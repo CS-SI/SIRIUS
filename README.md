@@ -1,10 +1,12 @@
 # Sirius
 
 ![](./doc/img/logo_cssi.jpg "")
+
 [//]: # (@image html doc/img/logo_cssi.jpg)
 [//]: # (@image latex doc/img/logo_cssi.jpg)
 
 ![](./doc/img/logo_sirius.jpg "")
+
 [//]: # (@image html doc/img/logo_sirius.jpg)
 [//]: # (@image latex doc/img/logo_sirius.jpg)
 
