@@ -1,0 +1,27 @@
+.section{
+	text-align:justify;
+}
+
+/* override table width restrictions */
+@media screen and (min-width: 767px) {
+
+	.wy-table-responsive table td {
+	/* !important prevents the common CSS stylesheets from overriding this
+	   as on RTD they are loaded after this stylesheet */
+	white-space: normal !important;
+	}
+
+	.wy-table-responsive {
+		overflow: visible !important;
+	}
+}
+
+.gofurther .first{
+	background-color: #31B404;
+        margin: 0em 0em 1em 0em;
+}
+
+.gofurther .last{
+        padding: 0em 1em 1em 1em;
+}
+

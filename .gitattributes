@@ -1,0 +1,21 @@
+* text=auto
+
+# source code
+*.cc text
+*.h text
+*.hpp text
+*.txx text
+*.txt text
+*.py text
+
+# documentation
+*.rst text
+*.md text
+*.in text
+*.css text
+*.html text
+
+# binary
+*.jpg binary
+*.zip binary
+

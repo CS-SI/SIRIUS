@@ -1,0 +1,16 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+AccessModifierOffset: -2
+ColumnLimit: 80
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 6
+IndentWidth: 4
+ObjCBlockIndentWidth: 4
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: false
+TabWidth: 4
+DerivePointerAlignment: false
+PointerAlignment: Left
+...
+

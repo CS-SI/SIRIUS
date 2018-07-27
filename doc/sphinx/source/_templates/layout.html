@@ -1,0 +1,16 @@
+{% extends "!layout.html" %}
+  {% block footer %} {{ super() }}
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+{% endblock %}
+{% set css_files = css_files + [ "_static/css/color_def.css" ] %}
+{% set script_files = script_files + [ "_static/js/custom_admonition.js" ] %}
