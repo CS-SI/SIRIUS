@@ -89,19 +89,19 @@ if (${ENABLE_DOCUMENTATION})
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM)
-        if (LATEX_FOUND)
-            add_custom_command(TARGET doc
-                POST_BUILD
-                COMMAND "${CMAKE_MAKE_PROGRAM}"
-                COMMENT	"Generating documentation pdf"
-                WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
-            # copy pdf manual into install directory
-            install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
-                    RENAME manual.pdf)
-        else()
-            message(STATUS "Cannot build pdf manual (LaTeX not found)")
-        endif()
+        #if (LATEX_FOUND)
+        #    add_custom_command(TARGET doc
+        #        POST_BUILD
+        #        COMMAND "${CMAKE_MAKE_PROGRAM}"
+        #        COMMENT	"Generating documentation pdf"
+        #        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
+        #    # copy pdf manual into install directory
+        #    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        #            DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
+        #            RENAME manual.pdf)
+        #else()
+        #    message(STATUS "Cannot build pdf manual (LaTeX not found)")
+        #endif()
     # copy doxygen documentation into install directory
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc)
