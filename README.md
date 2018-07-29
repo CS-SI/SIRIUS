@@ -59,6 +59,10 @@ docker run ldumas/sirius_dockerfile:sirius [OPTION...] input-image output-image
 
 # if no arguments are set then sirius is launched without any argument and its help is displayed
 # see below for the list of sirius args
+
+# note that using docker volume might be a good solution to give the container access to input-image
+# and to give host access to the output-image :
+docker run -v /home/user/outdir/:/outdir -v /home/user/input_images:/input ldumas/sirius_dockerfile:sirius /input/input-image.tif /outdir/output-image.tif -z 1 -d 2
 ```
 
 ## How to Build
