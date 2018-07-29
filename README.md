@@ -1,27 +1,65 @@
-# Sirius
+<h1 align="center">
+  <br>
+  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/enhanced_readme/doc/img/sirius-logo.svg" alt="Sirius by CS" width=60%></a>
+</h1>
 
-![](./doc/img/logo_cssi.jpg "")
+<h4 align="center">A fast resampling software with simple to plugin library.</h4>
 
-[//]: # (@image html doc/img/logo_cssi.jpg)
-[//]: # (@image latex doc/img/logo_cssi.jpg)
+<p align="center">
+  <a href="https://travis-ci.org/CS-SI/SIRIUS"><img src="https://travis-ci.org/CS-SI/SIRIUS.svg?branch=develop"></a>
+  <a href="https://hub.docker.com/r/ldumas/sirius_dockerfile/tags/"><img src="https://img.shields.io/docker/automated/ldumas/sirius_dockerfile.svg"></a>
+  <a href="https://github.com/CS-SI/SIRIUS/issues"><img src="https://img.shields.io/github/issues/CS-SI/SIRIUS.svg"></a>
+  <a href="https://opensource.org/licenses/GPL-3.0/"><img src="https://img.shields.io/badge/licence-GPL-blue.svg"></a>
+  <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields"></a>
+</p>
 
-![](./doc/img/logo_sirius.jpg "")
+<p align="center">
+  <a href="#overview">Overview</a> •
+  <a href="#docker_app">Docker App</a> •
+  <a href="#how-to-build">How To Build</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#credits">Acknowledgement</a>
+</p>
 
-[//]: # (@image html doc/img/logo_sirius.jpg)
-[//]: # (@image latex doc/img/logo_sirius.jpg)
+<h4 align="center">
+  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/develop/doc/img/logo_cssi.jpg" alt="CS" width="50"></a>
+</h4>
 
-As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on frequency resampling. Numerous softwares, some being open source, can be found to resample (most of the time upsample) data. Most of them offers various interpolators ([GIMP], [Pandore], [Getreuer], [OTB]), some being very fast but rather innacurate (nearest neighbors, bilinear) and some offering high quality results (more often than not based on a Lancsoz convolutional kernel) but being very time consuming. Then only a few provides ways to deal efficiently with large amount of data ([OTB]) or proposes a fast and accurate sinus cardinal interpolator implemented as frequencial zero padding ([Getreuer]). None of those anyway, allows one to resample satellite images in frequency domain with a floating upscaling or downscaling factor.
+As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on
+frequency resampling. Numerous softwares, some being open source, can be found to resample (most of the time upsample)
+data. Most of them offers various interpolators ([GIMP], [Pandore], [Getreuer], [OTB]),
+some being very fast but rather innacurate (nearest neighbors, bilinear) and some offering high quality results
+(more often than not based on a Lancsoz convolutional kernel) but being very time consuming.
+Then only a few provides ways to deal efficiently with large amount of data ([OTB]) or proposes a
+fast and accurate sinus cardinal interpolator implemented as frequencial zero padding ([Getreuer]).
+None of those however allows one to resample satellite images in frequency domain with a floating upscaling
+or downscaling factor.
 
-So far, it could be argued that the [OTB] remains the best solution for the purpose of resampling satellite images. However, and though there exists ways to filter satellite images in frequency domain with the [OTB], it is not possible to resample such an image in frequency domain.
+It could be argued that the [OTB] remains the best solution for the purpose of resampling satellite images.
+However, and though there exists ways to filter satellite images in frequency domain with the [OTB],
+it is not possible to resample such an image in frequency domain.
 
 Sirius then aims at filling this void offering a fast and simple to plug-in resampling C++ library that is taking advantage of the Fourier Transform.
-
-Sirius has been developed by [CS-SI] as an Open Source software and is distributed under the GNU General Public License version 3 or any later version.
 
 ## Overview
 
 * [Theoretical Basis Documentation][Theoretical Basis]
 * [Internals][Internals]
+
+## Docker App
+
+Sirius is delivered inside a docker container. Assuming one has previously installed docker, then Sirius can be launched
+using the following commands :
+
+```sh
+# pull image from the registry
+docker pull ldumas/sirius_dockerfile:sirius
+# then run sirius
+docker run ldumas/sirius_dockerfile:sirius [OPTION...] input-image output-image
+
+# if no arguments are set then sirius is launched without any argument and its help is displayed
+# see below for the list of sirius args
+```
 
 ## How to Build
 
@@ -348,7 +386,7 @@ Sirius developers would like to thank:
 [Getreuer]: https://doi.org/10.5201/ipol.2011.g_lmii "Getreuer, P. (2011). Linear Methods for Image Interpolation. Image Processing On Line, 1, 238259."
 
 [Internals]: INTERNALS.md "Internals"
-[Theoretical Basis]: https://github.com/CS-SI/SIRIUS "Sirius Theoretical Basis"
+[Theoretical Basis]: https://CS-SI.github.io/SIRIUS/html/Sirius.html
 [Sirius test data features]: https://github.com/CS-SI/SIRIUS "Sirius test data features"
 
 [CS-SI]: https://uk.c-s.fr/ "CS Systèmes d'information"
