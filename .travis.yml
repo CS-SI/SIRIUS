@@ -8,6 +8,7 @@ before_install:
 - docker pull ldumas/sirius_dockerfile:sirius_pages
 
 before_script:
+- echo $TRAVIS_PULL_REQUEST
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - export SRCDIR=/data
 
