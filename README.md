@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/master/doc/img/sirius-logo.svg" alt="Sirius by CS" width=60%></a>
+  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/master/doc/img/sirius-logo.svg" alt="Sirius by CS" width=35%></a>
 </h1>
 
 <h4 align="center">A fast resampling software with simple to plugin library.</h4>
@@ -22,7 +22,7 @@
 </p>
 
 <h4 align="center">
-  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/master/doc/img/logo_cssi.jpg" alt="CS" width="50"></a>
+  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/master/doc/img/logo_cssi.jpg" alt="CS" width="149px"></a>
 </h4>
 
 As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on
