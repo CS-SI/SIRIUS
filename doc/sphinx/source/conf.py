@@ -31,7 +31,7 @@ def setup(app):
   app.add_stylesheet( "css/my_theme.css" )
   app.add_javascript( "custom_admonition.js" )
 html_static_path = ['_static']
-html_logo = '../../img/logo_sirius.jpg'
+html_logo = 'in_images/sirius-logo.svg'
 html_search_language = 'en'
 #html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html']}
 htmlhelp_basename = 'Sirius'
