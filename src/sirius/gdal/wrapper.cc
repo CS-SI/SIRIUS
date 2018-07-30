@@ -29,7 +29,7 @@ namespace sirius {
 namespace gdal {
 
 GeoReference::GeoReference()
-    : geo_transform{0, 1, 0, 0, 1, 0},
+    : geo_transform{0, 1, 0, 0, 0, 1},
       projection_ref(""),
       is_initialized(false) {}
 
@@ -143,16 +143,16 @@ void SaveImage(const Image& image, const std::string& output_filepath,
     }
 }
 
-GeoReference ComputeZoomedGeoReference(const std::string& input_path,
-                                       const ZoomRatio& zoom_ratio) {
+GeoReference ComputeResampledGeoReference(const std::string& input_path,
+                                          const ZoomRatio& zoom_ratio) {
     auto input_dataset = sirius::gdal::LoadDataset(input_path);
 
-    return {ComputeOutputGeoTransform(input_dataset.get(), zoom_ratio),
+    return {ComputeResampledGeoTransform(input_dataset.get(), zoom_ratio),
             input_dataset->GetProjectionRef()};
 }
 
-std::vector<double> ComputeOutputGeoTransform(GDALDataset* dataset,
-                                              const ZoomRatio& zoom_ratio) {
+std::vector<double> ComputeResampledGeoTransform(GDALDataset* dataset,
+                                                 const ZoomRatio& zoom_ratio) {
     std::vector<double> geo_transform(6);
     CPLErr err = dataset->GetGeoTransform(geo_transform.data());
     if (err) {

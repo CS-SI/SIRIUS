@@ -41,28 +41,28 @@ set(SIRIUS_SRC
     sirius/filter.h
     sirius/filter.cc
 
-    sirius/i_frequency_zoom.h
-    sirius/frequency_zoom_factory.h
-    sirius/frequency_zoom_factory.cc
+    sirius/i_frequency_resampler.h
+    sirius/frequency_resampler_factory.h
+    sirius/frequency_resampler_factory.cc
 
     sirius/image_streamer.h
     sirius/image_streamer.cc
 
-    # zoom
-    sirius/zoom/frequency_zoom.h
-    sirius/zoom/frequency_zoom.txx
+    # resampler
+    sirius/resampler/frequency_resampler.h
+    sirius/resampler/frequency_resampler.txx
 
-    # zoom strategies
-    sirius/zoom/zoom_strategy/periodization_strategy.h
-    sirius/zoom/zoom_strategy/periodization_strategy.cc
-    sirius/zoom/zoom_strategy/zero_padding_strategy.h
-    sirius/zoom/zoom_strategy/zero_padding_strategy.cc
+    # resampler zoom strategies
+    sirius/resampler/zoom_strategy/periodization_strategy.h
+    sirius/resampler/zoom_strategy/periodization_strategy.cc
+    sirius/resampler/zoom_strategy/zero_padding_strategy.h
+    sirius/resampler/zoom_strategy/zero_padding_strategy.cc
 
-    # image decomposition policies
-    sirius/zoom/image_decomposition/regular_policy.h
-    sirius/zoom/image_decomposition/regular_policy.txx
-    sirius/zoom/image_decomposition/periodic_smooth_policy.h
-    sirius/zoom/image_decomposition/periodic_smooth_policy.txx
+    # resampler image decomposition policies
+    sirius/resampler/image_decomposition/regular_policy.h
+    sirius/resampler/image_decomposition/regular_policy.txx
+    sirius/resampler/image_decomposition/periodic_smooth_policy.h
+    sirius/resampler/image_decomposition/periodic_smooth_policy.txx
 
     # fftw
     sirius/fftw/exception.h
@@ -81,8 +81,8 @@ set(SIRIUS_SRC
     sirius/gdal/stream_block.h
     sirius/gdal/input_stream.h
     sirius/gdal/input_stream.cc
-    sirius/gdal/output_zoomed_stream.h
-    sirius/gdal/output_zoomed_stream.cc
+    sirius/gdal/resampled_output_stream.h
+    sirius/gdal/resampled_output_stream.cc
     sirius/gdal/types.h
     sirius/gdal/wrapper.h
     sirius/gdal/wrapper.cc

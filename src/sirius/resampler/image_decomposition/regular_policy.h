@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 CS - Systeme d'Information (CS-SI)
+ * Copyright (C) 2018 CS - Systemes d'Information (CS-SI)
  *
  * This file is part of Sirius
  *
@@ -19,29 +19,28 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
-#define SIRIUS_ZOOM_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
 
-#include "sirius/fftw/types.h"
 #include "sirius/filter.h"
 #include "sirius/image.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 /**
- * \brief Implementation of periodization frequency zoom
+ * \brief Implementation of regular image decomposition
  */
-class PeriodizationZoomStrategy {
+template <class ZoomStrategy>
+class ImageDecompositionRegularPolicy : private ZoomStrategy {
   public:
-    Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
-
-  private:
-    fftw::ComplexUPtr PeriodizeFFT(int zoom, const Image& image,
-                                   fftw::ComplexUPtr image_fft) const;
+    Image DecomposeAndZoom(int zoom, const Image& padded_image,
+                           const Filter& filter) const;
 };
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
-#endif  // SIRIUS_ZOOM_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+#include "sirius/resampler/image_decomposition/regular_policy.txx"
+
+#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_

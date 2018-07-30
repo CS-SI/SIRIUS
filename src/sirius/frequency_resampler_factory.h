@@ -19,10 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_FREQUENCY_ZOOM_FACTORY_H_
-#define SIRIUS_FREQUENCY_ZOOM_FACTORY_H_
+#ifndef SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_
+#define SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_
 
-#include "sirius/i_frequency_zoom.h"
+#include "sirius/i_frequency_resampler.h"
 
 namespace sirius {
 
@@ -43,22 +43,23 @@ enum class FrequencyZoomStrategies {
 };
 
 /**
- * \brief Factory of IFrequencyZoom that composes an image decomposition policy
- *        and a zoom strategy
+ * \brief Factory of IFrequencyResampler that composes an image decomposition
+ *   policy and a zoom strategy
  */
-class FrequencyZoomFactory {
+class FrequencyResamplerFactory {
   public:
     /**
-     * \brief IFrequencyZoom factory
+     * \brief IFrequencyResampler factory
      * \param image_decomposition cf. ImageDecompositionPolicies enum
      * \param zoom_strategy cf. FrequencyZoomStrategies enum
-     * \return requested composition of FrequencyZoom | nullptr if not available
+     * \return requested composition of FrequencyResampler | nullptr if not
+     * available
      */
-    static IFrequencyZoom::UPtr Create(
+    static IFrequencyResampler::UPtr Create(
           ImageDecompositionPolicies image_decomposition,
           FrequencyZoomStrategies zoom_strategy);
 };
 
 }  // namespace sirius
 
-#endif  // SIRIUS_FREQUENCY_ZOOM_FACTORY_H_
+#endif  // SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_

@@ -24,8 +24,8 @@
 #include <cstring>
 
 #include "sirius/exception.h"
-#include "sirius/frequency_zoom_factory.h"
-#include "sirius/i_frequency_zoom.h"
+#include "sirius/frequency_resampler_factory.h"
+#include "sirius/i_frequency_resampler.h"
 
 #include "sirius/fftw/exception.h"
 #include "sirius/fftw/fftw.h"
@@ -248,7 +248,7 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
           ImageDecompositionPolicies::kRegular;
     FrequencyZoomStrategies zoom_strategy =
           FrequencyZoomStrategies::kZeroPadding;
-    auto frequency_zoom = FrequencyZoomFactory::Create(
+    auto frequency_resampler = FrequencyResamplerFactory::Create(
           image_decomposition_policy, zoom_strategy);
 
     ZoomRatio new_zoom_ratio(zoom_ratio.output_resolution(), 1);
@@ -257,8 +257,8 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
     utils::IFFTShift2D(filter_image.data.data(), filter_image.size,
                        shifted_filter.data.data());
 
-    auto zoomed_filter = frequency_zoom->Compute(new_zoom_ratio, shifted_filter,
-                                                 {0, 0, 0, 0}, {});
+    auto zoomed_filter = frequency_resampler->Compute(
+          new_zoom_ratio, shifted_filter, {0, 0, 0, 0}, {});
 
     Image unshifted_zoomed_filter(zoomed_filter.size);
     utils::FFTShift2D(zoomed_filter.data.data(), zoomed_filter.size,

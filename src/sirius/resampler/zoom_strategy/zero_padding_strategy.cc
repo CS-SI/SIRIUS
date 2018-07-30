@@ -19,7 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/zoom/zoom_strategy/zero_padding_strategy.h"
+#include "sirius/resampler/zoom_strategy/zero_padding_strategy.h"
 
 #include <algorithm>
 
@@ -35,7 +35,7 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 Image ZeroPaddingZoomStrategy::Zoom(int zoom, const Image& padded_image,
                                     const Filter& filter) const {
@@ -129,5 +129,5 @@ fftw::ComplexUPtr ZeroPaddingZoomStrategy::ZeroPadFFT(
     return zoomed_fft;
 }
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius

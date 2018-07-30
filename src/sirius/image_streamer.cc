@@ -44,19 +44,19 @@ ImageStreamer::ImageStreamer(const std::string& input_path,
                     filter_metadata.padding_type),
       output_stream_(input_path, output_path, zoom_ratio) {}
 
-void ImageStreamer::Stream(const IFrequencyZoom& frequency_zoom,
+void ImageStreamer::Stream(const IFrequencyResampler& frequency_resampler,
                            const Filter& filter) {
     LOG("image_streamer", info, "stream block size: {}x{}", block_size_.row,
         block_size_.col);
     if (max_parallel_workers_ == 1) {
-        RunMonothreadStream(frequency_zoom, filter);
+        RunMonothreadStream(frequency_resampler, filter);
     } else {
-        RunMultithreadStream(frequency_zoom, filter);
+        RunMultithreadStream(frequency_resampler, filter);
     }
 }
 
-void ImageStreamer::RunMonothreadStream(const IFrequencyZoom& frequency_zoom,
-                                        const Filter& filter) {
+void ImageStreamer::RunMonothreadStream(
+      const IFrequencyResampler& frequency_resampler, const Filter& filter) {
     LOG("image_streamer", info, "start monothreaded streaming");
     while (!input_stream_.IsAtEnd()) {
         std::error_code read_ec;
@@ -66,7 +66,8 @@ void ImageStreamer::RunMonothreadStream(const IFrequencyZoom& frequency_zoom,
                 read_ec.message());
             break;
         }
-        block.buffer = std::move(frequency_zoom.Compute(
+
+        block.buffer = std::move(frequency_resampler.Compute(
               zoom_ratio_, block.buffer, block.padding, filter));
 
         std::error_code write_ec;
@@ -80,8 +81,8 @@ void ImageStreamer::RunMonothreadStream(const IFrequencyZoom& frequency_zoom,
     LOG("image_streamer", info, "end monothreaded streaming");
 }
 
-void ImageStreamer::RunMultithreadStream(const IFrequencyZoom& frequency_zoom,
-                                         const Filter& filter) {
+void ImageStreamer::RunMultithreadStream(
+      const IFrequencyResampler& frequency_resampler, const Filter& filter) {
     LOG("image_streamer", info, "start multithreaded streaming");
 
     // use block queues
@@ -114,7 +115,7 @@ void ImageStreamer::RunMultithreadStream(const IFrequencyZoom& frequency_zoom,
         LOG("image_streamer", info, "end reading blocks");
     };
 
-    auto worker_task = [this, &input_queue, &output_queue, &frequency_zoom,
+    auto worker_task = [this, &input_queue, &output_queue, &frequency_resampler,
                         &filter]() {
         try {
             while (input_queue.CanPop()) {
@@ -128,10 +129,8 @@ void ImageStreamer::RunMultithreadStream(const IFrequencyZoom& frequency_zoom,
                     break;
                 }
 
-                auto zoomed_block = std::move(frequency_zoom.Compute(
+                block.buffer = std::move(frequency_resampler.Compute(
                       zoom_ratio_, block.buffer, block.padding, filter));
-
-                block.buffer = std::move(zoomed_block);
 
                 std::error_code push_output_ec;
                 output_queue.Push(std::move(block), push_output_ec);

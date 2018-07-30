@@ -122,12 +122,12 @@ cmake --build . --target install
 
 ### Sirius standalone tool
 
-Sirius is shipped as a standalone tool that offers filtering and zoom in/out features.
+Sirius is shipped as a standalone tool that offers filtering and resampling features.
 
 ```sh
-./sirius -h
+$ ./sirius -h
 Sirius X.Y.Z (...)
-Standalone tool to resample images in the frequency domain
+Standalone tool to resample and filter images in the frequency domain
 
 Usage:
   ./sirius [OPTION...] input-image output-image
@@ -136,17 +136,18 @@ Usage:
   -v, --verbosity arg  Set verbosity level
                        (trace,debug,info,warn,err,critical,off) (default: info)
 
- zoom options:
-  -z, --input-resolution arg   Numerator of the zoom ratio (default: 1)
-  -d, --output-resolution arg  Denominator of the zoom ratio (default: 1)
+ resampling options:
+  -z, --input-resolution arg   Numerator of the resampling ratio (default: 1)
+  -d, --output-resolution arg  Denominator of the resampling ratio (default:
+                               1)
       --id-periodic-smooth     Use Periodic plus Smooth image decomposition
                                (default is regular image decomposition)
       --zoom-zero-padding      Use zero padding zoom algorithm (default is
                                periodization zoom algorithm)
 
  filter options:
-      --filter arg           Path to the filter image to apply to the zoomed
-                             image
+      --filter arg           Path to the filter image to apply to the
+                             resampled image
       --filter-no-padding    Do not add filter margins on input borders
                              (default is mirror padding)
       --filter-zero-padding  Use zero padding strategy to add filter margins
@@ -160,8 +161,8 @@ Usage:
       --block-height arg        Height of a stream block (default: 256)
       --no-block-resizing       Disable block resizing optimization
       --parallel-workers [=arg(=1)]
-                                Parallel workers used to compute zoom (8 max)
-                                (default: 1)
+                                Parallel workers used to compute resampling
+                                (8 max) (default: 1)
 ```
 
 #### Processing mode options
@@ -170,7 +171,7 @@ Usage:
 
 Regular mode (default mode) will put the whole image in memory and then processed it. **This mode should only be used on small image**.
 
-This command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
+The following command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
 
 
 ```sh
@@ -184,7 +185,7 @@ This command line will zoom in the image `/path/to/input-file.tif` by 4/3 with t
 
 Stream mode is activated with the option `--stream`. It will cut the image into multiple blocks of small size (default block size is 256x256). Each block will be processed separately and result blocks will be aggregated to generate the output image. **This mode must be used on large image.**
 
-Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the zoom).
+Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the resampling).
 
 ```sh
 ./sirius -z 4 -d 3 \
@@ -200,7 +201,7 @@ Default behavior tries to optimize block size so that the processed block (block
 
 When dealing with real zoom, block width and height are computed so that they comply with the zoom ratio.
 
-#### Zoom options
+#### Resampling options
 
 Sirius can use two image decomposition algorithms:
 * Regular (default behavior) is using raw image data without any processing.
@@ -215,7 +216,7 @@ More details on algorithms in the [Theoretical Basis documentation][Theoretical 
 #### Filter options
 
 A filter image path can be specified with the option `--filter`. This filter will be applied:
-* on the zoomed image if the image is zoomed in
+* on the resampled image if the image is zoomed in
 * on the source image if the image is zoomed out
 
 Default behavior will pad filter margins with a mirroring of the image borders.
@@ -292,15 +293,15 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 
 Sirius is designed to be easy to use.
 
-The main interface to compute a frequency zoom is `IFrequencyZoom` and it only requires an image, a zoom ratio and an optional filter.
+The main interface to compute a frequency resampling is `IFrequencyResampler` and it only requires an image, a zoom ratio and an optional filter.
 
-`IFrequencyZoom` objects are instantiated by the `FrequencyZoomFactory`.
+`IFrequencyResampler` objects are instantiated by the `FrequencyResamplerFactory`.
 
 #### Example without filter
 
 ```cpp
 #include "sirius/filter.h"
-#include "sirius/frequency_zoom_factory.h"
+#include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
 
@@ -310,15 +311,15 @@ sirius::Image image = {...};
 // configure the zoom ratio
 sirius::ZoomRatio zoom_ratio{7, 5};
 
-// compose a frequency zoom from sirius::ImageDecompositionPolicies and
+// compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
-sirius::IFrequencyZoom::UPtr freq_zoom =
-      sirius::FrequencyZoomFactory::Create(
+sirius::IFrequencyResampler::UPtr freq_resampler =
+      sirius::FrequencyResamplerFactory::Create(
             sirius::ImageDecompositionPolicies::kRegular,
             sirius::FrequencyZoomStrategies::kZeroPadding);
 
-// compute the zoomed image
-sirius::Image zoomed_image = freq_zoom->Compute(
+// compute the resampled image
+sirius::Image resampled_image = freq_resampler->Compute(
       zoom_ratio, image, {}, {});
 ```
 
@@ -326,7 +327,7 @@ sirius::Image zoomed_image = freq_zoom->Compute(
 
 ```cpp
 #include "sirius/filter.h"
-#include "sirius/frequency_zoom_factory.h"
+#include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
 
@@ -340,21 +341,21 @@ sirius::ZoomRatio zoom_ratio = {7, 5};
 sirius::Filter filter = sirius::Filter::Create("/path/to/filter/file.tif",
                                                zoom_ratio);
 
-// compose a frequency zoom from sirius::ImageDecompositionPolicies and
+// compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
-sirius::IFrequencyZoom::UPtr freq_zoom =
-      sirius::FrequencyZoomFactory::Create(
+sirius::IFrequencyResampler::UPtr freq_resampler =
+      sirius::FrequencyResamplerFactory::Create(
             sirius::ImageDecompositionPolicies::kPeriodicSmooth,
             sirius::FrequencyZoomStrategies::kZeroPadding);
 
-// compute the zoomed image
-sirius::Image zoomed_image = freq_zoom->Compute(
+// compute the resampled image
+sirius::Image resampled_image = freq_resampler->Compute(
       zoom_ratio, image, filter.padding(), filter);
 ```
 
 #### Thread safety
 
-Compute a zoomed image with Sirius is thread safe so it is possible to use the same `IFrequencyZoom` object in a multi-threaded context.
+Compute a resampled image with Sirius is thread safe so it is possible to use the same `IFrequencyResampler` object in a multi-threaded context.
 
 Process an image with a `Filter` object is also thread safe so you can reuse the same filter in a multi-threaded context.
 
@@ -369,7 +370,7 @@ ROOT_DATA_FEATURES/input
                   /output
 ```
 
-`frequency_zoom_tests` and `functional_tests` will create output images in the directory `ROOT_DATA_FEATURES/output`
+`frequency_resampler_tests` and `functional_tests` will create output images in the directory `ROOT_DATA_FEATURES/output`
 
 ## Acknowledgement
 

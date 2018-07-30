@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_I_FREQUENCY_ZOOM_H_
-#define SIRIUS_I_FREQUENCY_ZOOM_H_
+#ifndef SIRIUS_I_FREQUENCY_RESAMPLER_H_
+#define SIRIUS_I_FREQUENCY_RESAMPLER_H_
 
 #include <memory>
 #include <string>
@@ -33,18 +33,18 @@
 namespace sirius {
 
 /**
- * \class IFrequencyZoom
- * \brief Interface that frequency zoom should implement
+ * \class IFrequencyResampler
+ * \brief Interface that frequency resampler should implement
  */
-class IFrequencyZoom {
+class IFrequencyResampler {
   public:
-    using UPtr = std::unique_ptr<IFrequencyZoom>;
+    using UPtr = std::unique_ptr<IFrequencyResampler>;
 
   public:
-    virtual ~IFrequencyZoom() = default;
+    virtual ~IFrequencyResampler() = default;
 
     /**
-     * \brief Zoom in/out an image by a zoom ratio
+     * \brief Resample an image by a ratio in the frequency domain
      *
      * \remark This method is thread safe
      *
@@ -65,4 +65,4 @@ class IFrequencyZoom {
 
 }  // namespace sirius
 
-#endif  // SIRIUS_I_FREQUENCY_ZOOM_H_
+#endif  // SIRIUS_I_FREQUENCY_RESAMPLER_H_

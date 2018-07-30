@@ -60,12 +60,12 @@ DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,
                           int n_bands, const GeoReference& geo_ref = {});
 
 /**
- * \brief Compute zoomed georeference information
+ * \brief Compute resampled georeference information
  * \param input_path input image path
  * \param zoom_ratio zoom ratio
  */
-GeoReference ComputeZoomedGeoReference(const std::string& input_path,
-                                       const ZoomRatio& zoom_ratio);
+GeoReference ComputeResampledGeoReference(const std::string& input_path,
+                                          const ZoomRatio& zoom_ratio);
 
 /**
  * \brief Compute output image origin and pixel size
@@ -73,8 +73,8 @@ GeoReference ComputeZoomedGeoReference(const std::string& input_path,
  * \param zoom_ratio zoom ratio to be applied
  * \return new geo transform
  */
-std::vector<double> ComputeOutputGeoTransform(GDALDataset* dataset,
-                                              const ZoomRatio& zoom_ratio);
+std::vector<double> ComputeResampledGeoTransform(GDALDataset* dataset,
+                                                 const ZoomRatio& zoom_ratio);
 
 }  // namespace gdal
 }  // namespace sirius

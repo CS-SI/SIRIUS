@@ -19,10 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
-#define SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
 
-#include "sirius/zoom/image_decomposition/periodic_smooth_policy.h"
+#include "sirius/resampler/image_decomposition/periodic_smooth_policy.h"
 
 #include "sirius/fftw/fftw.h"
 #include "sirius/fftw/types.h"
@@ -31,7 +31,7 @@
 #include "sirius/utils/gsl.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 template <class ZoomStrategy>
 Image ImageDecompositionPeriodicSmoothPolicy<ZoomStrategy>::DecomposeAndZoom(
@@ -247,7 +247,7 @@ Image ImageDecompositionPeriodicSmoothPolicy<ZoomStrategy>::Interpolate2D(
     return interpolated_im;
 }
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
-#endif  // SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_

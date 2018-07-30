@@ -19,7 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/zoom/zoom_strategy/periodization_strategy.h"
+#include "sirius/resampler/zoom_strategy/periodization_strategy.h"
 
 #include <algorithm>
 
@@ -33,7 +33,7 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 Image PeriodizationZoomStrategy::Zoom(int zoom, const Image& padded_image,
                                       const Filter& filter) const {
@@ -181,5 +181,5 @@ fftw::ComplexUPtr PeriodizationZoomStrategy::PeriodizeFFT(
     return zoomed_fft;
 }
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
