@@ -1,8 +1,8 @@
 if [ "x${TRAVIS_REPO_SLUG}" = "xCS-SI/SIRIUS" ]; then
-    openssl aes-256-cbc -K $encrypted_f05cf190aee2_key -iv $encrypted_f05cf190aee2_iv -in github_deploy_key.enc -out github_deploy_key -d
-    chmod 600 deploy-key
+    openssl aes-256-cbc -K $encrypted_f05cf190aee2_key -iv $encrypted_f05cf190aee2_iv -in .travis/github_deploy_key.enc -out github_deploy_key -d
+    chmod 600 github_deploy_key
     eval `ssh-agent -s`
-    ssh-add deploy-key
+    ssh-add github_deploy_key
 
     cd "$TRAVIS_BUILD_DIR"
     mkdir doc/sphinx/build
