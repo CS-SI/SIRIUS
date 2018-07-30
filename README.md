@@ -1,12 +1,12 @@
 <h1 align="center">
   <br>
-  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/enhanced_readme/doc/img/sirius-logo.svg" alt="Sirius by CS" width=60%></a>
+  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/master/doc/img/sirius-logo.svg" alt="Sirius by CS" width=60%></a>
 </h1>
 
 <h4 align="center">A fast resampling software with simple to plugin library.</h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/CS-SI/SIRIUS"><img src="https://travis-ci.org/CS-SI/SIRIUS.svg?branch=develop"></a>
+  <a href="https://travis-ci.org/CS-SI/SIRIUS"><img src="https://travis-ci.org/CS-SI/SIRIUS.svg?branch=master"></a>
   <a href="https://hub.docker.com/r/ldumas/sirius_dockerfile/tags/"><img src="https://img.shields.io/docker/automated/ldumas/sirius_dockerfile.svg"></a>
   <a href="https://github.com/CS-SI/SIRIUS/issues"><img src="https://img.shields.io/github/issues/CS-SI/SIRIUS.svg"></a>
   <a href="https://opensource.org/licenses/GPL-3.0/"><img src="https://img.shields.io/badge/licence-GPL-blue.svg"></a>
@@ -22,7 +22,7 @@
 </p>
 
 <h4 align="center">
-  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/develop/doc/img/logo_cssi.jpg" alt="CS" width="50"></a>
+  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/master/doc/img/logo_cssi.jpg" alt="CS" width="50"></a>
 </h4>
 
 As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on
