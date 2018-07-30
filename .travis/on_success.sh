@@ -13,7 +13,7 @@ if [ "x${TRAVIS_REPO_SLUG}" = "xCS-SI/SIRIUS" ]; then
     git checkout -b gh-pages
     git add .
     git -c user.name='travis' -c user.email='travis' commit -m init
-    git push -q -f gh-pages &2>/dev/null
+    git push -q -f https://github.com/${TRAVIS_REPO_SLUG}.git gh-pages &2>/dev/null
     cd "$TRAVIS_BUILD_DIR"
 fi
 
