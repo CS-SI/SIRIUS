@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://github.com/dumasl/SIRIUS/blob/master/doc/img/sirius-logo.svg" alt="Sirius by CS" width=35%></a>
+  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://raw.githubusercontent.com/CS-SI/SIRIUS/master/doc/img/sirius-logo.svg?sanitize=true" alt="Sirius by CS-SI" width=35%></a>
 </h1>
 
 <h4 align="center">A fast resampling software with simple to plugin library.</h4>
