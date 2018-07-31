@@ -233,10 +233,6 @@ Filter Filter::CreateRealZoomFilter(Image filter_image,
         padding_col = static_cast<int>(filter_image.size.col / 2. *
                                        (1. / zoom_ratio.input_resolution()));
     }
-    LOG("filter", info, "zoomed filter size: {}x{}", filter_image.size.row,
-        filter_image.size.col);
-    LOG("filter", info, "zoomed filter padding: {}x{}", padding_row,
-        padding_col);
     return {std::move(filter_image),
             {padding_row, padding_col},
             zoom_ratio,
@@ -253,7 +249,7 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
     auto frequency_resampler = FrequencyResamplerFactory::Create(
           image_decomposition_policy, zoom_strategy);
 
-    ZoomRatio new_zoom_ratio(zoom_ratio.output_resolution(), 1);
+    auto new_zoom_ratio = ZoomRatio::Create(zoom_ratio.output_resolution(), 1);
 
     Image shifted_filter(filter_image.size);
     utils::IFFTShift2D(filter_image.data.data(), filter_image.size,

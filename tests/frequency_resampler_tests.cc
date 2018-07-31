@@ -64,7 +64,7 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
           "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    sirius::ZoomRatio zoom_ratio(2, 1);
+    auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
     auto dummy_image = sirius::tests::CreateDummyImage({20, 20});
@@ -209,7 +209,7 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
 TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    sirius::ZoomRatio zoom_ratio(2, 1);
+    auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test input
     auto dummy_image = sirius::tests::CreateDummyImage({4, 4});
@@ -362,7 +362,7 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 TEST_CASE("frequency resampler - periodic smooth - zero padding", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    sirius::ZoomRatio zoom_ratio(2, 1);
+    auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test input
     auto dummy_image = sirius::tests::CreateDummyImage({256, 256});
@@ -421,7 +421,7 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding", "[sirius]") {
 TEST_CASE("frequency resampler - real zoom", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    sirius::ZoomRatio zoom_ratio(7, 4);
+    auto zoom_ratio = sirius::ZoomRatio::Create(7, 4);
 
     // test input
     auto dummy_image = sirius::tests::CreateDummyImage({256, 256});
@@ -477,8 +477,8 @@ TEST_CASE("frequency resampler - real zoom", "[sirius]") {
 TEST_CASE("frequency resampler - example", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    sirius::ZoomRatio zoom_ratio_2_1(2, 1);
-    sirius::ZoomRatio zoom_ratio_7_4(7, 4);
+    auto zoom_ratio_2_1 = sirius::ZoomRatio::Create(2, 1);
+    auto zoom_ratio_7_4 = sirius::ZoomRatio::Create(7, 4);
 
     sirius::Image image = sirius::tests::CreateDummyImage({256, 256});
 

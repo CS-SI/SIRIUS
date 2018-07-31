@@ -54,8 +54,7 @@ struct CliParameters {
     std::string verbosity_level = "info";
 
     // resampling options
-    int input_resolution = 1;
-    int output_resolution = 1;
+    std::string resampling_ratio = "1:1";
     bool no_image_decomposition = false;
     bool upsample_periodization = false;
     bool upsample_zero_padding = false;
@@ -110,9 +109,8 @@ int main(int argc, const char* argv[]) {
     LOG("sirius", info, "Sirius {} - {}", sirius::kVersion, sirius::kGitCommit);
 
     try {
-        sirius::ZoomRatio zoom_ratio(params.input_resolution,
-                                     params.output_resolution);
-        LOG("sirius", info, "resampling ratio: {}/{}",
+        auto zoom_ratio = sirius::ZoomRatio::Create(params.resampling_ratio);
+        LOG("sirius", info, "resampling ratio: {}:{}",
             zoom_ratio.input_resolution(), zoom_ratio.output_resolution());
 
         // filter parameters
@@ -263,13 +261,12 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          cxxopts::value(params.verbosity_level)->default_value("info"));
 
     options.add_options("resampling")
-        ("z,input-resolution", "Numerator of the resampling ratio",
-         cxxopts::value(params.input_resolution)->default_value("1"))
-        ("d,output-resolution", "Denominator of the resampling ratio",
-         cxxopts::value(params.output_resolution)->default_value("1"))
+        ("r,resampling-ratio", "Resampling ratio as input:output, "
+          "allowed format: I (equivalent to I:1), I:O",
+         cxxopts::value(params.resampling_ratio)->default_value("1:1"))
         ("no-image-decomposition",
          "Do not decompose the input image "
-         "(default is periodic plus smooth image decomposition)",
+         "(default: periodic plus smooth image decomposition)",
          cxxopts::value(params.no_image_decomposition))
         ("upsample-periodization",
           "Force periodization as upsampling algorithm "
@@ -291,7 +288,7 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          cxxopts::value(params.filter_normalize))
         ("zero-pad-real-edges",
          "Force zero padding strategy on real input edges "
-         "(default is mirror padding)",
+         "(default: mirror padding)",
          cxxopts::value(params.zero_pad_real_edges));
 
     options.add_options("streaming")

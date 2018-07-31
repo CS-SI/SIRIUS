@@ -47,12 +47,13 @@ TEST_CASE("functional tests", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
     sirius::ZoomRatio zoom_ratio_1_1;
-    sirius::ZoomRatio zoom_ratio_2_1(2, 1);
-    sirius::ZoomRatio zoom_ratio_3_1(3, 1);
-    sirius::ZoomRatio zoom_ratio_15_1(15, 1);
-    sirius::ZoomRatio zoom_ratio_7_4(7, 4);
-    sirius::ZoomRatio zoom_ratio_1_3(1, 3);
-    sirius::ZoomRatio zoom_ratio_210_120(210, 120);
+
+    auto zoom_ratio_2_1 = sirius::ZoomRatio::Create(2, 1);
+    auto zoom_ratio_3_1 = sirius::ZoomRatio::Create(3, 1);
+    auto zoom_ratio_15_1 = sirius::ZoomRatio::Create(15, 1);
+    auto zoom_ratio_7_4 = sirius::ZoomRatio::Create(7, 4);
+    auto zoom_ratio_1_3 = sirius::ZoomRatio::Create(1, 3);
+    auto zoom_ratio_210_120 = sirius::ZoomRatio::Create(210, 120);
 
     auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
     auto lena_255_image = sirius::gdal::LoadImage("./input/lena-255x255.tif");

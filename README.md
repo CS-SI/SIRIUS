@@ -137,11 +137,9 @@ Usage:
                        (trace,debug,info,warn,err,critical,off) (default: info)
 
  resampling options:
-  -z, --input-resolution arg    Numerator of the resampling ratio (default:
-                                1)
-  -d, --output-resolution arg   Denominator of the resampling ratio (default:
-                                1)
-      --no-image-decomposition  Do not decompose the input image (default is
+  -r, --resampling-ratio arg    Resampling ratio as input:output, allowed
+                                format: I (equivalent to I:1), I:O (default: 1:1)
+      --no-image-decomposition  Do not decompose the input image (default:
                                 periodic plus smooth image decomposition)
       --upsample-periodization  Force periodization as upsampling algorithm
                                 (default algorithm if a filter is provided). A
@@ -155,7 +153,7 @@ Usage:
       --filter-normalize     Normalize filter coefficients (default is no
                              normalization)
       --zero-pad-real-edges  Force zero padding strategy on real input edges
-                             (default is mirror padding)
+                             (default: mirror padding)
 
  streaming options:
       --stream                  Enable stream mode
@@ -165,6 +163,7 @@ Usage:
       --parallel-workers [=arg(=1)]
                                 Parallel workers used to compute resampling
                                 (8 max) (default: 1)
+
 ```
 
 #### Processing mode options
@@ -177,7 +176,7 @@ The following command line will zoom in the image `/path/to/input-file.tif` by 4
 
 
 ```sh
-./sirius -z 4 -d 3 \
+./sirius -r 4:3 \
          --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
 ```
@@ -189,7 +188,7 @@ Stream mode is activated with the option `--stream`. It will cut the image into 
 Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the resampling).
 
 ```sh
-./sirius -z 4 -d 3 \
+./sirius -r 4:3 \
          --stream --parallel-workers=4 \
          --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
@@ -202,6 +201,10 @@ Default behavior tries to optimize block size so that the processed block (block
 When dealing with real zoom, block width and height are computed so that they comply with the zoom ratio.
 
 #### Resampling options
+
+Resampling ratio is specified with the option `-r`. Expected format ratios are:
+* `-r INPUT_RESOLUTION` where INPUT_RESOLUTION is a positive integer (e.g. `-r 2`).
+* `-r INPUT_RESOLUTION:OUTPUT_RESOLUTION` where INPUT_RESOLUTION and OUTPUT_RESOLUTION are positive integers (e.g. `-r 2:1`).
 
 Sirius can use two image decomposition algorithms:
 * Periodic plus Smooth (default behavior) is splitting the input image into a periodic part and a smooth image part.
@@ -240,7 +243,7 @@ More details on filters in the [Theoretical Basis documentation][Theoretical Bas
 The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition and zero padding upsampling.
 
 ```sh
-./sirius -z 2 -d 1 \
+./sirius -r 2:1 \
          --upsample-zero-padding \
          input/lena.jpg output/lena_z2.jpg
 ```
@@ -248,7 +251,7 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
 The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
-./sirius -z 2 -d 1 \
+./sirius -r 2 \
          input/lena.jpg output/lena_z2.jpg
 ```
 
@@ -256,7 +259,7 @@ The following command line will zoom in `input/sentinel2_20m.tif` by 2 using str
 
 ```sh
 ./sirius --stream --parallel-workers=8 \
-         -z 2 -d 1 \
+         -r 2 \
          --filter filters/ZOOM_2.tif \
          input/sentinel2_20m.tif output/sentinel2_20m_z2.tif
 ```
@@ -266,7 +269,7 @@ The following command line will zoom in `input/sentinel2_20m.tif` by 2 using str
 The following command line will zoom out `input/lena.jpg` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
-./sirius -z 1 -d 2 \
+./sirius -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/lena.jpg output/lena_z2.jpg
 ```
@@ -274,7 +277,7 @@ The following command line will zoom out `input/lena.jpg` by 1/2 using periodic 
 The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
-./sirius -z 1 -d 2 \
+./sirius -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/disparity.png output/disparity_z1_2.jpg
 ```
@@ -283,7 +286,7 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 
 ```sh
 ./sirius --stream --parallel-workers=8 \
-         -z 1 -d 2 \
+         -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/sentinel2_10m.tif output/sentinel2_10m_z1_2.tif
 ```
@@ -308,7 +311,7 @@ The main interface to compute a frequency resampling is `IFrequencyResampler` an
 sirius::Image image = {...};
 
 // configure the zoom ratio
-sirius::ZoomRatio zoom_ratio{7, 5};
+sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
@@ -334,7 +337,7 @@ sirius::Image resampled_image = freq_resampler->Compute(
 sirius::Image image = {...};
 
 // configure the zoom ratio
-sirius::ZoomRatio zoom_ratio = {7, 5};
+sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
 // create a filter from an image file
 sirius::Filter filter = sirius::Filter::Create("/path/to/filter/image_7_5.tif",
