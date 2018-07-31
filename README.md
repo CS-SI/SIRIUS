@@ -15,7 +15,7 @@
 
 <p align="center">
   <a href="#overview">Overview</a> •
-  <a href="#docker_app">Docker App</a> •
+  <a href="#docker-app">Docker App</a> •
   <a href="#how-to-build">How To Build</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#credits">Acknowledgement</a>
