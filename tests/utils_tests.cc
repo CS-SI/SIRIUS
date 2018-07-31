@@ -189,6 +189,148 @@ TEST_CASE("utils tests - IFFTShift2D(FFTShift2D)", "[sirius]") {
     }
 }
 
+TEST_CASE("utils tests - IFFTShift2DUncentered", "[sirius]") {
+    LOG_SET_LEVEL(trace);
+
+    SECTION("IFFTShift2DUncentered - odd row, odd col") {
+        std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
+                                  8, 9, 10, 11, 12, 13, 14, 15,
+                                  16, 17, 18, 19, 20, 21, 22, 23, 24};
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{18, 19, 15, 16, 17, 23, 24, 20,
+                                   21, 22, 3, 4, 0, 1, 2, 8, 9, 5, 6, 7,
+                                   13, 14, 10, 11, 12};
+
+        sirius::utils::IFFTShift2DUncentered(input.data(), {5, 5}, {3, 3}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+	SECTION("IFFTShift2DUncentered - odd row, odd col") {
+        std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
+                                  8, 9, 10, 11, 12, 13, 14, 15,
+                                  16, 17, 18, 19, 20, 21, 22, 23, 24};
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{24, 20, 21, 22, 23, 4, 0, 1,
+                                   2, 3, 9, 5, 6, 7, 8, 14, 10, 11, 12, 13,
+                                   19, 15, 16, 17, 18};
+
+        sirius::utils::IFFTShift2DUncentered(input.data(), {5, 5}, {4, 4}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+    SECTION("IFFTShift2DUncentered - even row, even col") {
+        std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
+                                  8, 9, 10, 11, 12, 13, 14, 15,
+                                 };
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{5, 6, 7, 4, 9, 10, 11, 8, 13, 14, 15, 12, 1, 2, 3, 0};
+
+        sirius::utils::IFFTShift2DUncentered(input.data(), {4, 4}, {1, 1}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+	SECTION("IFFTShift2DUncentered - even row, odd col") {
+        std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
+                                  8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                                  18, 19
+                                 };
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{8, 9, 5, 6, 7, 13, 14, 10, 11, 12, 18, 19, 15, 16, 17,
+								   3, 4, 0, 1, 2};
+
+        sirius::utils::IFFTShift2DUncentered(input.data(), {4, 5}, {3, 1}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+    SECTION("IFFTShift2DUncentered - odd row, even col") {
+        std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
+                                  8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                                  18, 19
+                                 };
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{1, 2, 3, 0, 5, 6, 7, 4, 9, 10, 11, 8, 13, 14, 15, 12, 17, 18, 19, 16};
+
+        sirius::utils::IFFTShift2DUncentered(input.data(), {5, 4}, {1, 0}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+}
+
+TEST_CASE("utils tests - FFTShift2DUncentered", "[sirius]") {
+    LOG_SET_LEVEL(trace);
+
+    SECTION("FFTShift2DUncentered - odd row, odd col") {
+        std::vector<double> input{18, 19, 15, 16, 17, 23, 24, 20,
+                                  21, 22, 3, 4, 0, 1, 2, 8, 9, 5, 6, 7,
+                                  13, 14, 10, 11, 12,};
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{0, 1, 2, 3, 4, 5, 6, 7,
+								   8, 9, 10, 11, 12, 13, 14, 15,
+                                   16, 17, 18, 19, 20, 21, 22, 23, 24};
+
+        sirius::utils::FFTShift2DUncentered(input.data(), {5, 5}, {3, 3}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+	SECTION("FFTShift2DUncentered - odd row, odd col") {
+        std::vector<double> input{24, 20, 21, 22, 23, 4, 0, 1,
+                                  2, 3, 9, 5, 6, 7, 8, 14, 10, 11, 12, 13,
+                                  19, 15, 16, 17, 18};
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{0, 1, 2, 3, 4, 5, 6, 7,
+                                   8, 9, 10, 11, 12, 13, 14, 15,
+                                   16, 17, 18, 19, 20, 21, 22, 23, 24};
+
+        sirius::utils::FFTShift2DUncentered(input.data(), {5, 5}, {4, 4}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+    SECTION("FFTShift2DUncentered - even row, even col") {
+        std::vector<double> input{5, 6, 7, 4, 9, 10, 11, 8, 13, 14, 15, 12, 1, 2, 3, 0};
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{ 0, 1, 2, 3, 4, 5, 6, 7,
+                                    8, 9, 10, 11, 12, 13, 14, 15};
+
+        sirius::utils::FFTShift2DUncentered(input.data(), {4, 4}, {1, 1}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+	SECTION("FFTShift2DUncentered - even row, odd col") {
+        std::vector<double> input{8, 9, 5, 6, 7, 13, 14, 10, 11, 12, 18, 19, 15, 16, 17,
+								  3, 4, 0, 1, 2
+                                 };
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{0, 1, 2, 3, 4, 5, 6, 7,
+                                   8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                                   18, 19};
+
+        sirius::utils::FFTShift2DUncentered(input.data(), {4, 5}, {3, 1}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+    
+    SECTION("FFTShift2DUncentered - odd row, even col") {
+        std::vector<double> input{1, 2, 3, 0, 5, 6, 7, 4, 9, 10, 11, 8, 13,
+								  14, 15, 12, 17, 18, 19, 16
+                                 };
+        std::vector<double> shifted_output(input.size());
+        std::vector<double> output{0, 1, 2, 3, 4, 5, 6, 7,
+                                   8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                                   18, 19};
+
+        sirius::utils::FFTShift2DUncentered(input.data(), {5, 4}, {1, 0}, shifted_output.data());
+        REQUIRE(std::equal(output.cbegin(), output.cend(),
+                           shifted_output.cbegin()));
+    }
+}
+
 TEST_CASE("utils test - LRU cache", "[sirius]") {
     struct DummyStruct {
         DummyStruct() = default;

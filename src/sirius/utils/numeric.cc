@@ -71,6 +71,114 @@ void IFFTShift2D(const double* data, const Size& size, double* shifted_data) {
     }
 }
 
+void IFFTShift2DUncentered(const double* data, const Size& size,
+                           const Point& hot_point, double* shifted_data) {
+    Size block_4(size.row - hot_point.y, size.col - hot_point.x);
+    Size block_3(block_4.row, hot_point.x);
+    Size block_2(hot_point.y, block_4.col);
+    Size block_1(hot_point.y, hot_point.x);
+
+    Point p4_shifted(0, 0);  // block4 top left corner after shift
+    Point p3_shifted(block_4.col, 0);
+    Point p2_shifted(0, block_4.row);
+    Point p1_shifted(block_4.col, block_4.row);
+
+    Point p4 = hot_point;  // block4 top left corner in source image
+    Point p3(0, size.row - block_4.row);
+    Point p2(p4.x, 0);
+    Point p1(0, 0);
+
+    int begin = p4_shifted.x + p4_shifted.y * size.col;
+    int begin_src = p4.x + p4.y * size.col;
+    for (int i = 0; i < block_4.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_4.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p3_shifted.x + p3_shifted.y * size.col;
+    begin_src = p3.x + p3.y * size.col;
+    for (int i = 0; i < block_3.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_3.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p2_shifted.x + p2_shifted.y * size.col;
+    begin_src = p2.x + p2.y * size.col;
+    for (int i = 0; i < block_2.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_2.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p1_shifted.x + p1_shifted.y * size.col;
+    begin_src = p1.x + p1.y * size.col;
+    for (int i = 0; i < block_1.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_1.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+}
+
+void FFTShift2DUncentered(const double* data, const Size& size,
+                          const Point& hot_point, double* shifted_data) {
+    Size block_4(size.row - hot_point.y, size.col - hot_point.x);
+    Size block_3(block_4.row, hot_point.x);
+    Size block_2(hot_point.y, block_4.col);
+    Size block_1(hot_point.y, hot_point.x);
+
+    Point p4(0, 0);  // block4 top left corner in source image
+    Point p3(block_4.col, 0);
+    Point p2(0, block_4.row);
+    Point p1(block_4.col, block_4.row);
+
+    Point p4_shifted = hot_point;  // block4 top left corner after shift
+    Point p3_shifted(0, size.row - block_4.row);
+    Point p2_shifted(p4_shifted.x, 0);
+    Point p1_shifted(0, 0);
+
+    int begin = p4_shifted.x + p4_shifted.y * size.col;
+    int begin_src = p4.x + p4.y * size.col;
+    for (int i = 0; i < block_4.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_4.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p3_shifted.x + p3_shifted.y * size.col;
+    begin_src = p3.x + p3.y * size.col;
+    for (int i = 0; i < block_3.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_3.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p2_shifted.x + p2_shifted.y * size.col;
+    begin_src = p2.x + p2.y * size.col;
+    for (int i = 0; i < block_2.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_2.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+
+    begin = p1_shifted.x + p1_shifted.y * size.col;
+    begin_src = p1.x + p1.y * size.col;
+    for (int i = 0; i < block_1.row; ++i) {
+        memcpy(&shifted_data[begin], &data[begin_src],
+               block_1.col * sizeof(double));
+        begin += size.col;
+        begin_src += size.col;
+    }
+}
+
 Size GenerateDyadicSize(const Size& size, const int res_in,
                         const Size& padding_size) {
     int h = size.row;
