@@ -56,7 +56,7 @@ struct CliParameters {
     // resampling options
     int input_resolution = 1;
     int output_resolution = 1;
-    bool periodic_smooth_image_decomposition = false;
+    bool no_image_decomposition = false;
     bool zpd_zoom_strategy = false;
 
     // filter options
@@ -117,16 +117,16 @@ int main(int argc, const char* argv[]) {
             zoom_ratio.output_resolution());
 
         sirius::ImageDecompositionPolicies image_decomposition_policy =
-              sirius::ImageDecompositionPolicies::kRegular;
+              sirius::ImageDecompositionPolicies::kPeriodicSmooth;
         sirius::FrequencyZoomStrategies zoom_strategy =
               sirius::FrequencyZoomStrategies::kPeriodization;
 
-        if (params.periodic_smooth_image_decomposition) {
-            LOG("sirius", info, "image decomposition: periodic plus smooth");
+        if (params.no_image_decomposition) {
+            LOG("sirius", info, "image decomposition: none");
             image_decomposition_policy =
-                  sirius::ImageDecompositionPolicies::kPeriodicSmooth;
+                  sirius::ImageDecompositionPolicies::kRegular;
         } else {
-            LOG("sirius", info, "image decomposition: regular");
+            LOG("sirius", info, "image decomposition: periodic plus smooth");
         }
         if (params.zpd_zoom_strategy) {
             LOG("sirius", info, "zoom: zero padding");
@@ -263,17 +263,17 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          cxxopts::value(params.input_resolution)->default_value("1"))
         ("d,output-resolution", "Denominator of the resampling ratio",
          cxxopts::value(params.output_resolution)->default_value("1"))
-        ("id-periodic-smooth",
-         "Use Periodic plus Smooth image decomposition "
-         "(default is regular image decomposition)",
-         cxxopts::value(params.periodic_smooth_image_decomposition))
+        ("no-image-decomposition",
+         "Do not decompose the input image "
+         "(default is periodic plus smooth image decomposition)",
+         cxxopts::value(params.no_image_decomposition))
         ("zoom-zero-padding", "Use zero padding zoom algorithm "
          "(default is periodization zoom algorithm)",
          cxxopts::value(params.zpd_zoom_strategy));
 
     options.add_options("filter")
         ("filter",
-         "Path to the filter image to apply to the resampled image",
+         "Path to the filter image to apply to the source or resampled image",
          cxxopts::value(params.filter_path))
         ("filter-no-padding",
          "Do not add filter margins on input borders "

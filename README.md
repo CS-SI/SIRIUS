@@ -137,17 +137,18 @@ Usage:
                        (trace,debug,info,warn,err,critical,off) (default: info)
 
  resampling options:
-  -z, --input-resolution arg   Numerator of the resampling ratio (default: 1)
-  -d, --output-resolution arg  Denominator of the resampling ratio (default:
-                               1)
-      --id-periodic-smooth     Use Periodic plus Smooth image decomposition
-                               (default is regular image decomposition)
-      --zoom-zero-padding      Use zero padding zoom algorithm (default is
-                               periodization zoom algorithm)
+  -z, --input-resolution arg    Numerator of the resampling ratio (default:
+                                1)
+  -d, --output-resolution arg   Denominator of the resampling ratio (default:
+                                1)
+      --no-image-decomposition  Do not decompose the input image (default is
+                                periodic plus smooth image decomposition)
+      --zoom-zero-padding       Use zero padding zoom algorithm (default is
+                                periodization zoom algorithm)
 
  filter options:
-      --filter arg           Path to the filter image to apply to the
-                             resampled image
+      --filter arg           Path to the filter image to apply to the source
+                             or resampled image
       --filter-no-padding    Do not add filter margins on input borders
                              (default is mirror padding)
       --filter-zero-padding  Use zero padding strategy to add filter margins
@@ -171,13 +172,12 @@ Usage:
 
 Regular mode (default mode) will put the whole image in memory and then processed it. **This mode should only be used on small image**.
 
-The following command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
+The following command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image-4-3.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
 
 
 ```sh
 ./sirius -z 4 -d 3 \
-         --id-periodic-smooth \
-         --filter /path/to/filter-image.tif \
+         --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
 ```
 
@@ -190,8 +190,7 @@ Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in m
 ```sh
 ./sirius -z 4 -d 3 \
          --stream --parallel-workers=4 \
-         --id-periodic-smooth \
-         --filter /path/to/filter-image.tif \
+         --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
 ```
 
@@ -204,8 +203,8 @@ When dealing with real zoom, block width and height are computed so that they co
 #### Resampling options
 
 Sirius can use two image decomposition algorithms:
-* Regular (default behavior) is using raw image data without any processing.
-* Periodic plus Smooth (`--id-periodic-smooth`) is splitting the input image into a periodic part and a smooth image part.
+* Periodic plus Smooth (default behavior) is splitting the input image into a periodic part and a smooth image part.
+* None (`--no-image-decomposition`) is using raw image data without any processing.
 
 Sirius can use two zoom strategies:
 * Periodization (default behavior)
@@ -237,7 +236,7 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
 
 ```sh
 ./sirius -z 2 -d 1 \
-         --id-periodic-smooth --zoom-zero-padding \
+         --zoom-zero-padding \
          input/lena.jpg output/lena_z2.jpg
 ```
 
@@ -245,7 +244,6 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
 
 ```sh
 ./sirius -z 2 -d 1 \
-         --id-periodic-smooth \
          input/lena.jpg output/lena_z2.jpg
 ```
 
@@ -254,7 +252,6 @@ The following command line will zoom in `input/sentinel2_20m.tif` by 2 using str
 ```sh
 ./sirius --stream --parallel-workers=8 \
          -z 2 -d 1 \
-         --id-periodic-smooth \
          --filter filters/ZOOM_2.tif \
          input/sentinel2_20m.tif output/sentinel2_20m_z2.tif
 ```
@@ -265,7 +262,7 @@ The following command line will zoom out `input/lena.jpg` by 1/2 using periodic 
 
 ```sh
 ./sirius -z 1 -d 2 \
-         --id-periodic-smooth --zoom-zero-padding \
+         --zoom-zero-padding \
          --filter filters/ZOOM_1_2.tif \
          input/lena.jpg output/lena_z2.jpg
 ```
@@ -274,7 +271,6 @@ The following command line will zoom out `input/disparity.png` by 1/2 using peri
 
 ```sh
 ./sirius -z 1 -d 2 \
-         --id-periodic-smooth \
          --filter filters/ZOOM_1_2.tif \
          input/disparity.png output/disparity_z1_2.jpg
 ```
@@ -284,7 +280,6 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 ```sh
 ./sirius --stream --parallel-workers=8 \
          -z 1 -d 2 \
-         --id-periodic-smooth \
          --filter filters/ZOOM_1_2.tif \
          input/sentinel2_10m.tif output/sentinel2_10m_z1_2.tif
 ```
@@ -315,7 +310,7 @@ sirius::ZoomRatio zoom_ratio{7, 5};
 //     sirius::FrequencyZoomStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
-            sirius::ImageDecompositionPolicies::kRegular,
+            sirius::ImageDecompositionPolicies::kPeriodicSmooth,
             sirius::FrequencyZoomStrategies::kZeroPadding);
 
 // compute the resampled image
@@ -338,7 +333,7 @@ sirius::Image image = {...};
 sirius::ZoomRatio zoom_ratio = {7, 5};
 
 // create a filter from an image file
-sirius::Filter filter = sirius::Filter::Create("/path/to/filter/file.tif",
+sirius::Filter filter = sirius::Filter::Create("/path/to/filter/image_7_5.tif",
                                                zoom_ratio);
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
@@ -346,7 +341,7 @@ sirius::Filter filter = sirius::Filter::Create("/path/to/filter/file.tif",
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
             sirius::ImageDecompositionPolicies::kPeriodicSmooth,
-            sirius::FrequencyZoomStrategies::kZeroPadding);
+            sirius::FrequencyZoomStrategies::kPeriodization);
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
