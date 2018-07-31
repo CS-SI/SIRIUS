@@ -57,7 +57,8 @@ struct CliParameters {
     int input_resolution = 1;
     int output_resolution = 1;
     bool no_image_decomposition = false;
-    bool zpd_zoom_strategy = false;
+    bool upsample_periodization = false;
+    bool upsample_zero_padding = false;
 
     // filter options
     std::string filter_path;
@@ -110,33 +111,10 @@ int main(int argc, const char* argv[]) {
     LOG("sirius", info, "Sirius {} - {}", sirius::kVersion, sirius::kGitCommit);
 
     try {
-        // resampling parameters
         sirius::ZoomRatio zoom_ratio(params.input_resolution,
                                      params.output_resolution);
-        LOG("sirius", info, "zoom ratio: {}/{}", zoom_ratio.input_resolution(),
-            zoom_ratio.output_resolution());
-
-        sirius::ImageDecompositionPolicies image_decomposition_policy =
-              sirius::ImageDecompositionPolicies::kPeriodicSmooth;
-        sirius::FrequencyZoomStrategies zoom_strategy =
-              sirius::FrequencyZoomStrategies::kPeriodization;
-
-        if (params.no_image_decomposition) {
-            LOG("sirius", info, "image decomposition: none");
-            image_decomposition_policy =
-                  sirius::ImageDecompositionPolicies::kRegular;
-        } else {
-            LOG("sirius", info, "image decomposition: periodic plus smooth");
-        }
-        if (params.zpd_zoom_strategy) {
-            LOG("sirius", info, "zoom: zero padding");
-            zoom_strategy = sirius::FrequencyZoomStrategies::kZeroPadding;
-        } else {
-            LOG("sirius", info, "zoom: periodization");
-        }
-
-        auto frequency_resampler = sirius::FrequencyResamplerFactory::Create(
-              image_decomposition_policy, zoom_strategy);
+        LOG("sirius", info, "resampling ratio: {}/{}",
+            zoom_ratio.input_resolution(), zoom_ratio.output_resolution());
 
         // filter parameters
         sirius::PaddingType padding_type = sirius::PaddingType::kMirrorPadding;
@@ -162,11 +140,41 @@ int main(int argc, const char* argv[]) {
                                          padding_type, params.filter_normalize);
         }
 
-        if (zoom_strategy == sirius::FrequencyZoomStrategies::kPeriodization &&
-            !filter.IsLoaded()) {
-            LOG("sirius", warn,
-                "providing a filter for this resampling is highly recommended");
+        // resampling parameters
+        sirius::ImageDecompositionPolicies image_decomposition_policy =
+              sirius::ImageDecompositionPolicies::kPeriodicSmooth;
+        sirius::FrequencyZoomStrategies zoom_strategy =
+              sirius::FrequencyZoomStrategies::kPeriodization;
+
+        if (params.no_image_decomposition) {
+            LOG("sirius", info, "image decomposition: none");
+            image_decomposition_policy =
+                  sirius::ImageDecompositionPolicies::kRegular;
+        } else {
+            LOG("sirius", info, "image decomposition: periodic plus smooth");
         }
+
+        if (zoom_ratio.ratio() > 1) {
+            // choose the upsampling algorithm only if ratio > 1
+            if (params.upsample_periodization && !filter.IsLoaded()) {
+                LOG("sirius", error,
+                    "filter is required with periodization upsampling");
+                return 1;
+            } else if (params.upsample_zero_padding || !filter.IsLoaded()) {
+                LOG("sirius", info, "upsampling: zero padding");
+                zoom_strategy = sirius::FrequencyZoomStrategies::kZeroPadding;
+                if (filter.IsLoaded()) {
+                    LOG("sirius", warn,
+                        "filter will be used with zero padding upsampling");
+                }
+            } else {
+                LOG("sirius", info, "upsampling: periodization");
+                zoom_strategy = sirius::FrequencyZoomStrategies::kPeriodization;
+            }
+        }
+
+        auto frequency_resampler = sirius::FrequencyResamplerFactory::Create(
+              image_decomposition_policy, zoom_strategy);
 
         if (!params.HasStreamMode()) {
             RunRegularMode(*frequency_resampler, filter, zoom_ratio, params);
@@ -188,7 +196,7 @@ void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
                     const CliParameters& params) {
     LOG("sirius", info, "regular mode");
     auto input_image = sirius::gdal::LoadImage(params.input_image_path);
-    LOG("sirius", info, "input image \"{}\", {}x{}", params.input_image_path,
+    LOG("sirius", info, "input image '{}' ({}x{})", params.input_image_path,
         input_image.size.row, input_image.size.col);
 
     auto resampled_geo_ref = sirius::gdal::ComputeResampledGeoReference(
@@ -196,7 +204,7 @@ void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
 
     auto resampled_image = frequency_resampler.Compute(
           zoom_ratio, input_image, filter.padding(), filter);
-    LOG("sirius", info, "resampled image \"{}\", {}x{}",
+    LOG("sirius", info, "resampled image '{}' ({}x{})",
         params.output_image_path, resampled_image.size.row,
         resampled_image.size.col);
     sirius::gdal::SaveImage(resampled_image, params.output_image_path,
@@ -267,9 +275,15 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          "Do not decompose the input image "
          "(default is periodic plus smooth image decomposition)",
          cxxopts::value(params.no_image_decomposition))
-        ("zoom-zero-padding", "Use zero padding zoom algorithm "
-         "(default is periodization zoom algorithm)",
-         cxxopts::value(params.zpd_zoom_strategy));
+        ("upsample-periodization",
+          "Force periodization as upsampling algorithm "
+          "(default algorithm if a filter is provided). "
+          "A filter is required to use this algorithm",
+          cxxopts::value(params.upsample_periodization))
+        ("upsample-zero-padding",
+          "Force zero padding as upsampling algorithm "
+          "(default algorithm if no filter is provided)",
+          cxxopts::value(params.upsample_zero_padding));
 
     options.add_options("filter")
         ("filter",

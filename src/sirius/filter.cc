@@ -165,7 +165,7 @@ fftw::ComplexUPtr Filter::CreateFilterFFT(const Size& image_size) const {
 Filter Filter::CreateZoomOutFilter(Image filter_image,
                                    const ZoomRatio& zoom_ratio,
                                    PaddingType padding_type) {
-    LOG("filter", info, "zoom out filter: use filter on source image");
+    LOG("filter", info, "filter: downsampling");
     int padding_row = (filter_image.size.row % 2 == 0)
                             ? (filter_image.size.row / 2)
                             : (filter_image.size.row - 1) / 2;
@@ -182,7 +182,7 @@ Filter Filter::CreateZoomOutFilter(Image filter_image,
 Filter Filter::CreateZoomInFilter(Image filter_image,
                                   const ZoomRatio& zoom_ratio,
                                   PaddingType padding_type) {
-    LOG("filter", info, "zoom in filter: use filter on zoomed image");
+    LOG("filter", info, "filter: upsampling");
     int padding_row = static_cast<int>(
           ((filter_image.size.row - 1) / 2) *
           (zoom_ratio.output_resolution() /
@@ -213,7 +213,9 @@ Filter Filter::CreateZoomInFilter(Image filter_image,
 Filter Filter::CreateRealZoomFilter(Image filter_image,
                                     const ZoomRatio& zoom_ratio,
                                     PaddingType padding_type) {
-    LOG("filter", info, "real zoom filter: zoom filter to input resolution");
+    LOG("filter", info,
+        "filter: float upsampling factor (upsample filter to input "
+        "resolution)");
     // zoom filter image to input resolution
     filter_image = ZoomFilterImageToInputResolution(filter_image, zoom_ratio);
 

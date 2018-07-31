@@ -143,8 +143,11 @@ Usage:
                                 1)
       --no-image-decomposition  Do not decompose the input image (default is
                                 periodic plus smooth image decomposition)
-      --zoom-zero-padding       Use zero padding zoom algorithm (default is
-                                periodization zoom algorithm)
+      --upsample-periodization  Force periodization as upsampling algorithm
+                                (default algorithm if a filter is provided). A
+                                filter is required to use this algorithm
+      --upsample-zero-padding   Force zero padding as upsampling algorithm
+                                (default algorithm if no filter is provided)
 
  filter options:
       --filter arg           Path to the filter image to apply to the source
@@ -206,9 +209,16 @@ Sirius can use two image decomposition algorithms:
 * Periodic plus Smooth (default behavior) is splitting the input image into a periodic part and a smooth image part.
 * None (`--no-image-decomposition`) is using raw image data without any processing.
 
-Sirius can use two zoom strategies:
-* Periodization (default behavior)
-* Zero padding (`--zoom-zero-padding`)
+Sirius can use two upsampling strategies:
+* Periodization: default behavior if a filter is provided.
+* Zero padding: default algorithm if no filter is provided)
+
+
+Upsampling strategies can be forced with the following options:
+* `--upsampling-zero-padding`
+* `--upsampling-periodization`
+
+**Force periodization upsampling without providing a filter will result in an error.**
 
 More details on algorithms in the [Theoretical Basis documentation][Theoretical Basis].
 
@@ -236,18 +246,18 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
 
 ```sh
 ./sirius -z 2 -d 1 \
-         --zoom-zero-padding \
+         --upsample-zero-padding \
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization zoom and filter for zoom 2.
+The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
 ./sirius -z 2 -d 1 \
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization zoom and filter for zoom 2.
+The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
 ./sirius --stream --parallel-workers=8 \
@@ -262,7 +272,6 @@ The following command line will zoom out `input/lena.jpg` by 1/2 using periodic 
 
 ```sh
 ./sirius -z 1 -d 2 \
-         --zoom-zero-padding \
          --filter filters/ZOOM_1_2.tif \
          input/lena.jpg output/lena_z2.jpg
 ```
