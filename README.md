@@ -152,12 +152,10 @@ Usage:
  filter options:
       --filter arg           Path to the filter image to apply to the source
                              or resampled image
-      --filter-no-padding    Do not add filter margins on input borders
-                             (default is mirror padding)
-      --filter-zero-padding  Use zero padding strategy to add filter margins
-                             on input borders (default is mirror padding)
       --filter-normalize     Normalize filter coefficients (default is no
                              normalization)
+      --zero-pad-real-edges  Force zero padding strategy on real input edges
+                             (default is mirror padding)
 
  streaming options:
       --stream                  Enable stream mode
@@ -211,28 +209,25 @@ Sirius can use two image decomposition algorithms:
 
 Sirius can use two upsampling strategies:
 * Periodization: default behavior if a filter is provided.
-* Zero padding: default algorithm if no filter is provided)
+* Zero padding: default algorithm if no filter is provided.
 
 
 Upsampling strategies can be forced with the following options:
 * `--upsampling-zero-padding`
 * `--upsampling-periodization`
 
-**Force periodization upsampling without providing a filter will result in an error.**
+*Force periodization upsampling without providing a filter will result in an error.*
 
 More details on algorithms in the [Theoretical Basis documentation][Theoretical Basis].
 
 #### Filter options
 
 A filter image path can be specified with the option `--filter`. This filter will be applied:
-* on the resampled image if the image is zoomed in
-* on the source image if the image is zoomed out
+* on the resampled image if the image is upsampled.
+* on the source image if the image is downsampled.
 
-Default behavior will pad filter margins with a mirroring of the image borders.
-
-`--filter-no-padding` will change the padding strategy and will not pad filter margins on the image borders.
-
-`--filter-zero-padding` will change the padding strategy and zero pad filter margins on the image borders.
+Default behavior will pad real input edges with a mirroring of the edges.
+`--zero-pad-real-edges` will change this strategy and zero pad real input edges.
 
 It is assumed that the filter is already normalized. If not, the option `--filter-normalize` will normize it before any processing.
 
@@ -242,7 +237,7 @@ More details on filters in the [Theoretical Basis documentation][Theoretical Bas
 
 ##### Zoom in
 
-The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition and zero padding zoom.
+The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition and zero padding upsampling.
 
 ```sh
 ./sirius -z 2 -d 1 \
@@ -268,7 +263,7 @@ The following command line will zoom in `input/sentinel2_20m.tif` by 2 using str
 
 ##### Zoom out
 
-The following command line will zoom out `input/lena.jpg` by 1/2 using periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/lena.jpg` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
 ./sirius -z 1 -d 2 \
@@ -276,7 +271,7 @@ The following command line will zoom out `input/lena.jpg` by 1/2 using periodic 
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
 ./sirius -z 1 -d 2 \
@@ -284,7 +279,7 @@ The following command line will zoom out `input/disparity.png` by 1/2 using peri
          input/disparity.png output/disparity_z1_2.jpg
 ```
 
-The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
 ./sirius --stream --parallel-workers=8 \

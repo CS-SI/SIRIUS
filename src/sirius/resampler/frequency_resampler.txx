@@ -111,14 +111,6 @@ Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
 
     int top_filter_margin = filter_padding_size.row;
     int left_filter_margin = filter_padding_size.col;
-    if (padding.type == PaddingType::kNone && padding.top != 0) {
-        // padding was ignored so there is no top padding
-        top_filter_margin = 0;
-    }
-    if (padding.type == PaddingType::kNone && padding.left != 0) {
-        // padding was ignored so there is no left padding
-        left_filter_margin = 0;
-    }
 
     int zoomed_col_length = input_size.col * zoom_ratio.input_resolution();
     int zoomed_left_padding_size =

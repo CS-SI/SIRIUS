@@ -62,8 +62,7 @@ struct CliParameters {
 
     // filter options
     std::string filter_path;
-    bool filter_no_padding = false;
-    bool filter_zero_padding = false;
+    bool zero_pad_real_edges = false;
 
     // stream mode options
     bool stream_mode = false;
@@ -118,10 +117,7 @@ int main(int argc, const char* argv[]) {
 
         // filter parameters
         sirius::PaddingType padding_type = sirius::PaddingType::kMirrorPadding;
-        if (params.filter_no_padding) {
-            LOG("sirius", info, "filter: no border padding");
-            padding_type = sirius::PaddingType::kNone;
-        } else if (params.filter_zero_padding) {
+        if (params.zero_pad_real_edges) {
             LOG("sirius", info, "filter: border zero padding");
             padding_type = sirius::PaddingType::kZeroPadding;
         } else {
@@ -289,18 +285,14 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
         ("filter",
          "Path to the filter image to apply to the source or resampled image",
          cxxopts::value(params.filter_path))
-        ("filter-no-padding",
-         "Do not add filter margins on input borders "
-         "(default is mirror padding)",
-         cxxopts::value(params.filter_no_padding))
-        ("filter-zero-padding",
-         "Use zero padding strategy to add filter margins on input borders "
-         "(default is mirror padding)",
-         cxxopts::value(params.filter_zero_padding))
         ("filter-normalize",
          "Normalize filter coefficients "
          "(default is no normalization)",
-         cxxopts::value(params.filter_normalize));
+         cxxopts::value(params.filter_normalize))
+        ("zero-pad-real-edges",
+         "Force zero padding strategy on real input edges "
+         "(default is mirror padding)",
+         cxxopts::value(params.zero_pad_real_edges));
 
     options.add_options("streaming")
         ("stream", "Enable stream mode",

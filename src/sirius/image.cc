@@ -61,8 +61,6 @@ Image Image::CreatePaddedImage(const Padding& padding) const {
             return CreateZeroPaddedImage(padding);
         case PaddingType::kMirrorPadding:
             return CreateMirrorPaddedImage(padding);
-        case PaddingType::kNone:
-            return {*this};
         default:
             LOG("image", warn, "padding type not handled, zero pad image");
             return CreateZeroPaddedImage(padding);
