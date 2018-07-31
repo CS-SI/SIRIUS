@@ -157,13 +157,14 @@ Usage:
 
  streaming options:
       --stream                  Enable stream mode
-      --block-width arg         Width of a stream block (default: 256)
-      --block-height arg        Height of a stream block (default: 256)
+      --block-width arg         Initial width of a stream block (default:
+                                256)
+      --block-height arg        Initial height of a stream block (default:
+                                256)
       --no-block-resizing       Disable block resizing optimization
       --parallel-workers [=arg(=1)]
                                 Parallel workers used to compute resampling
                                 (8 max) (default: 1)
-
 ```
 
 #### Processing mode options
@@ -196,7 +197,7 @@ Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in m
 
 It is possible to customize block size with the options `--block-witdh=XXX` and `--block-height=YYY`.
 
-Default behavior tries to optimize block size so that the processed block (block size + filter margins) width and height are dyadic. You can disable this optimization with the option `--no-block-resizing`.
+Default behavior tries to optimize given block size so that the processed block (block size + filter margins) width and height are dyadic. You can disable this optimization with the option `--no-block-resizing`.
 
 When dealing with real zoom, block width and height are computed so that they comply with the zoom ratio.
 

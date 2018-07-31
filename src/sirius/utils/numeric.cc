@@ -97,9 +97,6 @@ Size GenerateDyadicSize(const Size& size, const int res_in,
             return {initial_h, initial_w};
         }
     }
-    if (h != initial_h || w != initial_w) {
-        LOG("numeric", debug, "block resized to {}x{}", h, w);
-    }
 
     return {h, w};
 }
@@ -136,10 +133,6 @@ Size GenerateZoomCompliantSize(const Size& size, const ZoomRatio& zoom_r) {
                 zoom_r.ratio());
             return {initial_h, initial_w};
         }
-    }
-
-    if (h != initial_h || w != initial_w) {
-        LOG("numeric", debug, "block resized to {}x{}", h, w);
     }
 
     return {h, w};

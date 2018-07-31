@@ -222,12 +222,16 @@ void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
             stream_block_size = sirius::utils::GenerateDyadicSize(
                   stream_block_size, zoom_ratio.input_resolution(),
                   filter.padding_size());
+            LOG("sirius", warn, "stream block resized to dyadic size: {}x{}",
+                stream_block_size.row, stream_block_size.col);
         }
     } else {
         // real zoom needs specific block size (row and col should be multiple
         // of input resolution and output resolution)
         stream_block_size = sirius::utils::GenerateZoomCompliantSize(
               stream_block_size, zoom_ratio);
+        LOG("sirius", warn, "stream block resized to comply with zoom: {}x{}",
+            stream_block_size.row, stream_block_size.col);
     }
     sirius::ImageStreamer streamer(
           params.input_image_path, params.output_image_path, stream_block_size,
@@ -294,9 +298,9 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
     options.add_options("streaming")
         ("stream", "Enable stream mode",
          cxxopts::value(params.stream_mode))
-        ("block-width", "Width of a stream block",
+        ("block-width", "Initial width of a stream block",
          cxxopts::value(params.stream_block_width)->default_value("256"))
-        ("block-height", "Height of a stream block",
+        ("block-height", "Initial height of a stream block",
          cxxopts::value(params.stream_block_height)->default_value("256"))
         ("no-block-resizing",
          "Disable block resizing optimization",
