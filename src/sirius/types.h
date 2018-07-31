@@ -80,6 +80,21 @@ struct Size {
     int col{0};
 };
 
+struct Point {
+    Point() = default;
+
+    Point(int x, int y) : x(x), y(y) {}
+
+    ~Point() = default;
+    Point(const Point&) = default;
+    Point& operator=(const Point&) = default;
+    Point(Point&&) = default;
+    Point& operator=(Point&&) = default;
+
+    int x{0};
+    int y{0};
+};
+
 /**
  * \brief Data class that represents zoom ratio as
  *        input_resolution/output_resolution
