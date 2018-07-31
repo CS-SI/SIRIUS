@@ -43,7 +43,7 @@ ResampledOutputStream::ResampledOutputStream(const std::string& input_path,
     auto geo_ref = gdal::ComputeResampledGeoReference(input_path, zoom_ratio);
     output_dataset_ =
           gdal::CreateDataset(output_path, output_w, output_h, 1, geo_ref);
-    LOG("resampled_output_stream", info, "output image \"{}\", size: {}x{}",
+    LOG("resampled_output_stream", info, "resampled image '{}' ({}x{})",
         output_path, output_h, output_w);
 }
 
@@ -55,8 +55,10 @@ void ResampledOutputStream::Write(StreamBlock&& block, std::error_code& ec) {
           std::floor(block.col_idx * zoom_ratio_.input_resolution() /
                      static_cast<double>(zoom_ratio_.output_resolution()));
 
-    LOG("resampled_output_stream", debug, "writing {}x{} at {}x{}",
-        block.buffer.size.row, block.buffer.size.col, out_row_idx, out_col_idx);
+    LOG("resampled_output_stream", debug,
+        "writing block ({},{}) to ({},{}) (size: {}x{})", block.row_idx,
+        block.col_idx, out_row_idx, out_col_idx, block.buffer.size.row,
+        block.buffer.size.col);
 
     CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
           GF_Write, out_col_idx, out_row_idx, block.buffer.size.col,

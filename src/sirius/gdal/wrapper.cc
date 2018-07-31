@@ -51,7 +51,7 @@ DatasetUPtr LoadDataset(const std::string& filepath) {
     DatasetUPtr dataset(
           static_cast<GDALDataset*>(::GDALOpen(filepath.c_str(), GA_ReadOnly)));
     if (dataset == nullptr) {
-        LOG("gdal", error, "could not open the image file {}", filepath);
+        LOG("gdal", error, "could not open the image file '{}'", filepath);
         throw gdal::Exception();
     }
 
@@ -73,7 +73,7 @@ DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,
     DatasetUPtr dataset(
           driver->Create(filepath.c_str(), w, h, n_bands, GDT_Float32, NULL));
     if (dataset == nullptr) {
-        LOG("gdal", error, "could not create the image file {}", filepath);
+        LOG("gdal", error, "could not create the image file '{}'", filepath);
         throw gdal::Exception();
     }
 
@@ -115,7 +115,7 @@ Image LoadImage(const std::string& filepath) {
           tmp_size.col, tmp_size.row, GDT_Float64, 0, 0);
     if (err) {
         LOG("gdal", error,
-            "GDAL error: {} - could not get image data from file {}", err,
+            "GDAL error: {} - could not get image data from file '{}'", err,
             filepath);
         throw gdal::Exception();
     }
@@ -137,8 +137,8 @@ void SaveImage(const Image& image, const std::string& output_filepath,
                          const_cast<double*>(image.data.data()), image.size.col,
                          image.size.row, GDT_Float64, 0, 0);
     if (err) {
-        LOG("image", error, "GDAL error: {} - could not write in file {}", err,
-            output_filepath);
+        LOG("image", error, "GDAL error: {} - could not write in file '{}'",
+            err, output_filepath);
         throw gdal::Exception();
     }
 }
