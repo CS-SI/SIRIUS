@@ -122,12 +122,12 @@ cmake --build . --target install
 
 ### Sirius standalone tool
 
-Sirius is shipped as a standalone tool that offers filtering and zoom in/out features.
+Sirius is shipped as a standalone tool that offers filtering and resampling features.
 
 ```sh
-./sirius -h
+$ ./sirius -h
 Sirius X.Y.Z (...)
-Standalone tool to resample images in the frequency domain
+Standalone tool to resample and filter images in the frequency domain
 
 Usage:
   ./sirius [OPTION...] input-image output-image
@@ -136,32 +136,35 @@ Usage:
   -v, --verbosity arg  Set verbosity level
                        (trace,debug,info,warn,err,critical,off) (default: info)
 
- zoom options:
-  -z, --input-resolution arg   Numerator of the zoom ratio (default: 1)
-  -d, --output-resolution arg  Denominator of the zoom ratio (default: 1)
-      --id-periodic-smooth     Use Periodic plus Smooth image decomposition
-                               (default is regular image decomposition)
-      --zoom-zero-padding      Use zero padding zoom algorithm (default is
-                               periodization zoom algorithm)
+ resampling options:
+  -r, --resampling-ratio arg    Resampling ratio as input:output, allowed
+                                format: I (equivalent to I:1), I:O (default: 1:1)
+      --no-image-decomposition  Do not decompose the input image (default:
+                                periodic plus smooth image decomposition)
+      --upsample-periodization  Force periodization as upsampling algorithm
+                                (default algorithm if a filter is provided). A
+                                filter is required to use this algorithm
+      --upsample-zero-padding   Force zero padding as upsampling algorithm
+                                (default algorithm if no filter is provided)
 
  filter options:
-      --filter arg           Path to the filter image to apply to the zoomed
-                             image
-      --filter-no-padding    Do not add filter margins on input borders
-                             (default is mirror padding)
-      --filter-zero-padding  Use zero padding strategy to add filter margins
-                             on input borders (default is mirror padding)
+      --filter arg           Path to the filter image to apply to the source
+                             or resampled image
       --filter-normalize     Normalize filter coefficients (default is no
                              normalization)
+      --zero-pad-real-edges  Force zero padding strategy on real input edges
+                             (default: mirror padding)
 
  streaming options:
       --stream                  Enable stream mode
-      --block-width arg         Width of a stream block (default: 256)
-      --block-height arg        Height of a stream block (default: 256)
+      --block-width arg         Initial width of a stream block (default:
+                                256)
+      --block-height arg        Initial height of a stream block (default:
+                                256)
       --no-block-resizing       Disable block resizing optimization
       --parallel-workers [=arg(=1)]
-                                Parallel workers used to compute zoom (8 max)
-                                (default: 1)
+                                Parallel workers used to compute resampling
+                                (8 max) (default: 1)
 ```
 
 #### Processing mode options
@@ -170,13 +173,12 @@ Usage:
 
 Regular mode (default mode) will put the whole image in memory and then processed it. **This mode should only be used on small image**.
 
-This command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
+The following command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image-4-3.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
 
 
 ```sh
-./sirius -z 4 -d 3 \
-         --id-periodic-smooth \
-         --filter /path/to/filter-image.tif \
+./sirius -r 4:3 \
+         --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
 ```
 
@@ -184,45 +186,52 @@ This command line will zoom in the image `/path/to/input-file.tif` by 4/3 with t
 
 Stream mode is activated with the option `--stream`. It will cut the image into multiple blocks of small size (default block size is 256x256). Each block will be processed separately and result blocks will be aggregated to generate the output image. **This mode must be used on large image.**
 
-Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the zoom).
+Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the resampling).
 
 ```sh
-./sirius -z 4 -d 3 \
+./sirius -r 4:3 \
          --stream --parallel-workers=4 \
-         --id-periodic-smooth \
-         --filter /path/to/filter-image.tif \
+         --filter /path/to/filter-image-4-3.tif \
          /path/to/input-file.tif /path/to/output-file.tif
 ```
 
 It is possible to customize block size with the options `--block-witdh=XXX` and `--block-height=YYY`.
 
-Default behavior tries to optimize block size so that the processed block (block size + filter margins) width and height are dyadic. You can disable this optimization with the option `--no-block-resizing`.
+Default behavior tries to optimize given block size so that the processed block (block size + filter margins) width and height are dyadic. You can disable this optimization with the option `--no-block-resizing`.
 
 When dealing with real zoom, block width and height are computed so that they comply with the zoom ratio.
 
-#### Zoom options
+#### Resampling options
+
+Resampling ratio is specified with the option `-r`. Expected format ratios are:
+* `-r INPUT_RESOLUTION` where INPUT_RESOLUTION is a positive integer (e.g. `-r 2`).
+* `-r INPUT_RESOLUTION:OUTPUT_RESOLUTION` where INPUT_RESOLUTION and OUTPUT_RESOLUTION are positive integers (e.g. `-r 2:1`).
 
 Sirius can use two image decomposition algorithms:
-* Regular (default behavior) is using raw image data without any processing.
-* Periodic plus Smooth (`--id-periodic-smooth`) is splitting the input image into a periodic part and a smooth image part.
+* Periodic plus Smooth (default behavior) is splitting the input image into a periodic part and a smooth image part.
+* None (`--no-image-decomposition`) is using raw image data without any processing.
 
-Sirius can use two zoom strategies:
-* Periodization (default behavior)
-* Zero padding (`--zoom-zero-padding`)
+Sirius can use two upsampling strategies:
+* Periodization: default behavior if a filter is provided.
+* Zero padding: default algorithm if no filter is provided.
+
+
+Upsampling strategies can be forced with the following options:
+* `--upsampling-zero-padding`
+* `--upsampling-periodization`
+
+*Force periodization upsampling without providing a filter will result in an error.*
 
 More details on algorithms in the [Theoretical Basis documentation][Theoretical Basis].
 
 #### Filter options
 
 A filter image path can be specified with the option `--filter`. This filter will be applied:
-* on the zoomed image if the image is zoomed in
-* on the source image if the image is zoomed out
+* on the resampled image if the image is upsampled.
+* on the source image if the image is downsampled.
 
-Default behavior will pad filter margins with a mirroring of the image borders.
-
-`--filter-no-padding` will change the padding strategy and will not pad filter margins on the image borders.
-
-`--filter-zero-padding` will change the padding strategy and zero pad filter margins on the image borders.
+Default behavior will pad real input edges with a mirroring of the edges.
+`--zero-pad-real-edges` will change this strategy and zero pad real input edges.
 
 It is assumed that the filter is already normalized. If not, the option `--filter-normalize` will normize it before any processing.
 
@@ -232,58 +241,53 @@ More details on filters in the [Theoretical Basis documentation][Theoretical Bas
 
 ##### Zoom in
 
-The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition and zero padding zoom.
+The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition and zero padding upsampling.
 
 ```sh
-./sirius -z 2 -d 1 \
-         --id-periodic-smooth --zoom-zero-padding \
+./sirius -r 2:1 \
+         --upsample-zero-padding \
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization zoom and filter for zoom 2.
+The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
-./sirius -z 2 -d 1 \
-         --id-periodic-smooth \
+./sirius -r 2 \
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization zoom and filter for zoom 2.
+The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
 ./sirius --stream --parallel-workers=8 \
-         -z 2 -d 1 \
-         --id-periodic-smooth \
+         -r 2 \
          --filter filters/ZOOM_2.tif \
          input/sentinel2_20m.tif output/sentinel2_20m_z2.tif
 ```
 
 ##### Zoom out
 
-The following command line will zoom out `input/lena.jpg` by 1/2 using periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/lena.jpg` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
-./sirius -z 1 -d 2 \
-         --id-periodic-smooth --zoom-zero-padding \
+./sirius -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/lena.jpg output/lena_z2.jpg
 ```
 
-The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
-./sirius -z 1 -d 2 \
-         --id-periodic-smooth \
+./sirius -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/disparity.png output/disparity_z1_2.jpg
 ```
 
-The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for zoom 1/2.
+The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
 ./sirius --stream --parallel-workers=8 \
-         -z 1 -d 2 \
-         --id-periodic-smooth \
+         -r 1:2 \
          --filter filters/ZOOM_1_2.tif \
          input/sentinel2_10m.tif output/sentinel2_10m_z1_2.tif
 ```
@@ -292,15 +296,15 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 
 Sirius is designed to be easy to use.
 
-The main interface to compute a frequency zoom is `IFrequencyZoom` and it only requires an image, a zoom ratio and an optional filter.
+The main interface to compute a frequency resampling is `IFrequencyResampler` and it only requires an image, a zoom ratio and an optional filter.
 
-`IFrequencyZoom` objects are instantiated by the `FrequencyZoomFactory`.
+`IFrequencyResampler` objects are instantiated by the `FrequencyResamplerFactory`.
 
 #### Example without filter
 
 ```cpp
 #include "sirius/filter.h"
-#include "sirius/frequency_zoom_factory.h"
+#include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
 
@@ -308,17 +312,17 @@ The main interface to compute a frequency zoom is `IFrequencyZoom` and it only r
 sirius::Image image = {...};
 
 // configure the zoom ratio
-sirius::ZoomRatio zoom_ratio{7, 5};
+sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
-// compose a frequency zoom from sirius::ImageDecompositionPolicies and
+// compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
-sirius::IFrequencyZoom::UPtr freq_zoom =
-      sirius::FrequencyZoomFactory::Create(
-            sirius::ImageDecompositionPolicies::kRegular,
+sirius::IFrequencyResampler::UPtr freq_resampler =
+      sirius::FrequencyResamplerFactory::Create(
+            sirius::ImageDecompositionPolicies::kPeriodicSmooth,
             sirius::FrequencyZoomStrategies::kZeroPadding);
 
-// compute the zoomed image
-sirius::Image zoomed_image = freq_zoom->Compute(
+// compute the resampled image
+sirius::Image resampled_image = freq_resampler->Compute(
       zoom_ratio, image, {}, {});
 ```
 
@@ -326,7 +330,7 @@ sirius::Image zoomed_image = freq_zoom->Compute(
 
 ```cpp
 #include "sirius/filter.h"
-#include "sirius/frequency_zoom_factory.h"
+#include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
 
@@ -334,27 +338,27 @@ sirius::Image zoomed_image = freq_zoom->Compute(
 sirius::Image image = {...};
 
 // configure the zoom ratio
-sirius::ZoomRatio zoom_ratio = {7, 5};
+sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
 // create a filter from an image file
-sirius::Filter filter = sirius::Filter::Create("/path/to/filter/file.tif",
+sirius::Filter filter = sirius::Filter::Create("/path/to/filter/image_7_5.tif",
                                                zoom_ratio);
 
-// compose a frequency zoom from sirius::ImageDecompositionPolicies and
+// compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
-sirius::IFrequencyZoom::UPtr freq_zoom =
-      sirius::FrequencyZoomFactory::Create(
+sirius::IFrequencyResampler::UPtr freq_resampler =
+      sirius::FrequencyResamplerFactory::Create(
             sirius::ImageDecompositionPolicies::kPeriodicSmooth,
-            sirius::FrequencyZoomStrategies::kZeroPadding);
+            sirius::FrequencyZoomStrategies::kPeriodization);
 
-// compute the zoomed image
-sirius::Image zoomed_image = freq_zoom->Compute(
+// compute the resampled image
+sirius::Image resampled_image = freq_resampler->Compute(
       zoom_ratio, image, filter.padding(), filter);
 ```
 
 #### Thread safety
 
-Compute a zoomed image with Sirius is thread safe so it is possible to use the same `IFrequencyZoom` object in a multi-threaded context.
+Compute a resampled image with Sirius is thread safe so it is possible to use the same `IFrequencyResampler` object in a multi-threaded context.
 
 Process an image with a `Filter` object is also thread safe so you can reuse the same filter in a multi-threaded context.
 
@@ -369,7 +373,7 @@ ROOT_DATA_FEATURES/input
                   /output
 ```
 
-`frequency_zoom_tests` and `functional_tests` will create output images in the directory `ROOT_DATA_FEATURES/output`
+`frequency_resampler_tests` and `functional_tests` will create output images in the directory `ROOT_DATA_FEATURES/output`
 
 ## Acknowledgement
 

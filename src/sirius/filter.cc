@@ -24,8 +24,8 @@
 #include <cstring>
 
 #include "sirius/exception.h"
-#include "sirius/frequency_zoom_factory.h"
-#include "sirius/i_frequency_zoom.h"
+#include "sirius/frequency_resampler_factory.h"
+#include "sirius/i_frequency_resampler.h"
 
 #include "sirius/fftw/exception.h"
 #include "sirius/fftw/fftw.h"
@@ -165,7 +165,7 @@ fftw::ComplexUPtr Filter::CreateFilterFFT(const Size& image_size) const {
 Filter Filter::CreateZoomOutFilter(Image filter_image,
                                    const ZoomRatio& zoom_ratio,
                                    PaddingType padding_type) {
-    LOG("filter", info, "zoom out filter: use filter on source image");
+    LOG("filter", info, "filter: downsampling");
     int padding_row = (filter_image.size.row % 2 == 0)
                             ? (filter_image.size.row / 2)
                             : (filter_image.size.row - 1) / 2;
@@ -182,7 +182,7 @@ Filter Filter::CreateZoomOutFilter(Image filter_image,
 Filter Filter::CreateZoomInFilter(Image filter_image,
                                   const ZoomRatio& zoom_ratio,
                                   PaddingType padding_type) {
-    LOG("filter", info, "zoom in filter: use filter on zoomed image");
+    LOG("filter", info, "filter: upsampling");
     int padding_row = static_cast<int>(
           ((filter_image.size.row - 1) / 2) *
           (zoom_ratio.output_resolution() /
@@ -213,7 +213,9 @@ Filter Filter::CreateZoomInFilter(Image filter_image,
 Filter Filter::CreateRealZoomFilter(Image filter_image,
                                     const ZoomRatio& zoom_ratio,
                                     PaddingType padding_type) {
-    LOG("filter", info, "real zoom filter: zoom filter to input resolution");
+    LOG("filter", info,
+        "filter: float upsampling factor (upsample filter to input "
+        "resolution)");
     // zoom filter image to input resolution
     filter_image = ZoomFilterImageToInputResolution(filter_image, zoom_ratio);
 
@@ -231,10 +233,6 @@ Filter Filter::CreateRealZoomFilter(Image filter_image,
         padding_col = static_cast<int>(filter_image.size.col / 2. *
                                        (1. / zoom_ratio.input_resolution()));
     }
-    LOG("filter", info, "zoomed filter size: {}x{}", filter_image.size.row,
-        filter_image.size.col);
-    LOG("filter", info, "zoomed filter padding: {}x{}", padding_row,
-        padding_col);
     return {std::move(filter_image),
             {padding_row, padding_col},
             zoom_ratio,
@@ -248,17 +246,17 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
           ImageDecompositionPolicies::kRegular;
     FrequencyZoomStrategies zoom_strategy =
           FrequencyZoomStrategies::kZeroPadding;
-    auto frequency_zoom = FrequencyZoomFactory::Create(
+    auto frequency_resampler = FrequencyResamplerFactory::Create(
           image_decomposition_policy, zoom_strategy);
 
-    ZoomRatio new_zoom_ratio(zoom_ratio.output_resolution(), 1);
+    auto new_zoom_ratio = ZoomRatio::Create(zoom_ratio.output_resolution(), 1);
 
     Image shifted_filter(filter_image.size);
     utils::IFFTShift2D(filter_image.data.data(), filter_image.size,
                        shifted_filter.data.data());
 
-    auto zoomed_filter = frequency_zoom->Compute(new_zoom_ratio, shifted_filter,
-                                                 {0, 0, 0, 0}, {});
+    auto zoomed_filter = frequency_resampler->Compute(
+          new_zoom_ratio, shifted_filter, {0, 0, 0, 0}, {});
 
     Image unshifted_zoomed_filter(zoomed_filter.size);
     utils::FFTShift2D(zoomed_filter.data.data(), zoomed_filter.size,

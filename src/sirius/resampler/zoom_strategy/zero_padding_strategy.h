@@ -28,7 +28,7 @@
 #include "sirius/fftw/types.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 /**
  * \brief Implementation of zero padding frequency zoom
@@ -42,7 +42,7 @@ class ZeroPaddingZoomStrategy {
                                  fftw::ComplexUPtr image_fft) const;
 };
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
 #endif  // SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_

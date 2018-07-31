@@ -19,10 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_FREQUENCY_ZOOM_TXX_
-#define SIRIUS_ZOOM_FREQUENCY_ZOOM_TXX_
+#ifndef SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_
+#define SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_
 
-#include "sirius/zoom/frequency_zoom.h"
+#include "sirius/resampler/frequency_resampler.h"
 
 #include <algorithm>
 
@@ -35,35 +35,35 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::Compute(
+Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::Compute(
       const ZoomRatio& zoom_ratio, const Image& input_image,
       const Padding& image_padding, const Filter& filter) const {
-    LOG("frequency_zoom", trace, "compute {}/{} zoom of the image",
+    LOG("frequency_resampler", trace, "compute {}/{} zoom of the image",
         zoom_ratio.input_resolution(), zoom_ratio.output_resolution());
 
     // basic checks
     if (filter.IsLoaded() && !filter.CanBeApplied(zoom_ratio)) {
-        LOG("frequency_zoom", error,
+        LOG("frequency_resampler", error,
             "cannot apply this filter on this zoom ratio");
         throw SiriusException("cannot apply this filter on this zoom ratio");
     }
 
-    LOG("frequency_zoom", trace, "pad image");
+    LOG("frequency_resampler", trace, "pad image");
     auto padded_image = input_image.CreatePaddedImage(image_padding);
 
     if (padded_image.size.col % 2 != 0 || padded_image.size.row % 2 != 0) {
         padded_image.CreateEvenImage();
     }
 
-    LOG("frequency_zoom", trace, "decompose and zoom image");
+    LOG("frequency_resampler", trace, "decompose and zoom image");
     // method inherited from ImageDecompositionPolicy
     Image result_image = this->DecomposeAndZoom(zoom_ratio.input_resolution(),
                                                 padded_image, filter);
 
-    LOG("frequency_zoom", trace, "unpad zoomed image");
+    LOG("frequency_resampler", trace, "unpad zoomed image");
     auto result = UnpadImage(zoom_ratio, input_image, result_image,
                              image_padding, filter);
 
@@ -75,7 +75,7 @@ Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::Compute(
 }
 
 template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
+Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
       const ZoomRatio& zoom_ratio, const Image& original_image,
       const Image& zoomed_image, const Padding& padding,
       const Filter& filter) const {
@@ -111,14 +111,6 @@ Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
 
     int top_filter_margin = filter_padding_size.row;
     int left_filter_margin = filter_padding_size.col;
-    if (padding.type == PaddingType::kNone && padding.top != 0) {
-        // padding was ignored so there is no top padding
-        top_filter_margin = 0;
-    }
-    if (padding.type == PaddingType::kNone && padding.left != 0) {
-        // padding was ignored so there is no left padding
-        left_filter_margin = 0;
-    }
 
     int zoomed_col_length = input_size.col * zoom_ratio.input_resolution();
     int zoomed_left_padding_size =
@@ -145,9 +137,9 @@ Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
 }
 
 template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::DecimateImage(
+Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::DecimateImage(
       const Image& zoomed_image, const ZoomRatio& zoom_ratio) const {
-    LOG("frequency_zoom", trace, "decimate zoomed image by {}",
+    LOG("frequency_resampler", trace, "decimate zoomed image by {}",
         zoom_ratio.output_resolution());
 
     Image decimated_image(
@@ -173,7 +165,7 @@ Image FrequencyZoom<ImageDecompositionPolicy, ZoomStrategy>::DecimateImage(
     return decimated_image;
 }
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
-#endif  // SIRIUS_ZOOM_FREQUENCY_ZOOM_TXX_
+#endif  // SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_

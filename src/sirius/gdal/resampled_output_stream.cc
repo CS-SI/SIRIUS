@@ -19,7 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/gdal/output_zoomed_stream.h"
+#include "sirius/gdal/resampled_output_stream.h"
 
 #include "sirius/gdal/error_code.h"
 #include "sirius/gdal/wrapper.h"
@@ -29,9 +29,9 @@
 namespace sirius {
 namespace gdal {
 
-OutputZoomedStream::OutputZoomedStream(const std::string& input_path,
-                                       const std::string& output_path,
-                                       const ZoomRatio& zoom_ratio)
+ResampledOutputStream::ResampledOutputStream(const std::string& input_path,
+                                             const std::string& output_path,
+                                             const ZoomRatio& zoom_ratio)
     : zoom_ratio_(zoom_ratio) {
     auto input_dataset = gdal::LoadDataset(input_path);
 
@@ -40,14 +40,14 @@ OutputZoomedStream::OutputZoomedStream(const std::string& input_path,
     int output_w =
           std::ceil(input_dataset->GetRasterXSize() * zoom_ratio_.ratio());
 
-    auto geo_ref = gdal::ComputeZoomedGeoReference(input_path, zoom_ratio);
+    auto geo_ref = gdal::ComputeResampledGeoReference(input_path, zoom_ratio);
     output_dataset_ =
           gdal::CreateDataset(output_path, output_w, output_h, 1, geo_ref);
-    LOG("output_stream", info, "output image \"{}\", size: {}x{}", output_path,
-        output_h, output_w);
+    LOG("resampled_output_stream", info, "resampled image '{}' ({}x{})",
+        output_path, output_h, output_w);
 }
 
-void OutputZoomedStream::Write(StreamBlock&& block, std::error_code& ec) {
+void ResampledOutputStream::Write(StreamBlock&& block, std::error_code& ec) {
     int out_row_idx =
           std::floor(block.row_idx * zoom_ratio_.input_resolution() /
                      static_cast<double>(zoom_ratio_.output_resolution()));
@@ -55,8 +55,10 @@ void OutputZoomedStream::Write(StreamBlock&& block, std::error_code& ec) {
           std::floor(block.col_idx * zoom_ratio_.input_resolution() /
                      static_cast<double>(zoom_ratio_.output_resolution()));
 
-    LOG("output_stream", debug, "writing {}x{} at {}x{}", block.buffer.size.row,
-        block.buffer.size.col, out_row_idx, out_col_idx);
+    LOG("resampled_output_stream", debug,
+        "writing block ({},{}) to ({},{}) (size: {}x{})", block.row_idx,
+        block.col_idx, out_row_idx, out_col_idx, block.buffer.size.row,
+        block.buffer.size.col);
 
     CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
           GF_Write, out_col_idx, out_row_idx, block.buffer.size.col,
@@ -64,7 +66,7 @@ void OutputZoomedStream::Write(StreamBlock&& block, std::error_code& ec) {
           block.buffer.size.col, block.buffer.size.row, GDT_Float64, 0, 0,
           NULL);
     if (err) {
-        LOG("output_zoomed_stream", error,
+        LOG("resampled_output_stream", error,
             "GDAL error: {} - could not write to the given dataset", err);
         ec = make_error_code(err);
         return;

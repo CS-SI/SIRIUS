@@ -19,33 +19,23 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
-#define SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
 
-#include "sirius/filter.h"
-#include "sirius/image.h"
+#include "sirius/resampler/image_decomposition/regular_policy.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
-/**
- * \brief Implementation of <a
- * href="https://hal.archives-ouvertes.fr/file/index/docid/388020/filename/2009-11.pdf">Periodic
- * plus Smooth image decomposition</a>
- */
 template <class ZoomStrategy>
-class ImageDecompositionPeriodicSmoothPolicy : private ZoomStrategy {
-  public:
-    Image DecomposeAndZoom(int zoom, const Image& even_image,
-                           const Filter& filter) const;
+Image ImageDecompositionRegularPolicy<ZoomStrategy>::DecomposeAndZoom(
+      int zoom, const Image& padded_image, const Filter& filter) const {
+    // method inherited from ZoomStrategy
+    LOG("regular_decomposition", trace, "zoom image");
+    return this->Zoom(zoom, padded_image, filter);
+}
 
-  private:
-    Image Interpolate2D(int zoom, const Image& even_image) const;
-};
-
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
-#include "sirius/zoom/image_decomposition/periodic_smooth_policy.txx"
-
-#endif  // SIRIUS_ZOOM_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_

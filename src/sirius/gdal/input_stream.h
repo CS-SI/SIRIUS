@@ -22,7 +22,6 @@
 #ifndef SIRIUS_GDAL_INPUT_STREAM_H_
 #define SIRIUS_GDAL_INPUT_STREAM_H_
 
-#include <mutex>
 #include <system_error>
 
 #include "sirius/image.h"

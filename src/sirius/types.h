@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include <array>
+#include <string>
 #include <vector>
 
 namespace sirius {
@@ -86,19 +87,32 @@ struct Size {
 class ZoomRatio {
   public:
     /**
-     * \brief Instantiate a zoom ratio 1/1
+     * \brief Create an instance from a formatted string
+     *        (input_resolution:output_resolution)
+     * \param ratio_string should be formatted as
+     *        "input_resolution:output_resolution"
+     * \return zoom ratio
+     *
+     * \throw SiriusException if string format or ratio is invalid
      */
-    ZoomRatio() = default;
+    static ZoomRatio Create(const std::string& ratio_string);
 
     /**
      * \brief Zoom ratio as input_resolution/output_resolution
      *        Reduce the ratio
      * \param input_resolution numerator of the ratio
      * \param output_resolution denominator of the ratio
+     * \return zoom ratio
      *
-     * \throw SiriusException if input or output resolution is invalid
+     * \throw SiriusException if ratio is invalid
+     * \throw std::invalid_argument if conversion from string to int failed
      */
-    ZoomRatio(int input_resolution, int output_resolution);
+    static ZoomRatio Create(int input_resolution, int output_resolution = 1);
+
+    /**
+     * \brief Instantiate a zoom ratio 1:1
+     */
+    ZoomRatio() = default;
 
     ~ZoomRatio() = default;
     ZoomRatio(const ZoomRatio&) = default;
@@ -117,6 +131,8 @@ class ZoomRatio {
     bool IsRealZoom() const;
 
   private:
+    ZoomRatio(int input_resolution, int output_resolution);
+
     void ReduceRatio();
 
   private:

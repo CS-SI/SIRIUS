@@ -31,8 +31,7 @@
 #include <cxxopts.hpp>
 
 #include "sirius/exception.h"
-#include "sirius/frequency_zoom_factory.h"
-#include "sirius/i_frequency_zoom.h"
+#include "sirius/frequency_resampler_factory.h"
 #include "sirius/image_streamer.h"
 #include "sirius/sirius.h"
 
@@ -54,16 +53,15 @@ struct CliParameters {
     // general options
     std::string verbosity_level = "info";
 
-    // zoom options
-    int input_resolution = 1;
-    int output_resolution = 1;
-    bool periodic_smooth_image_decomposition = false;
-    bool zpd_zoom_strategy = false;
+    // resampling options
+    std::string resampling_ratio = "1:1";
+    bool no_image_decomposition = false;
+    bool upsample_periodization = false;
+    bool upsample_zero_padding = false;
 
     // filter options
     std::string filter_path;
-    bool filter_no_padding = false;
-    bool filter_zero_padding = false;
+    bool zero_pad_real_edges = false;
 
     // stream mode options
     bool stream_mode = false;
@@ -83,11 +81,11 @@ struct CliParameters {
 };
 
 CliParameters GetCliParameters(int argc, const char* argv[]);
-void RunRegularMode(const sirius::IFrequencyZoom& frequency_zoom,
+void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
                     const sirius::Filter& filter,
                     const sirius::ZoomRatio& zoom_ratio,
                     const CliParameters& params);
-void RunStreamMode(const sirius::IFrequencyZoom& frequency_zoom,
+void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
                    const sirius::Filter& filter,
                    const sirius::ZoomRatio& zoom_ratio,
                    const CliParameters& params);
@@ -111,40 +109,13 @@ int main(int argc, const char* argv[]) {
     LOG("sirius", info, "Sirius {} - {}", sirius::kVersion, sirius::kGitCommit);
 
     try {
-        // zoom parameters
-        sirius::ZoomRatio zoom_ratio(params.input_resolution,
-                                     params.output_resolution);
-        LOG("sirius", info, "zoom ratio: {}/{}", zoom_ratio.input_resolution(),
-            zoom_ratio.output_resolution());
-
-        sirius::ImageDecompositionPolicies image_decomposition_policy =
-              sirius::ImageDecompositionPolicies::kRegular;
-        sirius::FrequencyZoomStrategies zoom_strategy =
-              sirius::FrequencyZoomStrategies::kPeriodization;
-
-        if (params.periodic_smooth_image_decomposition) {
-            LOG("sirius", info, "image decomposition: periodic plus smooth");
-            image_decomposition_policy =
-                  sirius::ImageDecompositionPolicies::kPeriodicSmooth;
-        } else {
-            LOG("sirius", info, "image decomposition: regular");
-        }
-        if (params.zpd_zoom_strategy) {
-            LOG("sirius", info, "zoom: zero padding");
-            zoom_strategy = sirius::FrequencyZoomStrategies::kZeroPadding;
-        } else {
-            LOG("sirius", info, "zoom: periodization");
-        }
-
-        auto frequency_zoom = sirius::FrequencyZoomFactory::Create(
-              image_decomposition_policy, zoom_strategy);
+        auto zoom_ratio = sirius::ZoomRatio::Create(params.resampling_ratio);
+        LOG("sirius", info, "resampling ratio: {}:{}",
+            zoom_ratio.input_resolution(), zoom_ratio.output_resolution());
 
         // filter parameters
         sirius::PaddingType padding_type = sirius::PaddingType::kMirrorPadding;
-        if (params.filter_no_padding) {
-            LOG("sirius", info, "filter: no border padding");
-            padding_type = sirius::PaddingType::kNone;
-        } else if (params.filter_zero_padding) {
+        if (params.zero_pad_real_edges) {
             LOG("sirius", info, "filter: border zero padding");
             padding_type = sirius::PaddingType::kZeroPadding;
         } else {
@@ -163,46 +134,78 @@ int main(int argc, const char* argv[]) {
                                          padding_type, params.filter_normalize);
         }
 
-        if (zoom_strategy == sirius::FrequencyZoomStrategies::kPeriodization &&
-            !filter.IsLoaded()) {
-            LOG("sirius", warn,
-                "providing a filter for this zoom is highly recommended");
+        // resampling parameters
+        sirius::ImageDecompositionPolicies image_decomposition_policy =
+              sirius::ImageDecompositionPolicies::kPeriodicSmooth;
+        sirius::FrequencyZoomStrategies zoom_strategy =
+              sirius::FrequencyZoomStrategies::kPeriodization;
+
+        if (params.no_image_decomposition) {
+            LOG("sirius", info, "image decomposition: none");
+            image_decomposition_policy =
+                  sirius::ImageDecompositionPolicies::kRegular;
+        } else {
+            LOG("sirius", info, "image decomposition: periodic plus smooth");
         }
 
+        if (zoom_ratio.ratio() > 1) {
+            // choose the upsampling algorithm only if ratio > 1
+            if (params.upsample_periodization && !filter.IsLoaded()) {
+                LOG("sirius", error,
+                    "filter is required with periodization upsampling");
+                return 1;
+            } else if (params.upsample_zero_padding || !filter.IsLoaded()) {
+                LOG("sirius", info, "upsampling: zero padding");
+                zoom_strategy = sirius::FrequencyZoomStrategies::kZeroPadding;
+                if (filter.IsLoaded()) {
+                    LOG("sirius", warn,
+                        "filter will be used with zero padding upsampling");
+                }
+            } else {
+                LOG("sirius", info, "upsampling: periodization");
+                zoom_strategy = sirius::FrequencyZoomStrategies::kPeriodization;
+            }
+        }
+
+        auto frequency_resampler = sirius::FrequencyResamplerFactory::Create(
+              image_decomposition_policy, zoom_strategy);
+
         if (!params.HasStreamMode()) {
-            RunRegularMode(*frequency_zoom, filter, zoom_ratio, params);
+            RunRegularMode(*frequency_resampler, filter, zoom_ratio, params);
         } else {
-            RunStreamMode(*frequency_zoom, filter, zoom_ratio, params);
+            RunStreamMode(*frequency_resampler, filter, zoom_ratio, params);
         }
     } catch (const sirius::SiriusException& e) {
-        std::cerr << "sirius: exception while computing zoom: " << e.what()
-                  << std::endl;
+        std::cerr << "sirius: exception while computing resampling: "
+                  << e.what() << std::endl;
         return 1;
     }
 
     return 0;
 }
 
-void RunRegularMode(const sirius::IFrequencyZoom& frequency_zoom,
+void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
                     const sirius::Filter& filter,
                     const sirius::ZoomRatio& zoom_ratio,
                     const CliParameters& params) {
     LOG("sirius", info, "regular mode");
     auto input_image = sirius::gdal::LoadImage(params.input_image_path);
-    LOG("sirius", info, "input image \"{}\", {}x{}", params.input_image_path,
+    LOG("sirius", info, "input image '{}' ({}x{})", params.input_image_path,
         input_image.size.row, input_image.size.col);
 
-    auto geo_ref = sirius::gdal::ComputeZoomedGeoReference(
+    auto resampled_geo_ref = sirius::gdal::ComputeResampledGeoReference(
           params.input_image_path, zoom_ratio);
 
-    auto zoomed_image = frequency_zoom.Compute(zoom_ratio, input_image,
-                                               filter.padding(), filter);
-    LOG("sirius", info, "zoomed image \"{}\", {}x{}", params.output_image_path,
-        zoomed_image.size.row, zoomed_image.size.col);
-    sirius::gdal::SaveImage(zoomed_image, params.output_image_path, geo_ref);
+    auto resampled_image = frequency_resampler.Compute(
+          zoom_ratio, input_image, filter.padding(), filter);
+    LOG("sirius", info, "resampled image '{}' ({}x{})",
+        params.output_image_path, resampled_image.size.row,
+        resampled_image.size.col);
+    sirius::gdal::SaveImage(resampled_image, params.output_image_path,
+                            resampled_geo_ref);
 }
 
-void RunStreamMode(const sirius::IFrequencyZoom& frequency_zoom,
+void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
                    const sirius::Filter& filter,
                    const sirius::ZoomRatio& zoom_ratio,
                    const CliParameters& params) {
@@ -219,17 +222,21 @@ void RunStreamMode(const sirius::IFrequencyZoom& frequency_zoom,
             stream_block_size = sirius::utils::GenerateDyadicSize(
                   stream_block_size, zoom_ratio.input_resolution(),
                   filter.padding_size());
+            LOG("sirius", warn, "stream block resized to dyadic size: {}x{}",
+                stream_block_size.row, stream_block_size.col);
         }
     } else {
         // real zoom needs specific block size (row and col should be multiple
         // of input resolution and output resolution)
         stream_block_size = sirius::utils::GenerateZoomCompliantSize(
               stream_block_size, zoom_ratio);
+        LOG("sirius", warn, "stream block resized to comply with zoom: {}x{}",
+            stream_block_size.row, stream_block_size.col);
     }
     sirius::ImageStreamer streamer(
           params.input_image_path, params.output_image_path, stream_block_size,
           zoom_ratio, filter.Metadata(), max_parallel_workers);
-    streamer.Stream(frequency_zoom, filter);
+    streamer.Stream(frequency_resampler, filter);
 }
 
 CliParameters GetCliParameters(int argc, const char* argv[]) {
@@ -237,7 +244,8 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
     std::stringstream description;
     description << "Sirius " << sirius::kVersion << " (" << sirius::kGitCommit
                 << ")" << std::endl
-                << "Standalone tool to resample images in the frequency domain"
+                << "Standalone tool to resample and filter images in the "
+                   "frequency domain"
                 << std::endl;
     cxxopts::Options options(argv[0], description.str());
     options.positional_help("input-image output-image").show_positional_help();
@@ -245,8 +253,9 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
     auto max_threads_string =
           std::to_string(std::thread::hardware_concurrency());
     std::stringstream stream_parallel_workers_desc;
-    stream_parallel_workers_desc << "Parallel workers used to compute zoom ("
-                                 << max_threads_string << " max)";
+    stream_parallel_workers_desc
+          << "Parallel workers used to compute resampling ("
+          << max_threads_string << " max)";
 
     // clang-format off
     options.add_options("")
@@ -255,42 +264,43 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          "Set verbosity level (trace,debug,info,warn,err,critical,off)",
          cxxopts::value(params.verbosity_level)->default_value("info"));
 
-    options.add_options("zoom")
-        ("z,input-resolution", "Numerator of the zoom ratio",
-         cxxopts::value(params.input_resolution)->default_value("1"))
-        ("d,output-resolution", "Denominator of the zoom ratio",
-         cxxopts::value(params.output_resolution)->default_value("1"))
-        ("id-periodic-smooth",
-         "Use Periodic plus Smooth image decomposition "
-         "(default is regular image decomposition)",
-         cxxopts::value(params.periodic_smooth_image_decomposition))
-        ("zoom-zero-padding", "Use zero padding zoom algorithm "
-         "(default is periodization zoom algorithm)",
-         cxxopts::value(params.zpd_zoom_strategy));
+    options.add_options("resampling")
+        ("r,resampling-ratio", "Resampling ratio as input:output, "
+          "allowed format: I (equivalent to I:1), I:O",
+         cxxopts::value(params.resampling_ratio)->default_value("1:1"))
+        ("no-image-decomposition",
+         "Do not decompose the input image "
+         "(default: periodic plus smooth image decomposition)",
+         cxxopts::value(params.no_image_decomposition))
+        ("upsample-periodization",
+          "Force periodization as upsampling algorithm "
+          "(default algorithm if a filter is provided). "
+          "A filter is required to use this algorithm",
+          cxxopts::value(params.upsample_periodization))
+        ("upsample-zero-padding",
+          "Force zero padding as upsampling algorithm "
+          "(default algorithm if no filter is provided)",
+          cxxopts::value(params.upsample_zero_padding));
 
     options.add_options("filter")
         ("filter",
-         "Path to the filter image to apply to the zoomed image",
+         "Path to the filter image to apply to the source or resampled image",
          cxxopts::value(params.filter_path))
-        ("filter-no-padding",
-         "Do not add filter margins on input borders "
-         "(default is mirror padding)",
-         cxxopts::value(params.filter_no_padding))
-        ("filter-zero-padding",
-         "Use zero padding strategy to add filter margins on input borders "
-         "(default is mirror padding)",
-         cxxopts::value(params.filter_zero_padding))
         ("filter-normalize",
          "Normalize filter coefficients "
          "(default is no normalization)",
-         cxxopts::value(params.filter_normalize));
+         cxxopts::value(params.filter_normalize))
+        ("zero-pad-real-edges",
+         "Force zero padding strategy on real input edges "
+         "(default: mirror padding)",
+         cxxopts::value(params.zero_pad_real_edges));
 
     options.add_options("streaming")
         ("stream", "Enable stream mode",
          cxxopts::value(params.stream_mode))
-        ("block-width", "Width of a stream block",
+        ("block-width", "Initial width of a stream block",
          cxxopts::value(params.stream_block_width)->default_value("256"))
-        ("block-height", "Height of a stream block",
+        ("block-height", "Initial height of a stream block",
          cxxopts::value(params.stream_block_height)->default_value("256"))
         ("no-block-resizing",
          "Disable block resizing optimization",
@@ -307,7 +317,8 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
 
     options.parse_positional({"input", "output"});
 
-    params.help_message = options.help({"", "zoom", "filter", "streaming"});
+    params.help_message =
+          options.help({"", "resampling", "filter", "streaming"});
 
     try {
         auto result = options.parse(argc, argv);

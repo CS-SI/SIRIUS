@@ -19,36 +19,37 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_FREQUENCY_ZOOM_BASE_H_
-#define SIRIUS_ZOOM_FREQUENCY_ZOOM_BASE_H_
+#ifndef SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_
+#define SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_
 
-#include "sirius/i_frequency_zoom.h"
+#include "sirius/i_frequency_resampler.h"
 #include "sirius/image.h"
 
 #include "sirius/fftw/types.h"
 
 namespace sirius {
-namespace zoom {
+namespace resampler {
 
 /**
- * \brief Implementation of IFrequencyZoom
+ * \brief Implementation of IFrequencyResampler
  */
 template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-class FrequencyZoom final : public IFrequencyZoom,
-                            private ImageDecompositionPolicy<ZoomStrategy> {
+class FrequencyResampler final
+      : public IFrequencyResampler,
+        private ImageDecompositionPolicy<ZoomStrategy> {
   public:
-    FrequencyZoom() = default;
+    FrequencyResampler() = default;
 
     // copyable
-    FrequencyZoom(const FrequencyZoom&) = default;
-    FrequencyZoom& operator=(const FrequencyZoom&) = default;
+    FrequencyResampler(const FrequencyResampler&) = default;
+    FrequencyResampler& operator=(const FrequencyResampler&) = default;
     // moveable
-    FrequencyZoom(FrequencyZoom&&) = default;
-    FrequencyZoom& operator=(FrequencyZoom&&) = default;
+    FrequencyResampler(FrequencyResampler&&) = default;
+    FrequencyResampler& operator=(FrequencyResampler&&) = default;
 
-    ~FrequencyZoom() override = default;
+    ~FrequencyResampler() override = default;
 
-    // IFrequencyZoom interface
+    // IFrequencyResampler interface
     Image Compute(const ZoomRatio& ratio, const Image& input,
                   const Padding& image_padding,
                   const Filter& filter = {}) const override;
@@ -62,9 +63,9 @@ class FrequencyZoom final : public IFrequencyZoom,
                         const ZoomRatio& zoom_ratio) const;
 };
 
-}  // namespace zoom
+}  // namespace resampler
 }  // namespace sirius
 
-#include "sirius/zoom/frequency_zoom.txx"
+#include "sirius/resampler/frequency_resampler.txx"
 
-#endif  // SIRIUS_FREQ_ZOOM_H_
+#endif  // SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_

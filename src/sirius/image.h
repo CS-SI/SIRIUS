@@ -31,7 +31,6 @@ namespace sirius {
 enum class PaddingType {
     kZeroPadding = 0,   /**<  zero padding: fill margins with 0*/
     kMirrorPadding = 1, /**<  mirror padding: duplicate rows/cols in mirror*/
-    kNone = 2           /**<  none: do not add data for margins*/
 };
 
 /**
@@ -54,8 +53,7 @@ struct Padding {
     int right{0};
 
     bool IsEmpty() const {
-        return type == PaddingType::kNone ||
-               (top == 0 && bottom == 0 && left == 0 && right == 0);
+        return (top == 0 && bottom == 0 && left == 0 && right == 0);
     }
 
     PaddingType type{PaddingType::kMirrorPadding};

@@ -41,8 +41,8 @@ using DatasetUPtr = std::unique_ptr<::GDALDataset, detail::DatasetDeleter>;
 Sirius multi-threaded streaming is based on [lambdas][lambda] and [task mechanism][std::async]:
 
 * One task will read an image block from the input image and feed an input queue
-* N worker tasks will consume the input queue, compute the zoom and feed an output queue
-* One task will consume the output queue and write the zoomed block into the output image.
+* N worker tasks will consume the input queue, compute the resampling and feed an output queue
+* One task will consume the output queue and write the resampled block into the output image.
 
 Tasks are created using [`std::async`][std::async] with the policy `std::launch::async` (force the creation of a new thread to execute the given task).
 
@@ -88,16 +88,16 @@ C++11 standard guarantees that a unique instance will be initialized and that th
 
 ### Factory
 
-The `FrequencyZoom` is the combination of two algorithms:
+The `FrequencyResampler` is the combination of two algorithms:
 * an image decomposition algorithm
 * a zoom algorithm
 
-Sirius provides an `IFrequencyZoom` factory to compose the zoom type requested by a client.
-API clients should only deal with `IFrequencyZoom` interface and should not be concerned by `IFrequencyZoom` implementations.
+Sirius provides an `IFrequencyResampler` factory to compose the resampler requested by a client.
+API clients should only deal with `IFrequencyResampler` interface and should not be concerned by `IFrequencyResampler` implementations.
 
 ### Policy/Strategy
 
-`FrequencyZoom` is the composition of an image decomposition algorithm and a zoom algorithm.
+`FrequencyResampler` is the composition of an image decomposition algorithm and a zoom algorithm.
 The policy/strategy pattern is used to adapt the internal behavior of this class.
 
 An algorithm implementation must comply with an an algorithm type implicit interface.
@@ -139,7 +139,7 @@ FFTW plans are cached so that a plan with a given size is reused if it has alrea
 
 ### Concurrent queue
 
-Sirius multi-threaded streaming is using `ConcurrentQueue` instances to feed zoom workers and to feed output stream.
+Sirius multi-threaded streaming is using `ConcurrentQueue` instances to feed resampler workers and to feed output stream.
 
 This queue implementation is based on [std::condition_variable].
 

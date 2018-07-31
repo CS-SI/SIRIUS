@@ -19,11 +19,9 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_OUTPUT_ZOOMED_STREAM_H_
-#define SIRIUS_GDAL_OUTPUT_ZOOMED_STREAM_H_
+#ifndef SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+#define SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
 
-#include <mutex>
-#include <stack>
 #include <system_error>
 
 #include "sirius/types.h"
@@ -35,19 +33,19 @@ namespace sirius {
 namespace gdal {
 
 /**
- * \brief Write a zoomed image by block
+ * \brief Write a resampled image by block
  */
-class OutputZoomedStream {
+class ResampledOutputStream {
   public:
-    OutputZoomedStream(const std::string& input_path,
-                       const std::string& output_path,
-                       const ZoomRatio& zoom_ratio);
+    ResampledOutputStream(const std::string& input_path,
+                          const std::string& output_path,
+                          const ZoomRatio& zoom_ratio);
 
-    ~OutputZoomedStream() = default;
-    OutputZoomedStream(const OutputZoomedStream&) = delete;
-    OutputZoomedStream& operator=(const OutputZoomedStream&) = delete;
-    OutputZoomedStream(OutputZoomedStream&&) = delete;
-    OutputZoomedStream& operator=(OutputZoomedStream&&) = delete;
+    ~ResampledOutputStream() = default;
+    ResampledOutputStream(const ResampledOutputStream&) = delete;
+    ResampledOutputStream& operator=(const ResampledOutputStream&) = delete;
+    ResampledOutputStream(ResampledOutputStream&&) = delete;
+    ResampledOutputStream& operator=(ResampledOutputStream&&) = delete;
 
     /**
      * \brief Write a zoomed block in the output file
@@ -64,4 +62,4 @@ class OutputZoomedStream {
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_OUTPUT_ZOOMED_STREAM_H_
+#endif  // SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_

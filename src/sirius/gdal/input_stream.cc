@@ -48,7 +48,7 @@ InputStream::InputStream(const std::string& image_path,
         throw SiriusException("invalid block size");
     }
 
-    LOG("input_stream", info, "input image \"{}\", size: {}x{}", image_path,
+    LOG("input_stream", info, "input image '{}' ({}x{})", image_path,
         input_dataset_->GetRasterYSize(), input_dataset_->GetRasterXSize());
 }
 
