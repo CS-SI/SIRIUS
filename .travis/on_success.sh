@@ -7,6 +7,7 @@ if [ "x${TRAVIS_REPO_SLUG}" = "xCS-SI/SIRIUS" ]; then
     cd "$TRAVIS_BUILD_DIR"
     mkdir doc/sphinx/build
     docker run -v $TRAVIS_BUILD_DIR/doc/sphinx:/sphinx ldumas/sirius_dockerfile:sirius_pages /bin/sh -c "cd /sphinx; make html"
+    mv $TRAVIS_BUILD_DIR/doxy_html $TRAVIS_BUILD_DIR/doc/sphinx/build/
     cd $TRAVIS_BUILD_DIR/doc/sphinx/build/
     touch .nojekyll
     git init
