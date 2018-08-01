@@ -40,6 +40,8 @@
 #include "sirius/utils/log.h"
 #include "sirius/utils/numeric.h"
 
+#include "sirius/translation/frequency_translation.h"
+
 struct CliParameters {
     // status
     bool parsed = false;
@@ -59,6 +61,10 @@ struct CliParameters {
     bool upsample_periodization = false;
     bool upsample_zero_padding = false;
 
+    // translation options
+    float row_translation = 0.0;
+    float col_translation = 0.0;
+
     // filter options
     std::string filter_path;
     bool zero_pad_real_edges = false;
@@ -67,8 +73,10 @@ struct CliParameters {
     bool stream_mode = false;
     int stream_block_height = 256;
     int stream_block_width = 256;
-    bool stream_disable_block_resizing = false;
+    bool stream_no_block_resizing = false;
     bool filter_normalize = false;
+    int hot_point_x = -1;
+    int hot_point_y = -1;
     unsigned int stream_parallel_workers = std::thread::hardware_concurrency();
 
     bool HasStreamMode() const {
@@ -129,8 +137,10 @@ int main(int argc, const char* argv[]) {
         sirius::Filter filter;
         if (!params.filter_path.empty()) {
             LOG("sirius", info, "filter path: {}", params.filter_path);
+            sirius::Point hp(params.hot_point_x, params.hot_point_y);
+
             filter =
-                  sirius::Filter::Create(params.filter_path, zoom_ratio,
+                  sirius::Filter::Create(params.filter_path, zoom_ratio, hp,
                                          padding_type, params.filter_normalize);
         }
 
@@ -175,6 +185,20 @@ int main(int argc, const char* argv[]) {
         } else {
             RunStreamMode(*frequency_resampler, filter, zoom_ratio, params);
         }
+
+        if (params.row_translation != 0.0 || params.col_translation != 0.0) {
+            auto output_image =
+                  sirius::gdal::LoadImage(params.output_image_path);
+            sirius::FrequencyTranslation freq_trans;
+            output_image = freq_trans.Shift(
+                  output_image, params.col_translation, params.row_translation);
+            auto dataset = sirius::gdal::LoadDataset(params.output_image_path);
+            auto geo_ref = sirius::gdal::ComputeShiftedGeoReference(
+                  dataset.get(), params.row_translation,
+                  params.col_translation);
+            sirius::gdal::SaveImage(output_image, params.output_image_path,
+                                    geo_ref);
+        }
     } catch (const sirius::SiriusException& e) {
         std::cerr << "sirius: exception while computing resampling: "
                   << e.what() << std::endl;
@@ -218,7 +242,7 @@ void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
 
     // improve stream_block_size if requested or required
     if (!zoom_ratio.IsRealZoom()) {
-        if (!params.stream_disable_block_resizing) {
+        if (!params.stream_no_block_resizing) {
             stream_block_size = sirius::utils::GenerateDyadicSize(
                   stream_block_size, zoom_ratio.input_resolution(),
                   filter.padding_size());
@@ -282,6 +306,12 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
           "(default algorithm if no filter is provided)",
           cxxopts::value(params.upsample_zero_padding));
 
+    options.add_options("translation")
+        ("row-trans", "Translation on y axis (applied after resampling)", 
+          cxxopts::value(params.row_translation)->default_value("0.0"))
+        ("col-trans", "Translation on x axis (applied after resampling)", 
+          cxxopts::value(params.col_translation)->default_value("0.0"));
+
     options.add_options("filter")
         ("filter",
          "Path to the filter image to apply to the source or resampled image",
@@ -293,7 +323,15 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
         ("zero-pad-real-edges",
          "Force zero padding strategy on real input edges "
          "(default: mirror padding)",
-         cxxopts::value(params.zero_pad_real_edges));
+         cxxopts::value(params.zero_pad_real_edges))
+        ("hot-point-x",
+         "Hot point x coordinate"
+         "(considered centered if no value is provided)",
+         cxxopts::value(params.hot_point_x))
+        ("hot-point-y",
+         "Hot point y coordinate"
+         "(considered centered if no value is provided)",
+         cxxopts::value(params.hot_point_y));
 
     options.add_options("streaming")
         ("stream", "Enable stream mode",
@@ -304,7 +342,7 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          cxxopts::value(params.stream_block_height)->default_value("256"))
         ("no-block-resizing",
          "Disable block resizing optimization",
-         cxxopts::value(params.stream_disable_block_resizing))
+         cxxopts::value(params.stream_no_block_resizing))
         ("parallel-workers", stream_parallel_workers_desc.str(),
          cxxopts::value(params.stream_parallel_workers)
             ->default_value("1")
@@ -317,8 +355,8 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
 
     options.parse_positional({"input", "output"});
 
-    params.help_message =
-          options.help({"", "resampling", "filter", "streaming"});
+    params.help_message = options.help(
+          {"", "resampling", "translation", "filter", "streaming"});
 
     try {
         auto result = options.parse(argc, argv);

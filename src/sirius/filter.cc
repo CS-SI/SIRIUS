@@ -40,16 +40,25 @@ namespace sirius {
 
 Image ZoomFilterImageToInputResolution(const Image& filter_image,
                                        const ZoomRatio& zoom_ratio);
+
 void NormalizeFilterImage(Image& filter_image, int oversampling);
-Image FrequencyShift(const Image& filter_image);
+
+Image CenterFilterImage(const Image& filter_image, const Point& hot_point);
 
 Filter Filter::Create(const std::string& image_path,
-                      const ZoomRatio& zoom_ratio, PaddingType padding_type,
-                      bool normalize) {
+                      const ZoomRatio& zoom_ratio, const Point& hot_point,
+                      PaddingType padding_type, bool filter_normalize) {
     // load image
     auto filter_image = gdal::LoadImage(image_path);
 
-    if (normalize) {
+    if (hot_point.x < -1 || hot_point.x >= filter_image.size.col ||
+        hot_point.y < -1 || hot_point.y >= filter_image.size.row) {
+        LOG("filter", error, "Invalid hot point with coordinates {}, {}",
+            hot_point.x, hot_point.y);
+        throw SiriusException("Invalid hot point");
+    }
+
+    if (filter_normalize) {
         NormalizeFilterImage(filter_image, zoom_ratio.input_resolution());
     }
 
@@ -58,22 +67,24 @@ Filter Filter::Create(const std::string& image_path,
 
     if (zoom_ratio.ratio() <= 1) {
         return CreateZoomOutFilter(std::move(filter_image), zoom_ratio,
-                                   padding_type);
+                                   padding_type, hot_point);
     } else if (!zoom_ratio.IsRealZoom()) {
         return CreateZoomInFilter(std::move(filter_image), zoom_ratio,
-                                  padding_type);
+                                  padding_type, hot_point);
     } else {
         return CreateRealZoomFilter(std::move(filter_image), zoom_ratio,
-                                    padding_type);
+                                    padding_type, hot_point);
     }
 }
 
 Filter::Filter(Image&& filter_image, const Size& padding_size,
-               const ZoomRatio& zoom_ratio, PaddingType padding_type)
+               const ZoomRatio& zoom_ratio, PaddingType padding_type,
+               const Point& hot_point)
     : filter_(std::move(filter_image)),
       padding_size_(padding_size),
       zoom_ratio_(zoom_ratio),
       padding_type_(padding_type),
+      hot_point_(hot_point),
       filter_fft_cache_(std::make_unique<FilterFFTCache>()) {
     LOG("filter", info, "filter size: {}x{}", filter_.size.row,
         filter_.size.col);
@@ -164,8 +175,13 @@ fftw::ComplexUPtr Filter::CreateFilterFFT(const Size& image_size) const {
 
 Filter Filter::CreateZoomOutFilter(Image filter_image,
                                    const ZoomRatio& zoom_ratio,
-                                   PaddingType padding_type) {
+                                   PaddingType padding_type,
+                                   const Point& hot_point) {
     LOG("filter", info, "filter: downsampling");
+    if (hot_point.x != -1 && hot_point.y != -1) {
+        filter_image = CenterFilterImage(filter_image, hot_point);
+    }
+
     int padding_row = (filter_image.size.row % 2 == 0)
                             ? (filter_image.size.row / 2)
                             : (filter_image.size.row - 1) / 2;
@@ -176,13 +192,19 @@ Filter Filter::CreateZoomOutFilter(Image filter_image,
     return {std::move(filter_image),
             {padding_row, padding_col},
             zoom_ratio,
-            padding_type};
+            padding_type,
+            hot_point};
 }
 
 Filter Filter::CreateZoomInFilter(Image filter_image,
                                   const ZoomRatio& zoom_ratio,
-                                  PaddingType padding_type) {
+                                  PaddingType padding_type,
+                                  const Point& hot_point) {
     LOG("filter", info, "filter: upsampling");
+    if (hot_point.x != -1 && hot_point.y != -1) {
+        filter_image = CenterFilterImage(filter_image, hot_point);
+    }
+
     int padding_row = static_cast<int>(
           ((filter_image.size.row - 1) / 2) *
           (zoom_ratio.output_resolution() /
@@ -207,15 +229,21 @@ Filter Filter::CreateZoomInFilter(Image filter_image,
     return {std::move(filter_image),
             {padding_row, padding_col},
             zoom_ratio,
-            padding_type};
+            padding_type,
+            hot_point};
 }
 
 Filter Filter::CreateRealZoomFilter(Image filter_image,
                                     const ZoomRatio& zoom_ratio,
-                                    PaddingType padding_type) {
+                                    PaddingType padding_type,
+                                    const Point& hot_point) {
     LOG("filter", info,
         "filter: float upsampling factor (upsample filter to input "
         "resolution)");
+    if (hot_point.x != -1 && hot_point.y != 1) {
+        filter_image = CenterFilterImage(filter_image, hot_point);
+    }
+
     // zoom filter image to input resolution
     filter_image = ZoomFilterImageToInputResolution(filter_image, zoom_ratio);
 
@@ -236,7 +264,8 @@ Filter Filter::CreateRealZoomFilter(Image filter_image,
     return {std::move(filter_image),
             {padding_row, padding_col},
             zoom_ratio,
-            padding_type};
+            padding_type,
+            hot_point};
 }
 
 Image ZoomFilterImageToInputResolution(const Image& filter_image,
@@ -259,6 +288,7 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
           new_zoom_ratio, shifted_filter, {0, 0, 0, 0}, {});
 
     Image unshifted_zoomed_filter(zoomed_filter.size);
+    // centered FFTShift so filter's hot point remains centered
     utils::FFTShift2D(zoomed_filter.data.data(), zoomed_filter.size,
                       unshifted_zoomed_filter.data.data());
 
@@ -297,73 +327,19 @@ void NormalizeFilterImage(Image& filter_image, int oversampling) {
     }
 }
 
-Image FrequencyShift(const Image& filter_image) {
-    LOG("filter", info, "apply frequency shift to the filter");
-    Image shifted_filter(filter_image.size);
-    utils::IFFTShift2D(filter_image.data.data(), filter_image.size,
-                       shifted_filter.data.data());
+Image CenterFilterImage(const Image& filter_image, const Point& hot_point) {
+    LOG("filter", trace, "center filter image");
 
-    auto fft_filter =
-          fftw::FFT(shifted_filter.data.data(), shifted_filter.size);
-    int fft_row_count = shifted_filter.size.row;
-    int fft_col_count = shifted_filter.size.col / 2 + 1;
+    auto shifted_values =
+          fftw::CreateReal({filter_image.size.row, filter_image.size.col});
+    utils::IFFTShift2DUncentered(filter_image.data.data(), filter_image.size,
+                                 hot_point, shifted_values.get());
+    Image centered_filter(filter_image.size);
+    // centered FFTShift so filter's hot point remains centered
+    utils::FFTShift2D(shifted_values.get(), filter_image.size,
+                      centered_filter.data.data());
 
-    std::vector<double> freq_y = utils::ComputeFFTFreq(shifted_filter.size.col);
-    std::vector<double> freq_x =
-          utils::ComputeFFTFreq(shifted_filter.size.row, false);
-
-    auto exp_cplx_y = fftw::CreateComplex({1, fft_col_count});
-    auto exp_cplx_x = fftw::CreateComplex({fft_row_count, 1});
-
-    for (int j = 0; j < fft_col_count; ++j) {
-        exp_cplx_y.get()[j][0] = cos(-2 * M_PI * (-0.5) * freq_y[j]);
-        exp_cplx_y.get()[j][1] = sin(-2 * M_PI * (-0.5) * freq_y[j]);
-    }
-
-    for (int i = 0; i < fft_row_count; ++i) {
-        exp_cplx_x.get()[i][0] = cos(-2 * M_PI * (-0.5) * freq_x[i]);
-        exp_cplx_x.get()[i][1] = sin(-2 * M_PI * (-0.5) * freq_x[i]);
-    }
-
-    for (int i = 0; i < fft_row_count; ++i) {
-        for (int j = 0; j < fft_col_count; ++j) {
-            int idx = i * fft_col_count + j;
-            auto tmp_real = fft_filter.get()[idx][0];
-            auto tmp_im = fft_filter.get()[idx][1];
-            fft_filter.get()[idx][0] =
-                  fft_filter.get()[idx][0] * exp_cplx_x[i][0] *
-                        exp_cplx_y[j][0] -
-                  fft_filter.get()[idx][1] * exp_cplx_x[i][1] *
-                        exp_cplx_y[j][0] -
-                  fft_filter.get()[idx][1] * exp_cplx_x[i][0] *
-                        exp_cplx_y[j][1] -
-                  fft_filter.get()[idx][0] * exp_cplx_x[i][1] *
-                        exp_cplx_y[j][1];
-
-            fft_filter.get()[idx][1] =
-                  tmp_real * exp_cplx_x[i][0] * exp_cplx_y[j][1] -
-                  tmp_im * exp_cplx_x[i][1] * exp_cplx_y[j][1] +
-                  tmp_im * exp_cplx_x[i][0] * exp_cplx_y[j][0] +
-                  tmp_real * exp_cplx_x[i][1] * exp_cplx_y[j][0];
-        }
-    }
-
-    shifted_filter = fftw::IFFT(shifted_filter.size, std::move(fft_filter));
-    Image unshifted_filter(shifted_filter.size);
-    utils::FFTShift2D(shifted_filter.data.data(), unshifted_filter.size,
-                      unshifted_filter.data.data());
-
-    // remove last row and col
-    Image result_filter(
-          {unshifted_filter.size.row - 1, unshifted_filter.size.col - 1});
-    for (int i = 0; i < result_filter.size.row; ++i) {
-        for (int j = 0; j < result_filter.size.col; ++j) {
-            result_filter.data[i * result_filter.size.col + j] =
-                  unshifted_filter.data[i * unshifted_filter.size.col + j];
-        }
-    }
-
-    return result_filter;
+    return centered_filter;
 }
 
 }  // namespace sirius
