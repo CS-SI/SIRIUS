@@ -54,10 +54,6 @@ Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::Compute(
     LOG("frequency_resampler", trace, "pad image");
     auto padded_image = input_image.CreatePaddedImage(image_padding);
 
-    if (padded_image.size.col % 2 != 0 || padded_image.size.row % 2 != 0) {
-        padded_image.CreateEvenImage();
-    }
-
     LOG("frequency_resampler", trace, "decompose and zoom image");
     // method inherited from ImageDecompositionPolicy
     Image result_image = this->DecomposeAndZoom(zoom_ratio.input_resolution(),
