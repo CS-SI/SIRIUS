@@ -43,9 +43,6 @@ Image ZoomFilterImageToInputResolution(const Image& filter_image,
 
 void NormalizeFilterImage(Image& filter_image, int oversampling);
 
-Image FrequencyShift(const Image& filter_image, const Point& hot_point,
-                     float shift_col, float shift_row);
-
 Image CenterFilterImage(const Image& filter_image, const Point& hot_point);
 
 Filter Filter::Create(const std::string& image_path,
@@ -328,80 +325,6 @@ void NormalizeFilterImage(Image& filter_image, int oversampling) {
             }
         }
     }
-}
-
-Image FrequencyShift(const Image& filter_image, const Point& hot_point,
-                     float shift_row, float shift_col) {
-    LOG("filter", info, "apply frequency shift to the filter");
-    Image shifted_filter(filter_image.size);
-
-    if (hot_point.x == -1 && hot_point.y == -1) {
-        utils::IFFTShift2D(filter_image.data.data(), filter_image.size,
-                           shifted_filter.data.data());
-    } else {
-        utils::IFFTShift2DUncentered(filter_image.data.data(),
-                                     filter_image.size, hot_point,
-                                     shifted_filter.data.data());
-    }
-
-    auto fft_filter =
-          fftw::FFT(shifted_filter.data.data(), shifted_filter.size);
-    int fft_row_count = shifted_filter.size.row;
-    int fft_col_count = shifted_filter.size.col / 2 + 1;
-
-    std::vector<double> freq_y = utils::ComputeFFTFreq(shifted_filter.size.col);
-    std::vector<double> freq_x =
-          utils::ComputeFFTFreq(shifted_filter.size.row, false);
-
-    auto exp_cplx_y = fftw::CreateComplex({1, fft_col_count});
-    auto exp_cplx_x = fftw::CreateComplex({fft_row_count, 1});
-
-    for (int j = 0; j < fft_col_count; ++j) {
-        exp_cplx_y.get()[j][0] = cos(-2 * M_PI * shift_row * freq_y[j]);
-        exp_cplx_y.get()[j][1] = sin(-2 * M_PI * shift_row * freq_y[j]);
-    }
-
-    for (int i = 0; i < fft_row_count; ++i) {
-        exp_cplx_x.get()[i][0] = cos(-2 * M_PI * shift_col * freq_x[i]);
-        exp_cplx_x.get()[i][1] = sin(-2 * M_PI * shift_col * freq_x[i]);
-    }
-
-    for (int i = 0; i < fft_row_count; ++i) {
-        for (int j = 0; j < fft_col_count; ++j) {
-            int idx = i * fft_col_count + j;
-            auto tmp_real = fft_filter.get()[idx][0];
-            auto tmp_im = fft_filter.get()[idx][1];
-            fft_filter.get()[idx][0] =
-                  fft_filter.get()[idx][0] * exp_cplx_x[i][0] *
-                        exp_cplx_y[j][0] -
-                  fft_filter.get()[idx][1] * exp_cplx_x[i][1] *
-                        exp_cplx_y[j][0] -
-                  fft_filter.get()[idx][1] * exp_cplx_x[i][0] *
-                        exp_cplx_y[j][1] -
-                  fft_filter.get()[idx][0] * exp_cplx_x[i][1] *
-                        exp_cplx_y[j][1];
-
-            fft_filter.get()[idx][1] =
-                  tmp_real * exp_cplx_x[i][0] * exp_cplx_y[j][1] -
-                  tmp_im * exp_cplx_x[i][1] * exp_cplx_y[j][1] +
-                  tmp_im * exp_cplx_x[i][0] * exp_cplx_y[j][0] +
-                  tmp_real * exp_cplx_x[i][1] * exp_cplx_y[j][0];
-        }
-    }
-
-    shifted_filter = fftw::IFFT(shifted_filter.size, std::move(fft_filter));
-    Image unshifted_filter(shifted_filter.size);
-
-    if (hot_point.x == -1 && hot_point.y == -1) {
-        utils::FFTShift2D(shifted_filter.data.data(), unshifted_filter.size,
-                          unshifted_filter.data.data());
-    } else {
-        utils::FFTShift2DUncentered(shifted_filter.data.data(),
-                                    unshifted_filter.size, hot_point,
-                                    unshifted_filter.data.data());
-    }
-
-    return unshifted_filter;
 }
 
 Image CenterFilterImage(const Image& filter_image, const Point& hot_point) {

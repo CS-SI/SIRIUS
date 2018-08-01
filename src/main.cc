@@ -40,6 +40,8 @@
 #include "sirius/utils/log.h"
 #include "sirius/utils/numeric.h"
 
+#include "sirius/translation/frequency_translation.h"
+
 struct CliParameters {
     // status
     bool parsed = false;
@@ -58,6 +60,10 @@ struct CliParameters {
     bool no_image_decomposition = false;
     bool upsample_periodization = false;
     bool upsample_zero_padding = false;
+
+    // translation options
+    float row_translation = 0.0;
+    float col_translation = 0.0;
 
     // filter options
     std::string filter_path;
@@ -179,6 +185,20 @@ int main(int argc, const char* argv[]) {
         } else {
             RunStreamMode(*frequency_resampler, filter, zoom_ratio, params);
         }
+
+        if (params.row_translation != 0.0 || params.col_translation != 0.0) {
+            auto output_image =
+                  sirius::gdal::LoadImage(params.output_image_path);
+            sirius::FrequencyTranslation freq_trans;
+            output_image = freq_trans.Shift(
+                  output_image, params.col_translation, params.row_translation);
+            auto dataset = sirius::gdal::LoadDataset(params.output_image_path);
+            auto geo_ref = sirius::gdal::ComputeShiftedGeoReference(
+                  dataset.get(), params.row_translation,
+                  params.col_translation);
+            sirius::gdal::SaveImage(output_image, params.output_image_path,
+                                    geo_ref);
+        }
     } catch (const sirius::SiriusException& e) {
         std::cerr << "sirius: exception while computing resampling: "
                   << e.what() << std::endl;
@@ -286,6 +306,12 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
           "(default algorithm if no filter is provided)",
           cxxopts::value(params.upsample_zero_padding));
 
+    options.add_options("translation")
+        ("row-trans", "Translation on y axis (applied after resampling)", 
+          cxxopts::value(params.row_translation)->default_value("0.0"))
+        ("col-trans", "Translation on x axis (applied after resampling)", 
+          cxxopts::value(params.col_translation)->default_value("0.0"));
+
     options.add_options("filter")
         ("filter",
          "Path to the filter image to apply to the source or resampled image",
@@ -329,8 +355,8 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
 
     options.parse_positional({"input", "output"});
 
-    params.help_message =
-          options.help({"", "resampling", "filter", "streaming"});
+    params.help_message = options.help(
+          {"", "resampling", "translation", "filter", "streaming"});
 
     try {
         auto result = options.parse(argc, argv);

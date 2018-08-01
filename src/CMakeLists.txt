@@ -58,6 +58,10 @@ set(SIRIUS_SRC
     sirius/resampler/zoom_strategy/zero_padding_strategy.h
     sirius/resampler/zoom_strategy/zero_padding_strategy.cc
 
+    #translation
+    sirius/translation/frequency_translation.h
+    sirius/translation/frequency_translation.cc
+
     # resampler image decomposition policies
     sirius/resampler/image_decomposition/regular_policy.h
     sirius/resampler/image_decomposition/regular_policy.txx
