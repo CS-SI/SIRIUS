@@ -323,7 +323,7 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
         ("zero-pad-real-edges",
          "Force zero padding strategy on real input edges "
          "(default: mirror padding)",
-         cxxopts::value(params.zero_pad_real_edges));
+         cxxopts::value(params.zero_pad_real_edges))
         ("hot-point-x",
          "Hot point x coordinate"
          "(considered centered if no value is provided)",
