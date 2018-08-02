@@ -84,8 +84,8 @@ class Image {
 
     Image(const Image&) = default;
     Image& operator=(const Image&) = default;
-    Image(Image&&) = default;
-    Image& operator=(Image&&) = default;
+    Image(Image&&);
+    Image& operator=(Image&&);
 
     /**
      * \brief Get the cell count of the image (row x col)
