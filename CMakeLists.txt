@@ -24,6 +24,9 @@ project(Sirius CXX)
 
 include(cmake/BuildType.cmake)
 
+set(SIRIUS_VERSION "0.0.0" CACHE STRING "Sirius version")
+set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit" CACHE STRING "Sirius revision commit")
+
 option(ENABLE_CACHE_OPTIMIZATION "Enable cache (FFTW plan, Filter FFT)" ON)
 option(ENABLE_LOGS "Enable logs" ON)
 option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
@@ -35,22 +38,11 @@ list(APPEND CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
      "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
 
-# extract version from git tag using git describe
-find_package(Git QUIET)
-if(GIT_FOUND)
-    include(GetGitRevisionDescription)
-    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_GIT_SHA1)
-    git_describe(SIRIUS_GIT_DESCRIBE)
-    if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
-        message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
-        set(SIRIUS_VERSION "0.0.0")
-    else()
-        set(SIRIUS_VERSION "${SIRIUS_GIT_DESCRIBE}")
-    endif()
-else()
-    set(SIRIUS_GIT_REFSPEC "unknown")
-    set(SIRIUS_GIT_SHA1 "...")
-    set(SIRIUS_VERSION "X.Y.Z")
+if ("${SIRIUS_VERSION}" STREQUAL "")
+    set(SIRIUS_VERSION "0.0.0")
+endif()
+if ("${SIRIUS_REVISION_COMMIT}" STREQUAL "")
+    set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit")
 endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -58,7 +50,7 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug)
     set(ENABLE_GSL_CONTRACTS "ON")
 endif()
 
-message(STATUS "Sirius ${SIRIUS_VERSION}")
+message(STATUS "Sirius ${SIRIUS_VERSION} (${SIRIUS_REVISION_COMMIT})")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "Enable cache: ${ENABLE_CACHE_OPTIMIZATION}")
