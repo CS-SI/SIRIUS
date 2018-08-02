@@ -44,6 +44,8 @@ struct FilterMetadata {
     PaddingType padding_type{PaddingType::kMirrorPadding};
 };
 
+constexpr Point filter_default_hot_point{-1, -1};
+
 /**
  * \brief Frequency filter
  */
@@ -58,6 +60,7 @@ class Filter {
      * \brief Filter which is adapted specifically for a particular zoom ratio
      * \param image_path image path of the filter
      * \param zoom_ratio ratio on which the filter must be applied
+     * \param hot_point 2D coordinates of the filter's hot point
      * \param padding_type padding type
      * \param normalize normalize filter
      *
@@ -65,6 +68,7 @@ class Filter {
      */
     static Filter Create(const std::string& image_path,
                          const ZoomRatio& zoom_ratio,
+                         const Point& hot_point = filter_default_hot_point,
                          PaddingType padding_type = PaddingType::kMirrorPadding,
                          bool normalize = false);
 
@@ -116,6 +120,8 @@ class Filter {
                 padding_size_.col, padding_type_};
     }
 
+    const Point& hot_point() const { return hot_point_; }
+
     /**
      * \brief Check that the filter can be applied on the given zoom ratio
      * \param zoom_ratio
@@ -143,16 +149,20 @@ class Filter {
   private:
     static Filter CreateZoomInFilter(Image filter_image,
                                      const ZoomRatio& zoom_ratio,
-                                     PaddingType padding_type);
+                                     PaddingType padding_type,
+                                     const Point& hot_point);
     static Filter CreateZoomOutFilter(Image filter_image,
                                       const ZoomRatio& zoom_ratio,
-                                      PaddingType padding_type);
+                                      PaddingType padding_type,
+                                      const Point& hot_point);
     static Filter CreateRealZoomFilter(Image filter_image,
                                        const ZoomRatio& zoom_ratio,
-                                       PaddingType padding_type);
+                                       PaddingType padding_type,
+                                       const Point& hot_point);
 
     Filter(Image&& filter_image, const Size& padding_size,
-           const ZoomRatio& zoom_ratio, PaddingType padding_type);
+           const ZoomRatio& zoom_ratio, PaddingType padding_type,
+           const Point& hot_point);
 
     fftw::ComplexUPtr CreateFilterFFT(const Size& image_size) const;
 
@@ -161,6 +171,7 @@ class Filter {
     Size padding_size_{0, 0};
     ZoomRatio zoom_ratio_{};
     PaddingType padding_type_{PaddingType::kMirrorPadding};
+    Point hot_point_{filter_default_hot_point};
 
     FilterFFTCacheUPtr filter_fft_cache_{nullptr};
 };

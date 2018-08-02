@@ -81,6 +81,24 @@ struct Size {
 };
 
 /**
+ * \brief Data class that represents the 2D coordinates of a point
+ */
+struct Point {
+    Point() = default;
+
+    constexpr Point(int x, int y) noexcept : x(x), y(y) {}
+
+    ~Point() = default;
+    Point(const Point&) = default;
+    Point& operator=(const Point&) = default;
+    Point(Point&&) = default;
+    Point& operator=(Point&&) = default;
+
+    int x{0};
+    int y{0};
+};
+
+/**
  * \brief Data class that represents zoom ratio as
  *        input_resolution/output_resolution
  */

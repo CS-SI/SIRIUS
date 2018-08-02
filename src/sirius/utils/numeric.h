@@ -44,6 +44,27 @@ void FFTShift2D(const double* data, const Size& size, double* shifted_data);
 void IFFTShift2D(const double* data, const Size& size, double* shifted_data);
 
 /**
+ * \brief IFFTShift 2D matrix in which hot point is not centered
+ * \param data input data
+ * \param size dimensions of the image to be shifted
+ * \param hot_point hot point coordinates
+ * \param shifted_data output data
+ */
+void IFFTShift2DUncentered(const double* data, const Size& size,
+                           const Point& hot_point, double* shifted_data);
+
+/**
+ * \brief FFTShift 2D matrix in which hot point must remain uncentered after
+ * shift
+ * \param data input data
+ * \param size dimensions of the image to be shifted
+ * \param hot_point hot point coordinates
+ * \param shifted_data output data
+ */
+void FFTShift2DUncentered(const double* data, const Size& size,
+                          const Point& hot_point, double* shifted_data);
+
+/**
  * \brief Compute frequencies for which fft will be calculated
  * \param n_samples width of the spatial signal (expected to be odd)
  * \param half decide to return only half the frequencies

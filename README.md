@@ -130,7 +130,7 @@ Sirius X.Y.Z (...)
 Standalone tool to resample and filter images in the frequency domain
 
 Usage:
-  ./sirius [OPTION...] input-image output-image
+  ./src/sirius [OPTION...] input-image output-image
 
   -h, --help           Show help
   -v, --verbosity arg  Set verbosity level
@@ -154,6 +154,10 @@ Usage:
                              normalization)
       --zero-pad-real-edges  Force zero padding strategy on real input edges
                              (default: mirror padding)
+      --hot-point-x arg      Hot point x coordinate (considered centered if
+                             no value is provided)
+      --hot-point-y arg      Hot point y coordinate (considered centered if
+                             no value is provided)
 
  streaming options:
       --stream                  Enable stream mode
@@ -234,6 +238,8 @@ Default behavior will pad real input edges with a mirroring of the edges.
 `--zero-pad-real-edges` will change this strategy and zero pad real input edges.
 
 It is assumed that the filter is already normalized. If not, the option `--filter-normalize` will normize it before any processing.
+
+Finally, it is possible to give a filter which has an uncentered hot point by specifying its coordinates thanks to `--hot-point-x` and `--hot-point-y` options. In this case sirius will center the filter's hot point before any processing.
 
 More details on filters in the [Theoretical Basis documentation][Theoretical Basis].
 
