@@ -27,7 +27,6 @@
 #include "sirius/frequency_resampler_factory.h"
 #include "sirius/i_frequency_resampler.h"
 
-#include "sirius/fftw/exception.h"
 #include "sirius/fftw/fftw.h"
 #include "sirius/fftw/wrapper.h"
 
@@ -54,11 +53,17 @@ Filter Filter::Create(const std::string& image_path,
     // load image
     auto filter_image = gdal::LoadImage(image_path);
 
+    return Create(filter_image, zoom_ratio, hot_point, padding_type, normalize);
+}
+
+Filter Filter::Create(Image filter_image, const ZoomRatio& zoom_ratio,
+                      const Point& hot_point, PaddingType padding_type,
+                      bool normalize) {
     if (hot_point.x < -1 || hot_point.x >= filter_image.size.col ||
         hot_point.y < -1 || hot_point.y >= filter_image.size.row) {
         LOG("filter", error, "Invalid hot point with coordinates {}, {}",
             hot_point.x, hot_point.y);
-        throw SiriusException("Invalid hot point");
+        throw sirius::Exception("Invalid hot point");
     }
 
     if (normalize) {
@@ -106,7 +111,8 @@ fftw::ComplexUPtr Filter::Process(const Size& image_size,
         LOG("filter", error,
             "filter {}x{} is too large to be applied on the image {}x{}",
             filter_.size.row, filter_.size.col, image_size.row, image_size.col);
-        throw SiriusException("filter is too large to be applied on the image");
+        throw sirius::Exception(
+              "filter is too large to be applied on the image");
     }
 
     int filter_fft_row = image_size.row;

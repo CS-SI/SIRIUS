@@ -56,7 +56,7 @@ class IFrequencyResampler {
      *        The filter must be compatible with the requested ratio.
      * \return Zoomed in/out image
      *
-     * \throw SiriusException if a computing issue happens
+     * \throw sirius::Exception if a computing issue happens
      */
     virtual Image Compute(const ZoomRatio& zoom_ratio, const Image& input,
                           const Padding& image_padding,

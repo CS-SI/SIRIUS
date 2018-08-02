@@ -34,7 +34,7 @@ namespace gdal {
 /**
  * \brief Exception wrapper for GDAL error
  */
-class Exception : public SiriusException {
+class Exception : public sirius::Exception {
   public:
     /**
      * \brief Automatically extract GDAL error level and code from last GDAL

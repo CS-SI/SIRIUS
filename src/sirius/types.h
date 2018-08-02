@@ -47,34 +47,34 @@ struct Size {
     Size(Size&&) = default;
     Size& operator=(Size&&) = default;
 
-    inline bool operator<(const Size& rhs) const {
+    bool operator<(const Size& rhs) const {
         return (row < rhs.row) || ((row == rhs.row) && (col < rhs.col));
     }
 
-    inline bool operator==(const Size& rhs) const {
+    bool operator==(const Size& rhs) const {
         return row == rhs.row && col == rhs.col;
     }
 
-    inline Size operator*(int scale) const {
+    Size operator*(int scale) const {
         Size result(*this);
         result.row *= scale;
         result.col *= scale;
         return result;
     }
 
-    inline Size operator*(double scale) const {
+    Size operator*(double scale) const {
         Size result(*this);
         result.row = std::ceil(result.row * scale);
         result.col = std::ceil(result.col * scale);
         return result;
     }
 
-    inline Size& operator*=(int scale) {
+    Size& operator*=(int scale) {
         *this = *this * scale;
         return *this;
     }
 
-    inline int CellCount() const { return row * col; }
+    int CellCount() const { return row * col; }
 
     int row{0};
     int col{0};
@@ -111,7 +111,7 @@ class ZoomRatio {
      *        "input_resolution:output_resolution"
      * \return zoom ratio
      *
-     * \throw SiriusException if string format or ratio is invalid
+     * \throw sirius::Exception if string format or ratio is invalid
      */
     static ZoomRatio Create(const std::string& ratio_string);
 
@@ -122,7 +122,7 @@ class ZoomRatio {
      * \param output_resolution denominator of the ratio
      * \return zoom ratio
      *
-     * \throw SiriusException if ratio is invalid
+     * \throw sirius::Exception if ratio is invalid
      * \throw std::invalid_argument if conversion from string to int failed
      */
     static ZoomRatio Create(int input_resolution, int output_resolution = 1);
@@ -138,11 +138,11 @@ class ZoomRatio {
     ZoomRatio& operator=(const ZoomRatio&) = default;
     ZoomRatio& operator=(ZoomRatio&&) = default;
 
-    inline int input_resolution() const { return input_resolution_; }
+    int input_resolution() const { return input_resolution_; }
 
-    inline int output_resolution() const { return output_resolution_; }
+    int output_resolution() const { return output_resolution_; }
 
-    inline double ratio() const {
+    double ratio() const {
         return input_resolution_ / static_cast<double>(output_resolution_);
     }
 

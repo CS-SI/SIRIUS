@@ -43,10 +43,7 @@ Padding::Padding(int i_top, int i_bottom, int i_left, int i_right,
       right(i_right),
       type(i_type) {}
 
-Image::Image(const Size& size) : size(size) {
-    data.resize(size.CellCount());
-    std::fill(data.begin(), data.end(), 0);
-}
+Image::Image(const Size& size) : size(size), data(size.CellCount(), 0) {}
 
 Image::Image(const Size& size, Buffer&& buf)
     : size(size), data(std::move(buf)) {}

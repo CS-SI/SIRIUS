@@ -68,7 +68,7 @@ TEST_CASE("filter - sinc2 filter", "[sirius]") {
                                              zoom_ratio);
         REQUIRE(filter.IsLoaded());
         REQUIRE_THROWS_AS(filter.Process(size, std::move(complex_array)),
-                          sirius::SiriusException);
+                          sirius::Exception);
     }
     SECTION("sinc2 filter - regular image") {
         sirius::Size size{100, 100};

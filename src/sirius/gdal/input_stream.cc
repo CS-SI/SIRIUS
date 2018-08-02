@@ -45,7 +45,7 @@ InputStream::InputStream(const std::string& image_path,
       col_idx_(0) {
     if (block_size_.row <= 0 || block_size_.col <= 0) {
         LOG("input_stream", error, "invalid block size");
-        throw SiriusException("invalid block size");
+        throw sirius::Exception("invalid block size");
     }
 
     LOG("input_stream", info, "input image '{}' ({}x{})", image_path,
