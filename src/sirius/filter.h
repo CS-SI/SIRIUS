@@ -44,6 +44,8 @@ struct FilterMetadata {
     PaddingType padding_type{PaddingType::kMirrorPadding};
 };
 
+constexpr Point filter_default_hot_point{-1, -1};
+
 /**
  * \brief Frequency filter
  */
@@ -65,7 +67,8 @@ class Filter {
      * \throw SiriusException if the filter image cannot be loaded
      */
     static Filter Create(const std::string& image_path,
-                         const ZoomRatio& zoom_ratio, const Point& hot_point,
+                         const ZoomRatio& zoom_ratio,
+                         const Point& hot_point = filter_default_hot_point,
                          PaddingType padding_type = PaddingType::kMirrorPadding,
                          bool normalize = false);
 
@@ -168,7 +171,7 @@ class Filter {
     Size padding_size_{0, 0};
     ZoomRatio zoom_ratio_{};
     PaddingType padding_type_{PaddingType::kMirrorPadding};
-    Point hot_point_;
+    Point hot_point_{filter_default_hot_point};
 
     FilterFFTCacheUPtr filter_fft_cache_{nullptr};
 };
