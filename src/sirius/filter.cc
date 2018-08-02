@@ -50,7 +50,7 @@ Image CenterFilterImage(const Image& filter_image, const Point& hot_point);
 
 Filter Filter::Create(const std::string& image_path,
                       const ZoomRatio& zoom_ratio, const Point& hot_point,
-                      PaddingType padding_type, bool filter_normalize) {
+                      PaddingType padding_type, bool normalize) {
     // load image
     auto filter_image = gdal::LoadImage(image_path);
 
@@ -61,7 +61,7 @@ Filter Filter::Create(const std::string& image_path,
         throw SiriusException("Invalid hot point");
     }
 
-    if (filter_normalize) {
+    if (normalize) {
         NormalizeFilterImage(filter_image, zoom_ratio.input_resolution());
     }
 

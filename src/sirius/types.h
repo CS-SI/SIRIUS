@@ -80,10 +80,13 @@ struct Size {
     int col{0};
 };
 
+/**
+ * \brief Data class that represents the 2D coordinates of a point
+ */
 struct Point {
     Point() = default;
 
-    Point(int x, int y) : x(x), y(y) {}
+    constexpr Point(int x, int y) noexcept : x(x), y(y) {}
 
     ~Point() = default;
     Point(const Point&) = default;

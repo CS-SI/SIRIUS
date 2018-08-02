@@ -235,6 +235,8 @@ Default behavior will pad real input edges with a mirroring of the edges.
 
 It is assumed that the filter is already normalized. If not, the option `--filter-normalize` will normize it before any processing.
 
+Finally, it is possible to give a filter which has an uncentered hot point by specifying its coordinates thanks to `--hot-point-x` and `--hot-point-y` options. In this case sirius will center the filter's hot point before any processing.
+
 More details on filters in the [Theoretical Basis documentation][Theoretical Basis].
 
 #### Examples

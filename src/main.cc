@@ -299,11 +299,11 @@ CliParameters GetCliParameters(int argc, const char* argv[]) {
          "(default: mirror padding)",
          cxxopts::value(params.zero_pad_real_edges))
         ("hot-point-x",
-         "Hot point x coordinate"
+         "Hot point x coordinate "
          "(considered centered if no value is provided)",
          cxxopts::value(params.hot_point_x))
         ("hot-point-y",
-         "Hot point y coordinate"
+         "Hot point y coordinate "
          "(considered centered if no value is provided)",
          cxxopts::value(params.hot_point_y));
 
