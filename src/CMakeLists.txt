@@ -21,15 +21,6 @@
 
 cmake_minimum_required(VERSION 3.2)
 
-find_package(Git QUIET)
-if(GIT_FOUND)
-    include(GetGitRevisionDescription)
-    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_GIT_SHA1)
-else()
-    set(SIRIUS_GIT_REFSPEC "unknown")
-    set(SIRIUS_GIT_SHA1 "...")
-endif()
-
 set(SIRIUS_SRC
     sirius/exception.h
 

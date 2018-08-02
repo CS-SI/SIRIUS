@@ -30,7 +30,28 @@ option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
 
-set(SIRIUS_VERSION "0.0.0")
+# path to additional cmake modules
+list(APPEND CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
+
+# extract version from git tag using git describe
+find_package(Git QUIET)
+if(GIT_FOUND)
+    include(GetGitRevisionDescription)
+    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_GIT_SHA1)
+    git_describe(SIRIUS_GIT_DESCRIBE)
+    if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
+        message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
+        set(SIRIUS_VERSION "0.0.0")
+    else()
+        set(SIRIUS_VERSION "${SIRIUS_GIT_DESCRIBE}")
+    endif()
+else()
+    set(SIRIUS_GIT_REFSPEC "unknown")
+    set(SIRIUS_GIT_SHA1 "...")
+    set(SIRIUS_VERSION "X.Y.Z")
+endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     message(STATUS "Force GSL contracts on Debug build type")
@@ -60,11 +81,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 
-# path to additional cmake modules
-list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
-     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
-
 find_package(Threads)
 
 add_subdirectory(third_party)
@@ -77,7 +93,6 @@ endif()
 
 if (${ENABLE_DOCUMENTATION})
     find_package(Doxygen)
-    find_package(LATEX)
     if(DOXYGEN_FOUND)
         set(DOXYFILE_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/doxyfile.in)
         set(DOXYFILE_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen/doxyfile)
@@ -89,19 +104,20 @@ if (${ENABLE_DOCUMENTATION})
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM)
-        #if (LATEX_FOUND)
-        #    add_custom_command(TARGET doc
-        #        POST_BUILD
-        #        COMMAND "${CMAKE_MAKE_PROGRAM}"
-        #        COMMENT	"Generating documentation pdf"
-        #        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
-        #    # copy pdf manual into install directory
-        #    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-        #            DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
-        #            RENAME manual.pdf)
-        #else()
-        #    message(STATUS "Cannot build pdf manual (LaTeX not found)")
-        #endif()
+        # find_package(LATEX QUIET)
+        # if (LATEX_FOUND)
+        #     add_custom_command(TARGET doc
+        #         POST_BUILD
+        #         COMMAND "${CMAKE_MAKE_PROGRAM}"
+        #         COMMENT	"Generating documentation pdf"
+        #         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
+        #     # copy pdf manual into install directory
+        #     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        #             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
+        #             RENAME manual.pdf)
+        # else()
+        #     message(STATUS "Cannot build pdf manual (LaTeX not found)")
+        # endif()
     # copy doxygen documentation into install directory
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc)
