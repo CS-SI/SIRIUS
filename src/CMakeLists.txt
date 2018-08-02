@@ -90,8 +90,7 @@ set(SIRIUS_SRC
     sirius/utils/log.cc
     sirius/utils/lru_cache.h
     sirius/utils/numeric.h
-    sirius/utils/numeric.cc
-    sirius/utils/scope_cleaner.h)
+    sirius/utils/numeric.cc)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius)
 
