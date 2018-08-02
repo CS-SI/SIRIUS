@@ -21,12 +21,13 @@
 
 cmake_minimum_required(VERSION 3.2)
 
+# unit_test_main contains catch2 main (speed up unit test compilation)
 add_library(unit_test_main STATIC EXCLUDE_FROM_ALL catch_main.cc)
 target_link_libraries(unit_test_main catch)
 
 add_library(unit_test_lib STATIC EXCLUDE_FROM_ALL
-  utils.h
-  utils.cc)
+    utils.h
+    utils.cc)
 target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(unit_test_lib libsirius-static Threads::Threads)
 
@@ -35,6 +36,8 @@ file(GLOB unit_tests *_tests.cc)
 # group test targets into one to easify build
 add_custom_target(build_tests)
 
+# create unit test target from test file
+# need CMake regeneration to take into account new unit tests
 foreach(unit_test_file ${unit_tests})
     string(REGEX REPLACE ".*/(.*).cc" "\\1" unit_test "${unit_test_file}")
     add_executable(${unit_test} EXCLUDE_FROM_ALL ${unit_test_file})

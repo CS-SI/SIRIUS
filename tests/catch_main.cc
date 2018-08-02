@@ -19,5 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * \file catch_main.cc
+ * \brief This compilation unit contains catch2 main
+ */
+
 #define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>

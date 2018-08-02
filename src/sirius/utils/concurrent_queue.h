@@ -37,6 +37,9 @@ namespace utils {
  * ConcurrentQueue has a limited size.
  * Push and Pop methods can be used in a multi-threaded context.
  *
+ * This implementation is inspired by
+ *   https://juanchopanzacpp.wordpress.com/2013/02/26/concurrent-queue-c11
+ *
  * \warning Push and Pop methods may block.
  */
 template <typename T>

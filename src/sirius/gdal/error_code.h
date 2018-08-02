@@ -26,7 +26,7 @@
 
 #include <cpl_error.h>
 
-// This implementation is inspired from
+// This implementation is inspired by
 //   https://akrzemi1.wordpress.com/2017/07/12/your-own-error-code/
 
 namespace sirius {
