@@ -130,7 +130,7 @@ Sirius X.Y.Z (...)
 Standalone tool to resample and filter images in the frequency domain
 
 Usage:
-  ./sirius [OPTION...] input-image output-image
+  ./src/sirius [OPTION...] input-image output-image
 
   -h, --help           Show help
   -v, --verbosity arg  Set verbosity level
@@ -154,6 +154,10 @@ Usage:
                              normalization)
       --zero-pad-real-edges  Force zero padding strategy on real input edges
                              (default: mirror padding)
+      --hot-point-x arg      Hot point x coordinate (considered centered if
+                             no value is provided)
+      --hot-point-y arg      Hot point y coordinate (considered centered if
+                             no value is provided)
 
  streaming options:
       --stream                  Enable stream mode
