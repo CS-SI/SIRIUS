@@ -30,7 +30,7 @@ option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
 
-set(SIRIUS_VERSION "1.0.0")
+set(SIRIUS_VERSION "0.0.0")
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     message(STATUS "Force GSL contracts on Debug build type")

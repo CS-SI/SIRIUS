@@ -18,5 +18,6 @@ that the hardest part is rather knowing how to comprehend its discretization and
     Upsampling <upsampling/intro_up.rst>
     Downsampling <downsampling/intro_down.rst>
     References <other/ref.rst>
+    Sirius C++ doxygen <other/cpp_index.rst>
     Python examples API <autoapi/index.rst>
 
