@@ -22,7 +22,7 @@
 </p>
 
 <h4 align="center">
-  <a href="https://uk.c-s.fr/"><img src="https://github.com/CS-SI/SIRIUS/blob/master/doc/img/logo_cssi.jpg" alt="CS" width="149px"></a>
+  <a href="https://uk.c-s.fr/"><img src="https://raw.githubusercontent.com/CS-SI/SIRIUS/master/doc/img/logo_cssi.jpg" alt="CS-SI" width="149px"></a>
 </h4>
 
 As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on
