@@ -241,7 +241,7 @@ Upsampling strategies can be forced with the following options:
 
 *Force periodization upsampling without providing a filter will result in an error.*
 
-More details on algorithms in the [Theoretical Basis documentation][Theoretical Basis].
+More details on algorithms in the [Theoretical Basis documentation][Sirius periodization].
 
 #### Filter options
 
@@ -256,7 +256,7 @@ It is assumed that the filter is already normalized. If not, the option `--filte
 
 Finally, it is possible to give a filter which has an uncentered hot point by specifying its coordinates thanks to `--hot-point-x` and `--hot-point-y` options. In this case sirius will center the filter's hot point before any processing.
 
-More details on filters in the [Theoretical Basis documentation][Theoretical Basis].
+More details on filters in the [Theoretical Basis documentation][Sirius Kernel Interpolator].
 
 #### Examples
 
@@ -417,6 +417,8 @@ Sirius developers would like to thank:
 [Doxygen]: https://CS-SI.github.io/SIRIUS/doxy_html/index.html
 [Internals]: INTERNALS.md "Internals"
 [Sirius doc]: https://CS-SI.github.io/SIRIUS/html/Sirius.html
+[Sirius periodization] https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded
+[Sirius Kernel Interpolator] https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html
 [Sirius test data features]: https://github.com/CS-SI/SIRIUS "Sirius test data features"
 
 [CS-SI]: https://uk.c-s.fr/ "CS Systèmes d'information"
