@@ -5,7 +5,10 @@ extensions = [ 'sphinx.ext.imgmath' ,
 'sphinx.ext.intersphinx',
 'autoapi.extension',
 'IPython.sphinxext.ipython_console_highlighting',
-'IPython.sphinxext.ipython_directive'
+'IPython.sphinxext.ipython_directive',
+'breathe',
+'exhale',
+'m2r'
 ]
 
 # -- General configuration ------------------------------------------------
@@ -39,3 +42,30 @@ htmlhelp_basename = 'Sirius'
 # -- Options for LaTeX output ---------------------------------------------
 latex_documents = [(master_doc, 'Sirius.tex', u'sirius_doc', u'CS', 'manual')]
 #latex_logo = None
+
+
+# -- Options for exhale / breath -----------------------------------------
+# Setup the breathe extension
+breathe_projects = {
+    "Sirius": "doxy_xml"
+}
+breathe_default_project = "Sirius"
+
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder":     "api",
+    "rootFileName":          "library_root.rst",
+    "rootFileTitle":         "Library API",
+    "doxygenStripFromPath":  ".",
+    # Suggested optional arguments
+    "createTreeView":        True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": False
+#    "exhaleDoxygenStdin":    "INPUT = ../../../src/sirius/"
+}
+# Tell sphinx what the primary language being documented is.
+primary_domain = 'cpp'
+# Tell sphinx what the pygments highlight language should be.
+highlight_language = 'cpp'
