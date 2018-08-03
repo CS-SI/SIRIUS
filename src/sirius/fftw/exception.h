@@ -43,7 +43,7 @@ enum class ErrorCode {
 /**
  * \brief Exception wrapper for FFTW error
  */
-class Exception : public SiriusException {
+class Exception : public sirius::Exception {
   public:
     Exception(ErrorCode code);
 

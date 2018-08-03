@@ -30,7 +30,7 @@ Exception::Exception()
     : Exception(::CPLGetLastErrorType(), ::CPLGetLastErrorNo()) {}
 
 Exception::Exception(::CPLErr level, ::CPLErrorNum code)
-    : SiriusException(""), err_level_(level), err_code_(code) {
+    : sirius::Exception(""), err_level_(level), err_code_(code) {
     std::stringstream ss;
     ss << "GDAL error level " << err_level_ << " : code " << err_code_;
     default_err_msg_ = ss.str();

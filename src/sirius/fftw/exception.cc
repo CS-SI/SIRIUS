@@ -26,7 +26,7 @@
 namespace sirius {
 namespace fftw {
 
-Exception::Exception(ErrorCode code) : SiriusException(""), err_code_(code) {
+Exception::Exception(ErrorCode code) : sirius::Exception(""), err_code_(code) {
     std::stringstream ss;
     ss << "FFTW error - code " << static_cast<int>(err_code_);
     default_err_msg_ = ss.str();

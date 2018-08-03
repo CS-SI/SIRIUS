@@ -179,7 +179,7 @@ int main(int argc, const char* argv[]) {
         } else {
             RunStreamMode(*frequency_resampler, filter, zoom_ratio, params);
         }
-    } catch (const sirius::SiriusException& e) {
+    } catch (const std::exception& e) {
         std::cerr << "sirius: exception while computing resampling: "
                   << e.what() << std::endl;
         return 1;

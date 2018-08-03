@@ -28,7 +28,6 @@
 
 #include "sirius/exception.h"
 
-#include "sirius/fftw/exception.h"
 #include "sirius/fftw/types.h"
 #include "sirius/fftw/wrapper.h"
 
@@ -48,7 +47,7 @@ Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::Compute(
     if (filter.IsLoaded() && !filter.CanBeApplied(zoom_ratio)) {
         LOG("frequency_resampler", error,
             "cannot apply this filter on this zoom ratio");
-        throw SiriusException("cannot apply this filter on this zoom ratio");
+        throw Exception("cannot apply this filter on this zoom ratio");
     }
 
     LOG("frequency_resampler", trace, "pad image");

@@ -65,12 +65,13 @@ struct Padding {
 class Image {
   public:
     Image() = default;
+
     /**
      * \brief Instanciate an image of the given size and pre-allocate its buffer
      *        with 0
      * \param size image size
      */
-    Image(const Size& size);
+    explicit Image(const Size& size);
 
     /**
      * \brief Instanciate an image of the given size with data
@@ -83,21 +84,21 @@ class Image {
 
     Image(const Image&) = default;
     Image& operator=(const Image&) = default;
-    Image(Image&&) = default;
-    Image& operator=(Image&&) = default;
+    Image(Image&&);
+    Image& operator=(Image&&);
 
     /**
      * \brief Get the cell count of the image (row x col)
      * \return cell count
      */
-    inline int CellCount() const { return size.CellCount(); }
+    int CellCount() const { return size.CellCount(); }
 
     /**
      * \brief Get the value at cell (row, col)
      *        Row and col starts at 0
      * \return value
      */
-    inline Buffer::value_type Get(int row, int col) const {
+    Buffer::value_type Get(int row, int col) const {
         assert(row < size.row && col < size.col);
 
         return data[row * size.col + col];
@@ -107,7 +108,7 @@ class Image {
      * \brief Set the value at cell (row, col)
      *        Row and col starts at 0
      */
-    inline void Set(int row, int col, Buffer::value_type val) {
+    void Set(int row, int col, Buffer::value_type val) {
         assert(row < size.row && col < size.col);
 
         data[row * size.col + col] = val;
@@ -118,7 +119,7 @@ class Image {
      *        Row, col and data are set
      * \return bool
      */
-    inline bool IsLoaded() const {
+    bool IsLoaded() const {
         return size.row != 0 && size.col != 0 &&
                data.size() >= static_cast<std::size_t>(CellCount());
     }

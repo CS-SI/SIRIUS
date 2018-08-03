@@ -29,7 +29,7 @@ namespace sirius {
 /**
  * \brief Base class for sirius exceptions
  */
-class SiriusException : public std::runtime_error {
+class Exception : public std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 

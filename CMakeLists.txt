@@ -24,20 +24,33 @@ project(Sirius CXX)
 
 include(cmake/BuildType.cmake)
 
+set(SIRIUS_VERSION "0.0.0" CACHE STRING "Sirius version")
+set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit" CACHE STRING "Sirius revision commit")
+
 option(ENABLE_CACHE_OPTIMIZATION "Enable cache (FFTW plan, Filter FFT)" ON)
 option(ENABLE_LOGS "Enable logs" ON)
 option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
 
-set(SIRIUS_VERSION "0.0.0")
+# path to additional cmake modules
+list(APPEND CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
+
+if ("${SIRIUS_VERSION}" STREQUAL "")
+    set(SIRIUS_VERSION "0.0.0")
+endif()
+if ("${SIRIUS_REVISION_COMMIT}" STREQUAL "")
+    set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit")
+endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     message(STATUS "Force GSL contracts on Debug build type")
     set(ENABLE_GSL_CONTRACTS "ON")
 endif()
 
-message(STATUS "Sirius ${SIRIUS_VERSION}")
+message(STATUS "Sirius ${SIRIUS_VERSION} (${SIRIUS_REVISION_COMMIT})")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "Enable cache: ${ENABLE_CACHE_OPTIMIZATION}")
@@ -60,11 +73,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 
-# path to additional cmake modules
-list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
-     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
-
 find_package(Threads)
 
 add_subdirectory(third_party)
@@ -77,7 +85,6 @@ endif()
 
 if (${ENABLE_DOCUMENTATION})
     find_package(Doxygen)
-    find_package(LATEX)
     if(DOXYGEN_FOUND)
         set(DOXYFILE_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/doxyfile.in)
         set(DOXYFILE_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen/doxyfile)
@@ -89,19 +96,20 @@ if (${ENABLE_DOCUMENTATION})
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM)
-        #if (LATEX_FOUND)
-        #    add_custom_command(TARGET doc
-        #        POST_BUILD
-        #        COMMAND "${CMAKE_MAKE_PROGRAM}"
-        #        COMMENT	"Generating documentation pdf"
-        #        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
-        #    # copy pdf manual into install directory
-        #    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-        #            DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
-        #            RENAME manual.pdf)
-        #else()
-        #    message(STATUS "Cannot build pdf manual (LaTeX not found)")
-        #endif()
+        # find_package(LATEX QUIET)
+        # if (LATEX_FOUND)
+        #     add_custom_command(TARGET doc
+        #         POST_BUILD
+        #         COMMAND "${CMAKE_MAKE_PROGRAM}"
+        #         COMMENT	"Generating documentation pdf"
+        #         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/latex")
+        #     # copy pdf manual into install directory
+        #     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        #             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc
+        #             RENAME manual.pdf)
+        # else()
+        #     message(STATUS "Cannot build pdf manual (LaTeX not found)")
+        # endif()
     # copy doxygen documentation into install directory
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc)

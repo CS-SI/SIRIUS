@@ -24,6 +24,7 @@
 #include <cstring>
 
 #include <algorithm>
+#include <utility>
 
 #include <gdal.h>
 #include <gdal_priv.h>
@@ -43,13 +44,20 @@ Padding::Padding(int i_top, int i_bottom, int i_left, int i_right,
       right(i_right),
       type(i_type) {}
 
-Image::Image(const Size& size) : size(size) {
-    data.resize(size.CellCount());
-    std::fill(data.begin(), data.end(), 0);
-}
+Image::Image(const Size& size) : size(size), data(size.CellCount(), 0) {}
 
 Image::Image(const Size& size, Buffer&& buf)
     : size(size), data(std::move(buf)) {}
+
+Image::Image(Image&& rhs)
+    : size(std::exchange(rhs.size, {0, 0})),
+      data(std::exchange(rhs.data, {})) {}
+
+Image& Image::operator=(Image&& rhs) {
+    size = std::exchange(rhs.size, {0, 0});
+    data = std::exchange(rhs.data, {});
+    return *this;
+}
 
 Image Image::CreatePaddedImage(const Padding& padding) const {
     if (padding.IsEmpty()) {

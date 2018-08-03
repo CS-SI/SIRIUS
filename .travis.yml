@@ -1,6 +1,9 @@
 services:
 - docker
 
+git:
+  depth: false
+
 before_install:
 - docker pull ldumas/sirius_dockerfile:sirius_build
 - docker pull ldumas/sirius_dockerfile:sirius_pages
@@ -8,9 +11,12 @@ before_install:
 before_script:
 - if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; fi
 - export SRCDIR=/data
+- export SIRIUS_BUILD_DIR=.build
+- export INSTALL_DIR=/opt/sirius
+- SIRIUS_VERSION=$(git describe 2> /dev/null); if [ "x${SIRIUS_VERSION}" = "x" ]; then SIRIUS_VERSION="0.0.0"; fi; export SIRIUS_VERSION;
 
 script:
-- docker run -v $TRAVIS_BUILD_DIR/:/data ldumas/sirius_dockerfile:sirius_build /bin/sh -c "source /opt/rh/devtoolset-6/enable; cd $SRCDIR; [ ! -d .build ] && mkdir .build; cd .build; cmake3 .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/sirius -DENABLE_CACHE_OPTIMIZATION=ON -DENABLE_GSL_CONTRACTS=OFF -DENABLE_LOGS=ON -DENABLE_UNIT_TESTS=OFF -DENABLE_DOCUMENTATION=ON; make && make install; cd ..; mv .build/html doxy_html; rm -rf .build"
+- docker run -v $TRAVIS_BUILD_DIR/:/data ldumas/sirius_dockerfile:sirius_build /bin/sh -c "source /opt/rh/devtoolset-6/enable; cd $SRCDIR; .travis/create_cmake_project.sh $SIRIUS_BUILD_DIR $INSTALL_DIR $SIRIUS_VERSION $TRAVIS_COMMIT; cd $SIRIUS_BUILD_DIR; make -j4 build_tests && make -j4 && make install; cd ..; mv $SIRIUS_BUILD_DIR/html doxy_html; rm -rf $SIRIUS_BUILD_DIR"
 - CID=$(docker ps --latest --quiet)
 - if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker commit --change "ENV PATH $PATH:/opt/sirius/bin" $CID sirius_built; fi
 - if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker tag sirius_built ldumas/sirius_dockerfile:sirius_built; fi

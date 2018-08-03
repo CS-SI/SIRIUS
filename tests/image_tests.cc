@@ -34,107 +34,39 @@ namespace sirius {
 namespace tests {
 
 void CheckZeroPaddingImage(const Image& image, const Image& padded_image,
-                           const Padding& padding) {
-    REQUIRE(padded_image.size.row ==
-            (image.size.row + padding.top + padding.bottom));
-    REQUIRE(padded_image.size.col ==
-            (image.size.col + padding.left + padding.right));
-    REQUIRE(padded_image.data.size() == padded_image.size.CellCount());
-
-    // check top padding
-    for (int pad_row = 0; pad_row < padding.top; ++pad_row) {
-        for (int col = 0; col < padded_image.size.col; ++col) {
-            REQUIRE(padded_image.Get(pad_row, col) == 0.);
-        }
-    }
-
-    // check bottom padding
-    for (int pad_row = 0; pad_row < padding.bottom; ++pad_row) {
-        for (int col = 0; col < padded_image.size.col; ++col) {
-            REQUIRE(padded_image.Get(padded_image.size.row - pad_row - 1,
-                                     col) == 0.);
-        }
-    }
-
-    // check left padding
-    for (int pad_col = 0; pad_col < padding.left; ++pad_col) {
-        for (int row = 0; row < padded_image.size.row; ++row) {
-            REQUIRE(padded_image.Get(row, pad_col) == 0.);
-        }
-    }
-
-    // check right padding
-    for (int pad_col = 0; pad_col < padding.right; ++pad_col) {
-        for (int row = 0; row < padded_image.size.row; ++row) {
-            REQUIRE(padded_image.Get(
-                          row, padded_image.size.col - pad_col - 1) == 0.);
-        }
-    }
-
-    // check image
-    for (int row = 0; row < image.size.row; ++row) {
-        for (int col = 0; col < image.size.col; ++col) {
-            REQUIRE(padded_image.Get(row + padding.top, col + padding.left) ==
-                    image.Get(row, col));
-        }
-    }
-}
+                           const Padding& padding);
 
 void CheckMirrorPaddingImage(const Image& image, const Image& padded_image,
-                             const Padding& padding) {
-    REQUIRE(padded_image.size.row ==
-            (image.size.row + padding.top + padding.bottom));
-    REQUIRE(padded_image.size.col ==
-            (image.size.col + padding.left + padding.right));
-    REQUIRE(padded_image.data.size() == padded_image.size.CellCount());
-
-    // check top padding
-    for (int row = 0; row < padding.top; ++row) {
-        for (int col = padding.left;
-             col < padded_image.size.col - padding.right; ++col) {
-            REQUIRE(padded_image.Get(row, col) ==
-                    image.Get(padding.top - row - 1, col - padding.left));
-        }
-    }
-
-    // check bottom padding
-    for (int row = 0; row < padding.bottom; ++row) {
-        for (int col = padding.left;
-             col < padded_image.size.col - padding.right; ++col) {
-            REQUIRE(padded_image.Get(padded_image.size.row - row - 1, col) ==
-                    image.Get(image.size.row - padding.bottom + row,
-                              col - padding.left));
-        }
-    }
-
-    // check left padding
-    for (int col = 0; col < padding.left; ++col) {
-        for (int row = 0; row < padded_image.size.row; ++row) {
-            REQUIRE(padded_image.Get(row, col) ==
-                    padded_image.Get(row, 2 * padding.left - col - 1));
-        }
-    }
-
-    // check right padding
-    for (int row = 0; row < padded_image.size.row; ++row) {
-        for (int col = 0; col < padding.right; ++col) {
-            REQUIRE(padded_image.Get(row, padded_image.size.col - col - 1) ==
-                    padded_image.Get(row, padded_image.size.col -
-                                                2 * padding.right + col));
-        }
-    }
-
-    // check image
-    for (int row = 0; row < image.size.row; ++row) {
-        for (int col = 0; col < image.size.col; ++col) {
-            REQUIRE(padded_image.Get(row + padding.top, col + padding.left) ==
-                    image.Get(row, col));
-        }
-    }
-}
+                             const Padding& padding);
 
 }  // namespace tests
 }  // namespace sirius
+
+TEST_CASE("Image - Basics move", "[image]") {
+    static constexpr int kRow = 10;
+    static constexpr int kCol = 20;
+    sirius::Image image({kRow, kCol});
+
+    sirius::Image moved_image(std::move(image));
+    REQUIRE(image.size.row == 0);
+    REQUIRE(image.size.col == 0);
+    REQUIRE(image.data.size() == 0);
+
+    REQUIRE(moved_image.size.row == kRow);
+    REQUIRE(moved_image.size.col == kCol);
+    REQUIRE(moved_image.data.size() == moved_image.size.CellCount());
+
+    sirius::Image moved_image_assign;
+    moved_image_assign = std::move(moved_image);
+    REQUIRE(moved_image.size.row == 0);
+    REQUIRE(moved_image.size.col == 0);
+    REQUIRE(moved_image.data.size() == 0);
+
+    REQUIRE(moved_image_assign.size.row == kRow);
+    REQUIRE(moved_image_assign.size.col == kCol);
+    REQUIRE(moved_image_assign.data.size() ==
+            moved_image_assign.size.CellCount());
+}
 
 TEST_CASE("Image - Zero pad image", "[image]") {
     LOG_SET_LEVEL(trace);
@@ -335,3 +267,109 @@ TEST_CASE("Image - load well-formed image", "[sirius]") {
     REQUIRE(image.size.col > 0);
     REQUIRE(image.IsLoaded());
 }
+
+namespace sirius {
+namespace tests {
+
+void CheckZeroPaddingImage(const Image& image, const Image& padded_image,
+                           const Padding& padding) {
+    REQUIRE(padded_image.size.row ==
+            (image.size.row + padding.top + padding.bottom));
+    REQUIRE(padded_image.size.col ==
+            (image.size.col + padding.left + padding.right));
+    REQUIRE(padded_image.data.size() == padded_image.size.CellCount());
+
+    // check top padding
+    for (int pad_row = 0; pad_row < padding.top; ++pad_row) {
+        for (int col = 0; col < padded_image.size.col; ++col) {
+            REQUIRE(padded_image.Get(pad_row, col) == 0.);
+        }
+    }
+
+    // check bottom padding
+    for (int pad_row = 0; pad_row < padding.bottom; ++pad_row) {
+        for (int col = 0; col < padded_image.size.col; ++col) {
+            REQUIRE(padded_image.Get(padded_image.size.row - pad_row - 1,
+                                     col) == 0.);
+        }
+    }
+
+    // check left padding
+    for (int pad_col = 0; pad_col < padding.left; ++pad_col) {
+        for (int row = 0; row < padded_image.size.row; ++row) {
+            REQUIRE(padded_image.Get(row, pad_col) == 0.);
+        }
+    }
+
+    // check right padding
+    for (int pad_col = 0; pad_col < padding.right; ++pad_col) {
+        for (int row = 0; row < padded_image.size.row; ++row) {
+            REQUIRE(padded_image.Get(
+                          row, padded_image.size.col - pad_col - 1) == 0.);
+        }
+    }
+
+    // check image
+    for (int row = 0; row < image.size.row; ++row) {
+        for (int col = 0; col < image.size.col; ++col) {
+            REQUIRE(padded_image.Get(row + padding.top, col + padding.left) ==
+                    image.Get(row, col));
+        }
+    }
+}
+
+void CheckMirrorPaddingImage(const Image& image, const Image& padded_image,
+                             const Padding& padding) {
+    REQUIRE(padded_image.size.row ==
+            (image.size.row + padding.top + padding.bottom));
+    REQUIRE(padded_image.size.col ==
+            (image.size.col + padding.left + padding.right));
+    REQUIRE(padded_image.data.size() == padded_image.size.CellCount());
+
+    // check top padding
+    for (int row = 0; row < padding.top; ++row) {
+        for (int col = padding.left;
+             col < padded_image.size.col - padding.right; ++col) {
+            REQUIRE(padded_image.Get(row, col) ==
+                    image.Get(padding.top - row - 1, col - padding.left));
+        }
+    }
+
+    // check bottom padding
+    for (int row = 0; row < padding.bottom; ++row) {
+        for (int col = padding.left;
+             col < padded_image.size.col - padding.right; ++col) {
+            REQUIRE(padded_image.Get(padded_image.size.row - row - 1, col) ==
+                    image.Get(image.size.row - padding.bottom + row,
+                              col - padding.left));
+        }
+    }
+
+    // check left padding
+    for (int col = 0; col < padding.left; ++col) {
+        for (int row = 0; row < padded_image.size.row; ++row) {
+            REQUIRE(padded_image.Get(row, col) ==
+                    padded_image.Get(row, 2 * padding.left - col - 1));
+        }
+    }
+
+    // check right padding
+    for (int row = 0; row < padded_image.size.row; ++row) {
+        for (int col = 0; col < padding.right; ++col) {
+            REQUIRE(padded_image.Get(row, padded_image.size.col - col - 1) ==
+                    padded_image.Get(row, padded_image.size.col -
+                                                2 * padding.right + col));
+        }
+    }
+
+    // check image
+    for (int row = 0; row < image.size.row; ++row) {
+        for (int col = 0; col < image.size.col; ++col) {
+            REQUIRE(padded_image.Get(row + padding.top, col + padding.left) ==
+                    image.Get(row, col));
+        }
+    }
+}
+
+}  // namespace tests
+}  // namespace sirius

@@ -62,7 +62,7 @@ docker run ldumas/sirius_dockerfile:sirius [OPTION...] input-image output-image
 
 # note that using docker volume might be a good solution to give the container access to input-image
 # and to give host access to the output-image :
-docker run -v /home/user/outdir/:/outdir -v /home/user/input_images:/input ldumas/sirius_dockerfile:sirius /input/input-image.tif /outdir/output-image.tif -z 1 -d 2
+docker run -v /home/user/outdir/:/outdir -v /home/user/input_images:/input ldumas/sirius_dockerfile:sirius /input/input-image.tif /outdir/output-image.tif -r 1:2
 ```
 
 ## How to Build
@@ -88,21 +88,33 @@ Sirius is using [CMake] to build its libraries and executables.
 ### Options
 
 * `CMAKE_BUILD_TYPE`: Debug, Release, RelWithDebInfo or MinSizeRel
-* `CMAKE_INSTALL_PREFIX`: directory path where the built artifacts (include directory, library, docs) will be gathered
+* `CMAKE_INSTALL_PREFIX`: directory path where the built artifacts (include directory, library, docs) will be gathered using install target
+* `SIRIUS_VERSION`: set Sirius library version (default is `0.0.0`)
+* `SIRIUS_REVISION_COMMIT`: set Sirius library revision commit (default is `sirius-no-revision-commit`)
 * `ENABLE_CACHE_OPTIMIZATION`: set to `ON` to build with cache optimization for FFTW and Filter
 * `ENABLE_GSL_CONTRACTS`: set to `ON` to build with GSL contracts (e.g. bounds checking). This option should be `OFF` on release mode.
 * `ENABLE_LOGS`: set to `ON` if you want to build Sirius with the logs
 * `ENABLE_UNIT_TESTS`: set to `ON` if you want to build the unit tests
 * `ENABLE_DOCUMENTATION`: set to `ON` if you want to build the documentation
 
+Sirius version can be extracted from `git describe` and revision commit from `git rev-parse HEAD`.
+
 ### Example
 
 ```sh
 # CWD is Sirius root directory
+GIT_COMMIT=$(git rev-parse HEAD)
+GIT_DESCRIBE=$(git describe 2> /dev/null)
+if [ "x${GIT_DESCRIBE}" = "x" ]; then
+    GIT_DESCRIBE="0.0.0"
+fi
+
 mkdir .build
 cd .build
 cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DCMAKE_INSTALL_PREFIX=/tmp/sirius \
+         -DSIRIUS_VERSION=${GIT_DESCRIBE} \
+         -DSIRIUS_REVISION_COMMIT=${GIT_COMMIT} \
          -DENABLE_CACHE_OPTIMIZATION=ON \
          -DENABLE_GSL_CONTRACTS=OFF \
          -DENABLE_LOGS=ON \
@@ -112,6 +124,8 @@ cmake --build . --target sirius
 cmake --build . --target doc
 cmake --build . --target install
 ```
+
+See also `.travis/create_cmake_project.sh`
 
 ## How to use
 
@@ -130,7 +144,7 @@ Sirius X.Y.Z (...)
 Standalone tool to resample and filter images in the frequency domain
 
 Usage:
-  ./src/sirius [OPTION...] input-image output-image
+  ./sirius [OPTION...] input-image output-image
 
   -h, --help           Show help
   -v, --verbosity arg  Set verbosity level

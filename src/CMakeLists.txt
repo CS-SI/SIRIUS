@@ -21,15 +21,6 @@
 
 cmake_minimum_required(VERSION 3.2)
 
-find_package(Git QUIET)
-if(GIT_FOUND)
-    include(GetGitRevisionDescription)
-    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_GIT_SHA1)
-else()
-    set(SIRIUS_GIT_REFSPEC "unknown")
-    set(SIRIUS_GIT_SHA1 "...")
-endif()
-
 set(SIRIUS_SRC
     sirius/exception.h
 
@@ -99,8 +90,7 @@ set(SIRIUS_SRC
     sirius/utils/log.cc
     sirius/utils/lru_cache.h
     sirius/utils/numeric.h
-    sirius/utils/numeric.cc
-    sirius/utils/scope_cleaner.h)
+    sirius/utils/numeric.cc)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius)
 
