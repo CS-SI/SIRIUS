@@ -417,8 +417,8 @@ Sirius developers would like to thank:
 [Doxygen]: https://CS-SI.github.io/SIRIUS/doxy_html/index.html
 [Internals]: INTERNALS.md "Internals"
 [Sirius doc]: https://CS-SI.github.io/SIRIUS/html/Sirius.html
-[Sirius periodization] https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded
-[Sirius Kernel Interpolator] https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html
+[Sirius periodization]: https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded
+[Sirius Kernel Interpolator]: https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html
 [Sirius test data features]: https://github.com/CS-SI/SIRIUS "Sirius test data features"
 
 [CS-SI]: https://uk.c-s.fr/ "CS Systèmes d'information"
