@@ -38,6 +38,24 @@ list(APPEND CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
      "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
 
+find_package(Git QUIET)
+if(GIT_FOUND AND "${SIRIUS_VERSION}" STREQUAL ""
+             AND "${SIRIUS_REVISION_COMMIT}" STREQUAL "")
+    # try to extract version and revision commit from Git using git describe
+    include(GetGitRevisionDescription)
+    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_REVISION_COMMIT)
+    git_describe(SIRIUS_GIT_DESCRIBE)
+    if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
+        message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
+        set(SIRIUS_VERSION "0.0.0")
+    else()
+        set(SIRIUS_VERSION "${SIRIUS_GIT_DESCRIBE}")
+    endif()
+    if (SIRIUS_REVISION_COMMIT MATCHES ".*NOTFOUND")
+        set(SIRIUS_REVISION_COMMIT "")
+    endif()
+endif()
+
 if ("${SIRIUS_VERSION}" STREQUAL "")
     set(SIRIUS_VERSION "0.0.0")
 endif()

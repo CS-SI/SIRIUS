@@ -18,4 +18,5 @@
 # binary
 *.jpg binary
 *.zip binary
+*.tif binary
 

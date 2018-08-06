@@ -99,23 +99,16 @@ Sirius is using [CMake] to build its libraries and executables.
 * `ENABLE_DOCUMENTATION`: set to `ON` if you want to build the documentation
 
 Sirius version can be extracted from `git describe` and revision commit from `git rev-parse HEAD`.
+If version and revision commit are not provided, [CMake] will try to extract them with the latter git commands.
 
 ### Example
 
 ```sh
 # CWD is Sirius root directory
-GIT_COMMIT=$(git rev-parse HEAD)
-GIT_DESCRIBE=$(git describe 2> /dev/null)
-if [ "x${GIT_DESCRIBE}" = "x" ]; then
-    GIT_DESCRIBE="0.0.0"
-fi
-
 mkdir .build
 cd .build
 cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DCMAKE_INSTALL_PREFIX=/tmp/sirius \
-         -DSIRIUS_VERSION=${GIT_DESCRIBE} \
-         -DSIRIUS_REVISION_COMMIT=${GIT_COMMIT} \
          -DENABLE_CACHE_OPTIMIZATION=ON \
          -DENABLE_GSL_CONTRACTS=OFF \
          -DENABLE_LOGS=ON \
@@ -126,7 +119,7 @@ cmake --build . --target doc
 cmake --build . --target install
 ```
 
-See also `.travis/create_cmake_project.sh`
+See also `.travis.yml` and `.travis/create_cmake_project.sh`
 
 ## How to use
 
@@ -267,14 +260,15 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
 ```sh
 ./sirius -r 2:1 \
          --upsample-zero-padding \
-         input/lena.jpg output/lena_z2.jpg
+         data/input/lena.jpg /tmp/lena_z2.jpg
 ```
 
 The following command line will zoom in `input/lena.jpg` by 2 using periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
 ./sirius -r 2 \
-         input/lena.jpg output/lena_z2.jpg
+         --filter data/filters/ZOOM_2.tif \
+         data/input/lena.jpg /tmp/lena_z2.jpg
 ```
 
 The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
@@ -282,8 +276,8 @@ The following command line will zoom in `input/sentinel2_20m.tif` by 2 using str
 ```sh
 ./sirius --stream --parallel-workers=8 \
          -r 2 \
-         --filter filters/ZOOM_2.tif \
-         input/sentinel2_20m.tif output/sentinel2_20m_z2.tif
+         --filter data/filters/ZOOM_2.tif \
+         data/input/sentinel2_20m.tif /tmp/sentinel2_20m_z2.tif
 ```
 
 ##### Zoom out
@@ -292,16 +286,16 @@ The following command line will zoom out `input/lena.jpg` by 1/2 using periodic 
 
 ```sh
 ./sirius -r 1:2 \
-         --filter filters/ZOOM_1_2.tif \
-         input/lena.jpg output/lena_z2.jpg
+         --filter data/filters/ZOOM_1_2.tif \
+         data/input/lena.jpg /tmp/lena_z2.jpg
 ```
 
 The following command line will zoom out `input/disparity.png` by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
 ./sirius -r 1:2 \
-         --filter filters/ZOOM_1_2.tif \
-         input/disparity.png output/disparity_z1_2.jpg
+         --filter data/filters/ZOOM_1_2.tif \
+         data/input/disparity.png /tmp/disparity_z1_2.jpg
 ```
 
 The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.
@@ -309,8 +303,8 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 ```sh
 ./sirius --stream --parallel-workers=8 \
          -r 1:2 \
-         --filter filters/ZOOM_1_2.tif \
-         input/sentinel2_10m.tif output/sentinel2_10m_z1_2.tif
+         --filter data/filters/ZOOM_1_2.tif \
+         data/input/sentinel2_10m.tif /tmp/sentinel2_10m_z1_2.tif
 ```
 
 ### Sirius library API
