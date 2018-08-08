@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1resampler_1_1PeriodizationZoomStrategy:
+
+Class PeriodizationZoomStrategy
+===============================
+
+- Defined in :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::resampler::PeriodizationZoomStrategy
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1ImageStreamer:
+
+Class ImageStreamer
+===================
+
+- Defined in :ref:`file_src_sirius_image_streamer.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::ImageStreamer
+   :members:
+   :protected-members:
+   :undoc-members:

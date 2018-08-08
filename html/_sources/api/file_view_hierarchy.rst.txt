@@ -1,0 +1,101 @@
+
+File Hierarchy
+--------------
+
+
+.. raw:: html
+
+   <ul class="treeView" id="file-treeView">
+     <li>
+       <ul class="collapsibleList">
+         <li>
+           Directory <a href="dir_doc.html#dir-doc">doc</a>
+           <ul>
+             <li class="lastChild">
+               Directory <a href="dir_doc_doxygen.html#dir-doc-doxygen">doxygen</a>
+               <ul>
+                 <li class="lastChild">File <a href="file_doc_doxygen_sirius_doxygen.css.html#file-doc-doxygen-sirius-doxygen.css">sirius_doxygen.css</a></li>
+               </ul>
+             </li>
+           </ul>
+         </li>
+         <li>
+           Directory <a href="dir_src.html#dir-src">src</a>
+           <ul>
+             <li class="lastChild">
+               Directory <a href="dir_src_sirius.html#dir-src-sirius">sirius</a>
+               <ul>
+                 <li>
+                   Directory <a href="dir_src_sirius_fftw.html#dir-src-sirius-fftw">fftw</a>
+                   <ul>
+                     <li>File <a href="file_src_sirius_fftw_exception.h.html#file-src-sirius-fftw-exception.h">exception.h</a></li>
+                     <li>File <a href="file_src_sirius_fftw_fftw.h.html#file-src-sirius-fftw-fftw.h">fftw.h</a></li>
+                     <li>File <a href="file_src_sirius_fftw_types.h.html#file-src-sirius-fftw-types.h">types.h</a></li>
+                     <li class="lastChild">File <a href="file_src_sirius_fftw_wrapper.h.html#file-src-sirius-fftw-wrapper.h">wrapper.h</a></li>
+                   </ul>
+                 </li>
+                 <li>
+                   Directory <a href="dir_src_sirius_gdal.html#dir-src-sirius-gdal">gdal</a>
+                   <ul>
+                     <li>File <a href="file_src_sirius_gdal_debug.h.html#file-src-sirius-gdal-debug.h">debug.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_error_code.h.html#file-src-sirius-gdal-error-code.h">error_code.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_exception.h.html#file-src-sirius-gdal-exception.h">exception.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_input_stream.h.html#file-src-sirius-gdal-input-stream.h">input_stream.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_resampled_output_stream.h.html#file-src-sirius-gdal-resampled-output-stream.h">resampled_output_stream.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_stream_block.h.html#file-src-sirius-gdal-stream-block.h">stream_block.h</a></li>
+                     <li>File <a href="file_src_sirius_gdal_types.h.html#file-src-sirius-gdal-types.h">types.h</a></li>
+                     <li class="lastChild">File <a href="file_src_sirius_gdal_wrapper.h.html#file-src-sirius-gdal-wrapper.h">wrapper.h</a></li>
+                   </ul>
+                 </li>
+                 <li>
+                   Directory <a href="dir_src_sirius_resampler.html#dir-src-sirius-resampler">resampler</a>
+                   <ul>
+                     <li>
+                       Directory <a href="dir_src_sirius_resampler_image_decomposition.html#dir-src-sirius-resampler-image-decomposition">decomposition</a>
+                       <ul>
+                         <li>File <a href="file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h.html#file-src-sirius-resampler-image-decomposition-periodic-smooth-policy.h">periodic_smooth_policy.h</a></li>
+                         <li class="lastChild">File <a href="file_src_sirius_resampler_image_decomposition_regular_policy.h.html#file-src-sirius-resampler-image-decomposition-regular-policy.h">regular_policy.h</a></li>
+                       </ul>
+                     </li>
+                     <li>
+                       Directory <a href="dir_src_sirius_resampler_zoom_strategy.html#dir-src-sirius-resampler-zoom-strategy">strategy</a>
+                       <ul>
+                         <li>File <a href="file_src_sirius_resampler_zoom_strategy_periodization_strategy.h.html#file-src-sirius-resampler-zoom-strategy-periodization-strategy.h">periodization_strategy.h</a></li>
+                         <li class="lastChild">File <a href="file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h.html#file-src-sirius-resampler-zoom-strategy-zero-padding-strategy.h">zero_padding_strategy.h</a></li>
+                       </ul>
+                     </li>
+                     <li class="lastChild">File <a href="file_src_sirius_resampler_frequency_resampler.h.html#file-src-sirius-resampler-frequency-resampler.h">frequency_resampler.h</a></li>
+                   </ul>
+                 </li>
+                 <li>
+                   Directory <a href="dir_src_sirius_utils.html#dir-src-sirius-utils">utils</a>
+                   <ul>
+                     <li>File <a href="file_src_sirius_utils_concurrent_queue.h.html#file-src-sirius-utils-concurrent-queue.h">concurrent_queue.h</a></li>
+                     <li>File <a href="file_src_sirius_utils_concurrent_queue_error_code.h.html#file-src-sirius-utils-concurrent-queue-error-code.h">concurrent_queue_error_code.h</a></li>
+                     <li>File <a href="file_src_sirius_utils_gsl.h.html#file-src-sirius-utils-gsl.h">gsl.h</a></li>
+                     <li>File <a href="file_src_sirius_utils_log.h.html#file-src-sirius-utils-log.h">log.h</a></li>
+                     <li>File <a href="file_src_sirius_utils_lru_cache.h.html#file-src-sirius-utils-lru-cache.h">lru_cache.h</a></li>
+                     <li class="lastChild">File <a href="file_src_sirius_utils_numeric.h.html#file-src-sirius-utils-numeric.h">numeric.h</a></li>
+                   </ul>
+                 </li>
+                 <li>File <a href="file_src_sirius_exception.h.html#file-src-sirius-exception.h">exception.h</a></li>
+                 <li>File <a href="file_src_sirius_filter.h.html#file-src-sirius-filter.h">filter.h</a></li>
+                 <li>File <a href="file_src_sirius_frequency_resampler_factory.h.html#file-src-sirius-frequency-resampler-factory.h">frequency_resampler_factory.h</a></li>
+                 <li>File <a href="file_src_sirius_i_frequency_resampler.h.html#file-src-sirius-i-frequency-resampler.h">i_frequency_resampler.h</a></li>
+                 <li>File <a href="file_src_sirius_image.h.html#file-src-sirius-image.h">image.h</a></li>
+                 <li>File <a href="file_src_sirius_image_streamer.h.html#file-src-sirius-image-streamer.h">image_streamer.h</a></li>
+                 <li class="lastChild">File <a href="file_src_sirius_types.h.html#file-src-sirius-types.h">types.h</a></li>
+               </ul>
+             </li>
+           </ul>
+         </li>
+         <li>File <a href="file_INTERNALS.md.html#file-INTERNALS.md">INTERNALS.md</a></li>
+         <li class="lastChild">File <a href="file_README.md.html#file-README.md">README.md</a></li>
+
+       </ul>
+     </li><!-- only tree view element -->
+   </ul><!-- /treeView file-treeView -->
+
+.. end raw html for treeView
+
+

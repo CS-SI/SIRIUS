@@ -1,0 +1,79 @@
+
+.. _program_listing_file_src_sirius_fftw_fftw.h:
+
+Program Listing for File fftw.h
+===============================
+
+- Return to documentation for :ref:`file_src_sirius_fftw_fftw.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_FFTW_FFTW_H_
+   #define SIRIUS_FFTW_FFTW_H_
+   
+   #include <map>
+   #include <memory>
+   #include <type_traits>
+   
+   #include "sirius/fftw/types.h"
+   #include "sirius/image.h"
+   #include "sirius/types.h"
+   
+   #include "sirius/utils/lru_cache.h"
+   
+   namespace sirius {
+   namespace fftw {
+   
+   namespace detail {
+   
+   struct PlanDeleter {
+       void operator()(::fftw_plan plan);
+   };
+   }  // namespace detail
+   
+   using PlanUPtr =
+         std::unique_ptr<std::remove_pointer_t<::fftw_plan>, detail::PlanDeleter>;
+   using PlanSPtr = std::shared_ptr<std::remove_pointer_t<::fftw_plan>>;
+   
+   class Fftw {
+     private:
+       static constexpr int kCacheSize = 10;
+       using PlanCache = utils::LRUCache<Size, PlanSPtr, kCacheSize>;
+   
+     public:
+       static Fftw& Instance();
+   
+       PlanSPtr GetRealToComplexPlan(const Size& size, double* in,
+                                     fftw_complex* out);
+       PlanSPtr GetComplexToRealPlan(const Size& size, fftw_complex* in,
+                                     double* out);
+   
+     private:
+       Fftw() = default;
+   
+       // not copyable
+       Fftw(const Fftw&) = delete;
+       Fftw operator=(const Fftw&) = delete;
+       // not moveable
+       Fftw(Fftw&&) = delete;
+       Fftw operator=(Fftw&&) = delete;
+   
+       PlanSPtr CreateC2RPlan(const Size& size, fftw_complex* in, double* out);
+       PlanSPtr CreateR2CPlan(const Size& size, double* out, fftw_complex* in);
+   
+       // allow PlanDeleter operator() to access private DestroyPlan method
+       friend void detail::PlanDeleter::operator()(::fftw_plan);
+       void DestroyPlan(::fftw_plan plan);
+   
+     private:
+       std::mutex plan_mutex_;
+   
+       PlanCache r2c_plans_;
+       PlanCache c2r_plans_;
+   };
+   
+   }  // namespace fftw
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_FFTW_FFTW_H_

@@ -1,0 +1,47 @@
+
+.. _program_listing_file_src_sirius_gdal_stream_block.h:
+
+Program Listing for File stream_block.h
+=======================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_stream_block.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_STREAM_H_
+   #define SIRIUS_GDAL_STREAM_H_
+   
+   #include "sirius/image.h"
+   
+   namespace sirius {
+   namespace gdal {
+   
+   struct StreamBlock {
+       StreamBlock() = default;
+   
+       StreamBlock(Image&& i_block_image, int i_row_idx, int i_col_idx,
+                   const Padding& i_padding)
+           : buffer(std::move(i_block_image)),
+             row_idx(i_row_idx),
+             col_idx(i_col_idx),
+             padding(i_padding),
+             is_initialized(true) {}
+   
+       ~StreamBlock() = default;
+       StreamBlock(const StreamBlock&) = default;
+       StreamBlock& operator=(const StreamBlock&) = default;
+       StreamBlock(StreamBlock&&) = default;
+       StreamBlock& operator=(StreamBlock&&) = default;
+   
+       Image buffer{};
+       int row_idx = 0;
+       int col_idx = 0;
+       Padding padding{};
+       bool is_initialized = false;
+   };
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_STREAM_H_

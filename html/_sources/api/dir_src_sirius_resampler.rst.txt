@@ -1,0 +1,20 @@
+.. _dir_src_sirius_resampler:
+
+
+Directory resampler
+===================
+
+
+Subdirectories
+--------------
+
+- :ref:`dir_src_sirius_resampler_image_decomposition`
+- :ref:`dir_src_sirius_resampler_zoom_strategy`
+
+
+Files
+-----
+
+- :ref:`file_src_sirius_resampler_frequency_resampler.h`
+
+

@@ -1,0 +1,36 @@
+
+.. _program_listing_file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h:
+
+Program Listing for File periodic_smooth_policy.h
+=================================================
+
+- Return to documentation for :ref:`file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+   #define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+   
+   #include "sirius/filter.h"
+   #include "sirius/image.h"
+   
+   namespace sirius {
+   namespace resampler {
+   
+   template <class ZoomStrategy>
+   class ImageDecompositionPeriodicSmoothPolicy : private ZoomStrategy {
+     public:
+       Image DecomposeAndZoom(int zoom, const Image& even_image,
+                              const Filter& filter) const;
+   
+     private:
+       Image Interpolate2D(int zoom, const Image& even_image) const;
+   };
+   
+   }  // namespace resampler
+   }  // namespace sirius
+   
+   #include "sirius/resampler/image_decomposition/periodic_smooth_policy.txx"
+   
+   #endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_

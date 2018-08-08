@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.1. Upsampling &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”" href="sinc_as_zpd.html" />
+    <link rel="prev" title="2. Theoretical Basis" href="../theoretical_basis.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.1. Upsampling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sinc_as_zpd.html">2.1.1. &quot;Fourier Zero Padding&quot;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html">2.1.2. Tile processing of the large image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_kernel.html">2.1.4. User kernel interpolator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_convolution.html">2.1.5. Convolution near the data edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../downsampling/intro_down.html">2.2. Downsampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+      <li>2.1. Upsampling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/upsampling/intro_up.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="upsampling">
+<span id="id1"></span><h1>2.1. Upsampling<a class="headerlink" href="#upsampling" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sinc_as_zpd.html">2.1.1. &quot;Fourier Zero Padding&quot;</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sinc_as_zpd.html#sinus-cardinal-interpolation">2.1.1.1. Sinus cardinal interpolation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinc_as_zpd.html#simple-example">2.1.1.2. Simple example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sinc_as_zpd.html#summary">2.1.1.3. Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="large_image.html">2.1.2. Tile processing of the large image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="large_image.html#the-implicit-edges-discontinuities-and-their-associated-artifacts">2.1.2.1. The implicit edges discontinuities and their associated artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.html#the-possible-solutions">2.1.2.2. The possible solutions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html#margin-the-original-data">2.1.2.2.1. Margin the original data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html#mirroring-the-original-data">2.1.2.2.2. Mirroring the original data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html#the-periodic-smooth-decomposition">2.1.2.2.3. The periodic + smooth decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.html#conclusion-sirius-uses-the-p-s-decomposition">2.1.2.3. Conclusion : Sirius uses the p+s decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apodized_low-pass_filter.html#illustrating-the-issue">2.1.3.1. Illustrating the issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apodized_low-pass_filter.html#the-windowing-solution">2.1.3.2. The windowing solution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_kernel.html">2.1.4. User kernel interpolator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#one-can-give-sirius-his-own-low-pass-filter">2.1.4.1. One can give Sirius his own low-pass filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#the-sirius-filter-must-lie-on-the-spatial-domain">2.1.4.2. The Sirius Filter must lie on the spatial domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#the-sirius-filter-must-be-sampled-like-the-upsampled-targeted-signal">2.1.4.3. The Sirius Filter must be sampled like the upsampled (targeted) signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#the-sirius-filter-is-odd-and-a-gdal-supported-image-format">2.1.4.4. The Sirius Filter is odd and a GDAL supported image format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#sirius-auto-shifts-the-filter-before-its-ft-is-computed">2.1.4.5. Sirius auto-shifts the Filter before its FT is computed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#sirius-can-normalize-the-filter">2.1.4.6. Sirius can normalize the Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded">2.1.4.7. When Sirius uses a Filter to upsample, the spectrum is periodized instead of zero padded</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tile_convolution.html">2.1.5. Convolution near the data edges</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tile_convolution.html#the-real-edges">2.1.5.1. The real edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tile_convolution.html#the-virtual-edges">2.1.5.2. The virtual edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tile_convolution.html#what-sirius-proposes">2.1.5.3. What Sirius proposes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sinc_as_zpd.html" class="btn btn-neutral float-right" title="2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../theoretical_basis.html" class="btn btn-neutral" title="2. Theoretical Basis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

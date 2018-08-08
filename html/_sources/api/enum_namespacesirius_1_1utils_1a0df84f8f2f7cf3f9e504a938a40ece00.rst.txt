@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacesirius_1_1utils_1a0df84f8f2f7cf3f9e504a938a40ece00:
+
+Enum ConcurrentQueueErrorCode
+=============================
+
+- Defined in :ref:`file_src_sirius_utils_concurrent_queue_error_code.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: sirius::utils::ConcurrentQueueErrorCode

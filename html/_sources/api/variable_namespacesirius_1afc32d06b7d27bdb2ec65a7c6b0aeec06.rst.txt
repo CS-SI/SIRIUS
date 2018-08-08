@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacesirius_1afc32d06b7d27bdb2ec65a7c6b0aeec06:
+
+Variable sirius::filter_default_hot_point
+=========================================
+
+- Defined in :ref:`file_src_sirius_filter.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sirius::filter_default_hot_point

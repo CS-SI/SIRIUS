@@ -1,0 +1,60 @@
+
+
+.. _file_src_sirius_frequency_resampler_factory.h:
+
+File frequency_resampler_factory.h
+==================================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/frequency_resampler_factory.h``)
+---------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_frequency_resampler_factory.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``sirius/i_frequency_resampler.h`` (:ref:`file_src_sirius_i_frequency_resampler.h`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1FrequencyResamplerFactory`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1a4b0340354d296956cec5465a526ec760`
+
+- :ref:`exhale_enum_namespacesirius_1a4c39db7e9f5d38adb6bc9c6d1980e1d7`
+

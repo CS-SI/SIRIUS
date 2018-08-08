@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.3.9.17.1.1. Program Listing for File INTERNALS.md &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3.9.18. File log.h" href="file_src_sirius_utils_log.h.html" />
+    <link rel="prev" title="3.3.9.17. File INTERNALS.md" href="file_INTERNALS.md.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="library_root.html">3. Sirius Developer Zone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#class-hierarchy">3.1. Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#file-hierarchy">3.2. File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="library_root.html#full-api">3.3. Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#namespaces">3.3.1. Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#classes-and-structs">3.3.2. Classes and Structs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#enums">3.3.3. Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#functions">3.3.4. Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#variables">3.3.5. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#defines">3.3.6. Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#typedefs">3.3.7. Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#directories">3.3.8. Directories</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="library_root.html#files">3.3.9. Files</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_concurrent_queue.h.html">3.3.9.1. File concurrent_queue.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_concurrent_queue_error_code.h.html">3.3.9.2. File concurrent_queue_error_code.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_debug.h.html">3.3.9.3. File debug.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_error_code.h.html">3.3.9.4. File error_code.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_exception.h.html">3.3.9.5. File exception.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_fftw_exception.h.html">3.3.9.6. File exception.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_exception.h.html">3.3.9.7. File exception.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_fftw_fftw.h.html">3.3.9.8. File fftw.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_filter.h.html">3.3.9.9. File filter.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_resampler_frequency_resampler.h.html">3.3.9.10. File frequency_resampler.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_frequency_resampler_factory.h.html">3.3.9.11. File frequency_resampler_factory.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_gsl.h.html">3.3.9.12. File gsl.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_i_frequency_resampler.h.html">3.3.9.13. File i_frequency_resampler.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_image.h.html">3.3.9.14. File image.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_image_streamer.h.html">3.3.9.15. File image_streamer.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_input_stream.h.html">3.3.9.16. File input_stream.h</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="file_INTERNALS.md.html">3.3.9.17. File INTERNALS.md</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_log.h.html">3.3.9.18. File log.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_lru_cache.h.html">3.3.9.19. File lru_cache.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_utils_numeric.h.html">3.3.9.20. File numeric.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h.html">3.3.9.21. File periodic_smooth_policy.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_resampler_zoom_strategy_periodization_strategy.h.html">3.3.9.22. File periodization_strategy.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_README.md.html">3.3.9.23. File README.md</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_resampler_image_decomposition_regular_policy.h.html">3.3.9.24. File regular_policy.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_resampled_output_stream.h.html">3.3.9.25. File resampled_output_stream.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_doc_doxygen_sirius_doxygen.css.html">3.3.9.26. File sirius_doxygen.css</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_stream_block.h.html">3.3.9.27. File stream_block.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_fftw_types.h.html">3.3.9.28. File types.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_types.h.html">3.3.9.29. File types.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_types.h.html">3.3.9.30. File types.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_fftw_wrapper.h.html">3.3.9.31. File wrapper.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_gdal_wrapper.h.html">3.3.9.32. File wrapper.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h.html">3.3.9.33. File zero_padding_strategy.h</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="library_root.html">3. Library API</a> &raquo;</li>
+        
+          <li><a href="file_INTERNALS.md.html">3.3.9.17. File INTERNALS.md</a> &raquo;</li>
+        
+      <li>3.3.9.17.1.1. Program Listing for File INTERNALS.md</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/program_listing_file_INTERNALS.md.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="program-listing-for-file-internals-md">
+<span id="program-listing-file-internals-md"></span><h1>3.3.9.17.1.1. Program Listing for File INTERNALS.md<a class="headerlink" href="#program-listing-for-file-internals-md" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Return to documentation for <a class="reference internal" href="file_INTERNALS.md.html#file-internals-md"><span class="std std-ref">File INTERNALS.md</span></a></li>
+</ul>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span># Internals
+
+## Private API
+
+### FFTW
+
+[FFTW] is used to compute FFT and IFFT of images. API Wrappers have been created in Sirius to make [FFTW] object lifetime management easier. On top of that, thread safety was taken into account to allow computation in a multi-threaded context.
+
+### GDAL
+
+[GDAL] is used to load image into memory and to save computed image. Just as [FFTW], API wrappers have been created for [GDAL] object lifetime management.
+
+## C++ features
+
+Sirius relies heavily on modern C++ features (C++11/14) such as smart pointers (`std::unique_ptr`, `std::shared_ptr`), concurrency API (`std::async`) or lambdas.
+
+### Smart pointers
+
+[Smart pointers] are used to manage object lifetime ([RAII idiom][RAII]). When a smart pointer goes out of scope, the default behavior is to delete the managed resource using `delete` or `delete[]` (when the smart pointer resource is declared as an array).
+
+When the resource type has its own deleter, it is possible to customize the smart pointer deleter. This feature is used in Sirius for example on FFTW types (`fftw_complex` arrays, `double` arrays, `fftw_plan`) and GDAL type (`GDALDataset`).
+
+```cpp
+namespace gdal {
+
+namespace detail {
+
+struct DatasetDeleter {
+    void operator()(::GDALDataset* dataset) { ::GDALClose(dataset); }
+};
+
+}  // namespace detail
+
+using DatasetUPtr = std::unique_ptr&lt;::GDALDataset, detail::DatasetDeleter&gt;;
+
+}  // namespace gdal
+```
+
+### Concurrency API
+
+Sirius multi-threaded streaming is based on [lambdas][lambda] and [task mechanism][std::async]:
+
+* One task will read an image block from the input image and feed an input queue
+* N worker tasks will consume the input queue, compute the resampling and feed an output queue
+* One task will consume the output queue and write the resampled block into the output image.
+
+Tasks are created using [`std::async`][std::async] with the policy `std::launch::async` (force the creation of a new thread to execute the given task).
+
+```cpp
+auto task = []() { ... };
+auto task_future = std::async(std::launch::async, task);
+// wait end of task or exception
+task_future.get();
+```
+
+## Design Patterns
+
+### Singleton
+
+Sirius is using a singleton to address the thread safety issue of [FFTW] plan creation.
+
+This singleton is responsible of creating and deleting plan and is interacting with the `fftw_plan` smart pointer deleter.
+[Meyers singleton implementation][MeyersSingleton] is used.
+
+```cpp
+class Dummy {
+  public:
+    // Get Dummy singleton instance
+    static Dummy&amp; Instance() {
+        static Dummy instance;
+        return instance;
+    }
+
+  private:
+    Dummy() = default;
+    ~Dummy() = default;
+
+    // not copyable
+    Dummy(const Dummy&amp;) = delete;
+    Dummy&amp; operator=(const Dummy&amp;) = delete;
+    // not moveable
+    Dummy(Dummy&amp;&amp;) = delete;
+    Dummy&amp; operator=(Dummy&amp;&amp;) = delete;
+};
+```
+
+C++11 standard guarantees that a unique instance will be initialized and that this initialization is thread safe.
+
+### Factory
+
+The `FrequencyResampler` is the combination of two algorithms:
+* an image decomposition algorithm
+* a zoom algorithm
+
+Sirius provides an `IFrequencyResampler` factory to compose the resampler requested by a client.
+API clients should only deal with `IFrequencyResampler` interface and should not be concerned by `IFrequencyResampler` implementations.
+
+### Policy/Strategy
+
+`FrequencyResampler` is the composition of an image decomposition algorithm and a zoom algorithm.
+The policy/strategy pattern is used to adapt the internal behavior of this class.
+
+An algorithm implementation must comply with an an algorithm type implicit interface.
+
+E.g, zoom algorithms should comply with:
+
+```cpp
+class ZoomStrategy {
+  public:
+    Image Zoom(int zoom, const Image&amp; padded_image, const Filter&amp; filter) const;
+};
+```
+
+Image decomposition algorithms should comply with:
+
+```cpp
+class ImageDecompositionPolicy {
+  public:
+    Image DecomposeAndZoom(int zoom, const Image&amp; padded_image,
+                           const Filter&amp; filter) const;
+};
+```
+
+## Insiders
+
+### Logs
+
+Sirius is using [spdlog] as its logger library.
+
+This library makes it easy to generate and format logs in an application. Sinks are powerful components to generate (colored) logs in `stdout` or `stderr` but you can also send your logs in (rotating) files or to `syslog` without overhead.
+
+Sirius provides `LOG` macro to create logs easily. CMake `ENABLE_LOGS` option is also available to lighten the generated binaries by removing all log strings.
+
+### LRU Cache
+
+Sirius is using a basic Last Recently Used (LRU) cache implementation to optimize some computation at the cost of memory overhead. CMake `ENABLE_CACHE_OPTIMIZATION` option is available to control this behavior.
+
+FFTW plans are cached so that a plan with a given size is reused if it has already been created. Filter FFTs are also cached to be reused on a specific image FFTs.
+
+### Concurrent queue
+
+Sirius multi-threaded streaming is using `ConcurrentQueue` instances to feed resampler workers and to feed output stream.
+
+This queue implementation is based on [std::condition_variable].
+
+`ConcurrentQueue` objects have a maximum size and an active status.
+
+When maximum size is reached, `Push` operations will block until an element is popped from the queue. Likewise, `Pop` operations will block until there is an element to pop from the queue.
+
+To unblock `Push` or `Pop` operations (e.g. after an error occurred), you can deactivate the queue. Push new elements in a inactive queue will fail and pop element will be possible as long as there is an element inside the queue.
+
+[FFTW]: http://www.fftw.org/ &quot;Fastest Fourier Transform in the West&quot;
+[GDAL]: http://www.gdal.org/ &quot;Geospatial Data Abstraction Library&quot;
+[Smart pointers]: https://en.cppreference.com/w/cpp/memory &quot;Smart pointers&quot;
+[RAII]: https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization &quot;Resource Acquisition Is Initialization&quot;
+[lambda]: https://en.cppreference.com/w/cpp/language/lambda &quot;C++ lambda&quot;
+[std::async]: https://en.cppreference.com/w/cpp/thread/async &quot;std::async&quot;
+[MeyersSingleton]: https://www.pearson.com/us/higher-education/program/Meyers-Effective-C-55-Specific-Ways-to-Improve-Your-Programs-and-Designs-3rd-Edition/PGM73417.html &quot;Meyers singleton implementation&quot;
+[spdlog]: https://github.com/gabime/spdlog
+[std::condition_variable]: https://en.cppreference.com/w/cpp/thread/condition_variable &quot;std::condition_variable&quot;
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="file_src_sirius_utils_log.h.html" class="btn btn-neutral float-right" title="3.3.9.18. File log.h" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="file_INTERNALS.md.html" class="btn btn-neutral" title="3.3.9.17. File INTERNALS.md" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

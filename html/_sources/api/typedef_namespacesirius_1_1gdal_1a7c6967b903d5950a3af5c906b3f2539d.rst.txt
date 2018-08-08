@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacesirius_1_1gdal_1a7c6967b903d5950a3af5c906b3f2539d:
+
+Typedef sirius::gdal::DatasetUPtr
+=================================
+
+- Defined in :ref:`file_src_sirius_gdal_types.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sirius::gdal::DatasetUPtr

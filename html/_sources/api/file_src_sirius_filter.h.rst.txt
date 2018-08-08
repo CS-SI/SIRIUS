@@ -1,0 +1,88 @@
+
+
+.. _file_src_sirius_filter.h:
+
+File filter.h
+=============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/filter.h``)
+------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_filter.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``map``
+
+- ``memory``
+
+- ``sirius/fftw/types.h`` (:ref:`file_src_sirius_fftw_types.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+- ``sirius/utils/lru_cache.h`` (:ref:`file_src_sirius_utils_lru_cache.h`)
+
+- ``string``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_i_frequency_resampler.h`
+
+- :ref:`file_src_sirius_image_streamer.h`
+
+- :ref:`file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h`
+
+- :ref:`file_src_sirius_resampler_image_decomposition_regular_policy.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1FilterMetadata`
+
+- :ref:`exhale_class_classsirius_1_1Filter`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacesirius_1afc32d06b7d27bdb2ec65a7c6b0aeec06`
+

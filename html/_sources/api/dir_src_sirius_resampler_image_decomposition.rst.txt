@@ -1,0 +1,15 @@
+.. _dir_src_sirius_resampler_image_decomposition:
+
+
+Directory decomposition
+=======================
+
+
+
+Files
+-----
+
+- :ref:`file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h`
+- :ref:`file_src_sirius_resampler_image_decomposition_regular_policy.h`
+
+

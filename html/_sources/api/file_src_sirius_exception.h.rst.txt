@@ -1,0 +1,59 @@
+
+
+.. _file_src_sirius_exception.h:
+
+File exception.h
+================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/exception.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_exception.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``stdexcept``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_fftw_exception.h`
+
+- :ref:`file_src_sirius_gdal_exception.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1Exception`
+

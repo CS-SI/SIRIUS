@@ -1,0 +1,39 @@
+
+.. _program_listing_file_src_sirius_i_frequency_resampler.h:
+
+Program Listing for File i_frequency_resampler.h
+================================================
+
+- Return to documentation for :ref:`file_src_sirius_i_frequency_resampler.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_I_FREQUENCY_RESAMPLER_H_
+   #define SIRIUS_I_FREQUENCY_RESAMPLER_H_
+   
+   #include <memory>
+   #include <string>
+   #include <vector>
+   
+   #include "sirius/filter.h"
+   #include "sirius/image.h"
+   #include "sirius/types.h"
+   
+   namespace sirius {
+   
+   class IFrequencyResampler {
+     public:
+       using UPtr = std::unique_ptr<IFrequencyResampler>;
+   
+     public:
+       virtual ~IFrequencyResampler() = default;
+   
+       virtual Image Compute(const ZoomRatio& zoom_ratio, const Image& input,
+                             const Padding& image_padding,
+                             const Filter& filter = {}) const = 0;
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_I_FREQUENCY_RESAMPLER_H_

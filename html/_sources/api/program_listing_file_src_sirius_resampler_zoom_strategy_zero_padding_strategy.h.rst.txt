@@ -1,0 +1,35 @@
+
+.. _program_listing_file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h:
+
+Program Listing for File zero_padding_strategy.h
+================================================
+
+- Return to documentation for :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
+   #define SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
+   
+   #include "sirius/filter.h"
+   #include "sirius/image.h"
+   
+   #include "sirius/fftw/types.h"
+   
+   namespace sirius {
+   namespace resampler {
+   
+   class ZeroPaddingZoomStrategy {
+     public:
+       Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
+   
+     private:
+       fftw::ComplexUPtr ZeroPadFFT(int zoom, const Image& image,
+                                    fftw::ComplexUPtr image_fft) const;
+   };
+   
+   }  // namespace resampler
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_

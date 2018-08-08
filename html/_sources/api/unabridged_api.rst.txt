@@ -1,0 +1,660 @@
+
+Full API
+--------
+
+
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__fftw.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__fftw__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__gdal.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__gdal__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__resampler.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_sirius__utils.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_std.rst
+
+Classes and Structs
+*******************
+
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1fftw_1_1detail_1_1ComplexDeleter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1fftw_1_1detail_1_1PlanDeleter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1fftw_1_1detail_1_1RealDeleter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1FilterMetadata.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1gdal_1_1detail_1_1DatasetDeleter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1gdal_1_1GeoReference.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1gdal_1_1StreamBlock.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1Padding.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1Point.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structsirius_1_1Size.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structstd_1_1is__error__code__enum_3_01sirius_1_1gdal_1_1ErrorCode_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1Exception.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1fftw_1_1Exception.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1fftw_1_1Fftw.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1Filter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1FrequencyResamplerFactory.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1gdal_1_1Exception.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1gdal_1_1InputStream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1gdal_1_1ResampledOutputStream.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1IFrequencyResampler.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1Image.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1ImageStreamer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1resampler_1_1FrequencyResampler.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1resampler_1_1PeriodizationZoomStrategy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1utils_1_1ConcurrentQueue.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1utils_1_1LRUCache.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classsirius_1_1ZoomRatio.rst
+
+Enums
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1_1fftw_1a6766819cf988676bdb90db031130216c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1a4b0340354d296956cec5465a526ec760.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1_1gdal_1a1da0cb29feb6b82f87bcc6309a980595.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1a4c39db7e9f5d38adb6bc9c6d1980e1d7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1a69c9540ee854b23e907bb94930ad5b67.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacesirius_1_1utils_1a0df84f8f2f7cf3f9e504a938a40ece00.rst
+
+Functions
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1fftw_1a1b8ad8a7c77659627831c9e80fd8b163.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1fftw_1a7b8520f43c8abff5175a59a877168d80.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1fftw_1a99a4725d9fcd74afcffc4d84fbf3a653.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1fftw_1a2ee9e70da2bae2bb5b447c3a45cf93c6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1fftw_1ae96e917988ea3c646222ed9385ac1e7a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1ad4e08b52b60a8d69c8ad80718492470f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1a1ed353f63613d1a03eb6fbc5336e1b80.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1ab3825be7bb7583d5bc4d5bb8acce4094.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1a25c59ffa865183a728cb73d82c09f69e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1gdal_1afba591235fba805ffc0ed495227de685.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a509dfb8fbfa639ff3fa926c858baafe5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1ab67b459b57d1a750d1166165dcef6f8f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a51e77b12b9d7b578f694c1863a6bb16a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a322dd3f36b534dbeebd8b4ed2054b8d1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a54d47787bb9af0fff9dbb3d55599931a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a328eb9fab0923e0f17fc642644d9f0e1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a86b379fe387e3f9dbede9742860e0bf1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a29798ae6a8bebaa1c8e6fc84f201644b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a036853ca66896296aff37e5bd6bd0df0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1aca8b5a6cd2c4306381ff0cb9aa20e98c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1a06e7d1f73f1e58f50a2adaf2d6a535fc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacesirius_1_1utils_1ad39fe90b6fd39cd0f48c5988054e7b5b.rst
+
+Variables
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacesirius_1afc32d06b7d27bdb2ec65a7c6b0aeec06.rst
+
+Defines
+*******
+
+
+.. toctree::
+   :maxdepth: 5
+
+   define_log_8h_1a1fcd4192fd94b97a1495aa60081001f9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_log_8h_1ab64bb2a2e64746119867678511b22347.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_log_8h_1a0455917ef27afbbc292a7104ec8f8139.rst
+
+Typedefs
+********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1a7a208dcf4b7a30c7c9b415e05b484469.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1fftw_1aa2b77aa0bafa4e403a28be55cd61a821.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1fftw_1af7e1ebad9b581170cd3384e1fa9d9dcb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1fftw_1abe140e10fbcd3c65f459b6ca820d95ff.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1fftw_1a528a0bb4c70fb7362b679e00cb441371.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1fftw_1aa4684160df021baa400bcd3ba873b7db.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacesirius_1_1gdal_1a7c6967b903d5950a3af5c906b3f2539d.rst
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_doc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_doc_doxygen.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_fftw.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_gdal.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_resampler.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_resampler_image_decomposition.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_resampler_zoom_strategy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_sirius_utils.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_concurrent_queue.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_concurrent_queue_error_code.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_debug.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_error_code.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_exception.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_fftw_exception.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_exception.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_fftw_fftw.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_filter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_resampler_frequency_resampler.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_frequency_resampler_factory.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_gsl.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_i_frequency_resampler.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_image.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_image_streamer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_input_stream.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_INTERNALS.md.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_log.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_lru_cache.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_utils_numeric.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_resampler_zoom_strategy_periodization_strategy.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_README.md.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_resampler_image_decomposition_regular_policy.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_resampled_output_stream.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_doc_doxygen_sirius_doxygen.css.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_stream_block.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_fftw_types.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_types.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_types.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_fftw_wrapper.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_gdal_wrapper.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h.rst

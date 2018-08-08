@@ -1,0 +1,69 @@
+
+
+.. _file_src_sirius_utils_concurrent_queue_error_code.h:
+
+File concurrent_queue_error_code.h
+==================================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/utils/concurrent_queue_error_code.h``)
+---------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_utils_concurrent_queue_error_code.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``system_error``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__utils`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1_1utils_1a0df84f8f2f7cf3f9e504a938a40ece00`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1utils_1aca8b5a6cd2c4306381ff0cb9aa20e98c`
+

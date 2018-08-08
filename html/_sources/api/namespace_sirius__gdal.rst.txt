@@ -1,0 +1,70 @@
+
+.. _namespace_sirius__gdal:
+
+Namespace sirius::gdal
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius__gdal__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1gdal_1_1GeoReference`
+
+- :ref:`exhale_struct_structsirius_1_1gdal_1_1StreamBlock`
+
+- :ref:`exhale_class_classsirius_1_1gdal_1_1Exception`
+
+- :ref:`exhale_class_classsirius_1_1gdal_1_1InputStream`
+
+- :ref:`exhale_class_classsirius_1_1gdal_1_1ResampledOutputStream`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1_1gdal_1a1da0cb29feb6b82f87bcc6309a980595`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ad4e08b52b60a8d69c8ad80718492470f`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a1ed353f63613d1a03eb6fbc5336e1b80`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ab3825be7bb7583d5bc4d5bb8acce4094`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a25c59ffa865183a728cb73d82c09f69e`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1afba591235fba805ffc0ed495227de685`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1_1gdal_1a7c6967b903d5950a3af5c906b3f2539d`

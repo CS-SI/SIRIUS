@@ -1,0 +1,25 @@
+.. _exhale_class_classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy:
+
+Template Class ImageDecompositionPeriodicSmoothPolicy
+=====================================================
+
+- Defined in :ref:`file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``private ZoomStrategy``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::resampler::ImageDecompositionPeriodicSmoothPolicy
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,90 @@
+
+
+.. _file_src_sirius_image.h:
+
+File image.h
+============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/image.h``)
+-----------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_image.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cassert``
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_fftw_fftw.h`
+
+- :ref:`file_src_sirius_fftw_wrapper.h`
+
+- :ref:`file_src_sirius_filter.h`
+
+- :ref:`file_src_sirius_gdal_input_stream.h`
+
+- :ref:`file_src_sirius_gdal_stream_block.h`
+
+- :ref:`file_src_sirius_gdal_wrapper.h`
+
+- :ref:`file_src_sirius_i_frequency_resampler.h`
+
+- :ref:`file_src_sirius_resampler_frequency_resampler.h`
+
+- :ref:`file_src_sirius_resampler_image_decomposition_periodic_smooth_policy.h`
+
+- :ref:`file_src_sirius_resampler_image_decomposition_regular_policy.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1Padding`
+
+- :ref:`exhale_class_classsirius_1_1Image`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1a69c9540ee854b23e907bb94930ad5b67`
+

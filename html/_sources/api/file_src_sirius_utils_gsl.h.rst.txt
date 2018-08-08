@@ -1,0 +1,53 @@
+
+
+.. _file_src_sirius_utils_gsl.h:
+
+File gsl.h
+==========
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/utils/gsl.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_utils_gsl.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gsl/gsl``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1utils_1a06e7d1f73f1e58f50a2adaf2d6a535fc`
+

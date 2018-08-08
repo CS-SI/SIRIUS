@@ -1,0 +1,20 @@
+
+.. _namespace_sirius__gdal__detail:
+
+Namespace sirius::gdal::detail
+==============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1gdal_1_1detail_1_1DatasetDeleter`

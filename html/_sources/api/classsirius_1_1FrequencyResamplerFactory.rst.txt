@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1FrequencyResamplerFactory:
+
+Class FrequencyResamplerFactory
+===============================
+
+- Defined in :ref:`file_src_sirius_frequency_resampler_factory.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::FrequencyResamplerFactory
+   :members:
+   :protected-members:
+   :undoc-members:

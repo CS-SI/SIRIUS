@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1fftw_1a7b8520f43c8abff5175a59a877168d80:
+
+Function CreateReal
+===================
+
+- Defined in :ref:`file_src_sirius_fftw_wrapper.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::fftw::CreateReal

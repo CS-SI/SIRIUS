@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1Padding:
+
+Struct Padding
+==============
+
+- Defined in :ref:`file_src_sirius_image.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::Padding
+   :members:
+   :protected-members:
+   :undoc-members:

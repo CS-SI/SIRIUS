@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.3.2.30. Template Class LRUCache &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3.2.31. Class ZoomRatio" href="classsirius_1_1ZoomRatio.html" />
+    <link rel="prev" title="3.3.2.29. Template Class ConcurrentQueue" href="classsirius_1_1utils_1_1ConcurrentQueue.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="library_root.html">3. Sirius Developer Zone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#class-hierarchy">3.1. Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#file-hierarchy">3.2. File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="library_root.html#full-api">3.3. Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#namespaces">3.3.1. Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="library_root.html#classes-and-structs">3.3.2. Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1ComplexDeleter.html">3.3.2.1. Struct ComplexDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1PlanDeleter.html">3.3.2.2. Struct PlanDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1RealDeleter.html">3.3.2.3. Struct RealDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1FilterMetadata.html">3.3.2.4. Struct FilterMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1detail_1_1DatasetDeleter.html">3.3.2.5. Struct DatasetDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1GeoReference.html">3.3.2.6. Struct GeoReference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1StreamBlock.html">3.3.2.7. Struct StreamBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Padding.html">3.3.2.8. Struct Padding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Point.html">3.3.2.9. Struct Point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Size.html">3.3.2.10. Struct Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1is__error__code__enum_3_01sirius_1_1gdal_1_1ErrorCode_01_4.html">3.3.2.11. Template Struct is_error_code_enum&lt; sirius::gdal::ErrorCode &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4.html">3.3.2.12. Template Struct is_error_code_enum&lt; sirius::utils::ConcurrentQueueErrorCode &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Exception.html">3.3.2.13. Class Exception</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1fftw_1_1Exception.html">3.3.2.14. Class Exception</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1fftw_1_1Fftw.html">3.3.2.15. Class Fftw</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Filter.html">3.3.2.16. Class Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1FrequencyResamplerFactory.html">3.3.2.17. Class FrequencyResamplerFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1Exception.html">3.3.2.18. Class Exception</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1InputStream.html">3.3.2.19. Class InputStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1ResampledOutputStream.html">3.3.2.20. Class ResampledOutputStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1IFrequencyResampler.html">3.3.2.21. Class IFrequencyResampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Image.html">3.3.2.22. Class Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1ImageStreamer.html">3.3.2.23. Class ImageStreamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1FrequencyResampler.html">3.3.2.24. Template Class FrequencyResampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy.html">3.3.2.25. Template Class ImageDecompositionPeriodicSmoothPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy.html">3.3.2.26. Template Class ImageDecompositionRegularPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1PeriodizationZoomStrategy.html">3.3.2.27. Class PeriodizationZoomStrategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy.html">3.3.2.28. Class ZeroPaddingZoomStrategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1utils_1_1ConcurrentQueue.html">3.3.2.29. Template Class ConcurrentQueue</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">3.3.2.30. Template Class LRUCache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1ZoomRatio.html">3.3.2.31. Class ZoomRatio</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#enums">3.3.3. Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#functions">3.3.4. Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#variables">3.3.5. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#defines">3.3.6. Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#typedefs">3.3.7. Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#directories">3.3.8. Directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#files">3.3.9. Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="library_root.html">3. Library API</a> &raquo;</li>
+        
+      <li>3.3.2.30. Template Class LRUCache</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/classsirius_1_1utils_1_1LRUCache.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="template-class-lrucache">
+<span id="exhale-class-classsirius-1-1utils-1-1lrucache"></span><h1>3.3.2.30. Template Class LRUCache<a class="headerlink" href="#template-class-lrucache" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file_src_sirius_utils_lru_cache.h.html#file-src-sirius-utils-lru-cache-h"><span class="std std-ref">File lru_cache.h</span></a></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>3.3.2.30.1. Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv3N6sirius5utils8LRUCacheE">
+<span id="_CPPv2N6sirius5utils8LRUCacheE"></span><span id="sirius::utils::LRUCache"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache"></span><em class="property">template </em>&lt;typename <em>Key</em>, typename <em>Value</em>, std::size_t <em>CacheSize</em> = 5&gt;<br /><em class="property">class </em><code class="descname">LRUCache</code><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCacheE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>LRU cache. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache8LRUCacheEv">
+<span id="_CPPv2N6sirius5utils8LRUCache8LRUCacheEv"></span><span id="sirius::utils::LRUCache::LRUCache"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a05f6897362afd332fda78664af34c258"></span><code class="descname">LRUCache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache8LRUCacheEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCacheD0Ev">
+<span id="_CPPv2N6sirius5utils8LRUCacheD0Ev"></span><span id="sirius::utils::LRUCache::~LRUCache"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1ac1beeb4414a3b68d9b5fabaaad74672c"></span><code class="descname">~LRUCache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCacheD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache8LRUCacheERK8LRUCache">
+<span id="_CPPv2N6sirius5utils8LRUCache8LRUCacheERK8LRUCache"></span><span id="sirius::utils::LRUCache::LRUCache__LRUCacheCR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1ae6596942a970fecadca3d173217f36a4"></span><code class="descname">LRUCache</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCache8LRUCacheEv" title="sirius::utils::LRUCache::LRUCache">LRUCache</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache8LRUCacheERK8LRUCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCacheaSERK8LRUCache">
+<span id="_CPPv2N6sirius5utils8LRUCacheaSERK8LRUCache"></span><span id="sirius::utils::LRUCache::assign-operator__LRUCacheCR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a02b1098445a1580a13bcd5dacf5a7d7a"></span><a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCacheE" title="sirius::utils::LRUCache">LRUCache</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCacheE" title="sirius::utils::LRUCache">LRUCache</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCacheaSERK8LRUCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache8LRUCacheERR8LRUCache">
+<span id="_CPPv2N6sirius5utils8LRUCache8LRUCacheERR8LRUCache"></span><span id="sirius::utils::LRUCache::LRUCache__LRUCacheRR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a625fd2e7fb69b7bc2c5f4fc137129ec1"></span><code class="descname">LRUCache</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCache8LRUCacheEv" title="sirius::utils::LRUCache::LRUCache">LRUCache</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache8LRUCacheERR8LRUCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCacheaSERR8LRUCache">
+<span id="_CPPv2N6sirius5utils8LRUCacheaSERR8LRUCache"></span><span id="sirius::utils::LRUCache::assign-operator__LRUCacheRR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a7f0a02ca709aaf037997bd9939340366"></span><a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCacheE" title="sirius::utils::LRUCache">LRUCache</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv3N6sirius5utils8LRUCacheE" title="sirius::utils::LRUCache">LRUCache</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCacheaSERR8LRUCache" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache3GetERK3Key">
+<span id="_CPPv2N6sirius5utils8LRUCache3GetERK3Key"></span><span id="sirius::utils::LRUCache::Get__KeyCR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1aac741d1da67e5255e1f934e76488bb48"></span>Value <code class="descname">Get</code><span class="sig-paren">(</span><em class="property">const</em> Key &amp;<em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache3GetERK3Key" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a cache element. </p>
+<p>The element fetched will be the new head of the cache</p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>cache element if exists or default constructed element if not </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">key</span></code>: key of the requested element </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache6InsertERK3Key5Value">
+<span id="_CPPv2N6sirius5utils8LRUCache6InsertERK3Key5Value"></span><span id="sirius::utils::LRUCache::Insert__KeyCR.Value"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a44d0f0c1533af9721657b9ed860684be"></span>void <code class="descname">Insert</code><span class="sig-paren">(</span><em class="property">const</em> Key &amp;<em>key</em>, Value <em>element</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache6InsertERK3Key5Value" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Insert an element in the cache. </p>
+<p>If the cache size reaches the max size, the last recently used (LRU) element is removed from the cache</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">key</span></code>: key of the element </li>
+<li><code class="docutils literal notranslate"><span class="pre">element</span></code>: element to insert </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache6RemoveERK3Key">
+<span id="_CPPv2N6sirius5utils8LRUCache6RemoveERK3Key"></span><span id="sirius::utils::LRUCache::Remove__KeyCR"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a0813b1fcc32a9fe49e40f7487ef788d7"></span>void <code class="descname">Remove</code><span class="sig-paren">(</span><em class="property">const</em> Key &amp;<em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache6RemoveERK3Key" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove an element from the cache. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">key</span></code>: key of the element </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache5ClearEv">
+<span id="_CPPv2N6sirius5utils8LRUCache5ClearEv"></span><span id="sirius::utils::LRUCache::Clear"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a555436ff3a980a150454836d23098e10"></span>void <code class="descname">Clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache5ClearEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clear all the cache elements. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3NK6sirius5utils8LRUCache8ContainsERK3Key">
+<span id="_CPPv2NK6sirius5utils8LRUCache8ContainsERK3Key"></span><span id="sirius::utils::LRUCache::Contains__KeyCRC"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1ace4d14fbf356c83ecc1bf203dbe6fef0"></span>bool <code class="descname">Contains</code><span class="sig-paren">(</span><em class="property">const</em> Key &amp;<em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv3NK6sirius5utils8LRUCache8ContainsERK3Key" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check that a particular key is present in cache. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>true if the element is present in cache </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">key</span></code>: key of the requested element </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius5utils8LRUCache4SizeEv">
+<span id="_CPPv2N6sirius5utils8LRUCache4SizeEv"></span><span id="sirius::utils::LRUCache::Size"></span><span class="target" id="classsirius_1_1utils_1_1LRUCache_1a9fb65004a1332660b598771ef138dd45"></span>std::size_t <code class="descname">Size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius5utils8LRUCache4SizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the current size of the cache. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>size of the cache </dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="classsirius_1_1ZoomRatio.html" class="btn btn-neutral float-right" title="3.3.2.31. Class ZoomRatio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="classsirius_1_1utils_1_1ConcurrentQueue.html" class="btn btn-neutral" title="3.3.2.29. Template Class ConcurrentQueue" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

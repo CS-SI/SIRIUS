@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.1.5. Convolution near the data edges &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.1.6. Float upsampling factor:" href="float_upsampling_factor.html" />
+    <link rel="prev" title="2.1.4. User kernel interpolator" href="user_kernel.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro_up.html">2.1. Upsampling</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sinc_as_zpd.html">2.1.1. &quot;Fourier Zero Padding&quot;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html">2.1.2. Tile processing of the large image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_kernel.html">2.1.4. User kernel interpolator</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2.1.5. Convolution near the data edges</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-real-edges">2.1.5.1. The real edges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-virtual-edges">2.1.5.2. The virtual edges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-sirius-proposes">2.1.5.3. What Sirius proposes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../downsampling/intro_down.html">2.2. Downsampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+          <li><a href="intro_up.html">2.1. Upsampling</a> &raquo;</li>
+        
+      <li>2.1.5. Convolution near the data edges</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/upsampling/tile_convolution.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="convolution-near-the-data-edges">
+<span id="tile-convolution"></span><h1>2.1.5. Convolution near the data edges<a class="headerlink" href="#convolution-near-the-data-edges" title="Permalink to this headline">¶</a></h1>
+<p>So far we have seen that Sirius allows for filtering and tile processing. The use of a filter always comes with the use of
+margin across data edges so that all the data samples can be filtered (or interpolated depending on the zoom factor).
+When tiling the original data, two different types of edges arise : the real data edges, and the virtual ones (the edges
+between two tiles).</p>
+<div class="section" id="the-real-edges">
+<span id="real-edges"></span><h2>2.1.5.1. The real edges<a class="headerlink" href="#the-real-edges" title="Permalink to this headline">¶</a></h2>
+<p>When edges are real, since the use of the Fourier Transform implicitly periodizes the signal, the results near the edges
+are the ones one would have with a spatial convolution if the origin samples signal was periodized. See the following
+code-block :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">tri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="go"># only one sample is valid in this configuration</span>
+<span class="gp">In [2]: </span><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span><span class="n">tri</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">)</span>
+<span class="gh">Out[2]: </span><span class="go">array([19])</span>
+
+<span class="go"># keeping the same number of samples as the original image implies the add of margins</span>
+<span class="gp">In [3]: </span><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span><span class="n">tri</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+<span class="gh">Out[3]: </span><span class="go">array([10, 16, 19, 16, 10])</span>
+
+<span class="go"># ... which are not the same in spatial and frequential domain by default</span>
+<span class="gp">In [4]: </span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">tri</span><span class="p">))))</span>
+<span class="gh">Out[4]: </span><span class="go">array([14., 17., 19., 17., 14.])</span>
+
+<span class="go"># in spatial domain the default margins are zeros</span>
+<span class="gp">In [5]: </span><span class="n">margin</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="gp">In [6]: </span><span class="n">tri_zpd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">margin</span><span class="p">),</span> <span class="n">tri</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">margin</span><span class="p">)))</span>
+
+<span class="gp">In [7]: </span><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">tri_zpd</span><span class="p">,</span><span class="n">tri</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)[</span><span class="n">margin</span><span class="p">:</span><span class="n">margin</span><span class="o">+</span><span class="n">tri</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+<span class="gh">Out[7]: </span><span class="go">array([10., 16., 19., 16., 10.])</span>
+
+<span class="go"># when in frequential domain the margins comes from the implicit periodization of the signal</span>
+<span class="gp">In [8]: </span><span class="n">tri_per</span> <span class="o">=</span> <span class="n">periodize</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span><span class="n">margin</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="n">margin</span><span class="o">*</span><span class="n">tri</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+
+<span class="gp">In [9]: </span><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">tri_per</span><span class="p">,</span><span class="n">tri</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)[</span><span class="n">margin</span><span class="p">:</span><span class="n">margin</span><span class="o">+</span><span class="n">tri</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
+<span class="gh">Out[9]: </span><span class="go">array([14., 17., 19., 17., 14.])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-virtual-edges">
+<span id="virtual-edges"></span><h2>2.1.5.2. The virtual edges<a class="headerlink" href="#the-virtual-edges" title="Permalink to this headline">¶</a></h2>
+<p>Dealing with virtual edges is more critical because handling the real edges is really just about choosing a
+convention among several ones. The virtual edges, on the other hand, must be treated carefully to prevent artifacts from
+paving the output data.</p>
+<p>The idea is that, to compute correctly the tile edges, one needs to add half the filter size margins to it. According to
+<a class="reference internal" href="../other/ref.html#term-press-et-al-1992"><span class="xref std std-term">[Press et al, 1992]</span></a> this can be done by two different ways:</p>
+<p><strong>The overlap and save solution</strong></p>
+<p>This is the simplest approach as it is just about margin the tile with real samples surrounding it. Then, the output
+samples inside the margins must be discarded as they have been approximated with a
+<a class="reference internal" href="#real-edges"><span class="std std-ref">periodization of the input samples near the edges</span></a>.</p>
+<p>The tile samples, margins excluded, are correctly convolved and the only ones kept.</p>
+<p><strong>The overlap and add solution</strong></p>
+<p>The overlap and add solution consists in zero padding the input tile. Margins are then formed by zeros instead of the
+subsequent tile samples. The input tiles then do not overlap at all. However this time the tile margin output samples
+are not discarded. They are kept and added to the result of the first, half the filter size, samples of the subsequent
+input tile (margins excluded).</p>
+<p>In other words, all samples from the output tiles are kept. The samples originating from the associated input tile
+(meaning margins excluded) are not all correctly computed. This comes from the zero padding of the input tile. The firsts
+and lasts samples of the input tiles are computed with contributions coming from the zeros inside margins. The
+zeros cancel some filter weighs, hence the very last sample of an input tile is computed with only half the
+contributions it requires (not exactly half if the filter has odd number of samples). Then the same could be said for the
+very first margin sample (the sample right next to last sample of the input tile). Because output tiles are kept intact
+and then added to the overlapping part (half filter size) of the subsequent output tile, the lack of contributions is
+perfectly compensated.</p>
+</div>
+<div class="section" id="what-sirius-proposes">
+<h2>2.1.5.3. What Sirius proposes<a class="headerlink" href="#what-sirius-proposes" title="Permalink to this headline">¶</a></h2>
+<p>Here is expressed the way Sirius handles the margins:</p>
+<ul class="simple">
+<li><strong>For the real edges</strong> the default behavior is the mirroring of the input data.
+However the user is free to set the behavior to zero_padding instead.</li>
+<li><strong>For the virtual edges</strong> Sirius uses the overlap and save solution discussed earlier.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When a zoom factor <img class="math" src="../_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> is greater than <img class="math" src="../_images/math/d839e144267ecbb8a87acbc8a7dfda7824a1693e.png" alt="1"/>, then the margin size are not half of the filter size
+but rather <img class="math" src="../_images/math/3d33128ee5c27d6a7c935bf9d85ac1d786f8abf9.png" alt="margin = \frac{filter_{size}}{2*z}"/>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="float_upsampling_factor.html" class="btn btn-neutral float-right" title="2.1.6. Float upsampling factor:" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user_kernel.html" class="btn btn-neutral" title="2.1.4. User kernel interpolator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

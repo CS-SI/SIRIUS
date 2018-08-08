@@ -1,0 +1,80 @@
+
+
+.. _file_src_sirius_gdal_wrapper.h:
+
+File wrapper.h
+==============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/gdal/wrapper.h``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_gdal_wrapper.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``sirius/gdal/types.h`` (:ref:`file_src_sirius_gdal_types.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``string``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_image_streamer.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__gdal`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1gdal_1_1GeoReference`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ad4e08b52b60a8d69c8ad80718492470f`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a1ed353f63613d1a03eb6fbc5336e1b80`
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1afba591235fba805ffc0ed495227de685`
+

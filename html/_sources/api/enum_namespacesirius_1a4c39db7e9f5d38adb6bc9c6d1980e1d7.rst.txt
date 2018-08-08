@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacesirius_1a4c39db7e9f5d38adb6bc9c6d1980e1d7:
+
+Enum ImageDecompositionPolicies
+===============================
+
+- Defined in :ref:`file_src_sirius_frequency_resampler_factory.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: sirius::ImageDecompositionPolicies

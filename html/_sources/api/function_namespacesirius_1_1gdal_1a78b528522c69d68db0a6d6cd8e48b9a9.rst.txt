@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9:
+
+Function ComputeResampledGeoTransform
+=====================================
+
+- Defined in :ref:`file_src_sirius_gdal_wrapper.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::gdal::ComputeResampledGeoTransform

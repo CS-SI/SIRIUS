@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1a51e77b12b9d7b578f694c1863a6bb16a:
+
+Function FFTShift2D
+===================
+
+- Defined in :ref:`file_src_sirius_utils_numeric.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::FFTShift2D

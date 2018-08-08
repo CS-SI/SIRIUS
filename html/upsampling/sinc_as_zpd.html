@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding” &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.1.2. Tile processing of the large image:" href="large_image.html" />
+    <link rel="prev" title="2.1. Upsampling" href="intro_up.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro_up.html">2.1. Upsampling</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2.1.1. &quot;Fourier Zero Padding&quot;</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sinus-cardinal-interpolation">2.1.1.1. Sinus cardinal interpolation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#simple-example">2.1.1.2. Simple example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#summary">2.1.1.3. Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html">2.1.2. Tile processing of the large image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_kernel.html">2.1.4. User kernel interpolator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_convolution.html">2.1.5. Convolution near the data edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../downsampling/intro_down.html">2.2. Downsampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+          <li><a href="intro_up.html">2.1. Upsampling</a> &raquo;</li>
+        
+      <li>2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/upsampling/sinc_as_zpd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sinus-cardinal-interpolation-as-fourier-zero-padding">
+<span id="sinc-zpd"></span><h1>2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”<a class="headerlink" href="#sinus-cardinal-interpolation-as-fourier-zero-padding" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="sinus-cardinal-interpolation">
+<h2>2.1.1.1. Sinus cardinal interpolation<a class="headerlink" href="#sinus-cardinal-interpolation" title="Permalink to this headline">¶</a></h2>
+<p>In <a class="reference internal" href="../other/ref.html#term-getreuer-2011"><span class="xref std std-term">[Getreuer, 2011]</span></a> are reminded the benefits of the sinus cardinal for interpolation purpose. Defined as <img class="math" src="../_images/math/22f3470c6e38c210b59fe7013c38d143982b08bb.png" alt="sinc(t)=sin(\pi t)/(\pi t)"/>,
+with <img class="math" src="../_images/math/5c55b03fad1f4e743d65bd7d0cedbedc802d5de3.png" alt="sinc(0)=1"/>, the sinc function is the kernel associated with the <a class="reference internal" href="../other/ref.html#term-shannon-1948"><span class="xref std std-term">Wittaker-Shannon interpolation</span></a>.
+Its Fourier Transform is the rectangular signal.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span><span class="p">;</span>
+
+<span class="gp">In [2]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">21</span><span class="p">);</span>
+
+<span class="gp">In [3]: </span><span class="n">sincx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">);</span>
+
+<span class="gp">In [4]: </span><span class="n">sincx</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="gp">In [5]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span><span class="p">;</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sincx</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1Dsinc&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">sincx</span><span class="p">))),</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fft(sinc)&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/1Dsinc_with_fft.png" src="../_images/1Dsinc_with_fft.png" />
+<p>Since a spatial convolution of two signals is, under suitable conditions that we suppose valid here, equivalent to a point wise product of their
+fourier transform, then the sinc interpolator can be easily and efficiently implemented in frequential domain by zero padding the original spectrum up to
+a number of samples that will define the upscaling factor. Say the signal contains N samples and the zooming factor is 2, then
+N zeros shall be added to the spectrum of the signal to upsample it by a factor 2.</p>
+</div>
+<div class="section" id="simple-example">
+<h2>2.1.1.2. Simple example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
+<p>Below are two simple methods defined to perform “Fourier zero padding” of a signal :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="k">def</span> <span class="nf">zero_pad</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="c1"># initialize data</span>
+<span class="gp">   ...: </span>    <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">size</span>
+<span class="gp">   ...: </span>    <span class="n">N</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">zoom_factor</span>
+<span class="gp">   ...: </span>    <span class="n">zero_padded_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="c1"># not the same process if even or odd number of samples</span>
+<span class="gp">   ...: </span>    <span class="k">if</span> <span class="n">n</span><span class="o">%</span><span class="k">2</span> == 0:
+<span class="gp">   ...: </span>        <span class="n">zero_padded_s</span><span class="p">[</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+<span class="gp">   ...: </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">   ...: </span>        <span class="n">zero_padded_s</span><span class="p">[(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">:(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+<span class="gp">   ...: </span>    <span class="k">return</span> <span class="n">zero_padded_s</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="k">def</span> <span class="nf">fft1D_zero_pad</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="c1"># shift the signal as it is easier to fill new frequencies then</span>
+<span class="gp">   ...: </span>    <span class="n">tf_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">zero_padded_tf_s</span> <span class="o">=</span> <span class="n">zero_pad</span><span class="p">(</span><span class="n">tf_s</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">zoom_factor</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">zero_padded_tf_s</span> <span class="o">*=</span> <span class="n">zoom_factor</span>
+<span class="gp">   ...: </span>    <span class="c1"># return the shifted back spectrum</span>
+<span class="gp">   ...: </span>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">zero_padded_tf_s</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<p>Then we can use it to upsample a cosine by a factor 2 :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="k">def</span> <span class="nf">create_1D_cosine</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">   ....: </span>    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [11]: </span><span class="k">def</span> <span class="nf">zoom_freq_zero_padd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="n">tf_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+<span class="gp">   ....: </span>    <span class="n">zpd_tf</span> <span class="o">=</span> <span class="n">fft1D_zero_pad</span><span class="p">(</span><span class="n">tf_s</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="p">)</span>
+<span class="gp">   ....: </span>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">zpd_tf</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [12]: </span><span class="n">z</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+
+<span class="gp">In [13]: </span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+
+<span class="gp">In [14]: </span><span class="n">w</span><span class="o">=</span><span class="mi">4</span><span class="p">;</span>
+
+<span class="gp">In [15]: </span><span class="n">x</span><span class="p">,</span> <span class="n">cosx</span> <span class="o">=</span> <span class="n">create_1D_cosine</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+
+<span class="gp">In [16]: </span><span class="n">xz</span><span class="p">,</span> <span class="n">cosx_z_perfect</span> <span class="o">=</span> <span class="n">create_1D_cosine</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+
+<span class="gp">In [17]: </span><span class="n">cosx_z</span> <span class="o">=</span> <span class="n">zoom_freq_zero_padd</span><span class="p">(</span><span class="n">cosx</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">);</span>
+
+<span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xz</span><span class="p">,</span> <span class="n">cosx_z_perfect</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cos(x) analytically  zoomed&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [19]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xz</span><span class="p">,</span> <span class="n">cosx_z</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cos(x) zoomed by </span><span class="se">\&quot;</span><span class="s1">fourier zero padding</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [20]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xz</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">cosx</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;cos(x) original data&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/cosx_zeropadded.png" src="../_images/cosx_zeropadded.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One might have notice that in the <a class="reference internal" href="../autoapi/simple_signal_proc/index.html#_CPPv314fft1D_zero_pad2tf11zoom_factor" title="fft1D_zero_pad"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">fft1D_zero_pad()</span></code></a> method, the padded spectrum energy is multiplied by the upsample factor to keep the original spectrum energy and compensate for the add of zero frequencies.</p>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>2.1.1.3. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>As expressed by this over simplified example, the sinc interpolation can be easily implemented in fourier domain. To
+emulate a zoom by a factor <img class="math" src="../_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> with the sinus cardinal, this spectrum
+ought to be pixel-wise multiplied by a rectangular function, such that :</p>
+<div class="math">
+<p><img src="../_images/math/80d37affb7b40299ef82edb7f89d26406d6c6045.png" alt="rect(f) := \Biggl \lbrace{
+    1, \text{ if } f \in [ -\frac {f_e} {2};\frac {f_e} {2}]
+         \text{ with} f_e \text{ the sampling frequency of the original signal}
+    \atop
+    0, \text{ if } f \in [ -\frac {zf_e} {2};-\frac {f_e} {2}[ \cup ] \frac {f_e} {2};\frac {zf_e} {2}]
+    }"/></p>
+</div><p>Then the sampling frequency has been multiplied by <img class="math" src="../_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> and the original spatial signal is zoomed accordingly.
+To achieve the same goal in spatial domain directly, we would have had to convolve the signal with the sinc kernel. This
+kernel should have been recomputed (or tabulated) for each fractional position with a <img class="math" src="../_images/math/0ed17b771aa0e917bdff86386af4a089187e086c.png" alt="\frac{T_e}{z}=\frac{1}{zf_e}"/> step,
+which, depending on the kernel support, can really be time consuming.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="large_image.html" class="btn btn-neutral float-right" title="2.1.2. Tile processing of the large image:" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro_up.html" class="btn btn-neutral" title="2.1. Upsampling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

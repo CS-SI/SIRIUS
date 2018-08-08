@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1aca8b5a6cd2c4306381ff0cb9aa20e98c:
+
+Function make_error_code
+========================
+
+- Defined in :ref:`file_src_sirius_utils_concurrent_queue_error_code.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::make_error_code

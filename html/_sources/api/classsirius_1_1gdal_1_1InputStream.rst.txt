@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1gdal_1_1InputStream:
+
+Class InputStream
+=================
+
+- Defined in :ref:`file_src_sirius_gdal_input_stream.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::gdal::InputStream
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacesirius_1_1fftw_1abe140e10fbcd3c65f459b6ca820d95ff:
+
+Typedef sirius::fftw::PlanSPtr
+==============================
+
+- Defined in :ref:`file_src_sirius_fftw_fftw.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sirius::fftw::PlanSPtr

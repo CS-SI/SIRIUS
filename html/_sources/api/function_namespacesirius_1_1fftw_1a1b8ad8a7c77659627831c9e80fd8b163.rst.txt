@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1fftw_1a1b8ad8a7c77659627831c9e80fd8b163:
+
+Function CreateComplex
+======================
+
+- Defined in :ref:`file_src_sirius_fftw_wrapper.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::fftw::CreateComplex

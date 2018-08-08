@@ -1,0 +1,41 @@
+
+.. _program_listing_file_src_sirius_utils_concurrent_queue_error_code.h:
+
+Program Listing for File concurrent_queue_error_code.h
+======================================================
+
+- Return to documentation for :ref:`file_src_sirius_utils_concurrent_queue_error_code.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_UTILS_CONCURRENT_ERROR_CODE_H_
+   #define SIRIUS_UTILS_CONCURRENT_ERROR_CODE_H_
+   
+   #include <system_error>
+   
+   // This implementation is inspired by
+   //   https://akrzemi1.wordpress.com/2017/07/12/your-own-error-code/
+   
+   namespace sirius {
+   namespace utils {
+   
+   enum class ConcurrentQueueErrorCode {
+       kSuccess = 0,     
+       kQueueIsNotActive 
+   };
+   
+   std::error_code make_error_code(ConcurrentQueueErrorCode errc);
+   
+   }  // namespace utils
+   }  // namespace sirius
+   
+   namespace std {
+   
+   template <>
+   struct is_error_code_enum<sirius::utils::ConcurrentQueueErrorCode>
+         : std::true_type {};
+   
+   }  // namespace std
+   
+   #endif  // SIRIUS_UTILS_CONCURRENT_ERROR_CODE_H_

@@ -1,0 +1,37 @@
+
+.. _program_listing_file_src_sirius_gdal_types.h:
+
+Program Listing for File types.h
+================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_types.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_TYPES_H_
+   #define SIRIUS_GDAL_TYPES_H_
+   
+   #include <memory>
+   #include <type_traits>
+   
+   #include <gdal.h>
+   #include <gdal_priv.h>
+   
+   namespace sirius {
+   namespace gdal {
+   
+   namespace detail {
+   
+   struct DatasetDeleter {
+       void operator()(::GDALDataset* dataset) { ::GDALClose(dataset); }
+   };
+   
+   }  // namespace detail
+   
+   using DatasetUPtr = std::unique_ptr<::GDALDataset, detail::DatasetDeleter>;
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_TYPES_H_

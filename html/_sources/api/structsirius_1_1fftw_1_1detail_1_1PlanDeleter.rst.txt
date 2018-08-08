@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1fftw_1_1detail_1_1PlanDeleter:
+
+Struct PlanDeleter
+==================
+
+- Defined in :ref:`file_src_sirius_fftw_fftw.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::fftw::detail::PlanDeleter
+   :members:
+   :protected-members:
+   :undoc-members:

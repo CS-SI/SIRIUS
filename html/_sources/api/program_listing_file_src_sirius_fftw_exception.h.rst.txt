@@ -1,0 +1,49 @@
+
+.. _program_listing_file_src_sirius_fftw_exception.h:
+
+Program Listing for File exception.h
+====================================
+
+- Return to documentation for :ref:`file_src_sirius_fftw_exception.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_FFTW_EXCEPTION_H_
+   #define SIRIUS_FFTW_EXCEPTION_H_
+   
+   #include <string>
+   
+   #include "sirius/exception.h"
+   
+   namespace sirius {
+   namespace fftw {
+   
+   enum class ErrorCode {
+       kSuccess = 0,             
+       kMemoryAllocationFailed,  
+       kPlanCreationFailed,      
+       kComplexAllocationFailed, 
+       kRealAllocationFailed     
+   };
+   
+   class Exception : public sirius::Exception {
+     public:
+       Exception(ErrorCode code);
+   
+       Exception(const Exception&) = default;
+       Exception& operator=(const Exception&) = default;
+       Exception(Exception&&) = default;
+       Exception& operator=(Exception&&) = default;
+   
+       const char* what() const noexcept override;
+   
+     private:
+       ErrorCode err_code_;
+       std::string default_err_msg_;
+   };
+   
+   }  // namespace fftw
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_FFTW_EXCEPTION_H_

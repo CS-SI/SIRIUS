@@ -1,0 +1,58 @@
+
+.. _program_listing_file_src_sirius_gdal_wrapper.h:
+
+Program Listing for File wrapper.h
+==================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_wrapper.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_WRAPPER_H_
+   #define SIRIUS_GDAL_WRAPPER_H_
+   
+   #include <string>
+   
+   #include "sirius/gdal/types.h"
+   #include "sirius/image.h"
+   
+   namespace sirius {
+   namespace gdal {
+   
+   struct GeoReference {
+       GeoReference();
+       GeoReference(const std::vector<double>& geo_trans,
+                    const std::string& proj_ref);
+   
+       ~GeoReference() = default;
+       GeoReference(const GeoReference&) = default;
+       GeoReference& operator=(const GeoReference&) = default;
+       GeoReference(GeoReference&&) = default;
+       GeoReference& operator=(GeoReference&&) = default;
+   
+       std::vector<double> geo_transform;
+       std::string projection_ref;
+       bool is_initialized{false};
+   };
+   
+   Image LoadImage(const std::string& filepath);
+   
+   void SaveImage(const Image& image, const std::string& output_filepath,
+                  const GeoReference& geoRef = {});
+   
+   DatasetUPtr LoadDataset(const std::string& filepath);
+   
+   DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,
+                             int n_bands, const GeoReference& geo_ref = {});
+   
+   GeoReference ComputeResampledGeoReference(const std::string& input_path,
+                                             const ZoomRatio& zoom_ratio);
+   
+   std::vector<double> ComputeResampledGeoTransform(GDALDataset* dataset,
+                                                    const ZoomRatio& zoom_ratio);
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_WRAPPER_H_

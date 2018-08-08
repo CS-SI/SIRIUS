@@ -1,0 +1,66 @@
+
+.. _program_listing_file_src_sirius_utils_concurrent_queue.h:
+
+Program Listing for File concurrent_queue.h
+===========================================
+
+- Return to documentation for :ref:`file_src_sirius_utils_concurrent_queue.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_UTILS_CONCURRENT_QUEUE_H_
+   #define SIRIUS_UTILS_CONCURRENT_QUEUE_H_
+   
+   #include <condition_variable>
+   #include <mutex>
+   #include <queue>
+   #include <system_error>
+   
+   namespace sirius {
+   namespace utils {
+   
+   template <typename T>
+   class ConcurrentQueue {
+     public:
+       ConcurrentQueue(std::size_t max_queue_size = 10);
+       ~ConcurrentQueue() = default;
+   
+       ConcurrentQueue(const ConcurrentQueue&) = delete;
+       ConcurrentQueue& operator=(const ConcurrentQueue&) = delete;
+       ConcurrentQueue(ConcurrentQueue&&) = delete;
+       ConcurrentQueue& operator=(ConcurrentQueue&&) = delete;
+   
+       void Push(T&& element, std::error_code& ec);
+   
+       T Pop(std::error_code& ec);
+   
+       std::size_t Size();
+   
+       bool Empty();
+   
+       bool CanPop();
+   
+       void Activate();
+   
+       void Deactivate();
+   
+       void DeactivateAndClear();
+   
+       bool IsActive();
+   
+     private:
+       std::mutex queue_mutex_;
+       bool is_active_{true};
+       std::size_t max_queue_size_{10};
+       std::queue<T> queue_;
+       std::condition_variable push_cond_;
+       std::condition_variable pop_cond_;
+   };
+   
+   }  // namespace utils
+   }  // namespace sirius
+   
+   #include "sirius/utils/concurrent_queue.txx"
+   
+   #endif  // SIRIUS_UTILS_CONCURRENT_QUEUE_H_

@@ -1,0 +1,66 @@
+
+.. _namespace_sirius__fftw:
+
+Namespace sirius::fftw
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius__fftw__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1fftw_1_1Exception`
+
+- :ref:`exhale_class_classsirius_1_1fftw_1_1Fftw`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1_1fftw_1a6766819cf988676bdb90db031130216c`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a1b8ad8a7c77659627831c9e80fd8b163`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a7b8520f43c8abff5175a59a877168d80`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a2ee9e70da2bae2bb5b447c3a45cf93c6`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a99a4725d9fcd74afcffc4d84fbf3a653`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1ae96e917988ea3c646222ed9385ac1e7a`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1aa2b77aa0bafa4e403a28be55cd61a821`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1af7e1ebad9b581170cd3384e1fa9d9dcb`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1abe140e10fbcd3c65f459b6ca820d95ff`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1a528a0bb4c70fb7362b679e00cb441371`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1aa4684160df021baa400bcd3ba873b7db`

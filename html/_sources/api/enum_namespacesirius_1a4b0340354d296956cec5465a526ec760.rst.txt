@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacesirius_1a4b0340354d296956cec5465a526ec760:
+
+Enum FrequencyZoomStrategies
+============================
+
+- Defined in :ref:`file_src_sirius_frequency_resampler_factory.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: sirius::FrequencyZoomStrategies

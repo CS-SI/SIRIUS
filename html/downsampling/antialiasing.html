@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.2.1. Anti-Aliasing &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.2.2. Non integer downsampling factor" href="non_integers_down.html" />
+    <link rel="prev" title="2.2. Downsampling" href="intro_down.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../upsampling/intro_up.html">2.1. Upsampling</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="intro_down.html">2.2. Downsampling</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2.2.1. Anti-Aliasing process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="non_integers_down.html">2.2.2. Non integer downsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+          <li><a href="intro_down.html">2.2. Downsampling</a> &raquo;</li>
+        
+      <li>2.2.1. Anti-Aliasing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/downsampling/antialiasing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="anti-aliasing">
+<span id="antialiasing"></span><h1>2.2.1. Anti-Aliasing<a class="headerlink" href="#anti-aliasing" title="Permalink to this headline">¶</a></h1>
+<p>Because downsampling is the process of reducing a signal sampling frequency, it can cause severe aliasing by breaking
+the Shannon criteria.</p>
+<p>Hence, it is highly advised to provide Sirius a low-pass filter to apply to the original signal spectrum before
+downsampling it. Once the high frequencies are filtered, Sirius can safely decimate the original signal.</p>
+<p>Such a low-pass filter must cut-off the frequencies <img class="math" src="../_images/math/3884f4f83032af7ece1fdeae755b8b2243d6862e.png" alt="f, |f| &gt; |\frac{f_e}{2*z_d}|"/> with <img class="math" src="../_images/math/c100ca94fd4e8f8b0a5172c1d92537482a381f14.png" alt="z_d"/> the
+downsampling factor.</p>
+<p>Here is an example based on a high frequency cosine to emphasize the potential aliasing when downsampling :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># cosine signal based on two cosine, one with high frequency</span>
+<span class="gp">In [1]: </span><span class="n">x</span><span class="p">,</span><span class="n">cos4</span> <span class="o">=</span> <span class="n">create_1D_cosine</span><span class="p">(</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">x</span><span class="p">,</span><span class="n">cos20</span> <span class="o">=</span> <span class="n">create_1D_cosine</span><span class="p">(</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">cos4</span><span class="o">+</span><span class="n">cos20</span>
+
+<span class="gp">In [4]: </span><span class="n">fft_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+<span class="gp">In [5]: </span><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Sum of two cosine, one with high frequency.</span><span class="se">\n</span><span class="s1"> Shannon criteria is met here&#39;</span><span class="p">);</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">);</span>
+
+<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;The signal&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">);</span>
+
+<span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">*</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">fft_s</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;The signal FT&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/high_freq_cosine.png" src="../_images/high_freq_cosine.png" />
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># decimating the signal without caution</span>
+<span class="gp">In [10]: </span><span class="n">s_decim</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Downsampling without filtering high frequencies. </span><span class="se">\n</span><span class="s1">Shannon criteria is not met&#39;</span><span class="p">);</span>
+
+<span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">);</span>
+
+<span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original signal&#39;</span><span class="p">);</span>
+
+<span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span><span class="n">s_decim</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Decimated signal&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[15]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c85b210&gt;</span>
+
+<span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">);</span>
+
+<span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">s_decim</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">*</span><span class="n">s_decim</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s_decim</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Aliased decimated signal FT&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c865d50&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/hig_freq_cosine_decimated_aliasing.png" src="../_images/hig_freq_cosine_decimated_aliasing.png" />
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># decimating after low-pass filtering</span>
+<span class="gp">In [18]: </span><span class="n">x_</span><span class="p">,</span> <span class="n">lanczos_kernel_up2</span> <span class="o">=</span> <span class="n">create_1D_lanczos</span><span class="p">(</span> <span class="mi">50</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [19]: </span><span class="n">lanczos_kernel_up2</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_up2</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [20]: </span><span class="n">lanczos_kernel_up2</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_up2</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [21]: </span><span class="n">fft_lanczos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">lanczos_kernel_up2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+
+<span class="gp">In [22]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [23]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Low-pass filtering of the original signal FT.</span><span class="se">\n</span><span class="s1"> Frequencies above fe/4 are filtered&#39;</span><span class="p">)</span>
+<span class="gh">Out[23]: </span><span class="go">Text(0.5,1,&#39;Low-pass filtering of the original signal FT.\n Frequencies above fe/4 are filtered&#39;)</span>
+
+<span class="gp">In [24]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">*</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">fft_lanczos</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Low-pass filter (lanczos FT)&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[24]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055ca85550&gt;</span>
+
+<span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">*</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">fft_s</span> <span class="o">*</span> <span class="n">fft_lanczos</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original signal FT filtered&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055cafc750&gt;</span>
+
+<span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">*</span><span class="n">fft_s</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">fft_s</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original signal FT&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f0569acd750&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/high_cosine_ft_filtered.png" src="../_images/high_cosine_ft_filtered.png" />
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">s_filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">fft_s</span> <span class="o">*</span> <span class="n">fft_lanczos</span><span class="p">))</span>
+
+<span class="gp">In [28]: </span><span class="n">s_filtered_decim</span> <span class="o">=</span> <span class="n">s_filtered</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="gp">In [29]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [30]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Decimation with no aliasing.&#39;</span><span class="p">)</span>
+<span class="gh">Out[30]: </span><span class="go">Text(0.5,1,&#39;Decimation with no aliasing.&#39;)</span>
+
+<span class="gp">In [31]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">s_filtered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original signal filtered&#39;</span><span class="p">);</span>
+
+<span class="gp">In [32]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span><span class="n">s_filtered_decim</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Decimated signal&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[32]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055cac3250&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/hig_freq_cosine_decimated_no_aliasing.png" src="../_images/hig_freq_cosine_decimated_no_aliasing.png" />
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [34]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparing with and without aliasing.&#39;</span><span class="p">)</span>
+<span class="gh">Out[34]: </span><span class="go">Text(0.5,1,&#39;Comparing with and without aliasing.&#39;)</span>
+
+<span class="gp">In [35]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original signal&#39;</span><span class="p">);</span>
+
+<span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span><span class="n">s_filtered_decim</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Orignal signal filtered before decimation&#39;</span><span class="p">);</span>
+
+<span class="gp">In [37]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span><span class="n">s_decim</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Orignal signal decimated without low-pass filtering&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[37]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055d487a50&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/high_freq_cosine_decim_compared.png" src="../_images/high_freq_cosine_decim_compared.png" />
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="non_integers_down.html" class="btn btn-neutral float-right" title="2.2.2. Non integer downsampling factor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro_down.html" class="btn btn-neutral" title="2.2. Downsampling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

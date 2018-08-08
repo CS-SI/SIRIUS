@@ -1,0 +1,62 @@
+
+
+.. _file_src_sirius_fftw_exception.h:
+
+File exception.h
+================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/fftw/exception.h``)
+--------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_fftw_exception.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``sirius/exception.h`` (:ref:`file_src_sirius_exception.h`)
+
+- ``string``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__fftw`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1fftw_1_1Exception`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1_1fftw_1a6766819cf988676bdb90db031130216c`
+

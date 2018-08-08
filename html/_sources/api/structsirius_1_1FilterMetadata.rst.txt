@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1FilterMetadata:
+
+Struct FilterMetadata
+=====================
+
+- Defined in :ref:`file_src_sirius_filter.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::FilterMetadata
+   :members:
+   :protected-members:
+   :undoc-members:

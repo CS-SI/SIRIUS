@@ -1,0 +1,57 @@
+
+
+.. _file_src_sirius_resampler_image_decomposition_regular_policy.h:
+
+File regular_policy.h
+=====================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/resampler/image_decomposition/regular_policy.h``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_resampler_image_decomposition_regular_policy.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``sirius/filter.h`` (:ref:`file_src_sirius_filter.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/resampler/image_decomposition/regular_policy.txx``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__resampler`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy`
+

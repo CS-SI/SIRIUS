@@ -1,0 +1,61 @@
+
+
+.. _file_src_sirius_utils_concurrent_queue.h:
+
+File concurrent_queue.h
+=======================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/utils/concurrent_queue.h``)
+----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_utils_concurrent_queue.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``condition_variable``
+
+- ``mutex``
+
+- ``queue`` (:ref:`file_src_sirius_utils_concurrent_queue.h`)
+
+- ``sirius/utils/concurrent_queue.txx``
+
+- ``system_error``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1utils_1_1ConcurrentQueue`
+

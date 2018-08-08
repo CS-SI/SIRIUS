@@ -1,0 +1,61 @@
+
+.. _program_listing_file_src_sirius_gdal_input_stream.h:
+
+Program Listing for File input_stream.h
+=======================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_input_stream.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_INPUT_STREAM_H_
+   #define SIRIUS_GDAL_INPUT_STREAM_H_
+   
+   #include <system_error>
+   
+   #include "sirius/image.h"
+   #include "sirius/types.h"
+   
+   #include "sirius/gdal/stream_block.h"
+   #include "sirius/gdal/types.h"
+   
+   namespace sirius {
+   namespace gdal {
+   
+   class InputStream {
+     public:
+       InputStream(const std::string& image_path, const sirius::Size& block_size,
+                   const sirius::Size& block_margin_size,
+                   PaddingType block_padding_type);
+   
+       ~InputStream() = default;
+   
+       InputStream(const InputStream&) = delete;
+       InputStream& operator=(const InputStream&) = delete;
+       InputStream(InputStream&&) = delete;
+       InputStream& operator=(InputStream&&) = delete;
+   
+       sirius::Size Size() {
+           return {input_dataset_->GetRasterYSize(),
+                   input_dataset_->GetRasterXSize()};
+       }
+   
+       StreamBlock Read(std::error_code& ec);
+   
+       bool IsAtEnd() { return is_ended_; }
+   
+     private:
+       gdal::DatasetUPtr input_dataset_;
+       sirius::Size block_size_{256, 256};
+       sirius::Size block_margin_size_;
+       PaddingType block_padding_type_;
+       bool is_ended_ = false;
+       int row_idx_ = 0;
+       int col_idx_ = 0;
+   };
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_INPUT_STREAM_H_

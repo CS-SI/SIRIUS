@@ -1,0 +1,25 @@
+.. _exhale_class_classsirius_1_1gdal_1_1Exception:
+
+Class Exception
+===============
+
+- Defined in :ref:`file_src_sirius_gdal_exception.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public sirius::Exception`` (:ref:`exhale_class_classsirius_1_1Exception`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::gdal::Exception
+   :members:
+   :protected-members:
+   :undoc-members:

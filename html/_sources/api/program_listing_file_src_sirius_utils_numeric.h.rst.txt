@@ -1,0 +1,45 @@
+
+.. _program_listing_file_src_sirius_utils_numeric.h:
+
+Program Listing for File numeric.h
+==================================
+
+- Return to documentation for :ref:`file_src_sirius_utils_numeric.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_UTILS_NUMERIC_H_
+   #define SIRIUS_UTILS_NUMERIC_H_
+   
+   #include "sirius/types.h"
+   
+   namespace sirius {
+   namespace utils {
+   
+   int Gcd(int a, int b);
+   
+   void FFTShift2D(const double* data, const Size& size, double* shifted_data);
+   
+   void IFFTShift2D(const double* data, const Size& size, double* shifted_data);
+   
+   void IFFTShift2DUncentered(const double* data, const Size& size,
+                              const Point& hot_point, double* shifted_data);
+   
+   void FFTShift2DUncentered(const double* data, const Size& size,
+                             const Point& hot_point, double* shifted_data);
+   
+   std::vector<double> ComputeFFTFreq(int n_samples, bool half = true);
+   
+   Size GenerateDyadicSize(const Size& size, const int res_in,
+                           const Size& padding_size);
+   
+   Size GenerateZoomCompliantSize(const Size& size, const ZoomRatio& zoom_r);
+   
+   void CreateMeshgrid(int x_min, int x_max, int y_min, int y_max,
+                       std::vector<int>& xx, std::vector<int>& yy);
+   
+   }  // namespace utils
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_UTILS_NUMERIC_H_

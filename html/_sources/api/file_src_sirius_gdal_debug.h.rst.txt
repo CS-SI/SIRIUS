@@ -1,0 +1,57 @@
+
+
+.. _file_src_sirius_gdal_debug.h:
+
+File debug.h
+============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/gdal/debug.h``)
+----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_gdal_debug.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``fftw3.h``
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+- ``string``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__gdal`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1a25c59ffa865183a728cb73d82c09f69e`
+

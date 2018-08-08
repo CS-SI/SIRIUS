@@ -1,0 +1,28 @@
+
+.. _namespace_sirius__resampler:
+
+Namespace sirius::resampler
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1FrequencyResampler`
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy`
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy`
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1PeriodizationZoomStrategy`
+
+- :ref:`exhale_class_classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy`

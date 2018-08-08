@@ -1,0 +1,51 @@
+
+.. _program_listing_file_src_sirius_image_streamer.h:
+
+Program Listing for File image_streamer.h
+=========================================
+
+- Return to documentation for :ref:`file_src_sirius_image_streamer.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_IMAGE_STREAMER_H_
+   #define SIRIUS_IMAGE_STREAMER_H_
+   
+   #include "sirius/filter.h"
+   #include "sirius/i_frequency_resampler.h"
+   
+   #include "sirius/gdal/input_stream.h"
+   #include "sirius/gdal/resampled_output_stream.h"
+   #include "sirius/gdal/wrapper.h"
+   
+   namespace sirius {
+   
+   class ImageStreamer {
+     public:
+       ImageStreamer(const std::string& input_path, const std::string& output_path,
+                     const Size& block_size, const ZoomRatio& zoom_ratio,
+                     const FilterMetadata& filter_metadata,
+                     unsigned int max_parallel_workers);
+   
+       void Stream(const IFrequencyResampler& frequency_resampler,
+                   const Filter& filter);
+   
+     private:
+       void RunMonothreadStream(const IFrequencyResampler& frequency_resampler,
+                                const Filter& filter);
+   
+       void RunMultithreadStream(const IFrequencyResampler& frequency_resampler,
+                                 const Filter& filter);
+   
+     private:
+       unsigned int max_parallel_workers_;
+       Size block_size_;
+       ZoomRatio zoom_ratio_;
+       gdal::InputStream input_stream_;
+       gdal::ResampledOutputStream output_stream_;
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_IMAGE_STREAMER_H_

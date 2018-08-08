@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacesirius_1_1fftw_1a6766819cf988676bdb90db031130216c:
+
+Enum ErrorCode
+==============
+
+- Defined in :ref:`file_src_sirius_fftw_exception.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: sirius::fftw::ErrorCode

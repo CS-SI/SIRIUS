@@ -1,0 +1,90 @@
+
+
+.. _file_src_sirius_types.h:
+
+File types.h
+============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/types.h``)
+-----------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_types.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``cmath``
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_fftw_fftw.h`
+
+- :ref:`file_src_sirius_fftw_wrapper.h`
+
+- :ref:`file_src_sirius_filter.h`
+
+- :ref:`file_src_sirius_gdal_debug.h`
+
+- :ref:`file_src_sirius_gdal_input_stream.h`
+
+- :ref:`file_src_sirius_gdal_resampled_output_stream.h`
+
+- :ref:`file_src_sirius_i_frequency_resampler.h`
+
+- :ref:`file_src_sirius_image.h`
+
+- :ref:`file_src_sirius_utils_numeric.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1Point`
+
+- :ref:`exhale_struct_structsirius_1_1Size`
+
+- :ref:`exhale_class_classsirius_1_1ZoomRatio`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1a7a208dcf4b7a30c7c9b415e05b484469`
+

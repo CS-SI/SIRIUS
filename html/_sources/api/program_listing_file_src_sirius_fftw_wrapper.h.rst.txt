@@ -1,0 +1,38 @@
+
+.. _program_listing_file_src_sirius_fftw_wrapper.h:
+
+Program Listing for File wrapper.h
+==================================
+
+- Return to documentation for :ref:`file_src_sirius_fftw_wrapper.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_FFTW_WRAPPER_H_
+   #define SIRIUS_FFTW_WRAPPER_H_
+   
+   #include <gsl/gsl>
+   
+   #include "sirius/image.h"
+   #include "sirius/types.h"
+   
+   #include "sirius/fftw/types.h"
+   
+   namespace sirius {
+   namespace fftw {
+   
+   ComplexUPtr CreateComplex(const Size& size);
+   
+   RealUPtr CreateReal(const Size& size);
+   
+   ComplexUPtr FFT(const Image& image);
+   
+   ComplexUPtr FFT(double* values, const Size& size);
+   
+   Image IFFT(const Size& image_size, ComplexUPtr image_fft);
+   
+   }  // namespace fftw
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_FFTW_WRAPPER_H_

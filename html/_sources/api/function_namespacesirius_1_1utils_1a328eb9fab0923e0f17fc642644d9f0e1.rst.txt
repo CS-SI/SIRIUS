@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1a328eb9fab0923e0f17fc642644d9f0e1:
+
+Function GenerateDyadicSize
+===========================
+
+- Defined in :ref:`file_src_sirius_utils_numeric.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::GenerateDyadicSize

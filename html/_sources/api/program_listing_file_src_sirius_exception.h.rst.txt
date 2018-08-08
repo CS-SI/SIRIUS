@@ -1,0 +1,25 @@
+
+.. _program_listing_file_src_sirius_exception.h:
+
+Program Listing for File exception.h
+====================================
+
+- Return to documentation for :ref:`file_src_sirius_exception.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_EXCEPTION_H_
+   #define SIRIUS_EXCEPTION_H_
+   
+   #include <stdexcept>
+   
+   namespace sirius {
+   
+   class Exception : public std::runtime_error {
+       using std::runtime_error::runtime_error;
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_EXCEPTION_H_

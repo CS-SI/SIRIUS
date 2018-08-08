@@ -1,0 +1,38 @@
+
+.. _program_listing_file_src_sirius_frequency_resampler_factory.h:
+
+Program Listing for File frequency_resampler_factory.h
+======================================================
+
+- Return to documentation for :ref:`file_src_sirius_frequency_resampler_factory.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_
+   #define SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_
+   
+   #include "sirius/i_frequency_resampler.h"
+   
+   namespace sirius {
+   
+   enum class ImageDecompositionPolicies {
+       kRegular = 0,   
+       kPeriodicSmooth 
+   };
+   
+   enum class FrequencyZoomStrategies {
+       kZeroPadding = 0, 
+       kPeriodization    
+   };
+   
+   class FrequencyResamplerFactory {
+     public:
+       static IFrequencyResampler::UPtr Create(
+             ImageDecompositionPolicies image_decomposition,
+             FrequencyZoomStrategies zoom_strategy);
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_

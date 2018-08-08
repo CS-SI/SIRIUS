@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.1.2. Tile processing of the large image: &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.1.3. The discontinuous signals" href="apodized_low-pass_filter.html" />
+    <link rel="prev" title="2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”" href="sinc_as_zpd.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro_up.html">2.1. Upsampling</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sinc_as_zpd.html">2.1.1. &quot;Fourier Zero Padding&quot;</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2.1.2. Tile processing of the large image</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-implicit-edges-discontinuities-and-their-associated-artifacts">2.1.2.1. The implicit edges discontinuities and their associated artifacts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-possible-solutions">2.1.2.2. The possible solutions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conclusion-sirius-uses-the-p-s-decomposition">2.1.2.3. Conclusion : Sirius uses the p+s decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_kernel.html">2.1.4. User kernel interpolator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_convolution.html">2.1.5. Convolution near the data edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../downsampling/intro_down.html">2.2. Downsampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+          <li><a href="intro_up.html">2.1. Upsampling</a> &raquo;</li>
+        
+      <li>2.1.2. Tile processing of the large image:</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/upsampling/large_image.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tile-processing-of-the-large-image">
+<span id="large-data"></span><h1>2.1.2. Tile processing of the large image:<a class="headerlink" href="#tile-processing-of-the-large-image" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-implicit-edges-discontinuities-and-their-associated-artifacts">
+<h2>2.1.2.1. The implicit edges discontinuities and their associated artifacts<a class="headerlink" href="#the-implicit-edges-discontinuities-and-their-associated-artifacts" title="Permalink to this headline">¶</a></h2>
+<p>In order to process satellite images, Sirius divides it in tiles (blocks). Those tiles are then executed independently
+from each other.</p>
+<p>Though there is no particular reason for a natural signal / image to be periodic, Fourier Transform implicitly
+assumes it is. This leaves us with a periodized signal / image with probably strong discontinuities across its edges.
+This involves artifacts in the frequency domain that penalises the resampling process.</p>
+<p>The tiling process that divides the images with arbitrary borders can only emphasized those artifacts.</p>
+<p>Below is an example with a triangular 1D signal (periodic) and a linear signal (half the triangle) with strong edges
+discontinuities. Both signals are zero padded :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">n</span><span class="o">=</span><span class="mi">50</span>
+
+<span class="gp">In [2]: </span><span class="n">z</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="gp">In [3]: </span><span class="n">tri</span> <span class="o">=</span> <span class="n">create_1D_triangle_signal</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">tri_zpd</span> <span class="o">=</span> <span class="n">zoom_freq_zpd</span><span class="p">(</span> <span class="n">tri</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tri_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;triangular signal upsampled by Fourier zero padding&#39;</span><span class="p">);</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">),</span><span class="n">tri</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;orignal triangular signal samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055ca3cc90&gt;</span>
+
+<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [8]: </span><span class="n">halftri</span> <span class="o">=</span> <span class="n">create_1D_ramp</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">halftri_zpd</span> <span class="o">=</span> <span class="n">zoom_freq_zpd</span><span class="p">(</span> <span class="n">halftri</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zero padding&#39;</span><span class="p">);</span>
+
+<span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">),</span> <span class="n">halftri</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;orignal ramp signal samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[11]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c9b4d10&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/triangular_zpd.png" src="../_images/triangular_zpd.png" />
+<img alt="../_images/ramp_zpd.png" src="../_images/ramp_zpd.png" />
+<p>Those artifacts come from the fact that only a finite number of terms of the Fourier series can
+actually be used for numerical processing. Then, even though their limits do not overshoot the signal and will allow for
+a discontinuous signal to be approximated by infinite series of continuous sinusoids, every partial Fourier series can
+overshoot it. And it can actually be shown that the overshoot near a discontinuity will always be about 9%
+(<a class="reference internal" href="../other/ref.html#term-hewitt-hewitt-1979"><span class="xref std std-term">[Hewitt &amp; Hewitt, 1979]</span></a>).</p>
+</div>
+<div class="section" id="the-possible-solutions">
+<h2>2.1.2.2. The possible solutions<a class="headerlink" href="#the-possible-solutions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="margin-the-original-data">
+<h3>2.1.2.2.1. Margin the original data<a class="headerlink" href="#margin-the-original-data" title="Permalink to this headline">¶</a></h3>
+<p>One way to get rid of these artifacts is to marge the original data by propagating the first and the last value of the signal,
+before and after it.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">marge_factor</span><span class="o">=</span><span class="mi">4</span>
+
+<span class="gp">In [13]: </span><span class="n">halftri_zpd_spatially</span> <span class="o">=</span> <span class="n">zero_pad</span><span class="p">(</span><span class="n">halftri</span><span class="p">,</span> <span class="n">marge_factor</span><span class="p">)</span>
+
+<span class="gp">In [14]: </span><span class="n">halftri_zpd_spatially</span><span class="p">[</span><span class="n">halftri_zpd_spatially</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri_zpd_spatially</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">halftri</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [15]: </span><span class="n">halftri_zpd_spatially_zpd</span> <span class="o">=</span> <span class="n">zoom_freq_zpd</span><span class="p">(</span> <span class="n">halftri_zpd_spatially</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+
+<span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;It is possible to marge enough the data to </span><span class="se">\&#39;</span><span class="s1">move</span><span class="se">\&#39;</span><span class="s1"> the </span><span class="se">\n</span><span class="s1"> artifacts far away from the signal samples&#39;</span><span class="p">);</span>
+
+<span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zero padding&#39;</span><span class="p">);</span>
+
+<span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd_spatially_zpd</span><span class="p">[</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri_zpd</span><span class="o">.</span><span class="n">size</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zpd after adding spatial margin&#39;</span><span class="p">);</span>
+
+<span class="gp">In [19]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">),</span> <span class="n">halftri</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;orignal ramp signal samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[19]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c673790&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Margin_before_fzpd.png" src="../_images/Margin_before_fzpd.png" />
+<p>Note that the margin factor must be high enough :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">marge_factor</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="gp">In [21]: </span><span class="n">halftri_zpd_spatially_mf2</span> <span class="o">=</span> <span class="n">zero_pad</span><span class="p">(</span><span class="n">halftri</span><span class="p">,</span> <span class="n">marge_factor</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">halftri_zpd_spatially_mf2</span><span class="p">[</span><span class="n">halftri_zpd_spatially_mf2</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri_zpd_spatially_mf2</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">halftri</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [23]: </span><span class="n">halftri_zpd_spatially_mf2_zpd</span> <span class="o">=</span> <span class="n">zoom_freq_zpd</span><span class="p">(</span> <span class="n">halftri_zpd_spatially_mf2</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;The margin factor must be high enough&#39;</span><span class="p">);</span>
+
+<span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c6a0990&gt;</span>
+
+<span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd_spatially_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal spatially marged (x4) before Fourier zpd&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [27]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="o">+</span><span class="n">halftri_zpd_spatially_mf2_zpd</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">halftri_zpd_spatially_mf2_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal spatially marged (x2) before Fourier zpd&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [28]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="gh">Out[28]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c6429d0&gt;</span>
+
+<span class="gp">In [29]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd_spatially_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal spatially marged (x4) before Fourier zpd&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [30]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="o">+</span><span class="n">halftri_zpd_spatially_mf2_zpd</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">halftri_zpd_spatially_mf2_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal spatially marged (x2) before Fourier zpd&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+
+<span class="gp">In [31]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">130</span><span class="p">,</span><span class="mi">160</span><span class="p">)</span>
+<span class="gh">Out[31]: </span><span class="go">(130, 160)</span>
+
+<span class="gp">In [32]: </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="gh">Out[32]: </span><span class="go">(-1, 6)</span>
+</pre></div>
+</div>
+<img alt="../_images/Margin_factor_before_fzpd.png" src="../_images/Margin_factor_before_fzpd.png" />
+</div>
+<div class="section" id="mirroring-the-original-data">
+<h3>2.1.2.2.2. Mirroring the original data<a class="headerlink" href="#mirroring-the-original-data" title="Permalink to this headline">¶</a></h3>
+<p>One other way to look at it is to simply suppress the discontinuity by mirroring the signal.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">marge_factor</span><span class="o">=</span><span class="mi">2</span>
+
+<span class="gp">In [34]: </span><span class="n">halftri_mirrored</span> <span class="o">=</span> <span class="n">mirror</span><span class="p">(</span><span class="n">halftri</span><span class="p">,</span> <span class="n">margin_factor</span><span class="o">=</span><span class="n">marge_factor</span><span class="p">)</span>
+
+<span class="gp">In [35]: </span><span class="n">halftri_mirrored_zpd</span> <span class="o">=</span> <span class="n">zoom_freq_zpd</span><span class="p">(</span> <span class="n">halftri_mirrored</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+
+<span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;The ramp signal mirrored is periodic&#39;</span><span class="p">);</span>
+
+<span class="gp">In [37]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_mirrored</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mirrored ramp signal&#39;</span><span class="p">);</span>
+
+<span class="gp">In [38]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="gp">In [39]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;The mirroring makes the signal periodic and avoids artifacts&#39;</span><span class="p">);</span>
+
+<span class="gp">In [40]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zero padding&#39;</span><span class="p">);</span>
+
+<span class="gp">In [41]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_mirrored_zpd</span><span class="p">[</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri_zpd</span><span class="o">.</span><span class="n">size</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zpd after being mirrored&#39;</span><span class="p">);</span>
+
+<span class="gp">In [42]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">),</span> <span class="n">halftri</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;orignal ramp signal samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[42]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c58ee90&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Mirrored_ramp.png" src="../_images/Mirrored_ramp.png" />
+<img alt="../_images/Mirroring_before_fzpd.png" src="../_images/Mirroring_before_fzpd.png" />
+</div>
+<div class="section" id="the-periodic-smooth-decomposition">
+<h3>2.1.2.2.3. The periodic + smooth decomposition<a class="headerlink" href="#the-periodic-smooth-decomposition" title="Permalink to this headline">¶</a></h3>
+<p>The two previous methods implies adding ‘fake’ samples to the input data, which might be very time consuming if
+done for every tile of a satellite image. The solution proposed by <a class="reference internal" href="../other/ref.html#term-moisan-2011"><span class="xref std std-term">[Moisan, 2011]</span></a> however can deal with discontinuous signal with
+only a little overhead. It consists in decomposing the input signal into two sub-signals, one being periodic, and
+the other being smooth. The periodic signal can then be upsampled in Fourier domain without concerns about the artifacts
+discussed in this chapter. The smooth one, built from the differences located at the data edges, is upsampled spatially
+with a simple bilinear filter.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">n</span> <span class="o">=</span> <span class="n">halftri</span><span class="o">.</span><span class="n">size</span>
+
+<span class="go">#1 : Compute smooth part</span>
+<span class="gp">In [44]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="gp">In [45]: </span><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">halftri</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="gp">In [46]: </span><span class="n">s</span> <span class="o">=</span> <span class="p">((</span><span class="n">halftri</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">halftri</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="go"># 2 : Compute periodic part</span>
+<span class="gp">In [47]: </span><span class="n">p</span> <span class="o">=</span> <span class="n">halftri</span> <span class="o">-</span> <span class="n">s</span>
+
+<span class="go"># 3 : Zero padds the periodic part</span>
+<span class="gp">In [48]: </span><span class="n">tf_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="gp">In [49]: </span><span class="n">z_tf_p</span> <span class="o">=</span> <span class="n">fft1D_zero_pad</span><span class="p">(</span><span class="n">tf_p</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="go"># 4 : Interpolate the smooth part spatially with a blinear interpolator</span>
+<span class="gp">In [50]: </span><span class="n">bln_interp_s</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="go"># 5 : Merged p &amp; s zoomed and FT-1</span>
+<span class="gp">In [51]: </span><span class="n">halftri_p_fzpd_and_s_bln</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">z_tf_p</span><span class="p">)</span> <span class="o">+</span> <span class="n">bln_interp_s</span>
+
+<span class="go"># plot the decomposition</span>
+<span class="gp">In [52]: </span><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Periodic and smooth decomposition : spatial domain&#39;</span><span class="p">)</span>
+<span class="gh">Out[52]: </span><span class="go">Text(0.5,0.98,&#39;Periodic and smooth decomposition : spatial domain&#39;)</span>
+
+<span class="gp">In [53]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">411</span><span class="p">)</span>
+<span class="gh">Out[53]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c534b90&gt;</span>
+
+<span class="gp">In [54]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Input signal&#39;</span><span class="p">)</span>
+<span class="gh">Out[54]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c4fc850&gt;]</span>
+
+<span class="gp">In [55]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[55]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c4fc710&gt;</span>
+
+<span class="gp">In [56]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [57]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">412</span><span class="p">)</span>
+<span class="gh">Out[57]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c508590&gt;</span>
+
+<span class="gp">In [58]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">)</span>
+<span class="gh">Out[58]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c4bb510&gt;]</span>
+
+<span class="gp">In [59]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[59]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c4bb390&gt;</span>
+
+<span class="gp">In [60]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [61]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">413</span><span class="p">)</span>
+<span class="gh">Out[61]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c4c6410&gt;</span>
+
+<span class="gp">In [62]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;smooth&#39;</span><span class="p">)</span>
+<span class="gh">Out[62]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c47c5d0&gt;]</span>
+
+<span class="gp">In [63]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[63]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c47c490&gt;</span>
+
+<span class="gp">In [64]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [65]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">414</span><span class="p">)</span>
+<span class="gh">Out[65]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c552150&gt;</span>
+
+<span class="gp">In [66]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="n">s</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;periodic + smooth&#39;</span><span class="p">)</span>
+<span class="gh">Out[66]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c42a2d0&gt;]</span>
+
+<span class="gp">In [67]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[67]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c42a190&gt;</span>
+
+<span class="gp">In [68]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [69]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="go"># plot the result</span>
+<span class="gp">In [70]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Using the p+s decomposition avoids artifacts.</span><span class="se">\n</span><span class="s1"> This solution adds little overhead&#39;</span><span class="p">);</span>
+
+<span class="gp">In [71]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_zpd</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zero padding&#39;</span><span class="p">);</span>
+
+<span class="gp">In [72]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_p_fzpd_and_s_bln</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ramp signal upsampled by Fourier zero padding with p+s decomposition&#39;</span><span class="p">);</span>
+
+<span class="gp">In [73]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">*</span><span class="n">z</span><span class="p">,</span><span class="n">z</span><span class="p">),</span> <span class="n">halftri</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;orignal ramp signal samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[73]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c3e0550&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/p_plus_s_triangle_decomposition.png" src="../_images/p_plus_s_triangle_decomposition.png" />
+<img alt="../_images/p_plus_s_before_fzpd.png" src="../_images/p_plus_s_before_fzpd.png" />
+</div>
+</div>
+<div class="section" id="conclusion-sirius-uses-the-p-s-decomposition">
+<h2>2.1.2.3. Conclusion : Sirius uses the p+s decomposition<a class="headerlink" href="#conclusion-sirius-uses-the-p-s-decomposition" title="Permalink to this headline">¶</a></h2>
+<p>Because it adds little overhead the p+s decomposition is the solution processed by Sirius to Fourier Transform each
+tile.</p>
+<p>Below is a little comparison of the three methods presented above :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [74]: </span><span class="n">halftri_analytically_zoomed</span> <span class="o">=</span> <span class="n">create_1D_ramp</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">50</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [75]: </span><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Interpolation error against the input signal analytically upsampled&#39;</span><span class="p">)</span>
+<span class="gh">Out[75]: </span><span class="go">Text(0.5,0.98,&#39;Interpolation error against the input signal analytically upsampled&#39;)</span>
+
+<span class="gp">In [76]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
+<span class="gh">Out[76]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c38d710&gt;</span>
+
+<span class="gp">In [77]: </span><span class="n">marge_factor</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [78]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_analytically_zoomed</span><span class="o">-</span><span class="n">halftri_zpd_spatially_mf2_zpd</span><span class="p">[</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri_zpd</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;For Fourier zero padding with marged (x2) signal&#39;</span><span class="p">)</span>
+<span class="gh">Out[78]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c341fd0&gt;]</span>
+
+<span class="gp">In [79]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[79]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c341ed0&gt;</span>
+
+<span class="gp">In [80]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [81]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
+<span class="gh">Out[81]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c34a610&gt;</span>
+
+<span class="gp">In [82]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_analytically_zoomed</span><span class="o">-</span><span class="n">halftri_mirrored_zpd</span><span class="p">[</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">halftri</span><span class="o">.</span><span class="n">size</span><span class="o">*</span><span class="p">(</span><span class="n">marge_factor</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">halftri_zpd</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;For Fourier zero padding with mirrored (x2) signal&#39;</span><span class="p">)</span>
+<span class="gh">Out[82]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c300d90&gt;]</span>
+
+<span class="gp">In [83]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[83]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c300c90&gt;</span>
+
+<span class="gp">In [84]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="gp">In [85]: </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
+<span class="gh">Out[85]: </span><span class="go">&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f055c30b510&gt;</span>
+
+<span class="gp">In [86]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">halftri_analytically_zoomed</span><span class="o">-</span><span class="n">halftri_p_fzpd_and_s_bln</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">50</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;For Fourier zero padding with p+s decomposition&#39;</span><span class="p">)</span>
+<span class="gh">Out[86]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c2c1990&gt;]</span>
+
+<span class="gp">In [87]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[87]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c2c1890&gt;</span>
+
+<span class="gp">In [88]: </span><span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/comparing_solution_to_FT_tiles.png" src="../_images/comparing_solution_to_FT_tiles.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The use of an apodized low-pass filter such as the <a class="reference internal" href="apodized_low-pass_filter.html#window-lanczos"><span class="std std-ref">lanczos one</span></a> can lesser the artifacts since it smooths the high frequencies.
+However, this is only considered a side effect. First because Sirius shall not rely on the user low-pass filter to avoid those artifacts. But also because
+such a low-pass filter might blur the data where the periodic plus smooth decomposition will not. This is why the use of low-pass filter shall only be
+considered to deal with the signal discontinuities, not its non periodicity.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="apodized_low-pass_filter.html" class="btn btn-neutral float-right" title="2.1.3. The discontinuous signals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sinc_as_zpd.html" class="btn btn-neutral" title="2.1.1. Sinus cardinal interpolation as “Fourier Zero Padding”" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

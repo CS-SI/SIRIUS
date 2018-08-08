@@ -1,0 +1,71 @@
+
+
+.. _file_src_sirius_gdal_error_code.h:
+
+File error_code.h
+=================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/gdal/error_code.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_gdal_error_code.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cpl_error.h``
+
+- ``system_error``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__gdal`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structstd_1_1is__error__code__enum_3_01sirius_1_1gdal_1_1ErrorCode_01_4`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1_1gdal_1a1da0cb29feb6b82f87bcc6309a980595`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1gdal_1ab3825be7bb7583d5bc4d5bb8acce4094`
+

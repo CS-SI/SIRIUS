@@ -1,0 +1,25 @@
+.. _exhale_struct_structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4:
+
+Template Struct is_error_code_enum< sirius::utils::ConcurrentQueueErrorCode >
+=============================================================================
+
+- Defined in :ref:`file_src_sirius_utils_concurrent_queue_error_code.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public true_type``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: std::is_error_code_enum< sirius::utils::ConcurrentQueueErrorCode >
+   :members:
+   :protected-members:
+   :undoc-members:

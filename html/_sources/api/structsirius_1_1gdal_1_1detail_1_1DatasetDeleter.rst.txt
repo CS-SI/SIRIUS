@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1gdal_1_1detail_1_1DatasetDeleter:
+
+Struct DatasetDeleter
+=====================
+
+- Defined in :ref:`file_src_sirius_gdal_types.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::gdal::detail::DatasetDeleter
+   :members:
+   :protected-members:
+   :undoc-members:

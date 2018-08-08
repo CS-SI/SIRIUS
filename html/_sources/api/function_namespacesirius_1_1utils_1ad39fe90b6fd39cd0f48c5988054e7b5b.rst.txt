@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1ad39fe90b6fd39cd0f48c5988054e7b5b:
+
+Function SetVerbosityLevel
+==========================
+
+- Defined in :ref:`file_src_sirius_utils_log.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::SetVerbosityLevel

@@ -1,0 +1,72 @@
+
+
+.. _file_src_sirius_utils_log.h:
+
+File log.h
+==========
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/utils/log.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_utils_log.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``string``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_fftw_types.h`
+
+- :ref:`file_src_sirius_utils_lru_cache.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1utils_1ad39fe90b6fd39cd0f48c5988054e7b5b`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_log_8h_1a1fcd4192fd94b97a1495aa60081001f9`
+
+- :ref:`exhale_define_log_8h_1ab64bb2a2e64746119867678511b22347`
+
+- :ref:`exhale_define_log_8h_1a0455917ef27afbbc292a7104ec8f8139`
+

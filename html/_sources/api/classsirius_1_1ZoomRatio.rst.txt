@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1ZoomRatio:
+
+Class ZoomRatio
+===============
+
+- Defined in :ref:`file_src_sirius_types.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::ZoomRatio
+   :members:
+   :protected-members:
+   :undoc-members:

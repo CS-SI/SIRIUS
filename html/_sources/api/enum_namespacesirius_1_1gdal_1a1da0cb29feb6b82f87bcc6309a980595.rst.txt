@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacesirius_1_1gdal_1a1da0cb29feb6b82f87bcc6309a980595:
+
+Enum ErrorCode
+==============
+
+- Defined in :ref:`file_src_sirius_gdal_error_code.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: sirius::gdal::ErrorCode

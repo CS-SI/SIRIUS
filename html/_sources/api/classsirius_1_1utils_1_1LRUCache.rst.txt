@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1utils_1_1LRUCache:
+
+Template Class LRUCache
+=======================
+
+- Defined in :ref:`file_src_sirius_utils_lru_cache.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::utils::LRUCache
+   :members:
+   :protected-members:
+   :undoc-members:

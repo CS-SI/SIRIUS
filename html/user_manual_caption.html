@@ -1,0 +1,654 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. Sirius by CS &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Theoretical Basis" href="theoretical_basis.html" />
+    <link rel="prev" title="Sirius" href="Sirius.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Sirius at a glance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">1.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-app">1.2. Docker App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-build">1.3. How to Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">1.3.1. Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-dependencies">1.3.2. Internal dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">1.3.3. Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">1.3.4. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use">1.4. How to use</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#host-requirements">1.4.1. Host requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sirius-standalone-tool">1.4.2. Sirius standalone tool</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#processing-mode-options">1.4.2.1. Processing mode options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resampling-options">1.4.2.2. Resampling options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filter-options">1.4.2.3. Filter options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">1.4.2.4. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sirius-library-api">1.4.3. Sirius library API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-without-filter">1.4.3.1. Example without filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-with-filter">1.4.3.2. Example with filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#thread-safety">1.4.3.3. Thread safety</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-tests">1.5. Unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgement">1.6. Acknowledgement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_basis.html">2. Sirius Theoretical Basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="Sirius.html">Docs</a> &raquo;</li>
+        
+      <li>1. Sirius by CS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/user_manual_caption.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sirius-by-cs">
+<h1>1. Sirius by CS<a class="headerlink" href="#sirius-by-cs" title="Permalink to this headline">¶</a></h1>
+<h1 align="center">
+  <br>
+  <a href="https://CS-SI.github.io/SIRIUS/html/Sirius.html"><img src="https://raw.githubusercontent.com/CS-SI/SIRIUS/master/doc/img/sirius-logo.svg?sanitize=true" alt="Sirius by CS-SI" width=35%></a>
+</h1><h4 align="center">A fast resampling software with simple to plugin library.</h4><p align="center">
+  <a href="https://travis-ci.org/CS-SI/SIRIUS"><img src="https://travis-ci.org/CS-SI/SIRIUS.svg?branch=master"></a>
+  <a href="https://hub.docker.com/r/ldumas/sirius_dockerfile/tags/"><img src="https://img.shields.io/docker/automated/ldumas/sirius_dockerfile.svg"></a>
+  <a href="https://github.com/CS-SI/SIRIUS/issues"><img src="https://img.shields.io/github/issues/CS-SI/SIRIUS.svg"></a>
+  <a href="https://opensource.org/licenses/GPL-3.0/"><img src="https://img.shields.io/badge/licence-GPL-blue.svg"></a>
+  <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields"></a>
+</p><p align="center">
+  <a href="#overview">Overview</a> •
+  <a href="#docker-app">Docker App</a> •
+  <a href="#how-to-build">How To Build</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#credits">Acknowledgement</a>
+</p><h4 align="center">
+  <a href="https://uk.c-s.fr/"><img src="https://raw.githubusercontent.com/CS-SI/SIRIUS/master/doc/img/logo_cssi.jpg" alt="CS-SI" width="149px"></a>
+</h4><p>As of today, and to our knowledge, there is no complete open source resampling tool for satellite imagery based on
+frequency resampling. Numerous softwares, some being open source, can be found to resample (most of the time upsample)
+data. Most of them offers various interpolators (<span class="raw-html-m2r"><a href="https://www.gimp.org/fr/" title="GNU Image Manipulation Program">GIMP</a></span>, <span class="raw-html-m2r"><a href="https://clouard.users.greyc.fr/Pandore" title="Pandore: Une bibliothèque d'opérateurs de traitement d'images (Version 6.6). Laboratoire GREYC.">Pandore</a></span>, <span class="raw-html-m2r"><a href="https://doi.org/10.5201/ipol.2011.g_lmii" title="Getreuer, P. (2011). Linear Methods for Image Interpolation. Image Processing On Line, 1, 238259.">Getreuer</a></span>, <span class="raw-html-m2r"><a href="https://www.orfeo-toolbox.org" title="Orfeo ToolBox">OTB</a></span>),
+some being very fast but rather innacurate (nearest neighbors, bilinear) and some offering high quality results
+(more often than not based on a Lancsoz convolutional kernel) but being very time consuming.
+Then only a few provides ways to deal efficiently with large amount of data (<span class="raw-html-m2r"><a href="https://www.orfeo-toolbox.org" title="Orfeo ToolBox">OTB</a></span>) or proposes a
+fast and accurate sinus cardinal interpolator implemented as frequencial zero padding (<span class="raw-html-m2r"><a href="https://doi.org/10.5201/ipol.2011.g_lmii" title="Getreuer, P. (2011). Linear Methods for Image Interpolation. Image Processing On Line, 1, 238259.">Getreuer</a></span>).
+None of those however allows one to resample satellite images in frequency domain with a floating upscaling
+or downscaling factor.</p>
+<p>It could be argued that the <span class="raw-html-m2r"><a href="https://www.orfeo-toolbox.org" title="Orfeo ToolBox">OTB</a></span> remains the best solution for the purpose of resampling satellite images.
+However, and though there exists ways to filter satellite images in frequency domain with the <span class="raw-html-m2r"><a href="https://www.orfeo-toolbox.org" title="Orfeo ToolBox">OTB</a></span>,
+it is not possible to resample such an image in frequency domain.</p>
+<p>Sirius then aims at filling this void offering a fast and simple to plug-in resampling C++ library that is taking advantage of the Fourier Transform.</p>
+<div class="section" id="overview">
+<h2>1.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://CS-SI.github.io/SIRIUS/html/Sirius.html">Sirius documentation</a></li>
+<li><span class="raw-html-m2r"><a href="http://www.doxygen.org" title="Doxygen">Doxygen</a></span></li>
+<li><span class="raw-html-m2r"><a href="INTERNALS.md" title="Internals">Internals</a></span></li>
+</ul>
+</div>
+<div class="section" id="docker-app">
+<h2>1.2. Docker App<a class="headerlink" href="#docker-app" title="Permalink to this headline">¶</a></h2>
+<p>Sirius is delivered inside a docker container. Assuming one has previously installed docker, then Sirius can be launched
+using the following commands :</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># pull image from the registry</span>
+docker pull ldumas/sirius_dockerfile:sirius
+<span class="c1"># then run sirius</span>
+docker run ldumas/sirius_dockerfile:sirius <span class="o">[</span>OPTION...<span class="o">]</span> input-image output-image
+
+<span class="c1"># if no arguments are set then sirius is launched without any argument and its help is displayed</span>
+<span class="c1"># see below for the list of sirius args</span>
+
+<span class="c1"># note that using docker volume might be a good solution to give the container access to input-image</span>
+<span class="c1"># and to give host access to the output-image :</span>
+docker run -v /home/user/outdir/:/outdir -v /home/user/input_images:/input ldumas/sirius_dockerfile:sirius /input/input-image.tif /outdir/output-image.tif -r <span class="m">1</span>:2
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-build">
+<h2>1.3. How to Build<a class="headerlink" href="#how-to-build" title="Permalink to this headline">¶</a></h2>
+<p>Sirius is using <span class="raw-html-m2r"><a href="https://cmake.org/" title="CMake">CMake</a></span> to build its libraries and executables.</p>
+<div class="section" id="requirements">
+<h3>1.3.1. Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>C++14 compiler (GCC &gt;= 5)</li>
+<li><span class="raw-html-m2r"><a href="https://cmake.org/" title="CMake">CMake</a></span> &gt;=3.2</li>
+<li><span class="raw-html-m2r"><a href="http://www.gdal.org/" title="Geospatial Data Abstraction Library">GDAL</a></span> development kit, &gt;=2</li>
+<li><span class="raw-html-m2r"><a href="http://www.fftw.org/" title="Fastest Fourier Transform in the West">FFTW</a></span> development kit, &gt;=3</li>
+<li><span class="raw-html-m2r"><a href="http://www.doxygen.org" title="Doxygen">Doxygen</a></span> if documentation option is enabled</li>
+</ul>
+</div>
+<div class="section" id="internal-dependencies">
+<h3>1.3.2. Internal dependencies<a class="headerlink" href="#internal-dependencies" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><span class="raw-html-m2r"><a href="https://github.com/gabime/spdlog/tree/v0.17.0" title="spdlog v0.17.0">spdlog v0.17.0</a></span></li>
+<li><span class="raw-html-m2r"><a href="https://github.com/jarro2783/cxxopts/tree/v2.1.0" title="cxxopts v2.1.0">cxxopts v2.1.0</a></span></li>
+<li><span class="raw-html-m2r"><a href="https://github.com/Microsoft/GSL/tree/v1.0.0" title="Guideline Support Library v1.0.0">GSL v1.0.0</a></span></li>
+<li><span class="raw-html-m2r"><a href="https://github.com/catchorg/Catch2/tree/v2.2.3" title="Catch v2.2.3">catch v2.2.3</a></span></li>
+<li><span class="raw-html-m2r"><a href="https://github.com/rpavlik/cmake-modules" title="CMake Modules">cmake-modules</a></span></li>
+</ul>
+</div>
+<div class="section" id="options">
+<h3>1.3.3. Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code>: Debug, Release, RelWithDebInfo or MinSizeRel</li>
+<li><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>: directory path where the built artifacts (include directory, library, docs) will be gathered using install target</li>
+<li><code class="docutils literal notranslate"><span class="pre">SIRIUS_VERSION</span></code>: set Sirius library version (default is <code class="docutils literal notranslate"><span class="pre">0.0.0</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">SIRIUS_REVISION_COMMIT</span></code>: set Sirius library revision commit (default is <code class="docutils literal notranslate"><span class="pre">sirius-no-revision-commit</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_SIRIUS_EXECUTABLE</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> to enable sirius target executable</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_CACHE_OPTIMIZATION</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> to build with cache optimization for FFTW and Filter</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_GSL_CONTRACTS</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> to build with GSL contracts (e.g. bounds checking). This option should be <code class="docutils literal notranslate"><span class="pre">OFF</span></code> on release mode.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_LOGS</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> if you want to build Sirius with the logs</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_UNIT_TESTS</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> if you want to build the unit tests</li>
+<li><code class="docutils literal notranslate"><span class="pre">ENABLE_DOCUMENTATION</span></code>: set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> if you want to build the documentation</li>
+</ul>
+<p>Sirius version can be extracted from <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">describe</span></code> and revision commit from <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rev-parse</span> <span class="pre">HEAD</span></code>.
+If version and revision commit are not provided, <span class="raw-html-m2r"><a href="https://cmake.org/" title="CMake">CMake</a></span> will try to extract them with the latter git commands.</p>
+</div>
+<div class="section" id="example">
+<h3>1.3.4. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># CWD is Sirius root directory</span>
+mkdir .build
+<span class="nb">cd</span> .build
+cmake .. -DCMAKE_BUILD_TYPE<span class="o">=</span>Release <span class="se">\</span>
+         -DCMAKE_INSTALL_PREFIX<span class="o">=</span>/tmp/sirius <span class="se">\</span>
+         -DENABLE_SIRIUS_EXECUTABLE<span class="o">=</span>ON <span class="se">\</span>
+         -DENABLE_CACHE_OPTIMIZATION<span class="o">=</span>ON <span class="se">\</span>
+         -DENABLE_GSL_CONTRACTS<span class="o">=</span>OFF <span class="se">\</span>
+         -DENABLE_LOGS<span class="o">=</span>ON <span class="se">\</span>
+         -DENABLE_UNIT_TESTS<span class="o">=</span>OFF <span class="se">\</span>
+         -DENABLE_DOCUMENTATION<span class="o">=</span>ON
+cmake --build . --target sirius
+cmake --build . --target doc
+cmake --build . --target install
+</pre></div>
+</div>
+<p>See also <code class="docutils literal notranslate"><span class="pre">.travis.yml</span></code> and <code class="docutils literal notranslate"><span class="pre">.travis/create_cmake_project.sh</span></code></p>
+</div>
+</div>
+<div class="section" id="how-to-use">
+<h2>1.4. How to use<a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="host-requirements">
+<h3>1.4.1. Host requirements<a class="headerlink" href="#host-requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><span class="raw-html-m2r"><a href="http://www.gdal.org/" title="Geospatial Data Abstraction Library">GDAL</a></span> library</li>
+<li><span class="raw-html-m2r"><a href="http://www.fftw.org/fftw-paper-ieee.pdf" title="Matteo Frigo and Steven G. Johnson, “The design and implementation of FFTW3,” Proc. IEEE 93 (2), 216231 (2005)">FFTW3</a></span> library</li>
+</ul>
+</div>
+<div class="section" id="sirius-standalone-tool">
+<h3>1.4.2. Sirius standalone tool<a class="headerlink" href="#sirius-standalone-tool" title="Permalink to this headline">¶</a></h3>
+<p>Sirius is shipped as a standalone tool that offers filtering and resampling features.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ./sirius -h
+Sirius X.Y.Z <span class="o">(</span>...<span class="o">)</span>
+Standalone tool to resample and filter images in the frequency domain
+
+Usage:
+  ./sirius <span class="o">[</span>OPTION...<span class="o">]</span> input-image output-image
+
+  -h, --help           Show <span class="nb">help</span>
+  -v, --verbosity arg  Set verbosity level
+                       <span class="o">(</span>trace,debug,info,warn,err,critical,off<span class="o">)</span> <span class="o">(</span>default: info<span class="o">)</span>
+
+ resampling options:
+  -r, --resampling-ratio arg    Resampling ratio as input:output, allowed
+                                format: I <span class="o">(</span>equivalent to I:1<span class="o">)</span>, I:O <span class="o">(</span>default: <span class="m">1</span>:1<span class="o">)</span>
+      --no-image-decomposition  Do not decompose the input image <span class="o">(</span>default:
+                                periodic plus smooth image decomposition<span class="o">)</span>
+      --upsample-periodization  Force periodization as upsampling algorithm
+                                <span class="o">(</span>default algorithm <span class="k">if</span> a filter is provided<span class="o">)</span>. A
+                                filter is required to use this algorithm
+      --upsample-zero-padding   Force zero padding as upsampling algorithm
+                                <span class="o">(</span>default algorithm <span class="k">if</span> no filter is provided<span class="o">)</span>
+
+ filter options:
+      --filter arg           Path to the filter image to apply to the <span class="nb">source</span>
+                             or resampled image
+      --filter-normalize     Normalize filter coefficients <span class="o">(</span>default is no
+                             normalization<span class="o">)</span>
+      --zero-pad-real-edges  Force zero padding strategy on real input edges
+                             <span class="o">(</span>default: mirror padding<span class="o">)</span>
+      --hot-point-x arg      Hot point x coordinate <span class="o">(</span>considered centered <span class="k">if</span>
+                             no value is provided<span class="o">)</span>
+      --hot-point-y arg      Hot point y coordinate <span class="o">(</span>considered centered <span class="k">if</span>
+                             no value is provided<span class="o">)</span>
+
+ streaming options:
+      --stream                  Enable stream mode
+      --block-width arg         Initial width of a stream block <span class="o">(</span>default:
+                                <span class="m">256</span><span class="o">)</span>
+      --block-height arg        Initial height of a stream block <span class="o">(</span>default:
+                                <span class="m">256</span><span class="o">)</span>
+      --no-block-resizing       Disable block resizing optimization
+      --parallel-workers <span class="o">[=</span>arg<span class="o">(=</span><span class="m">1</span><span class="o">)]</span>
+                                Parallel workers used to compute resampling
+                                <span class="o">(</span><span class="m">8</span> max<span class="o">)</span> <span class="o">(</span>default: <span class="m">1</span><span class="o">)</span>
+</pre></div>
+</div>
+<div class="section" id="processing-mode-options">
+<h4>1.4.2.1. Processing mode options<a class="headerlink" href="#processing-mode-options" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="regular-mode">
+<h5>1.4.2.1.1. Regular mode<a class="headerlink" href="#regular-mode" title="Permalink to this headline">¶</a></h5>
+<p>Regular mode (default mode) will put the whole image in memory and then processed it. <strong>This mode should only be used on small image</strong>.</p>
+<p>The following command line will zoom in the image <code class="docutils literal notranslate"><span class="pre">/path/to/input-file.tif</span></code> by 4/3 with the periodic plus smooth image decomposition, apply the filter <code class="docutils literal notranslate"><span class="pre">/path/to/filter-image-4-3.tif</span></code> to the zoomed image and write the result into <code class="docutils literal notranslate"><span class="pre">/path/to/output-file.tif</span></code>.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">4</span>:3 <span class="se">\</span>
+         --filter /path/to/filter-image-4-3.tif <span class="se">\</span>
+         /path/to/input-file.tif /path/to/output-file.tif
+</pre></div>
+</div>
+</div>
+<div class="section" id="stream-mode">
+<h5>1.4.2.1.2. Stream mode<a class="headerlink" href="#stream-mode" title="Permalink to this headline">¶</a></h5>
+<p>Stream mode is activated with the option <code class="docutils literal notranslate"><span class="pre">--stream</span></code>. It will cut the image into multiple blocks of small size (default block size is 256x256). Each block will be processed separately and result blocks will be aggregated to generate the output image. <strong>This mode must be used on large image.</strong></p>
+<p>Stream mode can be run in mono-threaded context (<code class="docutils literal notranslate"><span class="pre">--parallel-workers=1</span></code>) or in multi-threaded context (<code class="docutils literal notranslate"><span class="pre">--parallel-workers=N</span></code> where N is the requested number of threads which will compute the resampling).</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">4</span>:3 <span class="se">\</span>
+         --stream --parallel-workers<span class="o">=</span><span class="m">4</span> <span class="se">\</span>
+         --filter /path/to/filter-image-4-3.tif <span class="se">\</span>
+         /path/to/input-file.tif /path/to/output-file.tif
+</pre></div>
+</div>
+<p>It is possible to customize block size with the options <code class="docutils literal notranslate"><span class="pre">--block-witdh=XXX</span></code> and <code class="docutils literal notranslate"><span class="pre">--block-height=YYY</span></code>.</p>
+<p>Default behavior tries to optimize given block size so that the processed block (block size + filter margins) width and height are dyadic. You can disable this optimization with the option <code class="docutils literal notranslate"><span class="pre">--no-block-resizing</span></code>.</p>
+<p>When dealing with real zoom, block width and height are computed so that they comply with the zoom ratio.</p>
+</div>
+</div>
+<div class="section" id="resampling-options">
+<h4>1.4.2.2. Resampling options<a class="headerlink" href="#resampling-options" title="Permalink to this headline">¶</a></h4>
+<p>Resampling ratio is specified with the option <code class="docutils literal notranslate"><span class="pre">-r</span></code>. Expected format ratios are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">INPUT_RESOLUTION</span></code> where INPUT_RESOLUTION is a positive integer (e.g. <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">2</span></code>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">INPUT_RESOLUTION:OUTPUT_RESOLUTION</span></code> where INPUT_RESOLUTION and OUTPUT_RESOLUTION are positive integers (e.g. <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">2:1</span></code>).</li>
+</ul>
+<p>Sirius can use two image decomposition algorithms:</p>
+<ul class="simple">
+<li>Periodic plus Smooth (default behavior) is splitting the input image into a periodic part and a smooth image part.</li>
+<li>None (<code class="docutils literal notranslate"><span class="pre">--no-image-decomposition</span></code>) is using raw image data without any processing.</li>
+</ul>
+<p>Sirius can use two upsampling strategies:</p>
+<ul class="simple">
+<li>Periodization: default behavior if a filter is provided.</li>
+<li>Zero padding: default algorithm if no filter is provided.</li>
+</ul>
+<p>Upsampling strategies can be forced with the following options:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">--upsampling-zero-padding</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">--upsampling-periodization</span></code></li>
+</ul>
+<p><em>Force periodization upsampling without providing a filter will result in an error.</em></p>
+<p>More details on algorithms in the <a class="reference external" href="https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded">Theoretical Basis documentation</a>.</p>
+</div>
+<div class="section" id="filter-options">
+<h4>1.4.2.3. Filter options<a class="headerlink" href="#filter-options" title="Permalink to this headline">¶</a></h4>
+<p>A filter image path can be specified with the option <code class="docutils literal notranslate"><span class="pre">--filter</span></code>. This filter will be applied:</p>
+<ul class="simple">
+<li>on the resampled image if the image is upsampled.</li>
+<li>on the source image if the image is downsampled.</li>
+</ul>
+<p>Default behavior will pad real input edges with a mirroring of the edges.
+<code class="docutils literal notranslate"><span class="pre">--zero-pad-real-edges</span></code> will change this strategy and zero pad real input edges.</p>
+<p>It is assumed that the filter is already normalized. If not, the option <code class="docutils literal notranslate"><span class="pre">--filter-normalize</span></code> will normize it before any processing.</p>
+<p>Finally, it is possible to give a filter which has an uncentered hot point by specifying its coordinates thanks to <code class="docutils literal notranslate"><span class="pre">--hot-point-x</span></code> and <code class="docutils literal notranslate"><span class="pre">--hot-point-y</span></code> options. In this case sirius will center the filter’s hot point before any processing.</p>
+<p>More details on filters in the <a class="reference external" href="https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html">Theoretical Basis documentation</a>.</p>
+</div>
+<div class="section" id="examples">
+<h4>1.4.2.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="zoom-in">
+<h5>1.4.2.4.1. Zoom in<a class="headerlink" href="#zoom-in" title="Permalink to this headline">¶</a></h5>
+<p>The following command line will zoom in <code class="docutils literal notranslate"><span class="pre">input/lena.jpg</span></code> by 2 using periodic plus smooth image decomposition and zero padding upsampling.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">2</span>:1 <span class="se">\</span>
+         --upsample-zero-padding <span class="se">\</span>
+         data/input/lena.jpg /tmp/lena_z2.jpg
+</pre></div>
+</div>
+<p>The following command line will zoom in <code class="docutils literal notranslate"><span class="pre">input/lena.jpg</span></code> by 2 using periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">2</span> <span class="se">\</span>
+         --filter data/filters/ZOOM_2.tif <span class="se">\</span>
+         data/input/lena.jpg /tmp/lena_z2.jpg
+</pre></div>
+</div>
+<p>The following command line will zoom in <code class="docutils literal notranslate"><span class="pre">input/sentinel2_20m.tif</span></code> by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius --stream --parallel-workers<span class="o">=</span><span class="m">8</span> <span class="se">\</span>
+         -r <span class="m">2</span> <span class="se">\</span>
+         --filter data/filters/ZOOM_2.tif <span class="se">\</span>
+         data/input/sentinel2_20m.tif /tmp/sentinel2_20m_z2.tif
+</pre></div>
+</div>
+</div>
+<div class="section" id="zoom-out">
+<h5>1.4.2.4.2. Zoom out<a class="headerlink" href="#zoom-out" title="Permalink to this headline">¶</a></h5>
+<p>The following command line will zoom out <code class="docutils literal notranslate"><span class="pre">input/lena.jpg</span></code> by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">1</span>:2 <span class="se">\</span>
+         --filter data/filters/ZOOM_1_2.tif <span class="se">\</span>
+         data/input/lena.jpg /tmp/lena_z2.jpg
+</pre></div>
+</div>
+<p>The following command line will zoom out <code class="docutils literal notranslate"><span class="pre">input/disparity.png</span></code> by 1/2 using periodic plus smooth image decomposition and filter for downsampling 1/2.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius -r <span class="m">1</span>:2 <span class="se">\</span>
+         --filter data/filters/ZOOM_1_2.tif <span class="se">\</span>
+         data/input/disparity.png /tmp/disparity_z1_2.jpg
+</pre></div>
+</div>
+<p>The following command line will zoom out <code class="docutils literal notranslate"><span class="pre">input/sentinel2_10m.tif</span></code> by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./sirius --stream --parallel-workers<span class="o">=</span><span class="m">8</span> <span class="se">\</span>
+         -r <span class="m">1</span>:2 <span class="se">\</span>
+         --filter data/filters/ZOOM_1_2.tif <span class="se">\</span>
+         data/input/sentinel2_10m.tif /tmp/sentinel2_10m_z1_2.tif
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="sirius-library-api">
+<h3>1.4.3. Sirius library API<a class="headerlink" href="#sirius-library-api" title="Permalink to this headline">¶</a></h3>
+<p>Sirius is designed to be easy to use.</p>
+<p>The main interface to compute a frequency resampling is <code class="docutils literal notranslate"><span class="pre">IFrequencyResampler</span></code> and it only requires an image, a zoom ratio and an optional filter.</p>
+<p><code class="docutils literal notranslate"><span class="pre">IFrequencyResampler</span></code> objects are instantiated by the <code class="docutils literal notranslate"><span class="pre">FrequencyResamplerFactory</span></code>.</p>
+<div class="section" id="example-without-filter">
+<h4>1.4.3.1. Example without filter<a class="headerlink" href="#example-without-filter" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;sirius/filter.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/frequency_resampler_factory.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/image.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/types.h&quot;</span><span class="cp"></span>
+
+<span class="c1">// create an image</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Image</span> <span class="n">image</span> <span class="o">=</span> <span class="p">{...};</span>
+
+<span class="c1">// configure the zoom ratio</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">ZoomRatio</span> <span class="n">zoom_ratio</span> <span class="o">=</span> <span class="n">sirius</span><span class="o">::</span><span class="n">ZoomRatio</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+<span class="c1">// compose a frequency resampler from sirius::ImageDecompositionPolicies and</span>
+<span class="c1">//     sirius::FrequencyZoomStrategies enums</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">IFrequencyResampler</span><span class="o">::</span><span class="n">UPtr</span> <span class="n">freq_resampler</span> <span class="o">=</span>
+      <span class="n">sirius</span><span class="o">::</span><span class="n">FrequencyResamplerFactory</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span>
+            <span class="n">sirius</span><span class="o">::</span><span class="n">ImageDecompositionPolicies</span><span class="o">::</span><span class="n">kPeriodicSmooth</span><span class="p">,</span>
+            <span class="n">sirius</span><span class="o">::</span><span class="n">FrequencyZoomStrategies</span><span class="o">::</span><span class="n">kZeroPadding</span><span class="p">);</span>
+
+<span class="c1">// compute the resampled image</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Image</span> <span class="n">resampled_image</span> <span class="o">=</span> <span class="n">freq_resampler</span><span class="o">-&gt;</span><span class="n">Compute</span><span class="p">(</span>
+      <span class="n">zoom_ratio</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-with-filter">
+<h4>1.4.3.2. Example with filter<a class="headerlink" href="#example-with-filter" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;sirius/filter.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/frequency_resampler_factory.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/image.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;sirius/types.h&quot;</span><span class="cp"></span>
+
+<span class="c1">// load an image</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Image</span> <span class="n">image</span> <span class="o">=</span> <span class="p">{...};</span>
+
+<span class="c1">// load a filter image</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Image</span> <span class="n">filter_image</span> <span class="o">=</span> <span class="p">{...};</span>
+
+<span class="c1">// configure the zoom ratio</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">ZoomRatio</span> <span class="n">zoom_ratio</span> <span class="o">=</span> <span class="n">sirius</span><span class="o">::</span><span class="n">ZoomRatio</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+<span class="c1">// create a filter from an image file</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Filter</span> <span class="n">filter</span> <span class="o">=</span> <span class="n">sirius</span><span class="o">::</span><span class="n">Filter</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="n">filter_image</span><span class="p">,</span> <span class="n">zoom_ratio</span><span class="p">);</span>
+
+<span class="c1">// compose a frequency resampler from sirius::ImageDecompositionPolicies and</span>
+<span class="c1">//     sirius::FrequencyZoomStrategies enums</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">IFrequencyResampler</span><span class="o">::</span><span class="n">UPtr</span> <span class="n">freq_resampler</span> <span class="o">=</span>
+      <span class="n">sirius</span><span class="o">::</span><span class="n">FrequencyResamplerFactory</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span>
+            <span class="n">sirius</span><span class="o">::</span><span class="n">ImageDecompositionPolicies</span><span class="o">::</span><span class="n">kPeriodicSmooth</span><span class="p">,</span>
+            <span class="n">sirius</span><span class="o">::</span><span class="n">FrequencyZoomStrategies</span><span class="o">::</span><span class="n">kPeriodization</span><span class="p">);</span>
+
+<span class="c1">// compute the resampled image</span>
+<span class="n">sirius</span><span class="o">::</span><span class="n">Image</span> <span class="n">resampled_image</span> <span class="o">=</span> <span class="n">freq_resampler</span><span class="o">-&gt;</span><span class="n">Compute</span><span class="p">(</span>
+      <span class="n">zoom_ratio</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">filter</span><span class="p">.</span><span class="n">padding</span><span class="p">(),</span> <span class="n">filter</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="thread-safety">
+<h4>1.4.3.3. Thread safety<a class="headerlink" href="#thread-safety" title="Permalink to this headline">¶</a></h4>
+<p>Compute a resampled image with Sirius is thread safe so it is possible to use the same <code class="docutils literal notranslate"><span class="pre">IFrequencyResampler</span></code> object in a multi-threaded context.</p>
+<p>Process an image with a <code class="docutils literal notranslate"><span class="pre">Filter</span></code> object is also thread safe so you can reuse the same filter in a multi-threaded context.</p>
+</div>
+</div>
+</div>
+<div class="section" id="unit-tests">
+<h2>1.5. Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Running tests requires data features (input image, filters) which are available <span class="raw-html-m2r"><a href="https://github.com/CS-SI/SIRIUS" title="Sirius test data features">here</a></span>.</p>
+<p>You need to execute the tests in the root directory of those data features. Expected directory tree is:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>ROOT_DATA_FEATURES/input
+                  /filters
+                  /output
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">frequency_resampler_tests</span></code> and <code class="docutils literal notranslate"><span class="pre">functional_tests</span></code> will create output images in the directory <code class="docutils literal notranslate"><span class="pre">ROOT_DATA_FEATURES/output</span></code></p>
+</div>
+<div class="section" id="acknowledgement">
+<h2>1.6. Acknowledgement<a class="headerlink" href="#acknowledgement" title="Permalink to this headline">¶</a></h2>
+<p>Sirius developers would like to thank:</p>
+<ul class="simple">
+<li>Matteo Frigo, Steven G. Johnson et al. for <span class="raw-html-m2r"><a href="http://www.fftw.org/fftw-paper-ieee.pdf" title="Matteo Frigo and Steven G. Johnson, “The design and implementation of FFTW3,” Proc. IEEE 93 (2), 216231 (2005)">FFTW3 library (GNU General Public License v3)</a></span></li>
+<li><span class="raw-html-m2r"><a href="http://www.gdal.org/" title="Geospatial Data Abstraction Library">GDAL (MIT License)</a></span> project team</li>
+<li>Gabi Melman et al. for <span class="raw-html-m2r"><a href="https://github.com/gabime/spdlog" title="spdlog">spdlog (MIT License)</a></span></li>
+<li>Jarryd Beck et al. for <span class="raw-html-m2r"><a href="https://github.com/jarro2783/cxxopts" title="cxxopts">cxxopts (MIT License)</a></span></li>
+<li><span class="raw-html-m2r"><a href="https://github.com/catchorg/Catch2/tree/v2.2.3" title="Catch2">Catch2 (Boost Software License - Version 1.0)</a></span> project team</li>
+<li><span class="raw-html-m2r"><a href="https://github.com/Microsoft/GSL" title="Guideline Support Library">GSL (MIT License)</a></span> project team</li>
+<li>Ryan Pavlik et al. for <span class="raw-html-m2r"><a href="https://github.com/rpavlik/cmake-modules" title="CMake Modules">cmake-modules (Boost Software License - Version 1.0)</a></span></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="theoretical_basis.html" class="btn btn-neutral float-right" title="2. Theoretical Basis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Sirius.html" class="btn btn-neutral" title="Sirius" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

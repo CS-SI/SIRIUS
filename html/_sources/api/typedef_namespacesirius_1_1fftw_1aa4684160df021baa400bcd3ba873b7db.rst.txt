@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacesirius_1_1fftw_1aa4684160df021baa400bcd3ba873b7db:
+
+Typedef sirius::fftw::RealUPtr
+==============================
+
+- Defined in :ref:`file_src_sirius_fftw_types.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sirius::fftw::RealUPtr

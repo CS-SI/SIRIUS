@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1fftw_1_1detail_1_1RealDeleter:
+
+Struct RealDeleter
+==================
+
+- Defined in :ref:`file_src_sirius_fftw_types.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::fftw::detail::RealDeleter
+   :members:
+   :protected-members:
+   :undoc-members:

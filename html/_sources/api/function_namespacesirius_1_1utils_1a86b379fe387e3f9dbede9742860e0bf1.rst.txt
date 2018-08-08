@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1a86b379fe387e3f9dbede9742860e0bf1:
+
+Function GenerateZoomCompliantSize
+==================================
+
+- Defined in :ref:`file_src_sirius_utils_numeric.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::GenerateZoomCompliantSize

@@ -1,0 +1,198 @@
+
+:mod:`simple_signal_proc`
+=========================
+
+.. py:module:: simple_signal_proc
+
+
+
+
+
+
+
+
+
+Module Contents
+---------------
+
+
+
+
+
+.. function:: create_1D_rect(n)
+
+   
+
+
+
+
+
+
+
+.. function:: sinc(x,dtype=None)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_sinc(n,step=1)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_lanczos(n,a=3,step=1)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_mire(n)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_triangle_signal(n=4,step=1)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_cosine(n=100,w=1)
+
+   
+
+
+
+
+
+
+
+.. function:: create_1D_ramp(n=100,step=1)
+
+   
+
+
+
+
+
+
+
+.. function:: show_1D(signal,title="Figure")
+
+   
+
+
+
+
+
+
+
+.. function:: mirror(s,margin_factor=2)
+
+   
+
+
+
+
+
+
+
+.. function:: zero_pad(s,margin_factor=2,dtype=None)
+
+   
+
+
+
+
+
+
+
+.. function:: periodize(s,margin_factor=2,dtype=None)
+
+   
+
+
+
+
+
+
+
+.. function:: fft1D_zero_pad(tf,zoom_factor=2)
+
+   
+
+
+
+
+
+
+
+.. function:: fft1D_periodization(tf,zoom_factor=2)
+
+   
+
+
+
+
+
+
+
+.. function:: zoom_freq_zpd(signal,zoom_factor=2)
+
+   
+
+
+
+
+
+
+
+.. function:: zoom_freq_img_periodization(signal,zoom_factor=2,user_kernel=None)
+
+   
+
+
+
+
+
+
+
+.. function:: interp1d(signal,zoom_factor)
+
+   
+
+
+
+
+
+
+
+.. function:: zoom_freq_img_perAndSmooth(signal,zoom_factor)
+
+   
+
+
+
+

@@ -1,0 +1,118 @@
+
+.. _program_listing_file_src_sirius_filter.h:
+
+Program Listing for File filter.h
+=================================
+
+- Return to documentation for :ref:`file_src_sirius_filter.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_FILTER_H_
+   #define SIRIUS_FILTER_H_
+   
+   #include <map>
+   #include <memory>
+   #include <string>
+   
+   #include "sirius/image.h"
+   #include "sirius/types.h"
+   
+   #include "sirius/fftw/types.h"
+   
+   #include "sirius/utils/lru_cache.h"
+   
+   namespace sirius {
+   
+   struct FilterMetadata {
+       Size size;
+       Size margin_size{0, 0};
+       PaddingType padding_type{PaddingType::kMirrorPadding};
+   };
+   
+   constexpr Point filter_default_hot_point{-1, -1};
+   
+   class Filter {
+     private:
+       static constexpr int kCacheSize = 10;
+       using FilterFFTCache = utils::LRUCache<Size, fftw::ComplexSPtr, kCacheSize>;
+       using FilterFFTCacheUPtr = std::unique_ptr<FilterFFTCache>;
+   
+     public:
+       static Filter Create(Image filter_image, const ZoomRatio& zoom_ratio,
+                            const Point& hot_point = filter_default_hot_point,
+                            PaddingType padding_type = PaddingType::kMirrorPadding,
+                            bool normalize = false);
+   
+       Filter() = default;
+   
+       ~Filter() = default;
+   
+       // non copyable
+       Filter(const Filter&) = delete;
+       Filter& operator=(const Filter&) = delete;
+       // moveable
+       Filter(Filter&&) = default;
+       Filter& operator=(Filter&&) = default;
+   
+       bool IsLoaded() const { return filter_.IsLoaded(); }
+   
+       Size size() const { return filter_.size; }
+   
+       Size padding_size() const { return padding_size_; }
+   
+       PaddingType padding_type() const { return padding_type_; }
+   
+       FilterMetadata Metadata() const {
+           return {filter_.size, padding_size_, padding_type_};
+       }
+   
+       Padding padding() const {
+           return {padding_size_.row, padding_size_.row, padding_size_.col,
+                   padding_size_.col, padding_type_};
+       }
+   
+       const Point& hot_point() const { return hot_point_; }
+   
+       bool CanBeApplied(const ZoomRatio& zoom_ratio) const {
+           return (zoom_ratio_.input_resolution() ==
+                   zoom_ratio.input_resolution());
+       }
+   
+       fftw::ComplexUPtr Process(const Size& image_size,
+                                 fftw::ComplexUPtr image_fft) const;
+   
+     private:
+       static Filter CreateZoomInFilter(Image filter_image,
+                                        const ZoomRatio& zoom_ratio,
+                                        PaddingType padding_type,
+                                        const Point& hot_point);
+       static Filter CreateZoomOutFilter(Image filter_image,
+                                         const ZoomRatio& zoom_ratio,
+                                         PaddingType padding_type,
+                                         const Point& hot_point);
+       static Filter CreateRealZoomFilter(Image filter_image,
+                                          const ZoomRatio& zoom_ratio,
+                                          PaddingType padding_type,
+                                          const Point& hot_point);
+   
+       Filter(Image&& filter_image, const Size& padding_size,
+              const ZoomRatio& zoom_ratio, PaddingType padding_type,
+              const Point& hot_point);
+   
+       fftw::ComplexUPtr CreateFilterFFT(const Size& image_size) const;
+   
+     private:
+       Image filter_{};
+       Size padding_size_{0, 0};
+       ZoomRatio zoom_ratio_{};
+       PaddingType padding_type_{PaddingType::kMirrorPadding};
+       Point hot_point_{filter_default_hot_point};
+   
+       FilterFFTCacheUPtr filter_fft_cache_{nullptr};
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_FILTER_H_

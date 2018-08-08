@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.3.2.15. Class Fftw &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3.2.16. Class Filter" href="classsirius_1_1Filter.html" />
+    <link rel="prev" title="3.3.2.14. Class Exception" href="classsirius_1_1fftw_1_1Exception.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="library_root.html">3. Sirius Developer Zone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#class-hierarchy">3.1. Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#file-hierarchy">3.2. File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="library_root.html#full-api">3.3. Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#namespaces">3.3.1. Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="library_root.html#classes-and-structs">3.3.2. Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1ComplexDeleter.html">3.3.2.1. Struct ComplexDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1PlanDeleter.html">3.3.2.2. Struct PlanDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1fftw_1_1detail_1_1RealDeleter.html">3.3.2.3. Struct RealDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1FilterMetadata.html">3.3.2.4. Struct FilterMetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1detail_1_1DatasetDeleter.html">3.3.2.5. Struct DatasetDeleter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1GeoReference.html">3.3.2.6. Struct GeoReference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1gdal_1_1StreamBlock.html">3.3.2.7. Struct StreamBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Padding.html">3.3.2.8. Struct Padding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Point.html">3.3.2.9. Struct Point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structsirius_1_1Size.html">3.3.2.10. Struct Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1is__error__code__enum_3_01sirius_1_1gdal_1_1ErrorCode_01_4.html">3.3.2.11. Template Struct is_error_code_enum&lt; sirius::gdal::ErrorCode &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4.html">3.3.2.12. Template Struct is_error_code_enum&lt; sirius::utils::ConcurrentQueueErrorCode &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Exception.html">3.3.2.13. Class Exception</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1fftw_1_1Exception.html">3.3.2.14. Class Exception</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">3.3.2.15. Class Fftw</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Filter.html">3.3.2.16. Class Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1FrequencyResamplerFactory.html">3.3.2.17. Class FrequencyResamplerFactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1Exception.html">3.3.2.18. Class Exception</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1InputStream.html">3.3.2.19. Class InputStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1gdal_1_1ResampledOutputStream.html">3.3.2.20. Class ResampledOutputStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1IFrequencyResampler.html">3.3.2.21. Class IFrequencyResampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1Image.html">3.3.2.22. Class Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1ImageStreamer.html">3.3.2.23. Class ImageStreamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1FrequencyResampler.html">3.3.2.24. Template Class FrequencyResampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy.html">3.3.2.25. Template Class ImageDecompositionPeriodicSmoothPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy.html">3.3.2.26. Template Class ImageDecompositionRegularPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1PeriodizationZoomStrategy.html">3.3.2.27. Class PeriodizationZoomStrategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy.html">3.3.2.28. Class ZeroPaddingZoomStrategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1utils_1_1ConcurrentQueue.html">3.3.2.29. Template Class ConcurrentQueue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1utils_1_1LRUCache.html">3.3.2.30. Template Class LRUCache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsirius_1_1ZoomRatio.html">3.3.2.31. Class ZoomRatio</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#enums">3.3.3. Enums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#functions">3.3.4. Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#variables">3.3.5. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#defines">3.3.6. Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#typedefs">3.3.7. Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#directories">3.3.8. Directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#files">3.3.9. Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="library_root.html">3. Library API</a> &raquo;</li>
+        
+      <li>3.3.2.15. Class Fftw</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/classsirius_1_1fftw_1_1Fftw.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="class-fftw">
+<span id="exhale-class-classsirius-1-1fftw-1-1fftw"></span><h1>3.3.2.15. Class Fftw<a class="headerlink" href="#class-fftw" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file_src_sirius_fftw_fftw.h.html#file-src-sirius-fftw-fftw-h"><span class="std std-ref">File fftw.h</span></a></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>3.3.2.15.1. Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv3N6sirius4fftw4FftwE">
+<span id="_CPPv2N6sirius4fftw4FftwE"></span><span id="sirius::fftw::Fftw"></span><span class="target" id="classsirius_1_1fftw_1_1Fftw"></span><em class="property">class </em><code class="descname">Fftw</code><a class="headerlink" href="#_CPPv3N6sirius4fftw4FftwE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>fftw3 management class </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv3N6sirius4fftw4Fftw20GetRealToComplexPlanERK4SizePdP12fftw_complex">
+<span id="_CPPv2N6sirius4fftw4Fftw20GetRealToComplexPlanERK4SizePdP12fftw_complex"></span><span id="sirius::fftw::Fftw::GetRealToComplexPlan__SizeCR.doubleP.fftw_complexP"></span><span class="target" id="classsirius_1_1fftw_1_1Fftw_1a7fd84de209e652cf71283b8726543f79"></span>PlanSPtr <code class="descname">GetRealToComplexPlan</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="structsirius_1_1Size.html#_CPPv3N6sirius4SizeE" title="sirius::Size">Size</a> &amp;<em>size</em>, double *<em>in</em>, fftw_complex *<em>out</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius4fftw4Fftw20GetRealToComplexPlanERK4SizePdP12fftw_complex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a r2c fftw plan of the given size. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>unique ptr to the created plan </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">in</span></code>: real input array complying with the size </li>
+<li><code class="docutils literal notranslate"><span class="pre">out</span></code>: complex output array complying with the size </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><a class="reference internal" href="classsirius_1_1fftw_1_1Exception.html#classsirius_1_1fftw_1_1Exception"><span class="std std-ref"><span class="pre">sirius::fftw::Exception</span></span></a></code>: if the plan creation fails </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv3N6sirius4fftw4Fftw20GetComplexToRealPlanERK4SizeP12fftw_complexPd">
+<span id="_CPPv2N6sirius4fftw4Fftw20GetComplexToRealPlanERK4SizeP12fftw_complexPd"></span><span id="sirius::fftw::Fftw::GetComplexToRealPlan__SizeCR.fftw_complexP.doubleP"></span><span class="target" id="classsirius_1_1fftw_1_1Fftw_1aa9481ee2c460deba51db3251edd84ff6"></span>PlanSPtr <code class="descname">GetComplexToRealPlan</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="structsirius_1_1Size.html#_CPPv3N6sirius4SizeE" title="sirius::Size">Size</a> &amp;<em>size</em>, fftw_complex *<em>in</em>, double *<em>out</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius4fftw4Fftw20GetComplexToRealPlanERK4SizeP12fftw_complexPd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a c2r fftw plan of the given size. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">size</span></code>: plan size </li>
+<li><code class="docutils literal notranslate"><span class="pre">in</span></code>: complex input array complying with the size </li>
+<li><code class="docutils literal notranslate"><span class="pre">out</span></code>: real output array complying with the size </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><a class="reference internal" href="classsirius_1_1fftw_1_1Exception.html#classsirius_1_1fftw_1_1Exception"><span class="std std-ref"><span class="pre">sirius::fftw::Exception</span></span></a></code>: if the plan creation fails </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv3N6sirius4fftw4Fftw8InstanceEv">
+<span id="_CPPv2N6sirius4fftw4Fftw8InstanceEv"></span><span id="sirius::fftw::Fftw::Instance"></span><span class="target" id="classsirius_1_1fftw_1_1Fftw_1aedb98da2d6703e068dbe498ba8c36911"></span><em class="property">static</em> <a class="reference internal" href="#_CPPv3N6sirius4fftw4FftwE" title="sirius::fftw::Fftw">Fftw</a> &amp;<code class="descname">Instance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius4fftw4Fftw8InstanceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get <a class="reference internal" href="#classsirius_1_1fftw_1_1Fftw"><span class="std std-ref">Fftw</span></a> singleton instance. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd><a class="reference internal" href="#classsirius_1_1fftw_1_1Fftw"><span class="std std-ref">Fftw</span></a> instance </dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="classsirius_1_1Filter.html" class="btn btn-neutral float-right" title="3.3.2.16. Class Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="classsirius_1_1fftw_1_1Exception.html" class="btn btn-neutral" title="3.3.2.14. Class Exception" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

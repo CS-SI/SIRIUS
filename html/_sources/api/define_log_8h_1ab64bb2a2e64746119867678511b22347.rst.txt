@@ -1,0 +1,13 @@
+.. _exhale_define_log_8h_1ab64bb2a2e64746119867678511b22347:
+
+Define LOG_SET_LEVEL
+====================
+
+- Defined in :ref:`file_src_sirius_utils_log.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LOG_SET_LEVEL

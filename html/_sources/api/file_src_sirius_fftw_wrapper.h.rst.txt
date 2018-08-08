@@ -1,0 +1,67 @@
+
+
+.. _file_src_sirius_fftw_wrapper.h:
+
+File wrapper.h
+==============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/fftw/wrapper.h``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_fftw_wrapper.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gsl/gsl``
+
+- ``sirius/fftw/types.h`` (:ref:`file_src_sirius_fftw_types.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__fftw`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a1b8ad8a7c77659627831c9e80fd8b163`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a7b8520f43c8abff5175a59a877168d80`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a2ee9e70da2bae2bb5b447c3a45cf93c6`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1a99a4725d9fcd74afcffc4d84fbf3a653`
+
+- :ref:`exhale_function_namespacesirius_1_1fftw_1ae96e917988ea3c646222ed9385ac1e7a`
+

@@ -1,0 +1,28 @@
+
+:mod:`conf`
+===========
+
+.. py:module:: conf
+
+
+
+
+
+
+
+
+
+Module Contents
+---------------
+
+
+
+
+
+.. function:: setup(app)
+
+   
+
+
+
+

@@ -1,0 +1,47 @@
+
+.. _program_listing_file_src_sirius_gdal_resampled_output_stream.h:
+
+Program Listing for File resampled_output_stream.h
+==================================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_resampled_output_stream.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+   #define SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+   
+   #include <system_error>
+   
+   #include "sirius/types.h"
+   
+   #include "sirius/gdal/stream_block.h"
+   #include "sirius/gdal/types.h"
+   
+   namespace sirius {
+   namespace gdal {
+   
+   class ResampledOutputStream {
+     public:
+       ResampledOutputStream(const std::string& input_path,
+                             const std::string& output_path,
+                             const ZoomRatio& zoom_ratio);
+   
+       ~ResampledOutputStream() = default;
+       ResampledOutputStream(const ResampledOutputStream&) = delete;
+       ResampledOutputStream& operator=(const ResampledOutputStream&) = delete;
+       ResampledOutputStream(ResampledOutputStream&&) = delete;
+       ResampledOutputStream& operator=(ResampledOutputStream&&) = delete;
+   
+       void Write(StreamBlock&& block, std::error_code& ec);
+   
+     private:
+       gdal::DatasetUPtr output_dataset_;
+       ZoomRatio zoom_ratio_;
+   };
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_

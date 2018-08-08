@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacesirius_1a7a208dcf4b7a30c7c9b415e05b484469:
+
+Typedef sirius::Buffer
+======================
+
+- Defined in :ref:`file_src_sirius_types.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sirius::Buffer

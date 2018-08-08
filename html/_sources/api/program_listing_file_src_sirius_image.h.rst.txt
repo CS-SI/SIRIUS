@@ -1,0 +1,98 @@
+
+.. _program_listing_file_src_sirius_image.h:
+
+Program Listing for File image.h
+================================
+
+- Return to documentation for :ref:`file_src_sirius_image.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_IMAGE_H_
+   #define SIRIUS_IMAGE_H_
+   
+   #include <cassert>
+   
+   #include "sirius/types.h"
+   
+   namespace sirius {
+   
+   enum class PaddingType {
+       kZeroPadding = 0,   
+       kMirrorPadding = 1, 
+   };
+   
+   struct Padding {
+       Padding() = default;
+       Padding(int top, int bottom, int left, int right,
+               PaddingType type = PaddingType::kMirrorPadding);
+   
+       ~Padding() = default;
+       Padding(const Padding&) = default;
+       Padding& operator=(const Padding&) = default;
+       Padding(Padding&&) = default;
+       Padding& operator=(Padding&&) = default;
+   
+       int top{0};
+       int bottom{0};
+       int left{0};
+       int right{0};
+   
+       bool IsEmpty() const {
+           return (top == 0 && bottom == 0 && left == 0 && right == 0);
+       }
+   
+       PaddingType type{PaddingType::kMirrorPadding};
+   };
+   
+   class Image {
+     public:
+       Image() = default;
+   
+       explicit Image(const Size& size);
+   
+       Image(const Size& size, Buffer&& buffer);
+   
+       ~Image() = default;
+   
+       Image(const Image&) = default;
+       Image& operator=(const Image&) = default;
+       Image(Image&&);
+       Image& operator=(Image&&);
+   
+       int CellCount() const { return size.CellCount(); }
+   
+       Buffer::value_type Get(int row, int col) const {
+           assert(row < size.row && col < size.col);
+   
+           return data[row * size.col + col];
+       }
+   
+       void Set(int row, int col, Buffer::value_type val) {
+           assert(row < size.row && col < size.col);
+   
+           data[row * size.col + col] = val;
+       }
+   
+       bool IsLoaded() const {
+           return size.row != 0 && size.col != 0 &&
+                  data.size() >= static_cast<std::size_t>(CellCount());
+       }
+   
+       Image CreatePaddedImage(const Padding& padding) const;
+   
+       Image CreateZeroPaddedImage(const Padding& zero_padding) const;
+   
+       Image CreateMirrorPaddedImage(const Padding& mirror_padding) const;
+   
+       void CreateEvenImage();
+   
+     public:
+       Size size{0, 0};
+       Buffer data;
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_IMAGE_H_

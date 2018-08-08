@@ -1,0 +1,71 @@
+
+
+.. _file_src_sirius_i_frequency_resampler.h:
+
+File i_frequency_resampler.h
+============================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/i_frequency_resampler.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_i_frequency_resampler.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``memory``
+
+- ``sirius/filter.h`` (:ref:`file_src_sirius_filter.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_frequency_resampler_factory.h`
+
+- :ref:`file_src_sirius_image_streamer.h`
+
+- :ref:`file_src_sirius_resampler_frequency_resampler.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1IFrequencyResampler`
+

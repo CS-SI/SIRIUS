@@ -1,0 +1,30 @@
+
+.. _program_listing_file_src_sirius_gdal_debug.h:
+
+Program Listing for File debug.h
+================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_debug.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_DEBUG_H_
+   #define SIRIUS_GDAL_DEBUG_H_
+   
+   #include <string>
+   
+   #include <fftw3.h>
+   
+   #include "sirius/types.h"
+   
+   namespace sirius {
+   namespace gdal {
+   
+   void SaveFFTAsImage(const fftw_complex* fft, const Size& image_size,
+                       const std::string& output_filepath);
+   
+   }  // gdal
+   }  // sirius
+   
+   #endif  // SIRIUS_GDAL_DEBUG_H_

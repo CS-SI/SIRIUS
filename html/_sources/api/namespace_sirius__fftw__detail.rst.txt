@@ -1,0 +1,24 @@
+
+.. _namespace_sirius__fftw__detail:
+
+Namespace sirius::fftw::detail
+==============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1ComplexDeleter`
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1PlanDeleter`
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1RealDeleter`

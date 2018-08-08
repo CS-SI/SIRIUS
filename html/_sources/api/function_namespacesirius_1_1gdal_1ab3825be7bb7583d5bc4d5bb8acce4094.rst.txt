@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1gdal_1ab3825be7bb7583d5bc4d5bb8acce4094:
+
+Function make_error_code
+========================
+
+- Defined in :ref:`file_src_sirius_gdal_error_code.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::gdal::make_error_code

@@ -1,0 +1,78 @@
+
+
+.. _file_src_sirius_fftw_fftw.h:
+
+File fftw.h
+===========
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/fftw/fftw.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_fftw_fftw.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``map``
+
+- ``memory``
+
+- ``sirius/fftw/types.h`` (:ref:`file_src_sirius_fftw_types.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+- ``sirius/utils/lru_cache.h`` (:ref:`file_src_sirius_utils_lru_cache.h`)
+
+- ``type_traits``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__fftw`
+
+- :ref:`namespace_sirius__fftw__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1PlanDeleter`
+
+- :ref:`exhale_class_classsirius_1_1fftw_1_1Fftw`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1abe140e10fbcd3c65f459b6ca820d95ff`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1a528a0bb4c70fb7362b679e00cb441371`
+

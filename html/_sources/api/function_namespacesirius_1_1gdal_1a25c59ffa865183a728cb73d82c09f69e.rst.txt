@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1gdal_1a25c59ffa865183a728cb73d82c09f69e:
+
+Function SaveFFTAsImage
+=======================
+
+- Defined in :ref:`file_src_sirius_gdal_debug.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::gdal::SaveFFTAsImage

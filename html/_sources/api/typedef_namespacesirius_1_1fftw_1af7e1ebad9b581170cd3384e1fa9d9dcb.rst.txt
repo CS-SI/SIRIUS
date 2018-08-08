@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacesirius_1_1fftw_1af7e1ebad9b581170cd3384e1fa9d9dcb:
+
+Typedef sirius::fftw::ComplexUPtr
+=================================
+
+- Defined in :ref:`file_src_sirius_fftw_types.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sirius::fftw::ComplexUPtr

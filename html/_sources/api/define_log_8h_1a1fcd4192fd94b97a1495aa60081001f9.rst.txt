@@ -1,0 +1,13 @@
+.. _exhale_define_log_8h_1a1fcd4192fd94b97a1495aa60081001f9:
+
+Define LOG
+==========
+
+- Defined in :ref:`file_src_sirius_utils_log.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LOG

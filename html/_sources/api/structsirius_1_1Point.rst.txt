@@ -1,0 +1,16 @@
+.. _exhale_struct_structsirius_1_1Point:
+
+Struct Point
+============
+
+- Defined in :ref:`file_src_sirius_types.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sirius::Point
+   :members:
+   :protected-members:
+   :undoc-members:

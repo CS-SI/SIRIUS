@@ -1,0 +1,95 @@
+
+.. _program_listing_file_src_sirius_utils_lru_cache.h:
+
+Program Listing for File lru_cache.h
+====================================
+
+- Return to documentation for :ref:`file_src_sirius_utils_lru_cache.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_UTILS_LRU_CACHE_H_
+   #define SIRIUS_UTILS_LRU_CACHE_H_
+   
+   #include <list>
+   #include <map>
+   #include <mutex>
+   
+   #include "sirius/utils/log.h"
+   
+   namespace sirius {
+   namespace utils {
+   
+   template <typename Key, typename Value, std::size_t CacheSize = 5>
+   class LRUCache {
+     public:
+       LRUCache() = default;
+       ~LRUCache() = default;
+   
+       // non copyable
+       LRUCache(const LRUCache&) = delete;
+       LRUCache& operator=(const LRUCache&) = delete;
+       // non moveable
+       LRUCache(LRUCache&&) = delete;
+       LRUCache& operator=(LRUCache&&) = delete;
+   
+       Value Get(const Key& key) {
+           std::lock_guard<std::mutex> lock(cache_mutex_);
+           if (elements_.count(key) > 0) {
+               ordered_keys_.remove(key);
+               ordered_keys_.push_front(key);
+               return elements_[key];
+           }
+           return {};
+       }
+   
+       void Insert(const Key& key, Value element) {
+           std::lock_guard<std::mutex> lock(cache_mutex_);
+           if (elements_.count(key) > 0) {
+               // entry already in cache, remove it
+               ordered_keys_.remove(key);
+               elements_.erase(key);
+           }
+   
+           // insert (key, value) in cache
+           ordered_keys_.push_front(key);
+           elements_[key] = element;
+   
+           if (elements_.size() > CacheSize) {
+               // too many entries, remove the last recently used value
+               auto lru_key = ordered_keys_.back();
+               ordered_keys_.pop_back();
+               elements_.erase(lru_key);
+           }
+       }
+   
+       void Remove(const Key& key) {
+           std::lock_guard<std::mutex> lock(cache_mutex_);
+           if (elements_.count(key) == 0) {
+               return;
+           }
+           ordered_keys_.remove(key);
+           elements_.erase(key);
+       }
+   
+       void Clear() {
+           std::lock_guard<std::mutex> lock(cache_mutex_);
+           ordered_keys_.clear();
+           elements_.clear();
+       }
+   
+       bool Contains(const Key& key) const { return elements_.count(key) > 0; }
+   
+       std::size_t Size() { return elements_.size(); }
+   
+     private:
+       std::mutex cache_mutex_;
+       std::list<Key> ordered_keys_;
+       std::map<Key, Value> elements_;
+   };
+   
+   }  // namespace utils
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_UTILS_LRU_CACHE_H_

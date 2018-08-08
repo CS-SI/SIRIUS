@@ -1,0 +1,96 @@
+
+.. _namespace_sirius:
+
+Namespace sirius
+================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+Copyright (C) 2018 CS - Systemes d'Information (CS-SI)
+This file is part of Sirius https://github.com/CS-SI/SIRIUS
+
+Sirius is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Sirius is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with Sirius. If not, see https://www.gnu.org/licenses/.
+Copyright (C) 2018 CS - Systeme d'Information (CS-SI)
+This file is part of Sirius https://github.com/CS-SI/SIRIUS
+
+Sirius is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Sirius is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with Sirius. If not, see https://www.gnu.org/licenses/. 
+ 
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius__fftw`
+
+- :ref:`namespace_sirius__gdal`
+
+- :ref:`namespace_sirius__resampler`
+
+- :ref:`namespace_sirius__utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1FilterMetadata`
+
+- :ref:`exhale_struct_structsirius_1_1Padding`
+
+- :ref:`exhale_struct_structsirius_1_1Point`
+
+- :ref:`exhale_struct_structsirius_1_1Size`
+
+- :ref:`exhale_class_classsirius_1_1Exception`
+
+- :ref:`exhale_class_classsirius_1_1Filter`
+
+- :ref:`exhale_class_classsirius_1_1FrequencyResamplerFactory`
+
+- :ref:`exhale_class_classsirius_1_1IFrequencyResampler`
+
+- :ref:`exhale_class_classsirius_1_1Image`
+
+- :ref:`exhale_class_classsirius_1_1ImageStreamer`
+
+- :ref:`exhale_class_classsirius_1_1ZoomRatio`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacesirius_1a4b0340354d296956cec5465a526ec760`
+
+- :ref:`exhale_enum_namespacesirius_1a4c39db7e9f5d38adb6bc9c6d1980e1d7`
+
+- :ref:`exhale_enum_namespacesirius_1a69c9540ee854b23e907bb94930ad5b67`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1a7a208dcf4b7a30c7c9b415e05b484469`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacesirius_1afc32d06b7d27bdb2ec65a7c6b0aeec06`

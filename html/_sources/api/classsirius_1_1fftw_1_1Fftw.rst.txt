@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1fftw_1_1Fftw:
+
+Class Fftw
+==========
+
+- Defined in :ref:`file_src_sirius_fftw_fftw.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::fftw::Fftw
+   :members:
+   :protected-members:
+   :undoc-members:

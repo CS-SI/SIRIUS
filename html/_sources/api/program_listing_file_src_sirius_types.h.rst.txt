@@ -1,0 +1,121 @@
+
+.. _program_listing_file_src_sirius_types.h:
+
+Program Listing for File types.h
+================================
+
+- Return to documentation for :ref:`file_src_sirius_types.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_TYPES_H_
+   #define SIRIUS_TYPES_H_
+   
+   #include <cmath>
+   
+   #include <array>
+   #include <string>
+   #include <vector>
+   
+   namespace sirius {
+   
+   using Buffer = std::vector<double>;
+   
+   struct Size {
+       Size() = default;
+   
+       Size(int row, int col);
+       Size(const std::array<int, 2>& size);
+   
+       ~Size() = default;
+       Size(const Size&) = default;
+       Size& operator=(const Size&) = default;
+       Size(Size&&) = default;
+       Size& operator=(Size&&) = default;
+   
+       bool operator<(const Size& rhs) const {
+           return (row < rhs.row) || ((row == rhs.row) && (col < rhs.col));
+       }
+   
+       bool operator==(const Size& rhs) const {
+           return row == rhs.row && col == rhs.col;
+       }
+   
+       Size operator*(int scale) const {
+           Size result(*this);
+           result.row *= scale;
+           result.col *= scale;
+           return result;
+       }
+   
+       Size operator*(double scale) const {
+           Size result(*this);
+           result.row = std::ceil(result.row * scale);
+           result.col = std::ceil(result.col * scale);
+           return result;
+       }
+   
+       Size& operator*=(int scale) {
+           *this = *this * scale;
+           return *this;
+       }
+   
+       int CellCount() const { return row * col; }
+   
+       int row{0};
+       int col{0};
+   };
+   
+   struct Point {
+       Point() = default;
+   
+       constexpr Point(int x, int y) noexcept : x(x), y(y) {}
+   
+       ~Point() = default;
+       Point(const Point&) = default;
+       Point& operator=(const Point&) = default;
+       Point(Point&&) = default;
+       Point& operator=(Point&&) = default;
+   
+       int x{0};
+       int y{0};
+   };
+   
+   class ZoomRatio {
+     public:
+       static ZoomRatio Create(const std::string& ratio_string);
+   
+       static ZoomRatio Create(int input_resolution, int output_resolution = 1);
+   
+       ZoomRatio() = default;
+   
+       ~ZoomRatio() = default;
+       ZoomRatio(const ZoomRatio&) = default;
+       ZoomRatio(ZoomRatio&&) = default;
+       ZoomRatio& operator=(const ZoomRatio&) = default;
+       ZoomRatio& operator=(ZoomRatio&&) = default;
+   
+       int input_resolution() const { return input_resolution_; }
+   
+       int output_resolution() const { return output_resolution_; }
+   
+       double ratio() const {
+           return input_resolution_ / static_cast<double>(output_resolution_);
+       }
+   
+       bool IsRealZoom() const;
+   
+     private:
+       ZoomRatio(int input_resolution, int output_resolution);
+   
+       void ReduceRatio();
+   
+     private:
+       int input_resolution_{1};
+       int output_resolution_{1};
+   };
+   
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_TYPES_H_

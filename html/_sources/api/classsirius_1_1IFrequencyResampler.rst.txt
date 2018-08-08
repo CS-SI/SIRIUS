@@ -1,0 +1,25 @@
+.. _exhale_class_classsirius_1_1IFrequencyResampler:
+
+Class IFrequencyResampler
+=========================
+
+- Defined in :ref:`file_src_sirius_i_frequency_resampler.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public sirius::resampler::FrequencyResampler< ImageDecompositionPolicy, ZoomStrategy >`` (:ref:`exhale_class_classsirius_1_1resampler_1_1FrequencyResampler`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::IFrequencyResampler
+   :members:
+   :protected-members:
+   :undoc-members:

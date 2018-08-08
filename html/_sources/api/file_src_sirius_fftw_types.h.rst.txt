@@ -1,0 +1,88 @@
+
+
+.. _file_src_sirius_fftw_types.h:
+
+File types.h
+============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/fftw/types.h``)
+----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_fftw_types.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``fftw3.h``
+
+- ``memory``
+
+- ``sirius/utils/log.h`` (:ref:`file_src_sirius_utils_log.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_fftw_fftw.h`
+
+- :ref:`file_src_sirius_fftw_wrapper.h`
+
+- :ref:`file_src_sirius_filter.h`
+
+- :ref:`file_src_sirius_resampler_frequency_resampler.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__fftw`
+
+- :ref:`namespace_sirius__fftw__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1ComplexDeleter`
+
+- :ref:`exhale_struct_structsirius_1_1fftw_1_1detail_1_1RealDeleter`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1aa2b77aa0bafa4e403a28be55cd61a821`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1af7e1ebad9b581170cd3384e1fa9d9dcb`
+
+- :ref:`exhale_typedef_namespacesirius_1_1fftw_1aa4684160df021baa400bcd3ba873b7db`
+

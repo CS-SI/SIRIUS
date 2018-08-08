@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1Image:
+
+Class Image
+===========
+
+- Defined in :ref:`file_src_sirius_image.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::Image
+   :members:
+   :protected-members:
+   :undoc-members:

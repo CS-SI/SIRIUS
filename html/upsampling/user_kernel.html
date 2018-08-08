@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.1.4. User kernel interpolator &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.1.5. Convolution near the data edges" href="tile_convolution.html" />
+    <link rel="prev" title="2.1.3. The discontinuous signals" href="apodized_low-pass_filter.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro_up.html">2.1. Upsampling</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sinc_as_zpd.html">2.1.1. &quot;Fourier Zero Padding&quot;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.html">2.1.2. Tile processing of the large image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apodized_low-pass_filter.html">2.1.3. The discontinuous signals</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2.1.4. User kernel interpolator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#one-can-give-sirius-his-own-low-pass-filter">2.1.4.1. One can give Sirius his own low-pass filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-sirius-filter-must-lie-on-the-spatial-domain">2.1.4.2. The Sirius Filter must lie on the spatial domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-sirius-filter-must-be-sampled-like-the-upsampled-targeted-signal">2.1.4.3. The Sirius Filter must be sampled like the upsampled (targeted) signal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-sirius-filter-is-odd-and-a-gdal-supported-image-format">2.1.4.4. The Sirius Filter is odd and a GDAL supported image format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sirius-auto-shifts-the-filter-before-its-ft-is-computed">2.1.4.5. Sirius auto-shifts the Filter before its FT is computed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sirius-can-normalize-the-filter">2.1.4.6. Sirius can normalize the Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded">2.1.4.7. When Sirius uses a Filter to upsample, the spectrum is periodized instead of zero padded</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tile_convolution.html">2.1.5. Convolution near the data edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="float_upsampling_factor.html">2.1.6. Float upsampling factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../downsampling/intro_down.html">2.2. Downsampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../other/ref.html">2.3. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/index.html">2.4. Associated Python Code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/library_root.html">3. Sirius Developer Zone</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../theoretical_basis.html">2. Theoretical Basis</a> &raquo;</li>
+        
+          <li><a href="intro_up.html">2.1. Upsampling</a> &raquo;</li>
+        
+      <li>2.1.4. User kernel interpolator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/upsampling/user_kernel.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-kernel-interpolator">
+<span id="user-kernel-up"></span><h1>2.1.4. User kernel interpolator<a class="headerlink" href="#user-kernel-interpolator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="one-can-give-sirius-his-own-low-pass-filter">
+<span id="siriusfilterrules"></span><h2>2.1.4.1. One can give Sirius his own low-pass filter<a class="headerlink" href="#one-can-give-sirius-his-own-low-pass-filter" title="Permalink to this headline">¶</a></h2>
+<p>Because many windowing functions are available, Sirius allows one to set his own <em>kernel</em>. The kernel word is emphasized here
+as Sirius will not use this input as a window for the sinc interpolator, but as a kernel itself. In other words, one
+can set the low-pass filter that Sirius will use to cut-off high frequencies.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the resampling factor is 1, then one can give Sirius a filter that is not an interpolation kernel to simply filter his image. This can be used for stray light correction or denoising applications for example.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In what comes next, the low-pass filter will be referenced as the Sirius filter since, as mentioned in the previous note, it actually does not have to always be a low-pass filter.</p>
+</div>
+</div>
+<div class="section" id="the-sirius-filter-must-lie-on-the-spatial-domain">
+<h2>2.1.4.2. The Sirius Filter must lie on the spatial domain<a class="headerlink" href="#the-sirius-filter-must-lie-on-the-spatial-domain" title="Permalink to this headline">¶</a></h2>
+<p>The filter given to Sirius must lie on the spatial domain. Sirius will then compute its Fourier Transform. This way, if the filter
+size is less than the one of the upsample original signal, it is spatially zero padded. The spatial zero padding upsamples the filter
+in frequency domain with a sinc kernel. This leaves Sirius with a low-pass filter having the same number of samples than
+the upsampled Fourier Transform of the original signal. Sirius can then multiply one by the other before going back to
+the spatial domain with an inverse Fourier Tranform.</p>
+</div>
+<div class="section" id="the-sirius-filter-must-be-sampled-like-the-upsampled-targeted-signal">
+<h2>2.1.4.3. The Sirius Filter must be sampled like the upsampled (targeted) signal<a class="headerlink" href="#the-sirius-filter-must-be-sampled-like-the-upsampled-targeted-signal" title="Permalink to this headline">¶</a></h2>
+<p>Because the filter FT is multiplied by the already upsampled signal FT, it has to be sampled accordingly. This means that,
+for a <img class="math" src="../_images/math/683f2dd9129a91d21aaf1c04afa6f78b39d4cb0a.png" alt="z"/> zooming factor, the filter spatial sample rate ought to be defined as <img class="math" src="../_images/math/7a26cd29b815395b630f3c2b33a2fddaf3c03f18.png" alt="T_s = \frac{1}{z}"/>.
+It is easy to see that using a sinc kernel (rectangular low-pass filter) sampled as the original signal rate
+(at integer positions) has no effect at all. Indeed, its FT is a constant function (see figure in <a class="reference internal" href="sinc_as_zpd.html#sinc-zpd"><span class="std std-ref">Sinus cardinal interpolation as “Fourier Zero Padding”</span></a>).</p>
+</div>
+<div class="section" id="the-sirius-filter-is-odd-and-a-gdal-supported-image-format">
+<h2>2.1.4.4. The Sirius Filter is odd and a GDAL supported image format<a class="headerlink" href="#the-sirius-filter-is-odd-and-a-gdal-supported-image-format" title="Permalink to this headline">¶</a></h2>
+<p>As of today, Sirius assumes the filter is a GDAL support image, has an odd number of samples. Plus, it assumes the
+filter center is in the middle of it.</p>
+</div>
+<div class="section" id="sirius-auto-shifts-the-filter-before-its-ft-is-computed">
+<h2>2.1.4.5. Sirius auto-shifts the Filter before its FT is computed<a class="headerlink" href="#sirius-auto-shifts-the-filter-before-its-ft-is-computed" title="Permalink to this headline">¶</a></h2>
+<p>Sirius assumes the user would have built its filter in the most intuitive representation : centered, starting from negative samples
+to positive ones. This is how the sinc and lanczos kernel have been plotted so far in this documentation.</p>
+<p>Sirius needs to shift the user spatial filter before computing its FT. This is because the FFT implementation Sirius
+depends on (the libFFTW from <a class="reference internal" href="../other/ref.html#term-frigo-johnson-2005"><span class="xref std std-term">[Frigo &amp; Johnson, 2005]</span></a>) -and the numpy one too for that matter- gives back an array which first frequency is
+the null frequency, and the following ones are the positive then the negative ones (both in increasing order).</p>
+<p>In the case of a sinc kernel, its FT is a rectangular signal. The following example shows that if the sinc kernel samples
+are not shifted prior to computing its FT, then its FT is not a rectangular signal.
+In other words, knowing the FFT implementation convention, one wishes to obtain a shifted rectangular signal when
+computing the FT of its sinc kernel. Since the inverse FT of a shifted rectangular signal is not a sinc kernel (but a
+shifted sinc kernel), it is a shifted sinc kernel that one has to use in order to get a shifted rectangular signal back from
+FT computation.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">)))</span>
+
+<span class="gp">In [2]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;The convention for samples sequence of FFT implementation.</span><span class="se">\n</span><span class="s1"> The input kernel must be shifted&#39;</span><span class="p">);</span>
+
+<span class="gp">In [3]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">sinc_kernel</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">frequencies</span><span class="p">[::</span><span class="mi">20</span><span class="p">]);</span>
+
+<span class="gp">In [4]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;frequencies&#39;</span><span class="p">);</span>
+
+<span class="gp">In [5]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">sinc_kernel</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;the output of FT computation for a centered sinc kernel&#39;</span><span class="p">);</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">sinc_kernel</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;the output of FT computation for a shifted sinc kernel&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c12d1d0&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/lanczos_kernel.png" src="../_images/lanczos_kernel.png" />
+</div>
+<div class="section" id="sirius-can-normalize-the-filter">
+<h2>2.1.4.6. Sirius can normalize the Filter<a class="headerlink" href="#sirius-can-normalize-the-filter" title="Permalink to this headline">¶</a></h2>
+<p>It is easy to see that the <em>sinc_kernel</em> and the <em>lanczos_kernel</em> defined above do not have a total weights sum equal to 1.
+Indeed, both of them were upsampled by a factor 2 so they can be used to zoom by 2 the original rectangular signal. Hence,
+these kernels are actually a combination of two kernels each. One that is used to convolve for integer positions (original data).
+And a second one used for fractional positions (half-pixel positions). Then, both kernels (integer and fractional positions) do
+have a total weights sum equal to 1.</p>
+<p>When using the upsampled <em>sinc_kernel</em> (or the lanczos one) in frequency domain, this implies an energy gain. To avoid this,
+the <em>sinc_kernel</em> must be normalized as one global kernel, meaning that if it contains two sub-kernels (say for integer
+and half-pixel positions), those sub-kernels weights sum must equal <img class="math" src="../_images/math/582d85cfa35dc89f5ae0a4903ea8eef0da364ab7.png" alt="\frac{1}{2}"/>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># compute the rect FT and zero padds it</span>
+<span class="gp">In [7]: </span><span class="n">fft_rect_zpd</span> <span class="o">=</span> <span class="n">fft1D_zero_pad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="go"># compute the sinc FT (with as many samples as the rect signal for simplicity here</span>
+<span class="gp">In [8]: </span><span class="n">fft_sinc_kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">sinc_kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">sinc_kernel</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="go"># multiply the rect FT by the sinc FT low-pass filter and FT-1</span>
+<span class="gp">In [9]: </span><span class="n">rect_upsampled_by_zpd_and_sinc_lowpassfiltered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft_sinc_kernel</span><span class="o">*</span><span class="n">fft_rect_zpd</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Rect signal upsample with sinc low pass filter. </span><span class="se">\n</span><span class="s1"> The filter must be normalized as one unique kernel.&#39;</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go">Text(0.5,1,&#39;Rect signal upsample with sinc low pass filter. \n The filter must be normalized as one unique kernel.&#39;)</span>
+
+<span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_zpd_and_sinc_lowpassfiltered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero Padding with FT(sinc) low-pass filter&#39;</span><span class="p">)</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c1659d0&gt;]</span>
+
+<span class="go"># same but with a sinc kernel normalized as one unique kernel</span>
+<span class="gp">In [12]: </span><span class="n">sinc_kernel_normalized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sinc_kernel</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">*</span><span class="n">sinc_kernel</span>
+
+<span class="gp">In [13]: </span><span class="n">sinc_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">/=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sinc_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [14]: </span><span class="n">sinc_kernel_normalized</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">/=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sinc_kernel_normalized</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [15]: </span><span class="n">fft_sinc_kernel_normalized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">sinc_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">sinc_kernel_normalized</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="gp">In [16]: </span><span class="n">rect_upsampled_by_zpd_and_sinc_lowpassfiltered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft_sinc_kernel_normalized</span><span class="o">*</span><span class="n">fft_rect_zpd</span><span class="p">)</span>
+
+<span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_zpd_and_sinc_lowpassfiltered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero Padding with FT(sinc) low-pass filter normalized&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c165d90&gt;</span>
+
+<span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">rect_zoomed_by_sinc_conv</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">rect</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;original samples&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/FT_upsample_rect_filter_normalization.png" src="../_images/FT_upsample_rect_filter_normalization.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The normalization is not performed by default. This is because one might have given Sirius a filter that is not for interpolation purpose.</p>
+</div>
+</div>
+<div class="section" id="when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded">
+<h2>2.1.4.7. When Sirius uses a Filter to upsample, the spectrum is periodized instead of zero padded<a class="headerlink" href="#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded" title="Permalink to this headline">¶</a></h2>
+<p>We have shown above how low-pass filtering with a Lanczos FT can improve the upsampling of a discontinuous signal such as
+the rectangular signal. This has been shown with spatial convolution and tested against the use of a sinc kernel.</p>
+<p>However, in frequencial domain, if we are to upsample a signal by a factor 2 with zero padding, and then apply a lanczos low-pass filter
+to it to reduce the ringings on the output upsampled signal, this gives us more oscillations than
+what we had using spatial convolution with the same lanczos kernel :</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">lanczos_kernel_normalized</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">lanczos_kernel</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">*</span><span class="n">lanczos_kernel</span>
+
+<span class="gp">In [20]: </span><span class="n">lanczos_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [21]: </span><span class="n">lanczos_kernel_normalized</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_normalized</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">fft_lanczos_kernel_normalized</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">lanczos_kernel_normalized</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">lanczos_kernel_normalized</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="gp">In [23]: </span><span class="n">rect_upsampled_by_zpd_and_lanczos_lowpassfiltered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft_lanczos_kernel_normalized</span><span class="o">*</span><span class="n">fft_rect_zpd</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Fourier zpd then low-pass filtered : sinc vs lanczos. </span><span class="se">\n</span><span class="s1">The lanczos results is not as good as spatial convolution&#39;</span><span class="p">);</span>
+
+<span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_zpd_and_sinc_lowpassfiltered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero Padding with FT(sinc) low-pass filter normalized&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c210e50&gt;</span>
+
+<span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_zpd_and_lanczos_lowpassfiltered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Zero Padding with FT(lanczos) low-pass filter normalized&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f055c282ed0&gt;</span>
+
+<span class="gp">In [27]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_zoomed_by_lanczos_kernel_conv</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Spatial convolution with lanczos kernel&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/FT_zpd_upsampling_with_filter.png" src="../_images/FT_zpd_upsampling_with_filter.png" />
+<p>This is because when we upsample the input signal FT with zero padding, and multiply it with the lanczos low-pass filter,
+we are actually using a low-pass filter that is the product of sinc low-pass filter and the lanczos one. In spatial domain,
+this is like convolving the input signal (our rectangular discontinuous signal) with a sinc kernel convolved with a lanczos one.
+Knowing this, we can reproduce the same behavior in spatial domain using a kernel that is the convolution of the sinc
+and lanczos ones.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">lanczos_kernel_conv_sinc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">lanczos_kernel</span><span class="p">,</span><span class="n">sinc_kernel</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+
+<span class="gp">In [29]: </span><span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="gp">In [30]: </span><span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">/=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="gp">In [31]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Sinc kernel and Lanczos kernel convolved together.&#39;</span><span class="p">);</span>
+
+<span class="gp">In [32]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lanczos_kernel_conv_sinc</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;The lanczos kernel convolved with a sinc one&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/Sinc_convolved_Lanczos_what_is_done_if_zpd_then_filtering.png" src="../_images/Sinc_convolved_Lanczos_what_is_done_if_zpd_then_filtering.png" />
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">rect_zoomed_by_lanczos_conv_sinc_kernel_conv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [34]: </span><span class="n">rect_zoomed_by_lanczos_conv_sinc_kernel_conv</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">rect_odd</span><span class="p">,</span> <span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="n">rect_odd</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [35]: </span><span class="n">rect_zoomed_by_lanczos_conv_sinc_kernel_conv</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">rect_odd</span><span class="p">,</span> <span class="n">lanczos_kernel_conv_sinc</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="o">+</span><span class="n">rect_odd</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spatial convolution equivalent to the</span><span class="se">\n</span><span class="s1"> Fourier zpd upsampling filtered by FT(lanczos)&#39;</span><span class="p">)</span>
+<span class="gh">Out[36]: </span><span class="go">Text(0.5,1,&#39;Spatial convolution equivalent to the\n Fourier zpd upsampling filtered by FT(lanczos)&#39;)</span>
+
+<span class="gp">In [37]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_zoomed_by_lanczos_kernel_conv</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rect signal spatially upsampled by lanczos kernel&#39;</span><span class="p">)</span>
+<span class="gh">Out[37]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f055c64f150&gt;]</span>
+
+<span class="gp">In [38]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_zoomed_by_lanczos_conv_sinc_kernel_conv</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;same but the lanczos kernel was convolved with a sinc one&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/Rect_convolved_with_sinc_convolved_with_lanczos.png" src="../_images/Rect_convolved_with_sinc_convolved_with_lanczos.png" />
+<p>To overcome this issue, instead of upsampling the signal FT with zero padding, when the user sets his own kernel interpolator,
+Sirius periodizes the spectrum to upsample it.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is important to notice that, if the low-pass filter presents high frequencies waves (and so is not that good of a low-pass filter), then the periodized frequencies located at the waves pick will remain.</p>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">fft_rect_perdiozed</span> <span class="o">=</span> <span class="n">fft1D_periodization</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span> <span class="n">zoom_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [40]: </span><span class="n">rect_upsampled_by_perdiodization_and_sinc_lowpassfilter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft_sinc_kernel_normalized</span> <span class="o">*</span> <span class="n">fft_rect_perdiozed</span><span class="p">)</span>
+
+<span class="gp">In [41]: </span><span class="n">rect_upsampled_by_perdiodization_and_lanczos_lowpassfilter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft_lanczos_kernel_normalized</span> <span class="o">*</span> <span class="n">fft_rect_perdiozed</span><span class="p">)</span>
+
+<span class="gp">In [42]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_perdiodization_and_sinc_lowpassfilter</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rect signal upsampled by periodization with FT(sinc) low-pass filter&#39;</span><span class="p">);</span>
+
+<span class="gp">In [43]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rect_upsampled_by_perdiodization_and_lanczos_lowpassfilter</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rect signal upsampled by periodization with FT(lanczos) low-pass filter&#39;</span><span class="p">);</span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/periodize_and_filter.png" src="../_images/periodize_and_filter.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tile_convolution.html" class="btn btn-neutral float-right" title="2.1.5. Convolution near the data edges" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="apodized_low-pass_filter.html" class="btn btn-neutral" title="2.1.3. The discontinuous signals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>

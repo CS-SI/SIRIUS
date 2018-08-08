@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy:
+
+Class ZeroPaddingZoomStrategy
+=============================
+
+- Defined in :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::resampler::ZeroPaddingZoomStrategy
+   :members:
+   :protected-members:
+   :undoc-members:

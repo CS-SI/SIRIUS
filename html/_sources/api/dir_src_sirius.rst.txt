@@ -1,0 +1,28 @@
+.. _dir_src_sirius:
+
+
+Directory sirius
+================
+
+
+Subdirectories
+--------------
+
+- :ref:`dir_src_sirius_fftw`
+- :ref:`dir_src_sirius_gdal`
+- :ref:`dir_src_sirius_resampler`
+- :ref:`dir_src_sirius_utils`
+
+
+Files
+-----
+
+- :ref:`file_src_sirius_exception.h`
+- :ref:`file_src_sirius_filter.h`
+- :ref:`file_src_sirius_frequency_resampler_factory.h`
+- :ref:`file_src_sirius_i_frequency_resampler.h`
+- :ref:`file_src_sirius_image.h`
+- :ref:`file_src_sirius_image_streamer.h`
+- :ref:`file_src_sirius_types.h`
+
+

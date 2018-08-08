@@ -1,0 +1,95 @@
+
+Class Hierarchy
+---------------
+
+
+.. raw:: html
+
+   <ul class="treeView" id="class-treeView">
+     <li>
+       <ul class="collapsibleList">
+         <li>
+           Namespace <a href="namespace_sirius.html#namespace-sirius">sirius</a>
+           <ul>
+             <li>
+               Namespace <a href="namespace_sirius__fftw.html#namespace-sirius-fftw">sirius::fftw</a>
+               <ul>
+                 <li>
+                   Namespace <a href="namespace_sirius__fftw__detail.html#namespace-sirius-fftw-detail">sirius::fftw::detail</a>
+                   <ul>
+                     <li>Struct <a href="structsirius_1_1fftw_1_1detail_1_1ComplexDeleter.html#exhale-struct-structsirius-1-1fftw-1-1detail-1-1ComplexDeleter">ComplexDeleter</a></li>
+                     <li>Struct <a href="structsirius_1_1fftw_1_1detail_1_1PlanDeleter.html#exhale-struct-structsirius-1-1fftw-1-1detail-1-1PlanDeleter">PlanDeleter</a></li>
+                     <li class="lastChild">Struct <a href="structsirius_1_1fftw_1_1detail_1_1RealDeleter.html#exhale-struct-structsirius-1-1fftw-1-1detail-1-1RealDeleter">RealDeleter</a></li>
+                   </ul>
+                 </li>
+                 <li>Class <a href="classsirius_1_1fftw_1_1Exception.html#exhale-class-classsirius-1-1fftw-1-1Exception">Exception</a></li>
+                 <li>Class <a href="classsirius_1_1fftw_1_1Fftw.html#exhale-class-classsirius-1-1fftw-1-1Fftw">Fftw</a></li>
+                 <li class="lastChild">Enum <a href="enum_namespacesirius_1_1fftw_1a6766819cf988676bdb90db031130216c.html#exhale-enum-namespacesirius-1-1fftw-1a6766819cf988676bdb90db031130216c">ErrorCode</a></li>
+               </ul>
+             </li>
+             <li>
+               Namespace <a href="namespace_sirius__gdal.html#namespace-sirius-gdal">sirius::gdal</a>
+               <ul>
+                 <li>
+                   Namespace <a href="namespace_sirius__gdal__detail.html#namespace-sirius-gdal-detail">sirius::gdal::detail</a>
+                   <ul>
+                     <li class="lastChild">Struct <a href="structsirius_1_1gdal_1_1detail_1_1DatasetDeleter.html#exhale-struct-structsirius-1-1gdal-1-1detail-1-1DatasetDeleter">DatasetDeleter</a></li>
+                   </ul>
+                 </li>
+                 <li>Struct <a href="structsirius_1_1gdal_1_1GeoReference.html#exhale-struct-structsirius-1-1gdal-1-1GeoReference">GeoReference</a></li>
+                 <li>Struct <a href="structsirius_1_1gdal_1_1StreamBlock.html#exhale-struct-structsirius-1-1gdal-1-1StreamBlock">StreamBlock</a></li>
+                 <li>Class <a href="classsirius_1_1gdal_1_1Exception.html#exhale-class-classsirius-1-1gdal-1-1Exception">Exception</a></li>
+                 <li>Class <a href="classsirius_1_1gdal_1_1InputStream.html#exhale-class-classsirius-1-1gdal-1-1InputStream">InputStream</a></li>
+                 <li>Class <a href="classsirius_1_1gdal_1_1ResampledOutputStream.html#exhale-class-classsirius-1-1gdal-1-1ResampledOutputStream">ResampledOutputStream</a></li>
+                 <li class="lastChild">Enum <a href="enum_namespacesirius_1_1gdal_1a1da0cb29feb6b82f87bcc6309a980595.html#exhale-enum-namespacesirius-1-1gdal-1a1da0cb29feb6b82f87bcc6309a980595">ErrorCode</a></li>
+               </ul>
+             </li>
+             <li>
+               Namespace <a href="namespace_sirius__resampler.html#namespace-sirius-resampler">sirius::resampler</a>
+               <ul>
+                 <li>Template Class <a href="classsirius_1_1resampler_1_1FrequencyResampler.html#exhale-class-classsirius-1-1resampler-1-1FrequencyResampler">FrequencyResampler</a></li>
+                 <li>Template Class <a href="classsirius_1_1resampler_1_1ImageDecompositionPeriodicSmoothPolicy.html#exhale-class-classsirius-1-1resampler-1-1ImageDecompositionPeriodicSmoothPolicy">ImageDecompositionPeriodicSmoothPolicy</a></li>
+                 <li>Template Class <a href="classsirius_1_1resampler_1_1ImageDecompositionRegularPolicy.html#exhale-class-classsirius-1-1resampler-1-1ImageDecompositionRegularPolicy">ImageDecompositionRegularPolicy</a></li>
+                 <li>Class <a href="classsirius_1_1resampler_1_1PeriodizationZoomStrategy.html#exhale-class-classsirius-1-1resampler-1-1PeriodizationZoomStrategy">PeriodizationZoomStrategy</a></li>
+                 <li class="lastChild">Class <a href="classsirius_1_1resampler_1_1ZeroPaddingZoomStrategy.html#exhale-class-classsirius-1-1resampler-1-1ZeroPaddingZoomStrategy">ZeroPaddingZoomStrategy</a></li>
+               </ul>
+             </li>
+             <li>
+               Namespace <a href="namespace_sirius__utils.html#namespace-sirius-utils">sirius::utils</a>
+               <ul>
+                 <li>Template Class <a href="classsirius_1_1utils_1_1ConcurrentQueue.html#exhale-class-classsirius-1-1utils-1-1ConcurrentQueue">ConcurrentQueue</a></li>
+                 <li>Template Class <a href="classsirius_1_1utils_1_1LRUCache.html#exhale-class-classsirius-1-1utils-1-1LRUCache">LRUCache</a></li>
+                 <li class="lastChild">Enum <a href="enum_namespacesirius_1_1utils_1a0df84f8f2f7cf3f9e504a938a40ece00.html#exhale-enum-namespacesirius-1-1utils-1a0df84f8f2f7cf3f9e504a938a40ece00">ConcurrentQueueErrorCode</a></li>
+               </ul>
+             </li>
+             <li>Struct <a href="structsirius_1_1FilterMetadata.html#exhale-struct-structsirius-1-1FilterMetadata">FilterMetadata</a></li>
+             <li>Struct <a href="structsirius_1_1Padding.html#exhale-struct-structsirius-1-1Padding">Padding</a></li>
+             <li>Struct <a href="structsirius_1_1Point.html#exhale-struct-structsirius-1-1Point">Point</a></li>
+             <li>Struct <a href="structsirius_1_1Size.html#exhale-struct-structsirius-1-1Size">Size</a></li>
+             <li>Class <a href="classsirius_1_1Exception.html#exhale-class-classsirius-1-1Exception">Exception</a></li>
+             <li>Class <a href="classsirius_1_1Filter.html#exhale-class-classsirius-1-1Filter">Filter</a></li>
+             <li>Class <a href="classsirius_1_1FrequencyResamplerFactory.html#exhale-class-classsirius-1-1FrequencyResamplerFactory">FrequencyResamplerFactory</a></li>
+             <li>Class <a href="classsirius_1_1IFrequencyResampler.html#exhale-class-classsirius-1-1IFrequencyResampler">IFrequencyResampler</a></li>
+             <li>Class <a href="classsirius_1_1Image.html#exhale-class-classsirius-1-1Image">Image</a></li>
+             <li>Class <a href="classsirius_1_1ImageStreamer.html#exhale-class-classsirius-1-1ImageStreamer">ImageStreamer</a></li>
+             <li>Class <a href="classsirius_1_1ZoomRatio.html#exhale-class-classsirius-1-1ZoomRatio">ZoomRatio</a></li>
+             <li>Enum <a href="enum_namespacesirius_1a4b0340354d296956cec5465a526ec760.html#exhale-enum-namespacesirius-1a4b0340354d296956cec5465a526ec760">FrequencyZoomStrategies</a></li>
+             <li>Enum <a href="enum_namespacesirius_1a4c39db7e9f5d38adb6bc9c6d1980e1d7.html#exhale-enum-namespacesirius-1a4c39db7e9f5d38adb6bc9c6d1980e1d7">ImageDecompositionPolicies</a></li>
+             <li class="lastChild">Enum <a href="enum_namespacesirius_1a69c9540ee854b23e907bb94930ad5b67.html#exhale-enum-namespacesirius-1a69c9540ee854b23e907bb94930ad5b67">PaddingType</a></li>
+           </ul>
+         </li>
+         <li class="lastChild">
+           Namespace <a href="namespace_std.html#namespace-std">std</a>
+           <ul>
+             <li>Template <a href="structstd_1_1is__error__code__enum_3_01sirius_1_1gdal_1_1ErrorCode_01_4.html#exhale-struct-structstd-1-1is-error-code-enum-3-01sirius-1-1gdal-1-1ErrorCode-01-4">Struct is_error_code_enum&lt; sirius::gdal::ErrorCode &gt;</a></li>
+             <li class="lastChild">Template <a href="structstd_1_1is__error__code__enum_3_01sirius_1_1utils_1_1ConcurrentQueueErrorCode_01_4.html#exhale-struct-structstd-1-1is-error-code-enum-3-01sirius-1-1utils-1-1ConcurrentQueueErrorCode-01-4">Struct is_error_code_enum&lt; sirius::utils::ConcurrentQueueErrorCode &gt;</a></li>
+           </ul>
+         </li>
+
+       </ul>
+     </li><!-- only tree view element -->
+   </ul><!-- /treeView class-treeView -->
+
+.. end raw html for treeView
+
+

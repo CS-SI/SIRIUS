@@ -1,0 +1,46 @@
+
+.. _program_listing_file_src_sirius_gdal_exception.h:
+
+Program Listing for File exception.h
+====================================
+
+- Return to documentation for :ref:`file_src_sirius_gdal_exception.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_GDAL_EXCEPTION_H_
+   #define SIRIUS_GDAL_EXCEPTION_H_
+   
+   #include <string>
+   
+   #include <cpl_error.h>
+   
+   #include <sirius/exception.h>
+   
+   namespace sirius {
+   namespace gdal {
+   
+   class Exception : public sirius::Exception {
+     public:
+       Exception();
+   
+       Exception(CPLErr level, CPLErrorNum code);
+   
+       Exception(const Exception&) = default;
+       Exception& operator=(const Exception&) = default;
+       Exception(Exception&&) = default;
+       Exception& operator=(Exception&&) = default;
+   
+       const char* what() const noexcept override;
+   
+     private:
+       ::CPLErr err_level_;
+       ::CPLErrorNum err_code_;
+       std::string default_err_msg_;
+   };
+   
+   }  // namespace gdal
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_GDAL_EXCEPTION_H_

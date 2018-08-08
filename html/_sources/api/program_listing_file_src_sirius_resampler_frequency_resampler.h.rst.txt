@@ -1,0 +1,58 @@
+
+.. _program_listing_file_src_sirius_resampler_frequency_resampler.h:
+
+Program Listing for File frequency_resampler.h
+==============================================
+
+- Return to documentation for :ref:`file_src_sirius_resampler_frequency_resampler.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_
+   #define SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_
+   
+   #include "sirius/i_frequency_resampler.h"
+   #include "sirius/image.h"
+   
+   #include "sirius/fftw/types.h"
+   
+   namespace sirius {
+   namespace resampler {
+   
+   template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
+   class FrequencyResampler final
+         : public IFrequencyResampler,
+           private ImageDecompositionPolicy<ZoomStrategy> {
+     public:
+       FrequencyResampler() = default;
+   
+       // copyable
+       FrequencyResampler(const FrequencyResampler&) = default;
+       FrequencyResampler& operator=(const FrequencyResampler&) = default;
+       // moveable
+       FrequencyResampler(FrequencyResampler&&) = default;
+       FrequencyResampler& operator=(FrequencyResampler&&) = default;
+   
+       ~FrequencyResampler() override = default;
+   
+       // IFrequencyResampler interface
+       Image Compute(const ZoomRatio& ratio, const Image& input,
+                     const Padding& image_padding,
+                     const Filter& filter = {}) const override;
+   
+     private:
+       Image UnpadImage(const ZoomRatio& zoom_ratio, const Image& original_image,
+                        const Image& zoomed_image, const Padding& image_padding,
+                        const Filter& filter) const;
+   
+       Image DecimateImage(const Image& zoomed_image,
+                           const ZoomRatio& zoom_ratio) const;
+   };
+   
+   }  // namespace resampler
+   }  // namespace sirius
+   
+   #include "sirius/resampler/frequency_resampler.txx"
+   
+   #endif  // SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_H_

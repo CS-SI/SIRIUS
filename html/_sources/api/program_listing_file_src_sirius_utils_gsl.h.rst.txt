@@ -1,0 +1,29 @@
+
+.. _program_listing_file_src_sirius_utils_gsl.h:
+
+Program Listing for File gsl.h
+==============================
+
+- Return to documentation for :ref:`file_src_sirius_utils_gsl.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_UTILS_GSL_H_
+   #define SIRIUS_UTILS_GSL_H_
+   
+   #include <gsl/gsl>
+   
+   namespace sirius {
+   namespace utils {
+   
+   template <typename SmartPtr>
+   auto MakeSmartPtrArraySpan(const SmartPtr& smart_ptr, const Size& size) {
+       return gsl::span<typename SmartPtr::element_type>(smart_ptr.get(),
+                                                         size.CellCount());
+   }
+   
+   }  // namespace utils
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_UTILS_GSL_H_

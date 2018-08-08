@@ -1,0 +1,15 @@
+.. _dir_src_sirius_resampler_zoom_strategy:
+
+
+Directory strategy
+==================
+
+
+
+Files
+-----
+
+- :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+- :ref:`file_src_sirius_resampler_zoom_strategy_zero_padding_strategy.h`
+
+

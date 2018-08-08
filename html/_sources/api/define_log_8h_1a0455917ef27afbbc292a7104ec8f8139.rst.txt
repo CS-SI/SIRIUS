@@ -1,0 +1,13 @@
+.. _exhale_define_log_8h_1a0455917ef27afbbc292a7104ec8f8139:
+
+Define LOG_SET_LEVEL_ENUM
+=========================
+
+- Defined in :ref:`file_src_sirius_utils_log.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LOG_SET_LEVEL_ENUM

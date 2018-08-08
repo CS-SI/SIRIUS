@@ -1,0 +1,33 @@
+
+.. _program_listing_file_src_sirius_resampler_image_decomposition_regular_policy.h:
+
+Program Listing for File regular_policy.h
+=========================================
+
+- Return to documentation for :ref:`file_src_sirius_resampler_image_decomposition_regular_policy.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+   #define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+   
+   #include "sirius/filter.h"
+   #include "sirius/image.h"
+   
+   namespace sirius {
+   namespace resampler {
+   
+   template <class ZoomStrategy>
+   class ImageDecompositionRegularPolicy : private ZoomStrategy {
+     public:
+       Image DecomposeAndZoom(int zoom, const Image& padded_image,
+                              const Filter& filter) const;
+   };
+   
+   }  // namespace resampler
+   }  // namespace sirius
+   
+   #include "sirius/resampler/image_decomposition/regular_policy.txx"
+   
+   #endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_

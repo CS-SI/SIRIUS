@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1a322dd3f36b534dbeebd8b4ed2054b8d1:
+
+Function FFTShift2DUncentered
+=============================
+
+- Defined in :ref:`file_src_sirius_utils_numeric.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::FFTShift2DUncentered

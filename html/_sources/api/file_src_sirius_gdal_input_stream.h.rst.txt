@@ -1,0 +1,67 @@
+
+
+.. _file_src_sirius_gdal_input_stream.h:
+
+File input_stream.h
+===================
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/gdal/input_stream.h``)
+-----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_gdal_input_stream.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``sirius/gdal/stream_block.h`` (:ref:`file_src_sirius_gdal_stream_block.h`)
+
+- ``sirius/gdal/types.h`` (:ref:`file_src_sirius_gdal_types.h`)
+
+- ``sirius/image.h`` (:ref:`file_src_sirius_image.h`)
+
+- ``sirius/types.h`` (:ref:`file_src_sirius_types.h`)
+
+- ``system_error``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_image_streamer.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__gdal`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsirius_1_1gdal_1_1InputStream`
+

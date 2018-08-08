@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1utils_1_1ConcurrentQueue:
+
+Template Class ConcurrentQueue
+==============================
+
+- Defined in :ref:`file_src_sirius_utils_concurrent_queue.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::utils::ConcurrentQueue
+   :members:
+   :protected-members:
+   :undoc-members:

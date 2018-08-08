@@ -1,0 +1,16 @@
+.. _exhale_class_classsirius_1_1gdal_1_1ResampledOutputStream:
+
+Class ResampledOutputStream
+===========================
+
+- Defined in :ref:`file_src_sirius_gdal_resampled_output_stream.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sirius::gdal::ResampledOutputStream
+   :members:
+   :protected-members:
+   :undoc-members:

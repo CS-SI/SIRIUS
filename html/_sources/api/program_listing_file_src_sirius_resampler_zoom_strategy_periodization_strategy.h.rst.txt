@@ -1,0 +1,34 @@
+
+.. _program_listing_file_src_sirius_resampler_zoom_strategy_periodization_strategy.h:
+
+Program Listing for File periodization_strategy.h
+=================================================
+
+- Return to documentation for :ref:`file_src_sirius_resampler_zoom_strategy_periodization_strategy.h`
+
+.. code-block:: cpp
+
+   
+   #ifndef SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+   #define SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+   
+   #include "sirius/fftw/types.h"
+   #include "sirius/filter.h"
+   #include "sirius/image.h"
+   
+   namespace sirius {
+   namespace resampler {
+   
+   class PeriodizationZoomStrategy {
+     public:
+       Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
+   
+     private:
+       fftw::ComplexUPtr PeriodizeFFT(int zoom, const Image& image,
+                                      fftw::ComplexUPtr image_fft) const;
+   };
+   
+   }  // namespace resampler
+   }  // namespace sirius
+   
+   #endif  // SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_

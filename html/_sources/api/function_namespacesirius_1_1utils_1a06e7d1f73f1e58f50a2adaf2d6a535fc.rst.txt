@@ -1,0 +1,13 @@
+.. _exhale_function_namespacesirius_1_1utils_1a06e7d1f73f1e58f50a2adaf2d6a535fc:
+
+Function MakeSmartPtrArraySpan
+==============================
+
+- Defined in :ref:`file_src_sirius_utils_gsl.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sirius::utils::MakeSmartPtrArraySpan

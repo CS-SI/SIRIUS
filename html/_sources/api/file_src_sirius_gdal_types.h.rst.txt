@@ -1,0 +1,78 @@
+
+
+.. _file_src_sirius_gdal_types.h:
+
+File types.h
+============
+
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``src/sirius/gdal/types.h``)
+----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_src_sirius_gdal_types.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gdal.h``
+
+- ``gdal_priv.h``
+
+- ``memory``
+
+- ``type_traits``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_src_sirius_gdal_input_stream.h`
+
+- :ref:`file_src_sirius_gdal_resampled_output_stream.h`
+
+- :ref:`file_src_sirius_gdal_wrapper.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sirius`
+
+- :ref:`namespace_sirius__gdal`
+
+- :ref:`namespace_sirius__gdal__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsirius_1_1gdal_1_1detail_1_1DatasetDeleter`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacesirius_1_1gdal_1a7c6967b903d5950a3af5c906b3f2539d`
+

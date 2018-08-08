@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.3.4.7. Function ComputeResampledGeoTransform &mdash; SIRIUS  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/autoapi.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/color_def.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3.4.8. Function CreateDataset" href="function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c.html" />
+    <link rel="prev" title="3.3.4.6. Function ComputeResampledGeoReference" href="function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../Sirius.html" class="icon icon-home"> SIRIUS
+          
+
+          
+            
+            <img src="../_static/logo_sirius.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_manual_caption.html">1. Sirius at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theoretical_basis.html">2. Sirius Theoretical Basis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="library_root.html">3. Sirius Developer Zone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#class-hierarchy">3.1. Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library_root.html#file-hierarchy">3.2. File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="library_root.html#full-api">3.3. Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#namespaces">3.3.1. Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#classes-and-structs">3.3.2. Classes and Structs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#enums">3.3.3. Enums</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="library_root.html#functions">3.3.4. Functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1fftw_1a1b8ad8a7c77659627831c9e80fd8b163.html">3.3.4.1. Function CreateComplex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1fftw_1a7b8520f43c8abff5175a59a877168d80.html">3.3.4.2. Function CreateReal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1fftw_1a99a4725d9fcd74afcffc4d84fbf3a653.html">3.3.4.3. Function FFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1fftw_1a2ee9e70da2bae2bb5b447c3a45cf93c6.html">3.3.4.4. Function FFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1fftw_1ae96e917988ea3c646222ed9385ac1e7a.html">3.3.4.5. Function IFFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57.html">3.3.4.6. Function ComputeResampledGeoReference</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">3.3.4.7. Function ComputeResampledGeoTransform</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c.html">3.3.4.8. Function CreateDataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1ad4e08b52b60a8d69c8ad80718492470f.html">3.3.4.9. Function LoadDataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1a1ed353f63613d1a03eb6fbc5336e1b80.html">3.3.4.10. Function LoadImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1ab3825be7bb7583d5bc4d5bb8acce4094.html">3.3.4.11. Function make_error_code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1a25c59ffa865183a728cb73d82c09f69e.html">3.3.4.12. Function SaveFFTAsImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1gdal_1afba591235fba805ffc0ed495227de685.html">3.3.4.13. Function SaveImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a509dfb8fbfa639ff3fa926c858baafe5.html">3.3.4.14. Function ComputeFFTFreq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1ab67b459b57d1a750d1166165dcef6f8f.html">3.3.4.15. Function CreateMeshgrid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a51e77b12b9d7b578f694c1863a6bb16a.html">3.3.4.16. Function FFTShift2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a322dd3f36b534dbeebd8b4ed2054b8d1.html">3.3.4.17. Function FFTShift2DUncentered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a54d47787bb9af0fff9dbb3d55599931a.html">3.3.4.18. Function Gcd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a328eb9fab0923e0f17fc642644d9f0e1.html">3.3.4.19. Function GenerateDyadicSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a86b379fe387e3f9dbede9742860e0bf1.html">3.3.4.20. Function GenerateZoomCompliantSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a29798ae6a8bebaa1c8e6fc84f201644b.html">3.3.4.21. Function IFFTShift2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a036853ca66896296aff37e5bd6bd0df0.html">3.3.4.22. Function IFFTShift2DUncentered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1aca8b5a6cd2c4306381ff0cb9aa20e98c.html">3.3.4.23. Function make_error_code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1a06e7d1f73f1e58f50a2adaf2d6a535fc.html">3.3.4.24. Function MakeSmartPtrArraySpan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_namespacesirius_1_1utils_1ad39fe90b6fd39cd0f48c5988054e7b5b.html">3.3.4.25. Function SetVerbosityLevel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#variables">3.3.5. Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#defines">3.3.6. Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#typedefs">3.3.7. Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#directories">3.3.8. Directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library_root.html#files">3.3.9. Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Sirius.html">SIRIUS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Sirius.html">Docs</a> &raquo;</li>
+        
+          <li><a href="library_root.html">3. Library API</a> &raquo;</li>
+        
+      <li>3.3.4.7. Function ComputeResampledGeoTransform</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/function_namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="function-computeresampledgeotransform">
+<span id="exhale-function-namespacesirius-1-1gdal-1a78b528522c69d68db0a6d6cd8e48b9a9"></span><h1>3.3.4.7. Function ComputeResampledGeoTransform<a class="headerlink" href="#function-computeresampledgeotransform" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file_src_sirius_gdal_wrapper.h.html#file-src-sirius-gdal-wrapper-h"><span class="std std-ref">File wrapper.h</span></a></li>
+</ul>
+<div class="section" id="function-documentation">
+<h2>3.3.4.7.1. Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="_CPPv3N6sirius4gdal28ComputeResampledGeoTransformEP11GDALDatasetRK9ZoomRatio">
+<span id="_CPPv2N6sirius4gdal28ComputeResampledGeoTransformEP11GDALDatasetRK9ZoomRatio"></span><span id="sirius::gdal::ComputeResampledGeoTransform__GDALDatasetP.ZoomRatioCR"></span><span class="target" id="namespacesirius_1_1gdal_1a78b528522c69d68db0a6d6cd8e48b9a9"></span>std::vector&lt;double&gt; <code class="descclassname">sirius::gdal<code class="descclassname">::</code></code><code class="descname">ComputeResampledGeoTransform</code><span class="sig-paren">(</span>GDALDataset *<em>dataset</em>, <em class="property">const</em> <a class="reference internal" href="classsirius_1_1ZoomRatio.html#_CPPv3N6sirius9ZoomRatioE" title="sirius::ZoomRatio">ZoomRatio</a> &amp;<em>zoom_ratio</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv3N6sirius4gdal28ComputeResampledGeoTransformEP11GDALDatasetRK9ZoomRatio" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compute output image origin and pixel size. </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>new geo transform </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">dataset</span></code>: input dataset </li>
+<li><code class="docutils literal notranslate"><span class="pre">zoom_ratio</span></code>: zoom ratio to be applied </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="function_namespacesirius_1_1gdal_1ad17dad2eac42370e7e2d77512112fa3c.html" class="btn btn-neutral float-right" title="3.3.4.8. Function CreateDataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="function_namespacesirius_1_1gdal_1afef8ffd07191939dec9f7c3448f73a57.html" class="btn btn-neutral" title="3.3.4.6. Function ComputeResampledGeoReference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, CS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/custom_admonition.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+      <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+      <script type="text/javascript" src="../_static/js/custom_admonition.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ffffff;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #076889;
+    }
+  </style>
+
+
+</body>
+</html>
