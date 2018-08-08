@@ -72,10 +72,11 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
     auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
 
     // filters
-    auto dirac_filter =
-          sirius::Filter::Create("./filters/dirac_filter.tiff", zoom_ratio);
-    auto sinc_zoom2_filter =
-          sirius::Filter::Create("./filters/sinc_zoom2_filter.tif", zoom_ratio);
+    auto dirac_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"), zoom_ratio);
+    auto sinc_zoom2_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          zoom_ratio);
 
     // output
     sirius::Image output;
@@ -217,10 +218,11 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
     auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
 
     // filters
-    auto dirac_filter =
-          sirius::Filter::Create("./filters/dirac_filter.tiff", zoom_ratio);
-    auto sinc_zoom2_filter =
-          sirius::Filter::Create("./filters/sinc_zoom2_filter.tif", zoom_ratio);
+    auto dirac_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"), zoom_ratio);
+    auto sinc_zoom2_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          zoom_ratio);
 
     // output
     sirius::Image output;
@@ -482,10 +484,12 @@ TEST_CASE("frequency resampler - example", "[sirius]") {
 
     sirius::Image image = sirius::tests::CreateDummyImage({256, 256});
 
-    auto dirac_filter =
-          sirius::Filter::Create("./filters/dirac_filter.tiff", zoom_ratio_7_4);
-    auto sinc_filter = sirius::Filter::Create("./filters/sinc_zoom2_filter.tif",
-                                              zoom_ratio_2_1);
+    auto dirac_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"),
+          zoom_ratio_7_4);
+    auto sinc_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          zoom_ratio_2_1);
 
     sirius::IFrequencyResampler::UPtr freq_resampler =
           sirius::FrequencyResamplerFactory::Create(

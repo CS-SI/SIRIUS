@@ -42,7 +42,7 @@ find_path(SIRIUS_INCLUDE_DIR
         ${SIRIUS_ROOT}
         ${PC_SIRIUS_INCLUDE_DIRS}
     PATH_SUFFIXES
-        include)
+        include/sirius)
 
 find_library(SIRIUS_LIBRARY
     NAMES
@@ -51,7 +51,7 @@ find_library(SIRIUS_LIBRARY
         ${SIRIUS_ROOT}
         ${PC_SIRIUS_LIBRARIES}
     PATH_SUFFIXES
-        lib)
+        lib/sirius)
 
 set(SIRIUS_LIBRARIES ${SIRIUS_LIBRARY})
 set(SIRIUS_INCLUDE_DIRS ${SIRIUS_INCLUDE_DIR})

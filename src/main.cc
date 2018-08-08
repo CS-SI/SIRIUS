@@ -132,10 +132,9 @@ int main(int argc, const char* argv[]) {
         if (!params.filter_path.empty()) {
             LOG("sirius", info, "filter path: {}", params.filter_path);
             sirius::Point hp(params.hot_point_x, params.hot_point_y);
-
-            filter =
-                  sirius::Filter::Create(params.filter_path, zoom_ratio, hp,
-                                         padding_type, params.filter_normalize);
+            filter = sirius::Filter::Create(
+                  sirius::gdal::LoadImage(params.filter_path), zoom_ratio, hp,
+                  padding_type, params.filter_normalize);
         }
 
         // resampling parameters

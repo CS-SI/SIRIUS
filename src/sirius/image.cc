@@ -26,12 +26,6 @@
 #include <algorithm>
 #include <utility>
 
-#include <gdal.h>
-#include <gdal_priv.h>
-
-#include "sirius/gdal/exception.h"
-#include "sirius/gdal/types.h"
-
 #include "sirius/utils/log.h"
 
 namespace sirius {

@@ -27,7 +27,6 @@
 #include "sirius/fftw/fftw.h"
 #include "sirius/fftw/types.h"
 #include "sirius/fftw/wrapper.h"
-#include "sirius/gdal/wrapper.h"
 
 #include "sirius/exception.h"
 

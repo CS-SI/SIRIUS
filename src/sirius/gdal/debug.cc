@@ -19,14 +19,14 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/utils/debug.h"
+#include "sirius/gdal/debug.h"
 
 #include "sirius/fftw/types.h"
 
 #include "sirius/gdal/wrapper.h"
 
 namespace sirius {
-namespace debug {
+namespace gdal {
 
 #ifdef NDEBUG
 
@@ -60,5 +60,5 @@ void SaveFFTAsImage(const fftw_complex*, const Size&, const std::string&) {}
 
 #endif  // NDEBUG
 
-}  // namespace utils
+}  // namespace gdal
 }  // namespace sirius

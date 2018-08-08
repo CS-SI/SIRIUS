@@ -92,6 +92,7 @@ Sirius is using [CMake] to build its libraries and executables.
 * `CMAKE_INSTALL_PREFIX`: directory path where the built artifacts (include directory, library, docs) will be gathered using install target
 * `SIRIUS_VERSION`: set Sirius library version (default is `0.0.0`)
 * `SIRIUS_REVISION_COMMIT`: set Sirius library revision commit (default is `sirius-no-revision-commit`)
+* `ENABLE_SIRIUS_EXECUTABLE`: set to `ON` to enable sirius target executable
 * `ENABLE_CACHE_OPTIMIZATION`: set to `ON` to build with cache optimization for FFTW and Filter
 * `ENABLE_GSL_CONTRACTS`: set to `ON` to build with GSL contracts (e.g. bounds checking). This option should be `OFF` on release mode.
 * `ENABLE_LOGS`: set to `ON` if you want to build Sirius with the logs
@@ -109,6 +110,7 @@ mkdir .build
 cd .build
 cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DCMAKE_INSTALL_PREFIX=/tmp/sirius \
+         -DENABLE_SIRIUS_EXECUTABLE=ON \
          -DENABLE_CACHE_OPTIMIZATION=ON \
          -DENABLE_GSL_CONTRACTS=OFF \
          -DENABLE_LOGS=ON \
@@ -349,15 +351,17 @@ sirius::Image resampled_image = freq_resampler->Compute(
 #include "sirius/image.h"
 #include "sirius/types.h"
 
-// create an image
+// load an image
 sirius::Image image = {...};
+
+// load a filter image
+sirius::Image filter_image = {...};
 
 // configure the zoom ratio
 sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
 // create a filter from an image file
-sirius::Filter filter = sirius::Filter::Create("/path/to/filter/image_7_5.tif",
-                                               zoom_ratio);
+sirius::Filter filter = sirius::Filter::Create(filter_image, zoom_ratio);
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
