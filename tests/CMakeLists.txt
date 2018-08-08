@@ -29,7 +29,10 @@ add_library(unit_test_lib STATIC EXCLUDE_FROM_ALL
     utils.h
     utils.cc)
 target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(unit_test_lib libsirius-static Threads::Threads)
+target_link_libraries(unit_test_lib
+    libsirius-static
+    libsirius-gdal-static
+    Threads::Threads)
 
 file(GLOB unit_tests *_tests.cc)
 

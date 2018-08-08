@@ -30,8 +30,6 @@
 #include "sirius/fftw/fftw.h"
 #include "sirius/fftw/wrapper.h"
 
-#include "sirius/gdal/wrapper.h"
-
 #include "sirius/utils/gsl.h"
 #include "sirius/utils/numeric.h"
 
@@ -46,15 +44,6 @@ Image FrequencyShift(const Image& filter_image, const Point& hot_point,
                      float shift_col, float shift_row);
 
 Image CenterFilterImage(const Image& filter_image, const Point& hot_point);
-
-Filter Filter::Create(const std::string& image_path,
-                      const ZoomRatio& zoom_ratio, const Point& hot_point,
-                      PaddingType padding_type, bool normalize) {
-    // load image
-    auto filter_image = gdal::LoadImage(image_path);
-
-    return Create(filter_image, zoom_ratio, hot_point, padding_type, normalize);
-}
 
 Filter Filter::Create(Image filter_image, const ZoomRatio& zoom_ratio,
                       const Point& hot_point, PaddingType padding_type,

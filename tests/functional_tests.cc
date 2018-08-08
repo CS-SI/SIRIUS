@@ -63,10 +63,12 @@ TEST_CASE("functional tests", "[sirius]") {
     auto half_door_image = sirius::gdal::LoadImage("./input/half-door.tif");
 
     sirius::Filter no_filter;
-    auto dirac_2_1_filter =
-          sirius::Filter::Create("./filters/dirac_filter.tiff", zoom_ratio_2_1);
+    auto dirac_2_1_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"),
+          zoom_ratio_2_1);
     auto sinc_2_1_filter = sirius::Filter::Create(
-          "./filters/sinc_zoom2_filter.tif", zoom_ratio_2_1);
+          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          zoom_ratio_2_1);
 
     auto regular_zero_padding_freq_resampler =
           sirius::FrequencyResamplerFactory::Create(

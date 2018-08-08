@@ -58,22 +58,6 @@ class Filter {
   public:
     /**
      * \brief Filter which is adapted specifically for a particular zoom ratio
-     * \param image_path image path of the filter
-     * \param zoom_ratio ratio on which the filter must be applied
-     * \param hot_point 2D coordinates of the filter's hot point
-     * \param padding_type padding type
-     * \param normalize normalize filter
-     *
-     * \throw sirius::Exception if the filter image cannot be loaded
-     */
-    static Filter Create(const std::string& image_path,
-                         const ZoomRatio& zoom_ratio,
-                         const Point& hot_point = filter_default_hot_point,
-                         PaddingType padding_type = PaddingType::kMirrorPadding,
-                         bool normalize = false);
-
-    /**
-     * \brief Filter which is adapted specifically for a particular zoom ratio
      * \param filter_image image of the filter
      * \param zoom_ratio ratio on which the filter must be applied
      * \param padding_type padding type

@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_UTILS_DEBUG_H_
-#define SIRIUS_UTILS_DEBUG_H_
+#ifndef SIRIUS_GDAL_DEBUG_H_
+#define SIRIUS_GDAL_DEBUG_H_
 
 #include <string>
 
@@ -29,12 +29,12 @@
 #include "sirius/types.h"
 
 namespace sirius {
-namespace debug {
+namespace gdal {
 
 void SaveFFTAsImage(const fftw_complex* fft, const Size& image_size,
                     const std::string& output_filepath);
 
-}  // debug
+}  // gdal
 }  // sirius
 
-#endif  // SIRIUS_UTILS_DEBUG_H_
+#endif  // SIRIUS_GDAL_DEBUG_H_
