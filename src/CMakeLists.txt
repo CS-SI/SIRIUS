@@ -36,6 +36,10 @@ set(LIBSIRIUS_SRC
     sirius/frequency_resampler_factory.h
     sirius/frequency_resampler_factory.cc
 
+    sirius/i_frequency_translator.h
+    sirius/frequency_translator_factory.h
+    sirius/frequency_translator_factory.cc
+
     # image_decomposition
     sirius/image_decomposition/periodic_smooth_policy.h
     sirius/image_decomposition/periodic_smooth_policy.txx
@@ -53,6 +57,16 @@ set(LIBSIRIUS_SRC
     sirius/resampling/upsampling/periodization_upsampling.cc
     sirius/resampling/upsampling/zero_padding_upsampling.h
     sirius/resampling/upsampling/zero_padding_upsampling.cc
+
+    # translation
+    sirius/translation/frequency_translator.h
+    sirius/translation/interpolator.h
+    sirius/translation/interpolator.cc
+    sirius/translation/parameters.h
+    sirius/translation/processor.h
+    sirius/translation/processor.cc
+    sirius/translation/utils.h
+    sirius/translation/utils.cc
 
     # fftw
     sirius/fftw/exception.h
@@ -146,7 +160,13 @@ if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
         sirius/gdal/resampling/input_stream.h
         sirius/gdal/resampling/input_stream.cc
         sirius/gdal/resampling/output_stream.h
-        sirius/gdal/resampling/output_stream.cc)
+        sirius/gdal/resampling/output_stream.cc
+
+        # gdal/translation
+        sirius/gdal/translation/input_stream.h
+        sirius/gdal/translation/input_stream.cc
+        sirius/gdal/translation/output_stream.h
+        sirius/gdal/translation/output_stream.cc)
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL ${LIBSIRIUS_GDAL_SRC})
     target_link_libraries(libsirius-gdal-static gdal libsirius)
 endif ()

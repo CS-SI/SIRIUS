@@ -142,20 +142,24 @@ Standalone tool to resample and filter images in the frequency domain
 Usage:
   ./sirius [OPTION...] input-image output-image
 
-  -h, --help           Show help
-  -v, --verbosity arg  Set verbosity level
-                       (trace,debug,info,warn,err,critical,off) (default: info)
+  -h, --help                    Show help
+  -v, --verbosity arg           Set verbosity level
+                                (trace,debug,info,warn,err,critical,off) (default: info)
+      --no-image-decomposition  Do not decompose the input image (default:
+                                periodic plus smooth image decomposition)
 
  resampling options:
   -r, --resampling-ratio arg    Resampling ratio as input:output, allowed
                                 format: I (equivalent to I:1), I:O (default: 1:1)
-      --no-image-decomposition  Do not decompose the input image (default:
-                                periodic plus smooth image decomposition)
       --upsample-periodization  Force periodization as upsampling algorithm
                                 (default algorithm if a filter is provided). A
                                 filter is required to use this algorithm
       --upsample-zero-padding   Force zero padding as upsampling algorithm
                                 (default algorithm if no filter is provided)
+
+ translation options:
+      --trans-row arg  Translation on y axis (default: 0.0)
+      --trans-col arg  Translation on x axis (default: 0.0)
 
  filter options:
       --filter arg           Path to the filter image to apply to the source
@@ -221,6 +225,13 @@ Upsampling strategies can be forced with the following options:
 *Force periodization upsampling without providing a filter will result in an error.*
 
 More details on algorithms in the [Theoretical Basis documentation][Sirius periodization].
+
+#### Translation options
+
+Translation parameters can be specified with options `--trans-row` and `--trans-col`.
+* `--trans-row ROW_TRANSLATION --trans-col COL_TRANSLATION` where ROW_TRANSLATION and COL_TRANSLATION are floating point translations respectively on y and x axis.
+By default these two options are set to 0.0 so no translation is applied. If these parameters are set up, only the translation will be performed even if zoom parameters are also set.
+Note that any translation will result in a cropped image due to the removing of periodized borders. The cropped size on x and y axis is equivalent to the given parameters.
 
 #### Filter options
 
@@ -293,6 +304,12 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
          data/input/sentinel2_10m.tif /tmp/sentinel2_10m_z1_2.tif
 ```
 
+#### Translation
+The following command line will only apply a translation by 50.0 pixels on x and y axis to the given image.
+```sh
+./sirius --trans-row 50.0 --trans-col 50.0 input/lena.jpg output/lena_shift50.tif
+```
+
 ### Sirius library API
 
 Sirius is designed to be easy to use.
@@ -319,7 +336,7 @@ sirius::resampling::Parameters resampling_params{sirius::ZoomRatio::Create(7, 5)
 //     sirius::FrequencyZoomStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
-            sirius::ImageDecompositionPolicies::kPeriodicSmooth,
+            sirius::image_decomposition::Policies::kPeriodicSmooth,
             sirius::FrequencyZoomStrategies::kZeroPadding);
 
 // compute the resampled image
@@ -356,13 +373,36 @@ sirius::resampling::Parameters resampling_params{zoom_ratio,
 //     sirius::FrequencyZoomStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
-            sirius::ImageDecompositionPolicies::kPeriodicSmooth,
+            sirius::image_decomposition::Policies::kPeriodicSmooth,
             sirius::FrequencyZoomStrategies::kPeriodization);
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
       image, filter->padding(), resampling_params);
 ```
+
+#### Translation example
+
+```cpp
+#include "sirius/frequency_translator_factory.h"
+#include "sirius/image.h"
+#include "sirius/types.h"
+
+// create an image
+sirius::Image image = {...};
+
+// create two shifts
+float row_shift = 20.5;
+float col_shift = 20.5;
+
+sirius::IFrequencyTranslator::UPtr freq_shifter = 
+      sirius::FrequencyTranslatorFactory::Create(
+                  sirius::image_decomposition::Policies::kPeriodicSmooth);
+
+// compute the shifted image
+sirius::Image shifted_image = freq_shifter->Compute(image, {}, {row_shift, col_shift});    
+```
+
 
 #### Thread safety
 
