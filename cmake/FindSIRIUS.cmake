@@ -53,21 +53,38 @@ find_library(SIRIUS_LIBRARY
     PATH_SUFFIXES
         lib/sirius)
 
-set(SIRIUS_LIBRARIES ${SIRIUS_LIBRARY})
+find_library(SIRIUS_STATIC_LIBRARY
+    NAMES
+        libsirius-static
+    HINTS
+        ${SIRIUS_ROOT}
+        ${PC_SIRIUS_LIBRARIES}
+    PATH_SUFFIXES
+        lib/sirius)
+
+list(APPEND SIRIUS_LIBRARIES ${SIRIUS_STATIC_LIBRARY} ${SIRIUS_LIBRARY} )
 set(SIRIUS_INCLUDE_DIRS ${SIRIUS_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 
-find_package_handle_standard_args(SIRIUS DEFAULT_MSG SIRIUS_LIBRARY SIRIUS_INCLUDE_DIR)
+find_package_handle_standard_args(SIRIUS DEFAULT_MSG
+    SIRIUS_LIBRARY
+    SIRIUS_STATIC_LIBRARY
+    SIRIUS_INCLUDE_DIR)
 
-mark_as_advanced(SIRIUS_INCLUDE_DIR SIRIUS_LIBRARY)
+mark_as_advanced(SIRIUS_INCLUDE_DIR SIRIUS_LIBRARY SIRIUS_STATIC_LIBRARY)
 
 if (SIRIUS_FOUND)
-    if(NOT TARGET sirius)
-        add_library(sirius SHARED IMPORTED)
-        set_target_properties(sirius PROPERTIES
+    if(NOT TARGET libsirius)
+        add_library(libsirius SHARED IMPORTED)
+        set_target_properties(libsirius PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS}
-            IMPORTED_LOCATION ${SIRIUS_LIBRARIES})
+            IMPORTED_LOCATION ${SIRIUS_LIBRARY})
+    endif()
+    if(NOT TARGET libsirius-static)
+        add_library(libsirius-static STATIC IMPORTED)
+        set_target_properties(libsirius-static PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${SIRIUS_STATIC_LIBRARY})
     endif()
 endif ()
-

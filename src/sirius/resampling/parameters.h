@@ -19,33 +19,34 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
-#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+#ifndef SIRIUS_RESAMPLING_PARAMETERS_H_
+#define SIRIUS_RESAMPLING_PARAMETERS_H_
 
 #include "sirius/filter.h"
-#include "sirius/image.h"
+#include "sirius/types.h"
 
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
 /**
- * \brief Implementation of <a
- * href="https://hal.archives-ouvertes.fr/file/index/docid/388020/filename/2009-11.pdf">Periodic
- * plus Smooth image decomposition</a>
+ * \brief Data class that represents resampling parameters
+ *
+ * Parameters instance is not responsible of the lifetime of the filter. User
+ * must insure that the filter will remain valid during lifetime of Parameters
+ * instance.
  */
-template <class ZoomStrategy>
-class ImageDecompositionPeriodicSmoothPolicy : private ZoomStrategy {
-  public:
-    Image DecomposeAndZoom(int zoom, const Image& even_image,
-                           const Filter& filter) const;
+struct Parameters {
+    Parameters(const ZoomRatio& i_zoom_ratio)
+        : ratio(i_zoom_ratio), filter(nullptr) {}
 
-  private:
-    Image Interpolate2D(int zoom, const Image& even_image) const;
+    Parameters(const ZoomRatio& i_zoom_ratio, const Filter* i_filter)
+        : ratio(i_zoom_ratio), filter(i_filter) {}
+
+    ZoomRatio ratio;
+    const Filter* filter{nullptr};
 };
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius
 
-#include "sirius/resampler/image_decomposition/periodic_smooth_policy.txx"
-
-#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_H_
+#endif  // SIRIUS_RESAMPLING_PARAMETERS_H_

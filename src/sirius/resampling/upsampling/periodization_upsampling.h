@@ -19,29 +19,32 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
-#define SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+#ifndef SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_
+#define SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_
 
-#include "sirius/fftw/types.h"
-#include "sirius/filter.h"
 #include "sirius/image.h"
 
+#include "sirius/fftw/types.h"
+
+#include "sirius/resampling/parameters.h"
+
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
 /**
- * \brief Implementation of periodization frequency zoom
+ * \brief Implementation of periodization frequency upsampling
  */
-class PeriodizationZoomStrategy {
+class PeriodizationUpsampling {
   public:
-    Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
+    Image Process(const Image& padded_image,
+                  const Parameters& parameters) const;
 
   private:
     fftw::ComplexUPtr PeriodizeFFT(int zoom, const Image& image,
                                    fftw::ComplexUPtr image_fft) const;
 };
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLER_ZOOM_STRATEGY_PERIODIZATION_STRATEGY_H_
+#endif  // SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_

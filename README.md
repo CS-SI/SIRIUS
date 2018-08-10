@@ -170,7 +170,6 @@ Usage:
                              no value is provided)
 
  streaming options:
-      --stream                  Enable stream mode
       --block-width arg         Initial width of a stream block (default:
                                 256)
       --block-height arg        Initial height of a stream block (default:
@@ -181,24 +180,9 @@ Usage:
                                 (8 max) (default: 1)
 ```
 
-#### Processing mode options
+#### Stream mode
 
-##### Regular mode
-
-Regular mode (default mode) will put the whole image in memory and then processed it. **This mode should only be used on small image**.
-
-The following command line will zoom in the image `/path/to/input-file.tif` by 4/3 with the periodic plus smooth image decomposition, apply the filter `/path/to/filter-image-4-3.tif` to the zoomed image and write the result into `/path/to/output-file.tif`.
-
-
-```sh
-./sirius -r 4:3 \
-         --filter /path/to/filter-image-4-3.tif \
-         /path/to/input-file.tif /path/to/output-file.tif
-```
-
-##### Stream mode
-
-Stream mode is activated with the option `--stream`. It will cut the image into multiple blocks of small size (default block size is 256x256). Each block will be processed separately and result blocks will be aggregated to generate the output image. **This mode must be used on large image.**
+Input image will be split into multiple blocks of small size (default block size is 256x256). Each block will be processed separately and result blocks will be aggregated to generate the output image.
 
 Stream mode can be run in mono-threaded context (`--parallel-workers=1`) or in multi-threaded context (`--parallel-workers=N` where N is the requested number of threads which will compute the resampling).
 
@@ -273,10 +257,10 @@ The following command line will zoom in `input/lena.jpg` by 2 using periodic plu
          data/input/lena.jpg /tmp/lena_z2.jpg
 ```
 
-The following command line will zoom in `input/sentinel2_20m.tif` by 2 using stream mode and 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
+The following command line will zoom in `input/sentinel2_20m.tif` by 2 using 8 workers, periodic plus smooth image decomposition, periodization upsampling and filter for upsampling 2.
 
 ```sh
-./sirius --stream --parallel-workers=8 \
+./sirius --parallel-workers=8 \
          -r 2 \
          --filter data/filters/ZOOM_2.tif \
          data/input/sentinel2_20m.tif /tmp/sentinel2_20m_z2.tif
@@ -300,10 +284,10 @@ The following command line will zoom out `input/disparity.png` by 1/2 using peri
          data/input/disparity.png /tmp/disparity_z1_2.jpg
 ```
 
-The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using using stream mode and 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.
+The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 8 workers, periodic plus smooth image decomposition and filter for downsampling 1/2.
 
 ```sh
-./sirius --stream --parallel-workers=8 \
+./sirius --parallel-workers=8 \
          -r 1:2 \
          --filter data/filters/ZOOM_1_2.tif \
          data/input/sentinel2_10m.tif /tmp/sentinel2_10m_z1_2.tif
@@ -320,16 +304,16 @@ The main interface to compute a frequency resampling is `IFrequencyResampler` an
 #### Example without filter
 
 ```cpp
-#include "sirius/filter.h"
 #include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
+#include "sirius/resampling/parameters.h"
 
 // create an image
 sirius::Image image = {...};
 
-// configure the zoom ratio
-sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
+// configure resampling parameters
+sirius::resampling::Parameters resampling_params{sirius::ZoomRatio::Create(7, 5)};
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
@@ -340,7 +324,7 @@ sirius::IFrequencyResampler::UPtr freq_resampler =
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
-      zoom_ratio, image, {}, {});
+      image, {}, resampling_params);
 ```
 
 #### Example with filter
@@ -350,6 +334,7 @@ sirius::Image resampled_image = freq_resampler->Compute(
 #include "sirius/frequency_resampler_factory.h"
 #include "sirius/image.h"
 #include "sirius/types.h"
+#include "sirius/resampling/parameters.h"
 
 // load an image
 sirius::Image image = {...};
@@ -361,7 +346,11 @@ sirius::Image filter_image = {...};
 sirius::ZoomRatio zoom_ratio = sirius::ZoomRatio::Create(7, 5);
 
 // create a filter from an image file
-sirius::Filter filter = sirius::Filter::Create(filter_image, zoom_ratio);
+sirius::Filter::UPtr filter = sirius::Filter::Create(filter_image, zoom_ratio);
+
+// configure resampling parameters
+sirius::resampling::Parameters resampling_params{zoom_ratio,
+                                                 filter.get()};
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
 //     sirius::FrequencyZoomStrategies enums
@@ -372,7 +361,7 @@ sirius::IFrequencyResampler::UPtr freq_resampler =
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
-      zoom_ratio, image, filter.padding(), filter);
+      image, filter->padding(), resampling_params);
 ```
 
 #### Thread safety

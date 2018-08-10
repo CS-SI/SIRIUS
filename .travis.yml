@@ -13,7 +13,7 @@ before_script:
 - export SRCDIR=/data
 - export SIRIUS_BUILD_DIR=.build
 - export INSTALL_DIR=/opt/sirius
-- SIRIUS_VERSION=$(git describe 2> /dev/null); if [ "x${SIRIUS_VERSION}" = "x" ]; then SIRIUS_VERSION="0.0.0"; fi; export SIRIUS_VERSION;
+- SIRIUS_VERSION=$(git describe --tags 2> /dev/null); if [ "x${SIRIUS_VERSION}" = "x" ]; then SIRIUS_VERSION="0.0.0"; fi; export SIRIUS_VERSION;
 
 script:
 - docker run -v $TRAVIS_BUILD_DIR/:/data ldumas/sirius_dockerfile:sirius_build /bin/sh -c "source /opt/rh/devtoolset-6/enable; cd $SRCDIR; .travis/create_cmake_project.sh $SIRIUS_BUILD_DIR $INSTALL_DIR $SIRIUS_VERSION $TRAVIS_COMMIT; cd $SIRIUS_BUILD_DIR; make -j4 build_tests && make -j4 && make install; cd ..; mv $SIRIUS_BUILD_DIR/html doxy_html; mv $SIRIUS_BUILD_DIR/xml doxy_xml; rm -rf $SIRIUS_BUILD_DIR"

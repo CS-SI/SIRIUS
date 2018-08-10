@@ -45,7 +45,7 @@ if(GIT_FOUND AND "${SIRIUS_VERSION}" STREQUAL ""
     # try to extract version and revision commit from Git using git describe
     include(GetGitRevisionDescription)
     get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_REVISION_COMMIT)
-    git_describe(SIRIUS_GIT_DESCRIBE)
+    git_describe(SIRIUS_GIT_DESCRIBE --tags)
     if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
         message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
         set(SIRIUS_VERSION "0.0.0")

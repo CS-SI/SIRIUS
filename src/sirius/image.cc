@@ -30,14 +30,6 @@
 
 namespace sirius {
 
-Padding::Padding(int i_top, int i_bottom, int i_left, int i_right,
-                 PaddingType i_type)
-    : top(i_top),
-      bottom(i_bottom),
-      left(i_left),
-      right(i_right),
-      type(i_type) {}
-
 Image::Image(const Size& size) : size(size), data(size.CellCount(), 0) {}
 
 Image::Image(const Size& size, Buffer&& buf)

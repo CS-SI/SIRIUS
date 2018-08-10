@@ -19,23 +19,21 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
-#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+#ifndef SIRIUS_RESAMPLING_INTERPOLATOR_H_
+#define SIRIUS_RESAMPLING_INTERPOLATOR_H_
 
-#include "sirius/resampler/image_decomposition/regular_policy.h"
+#include "sirius/image.h"
+#include "sirius/resampling/parameters.h"
 
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
-template <class ZoomStrategy>
-Image ImageDecompositionRegularPolicy<ZoomStrategy>::DecomposeAndZoom(
-      int zoom, const Image& padded_image, const Filter& filter) const {
-    // method inherited from ZoomStrategy
-    LOG("regular_decomposition", trace, "zoom image");
-    return this->Zoom(zoom, padded_image, filter);
-}
+class Interpolator {
+  public:
+    Image Interpolate2D(const Image& image, const Parameters& parameters) const;
+};
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+#endif  // SIRIUS_RESAMPLING_INTERPOLATOR_H_

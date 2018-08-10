@@ -19,7 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/resampler/zoom_strategy/zero_padding_strategy.h"
+#include "sirius/resampling/upsampling/zero_padding_upsampling.h"
 
 #include <algorithm>
 
@@ -34,10 +34,12 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
-Image ZeroPaddingZoomStrategy::Zoom(int zoom, const Image& padded_image,
-                                    const Filter& filter) const {
+Image ZeroPaddingUpsampling::Process(const Image& padded_image,
+                                     const Parameters& parameters) const {
+    int zoom = parameters.ratio.input_resolution();
+
     // 1) FFT image
     LOG("zero_padding_zoom", trace, "compute image FFT {}x{}",
         padded_image.size.row, padded_image.size.col);
@@ -45,15 +47,17 @@ Image ZeroPaddingZoomStrategy::Zoom(int zoom, const Image& padded_image,
 
     // 2) zoom FFT
     LOG("zero_padding_zoom", trace, "zero pad FFT");
-    auto zoomed_fft = ZeroPadFFT(zoom, padded_image, std::move(image_fft));
+    auto zoomed_fft = ZeroPadFFT(parameters.ratio.input_resolution(),
+                                 padded_image, std::move(image_fft));
 
     Size zoomed_size{padded_image.size.row * zoom,
                      padded_image.size.col * zoom};
 
-    if (filter.IsLoaded()) {
+    if (parameters.filter) {
         // 3) Filter zoomed FFT
         LOG("zero_padding_zoom", trace, "apply filter");
-        zoomed_fft = filter.Process(zoomed_size, std::move(zoomed_fft));
+        zoomed_fft =
+              parameters.filter->Process(zoomed_size, std::move(zoomed_fft));
     }
 
     // 4) IFFT zoomed FFT
@@ -68,7 +72,7 @@ Image ZeroPaddingZoomStrategy::Zoom(int zoom, const Image& padded_image,
     return zoomed_image;
 }
 
-fftw::ComplexUPtr ZeroPaddingZoomStrategy::ZeroPadFFT(
+fftw::ComplexUPtr ZeroPaddingUpsampling::ZeroPadFFT(
       int zoom, const Image& image, fftw::ComplexUPtr image_fft) const {
     if (zoom <= 1) {
         // nothing to pad: 1:1 zoom
@@ -128,5 +132,5 @@ fftw::ComplexUPtr ZeroPaddingZoomStrategy::ZeroPadFFT(
     return zoomed_fft;
 }
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius

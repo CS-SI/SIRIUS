@@ -19,21 +19,25 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_IMAGE_STREAMER_H_
-#define SIRIUS_IMAGE_STREAMER_H_
+#ifndef SIRIUS_GDAL_IMAGE_STREAMER_H_
+#define SIRIUS_GDAL_IMAGE_STREAMER_H_
 
-#include "sirius/filter.h"
-#include "sirius/i_frequency_resampler.h"
+#include <future>
+#include <vector>
 
 #include "sirius/gdal/input_stream.h"
-#include "sirius/gdal/resampled_output_stream.h"
 #include "sirius/gdal/wrapper.h"
 
+#include "sirius/utils/concurrent_queue.h"
+#include "sirius/utils/log.h"
+
 namespace sirius {
+namespace gdal {
 
 /**
  * \brief Image streamer with monothread or multithread strategies
  */
+template <typename Transformer, typename InputStream, typename OutputStream>
 class ImageStreamer {
   public:
     /**
@@ -42,26 +46,26 @@ class ImageStreamer {
      * \param input_path input image path
      * \param output_path output image path
      * \param block_size stream block size
-     * \param zoom_ratio zoom ratio
-     * \param filter_metadata filter metadata
-     * \param padding_type filter padding type
+     * \param allow_block_resizing allow block resizing
+     * \param parameters transformation parameters
      * \param max_parallel_workers max parallel workers to compute the zoom on
      *        stream blocks
      */
-    ImageStreamer(const std::string& input_path, const std::string& output_path,
-                  const Size& block_size, const ZoomRatio& zoom_ratio,
-                  const FilterMetadata& filter_metadata,
-                  unsigned int max_parallel_workers);
+    ImageStreamer(
+          const std::string& input_path, const std::string& output_path,
+          const Size& block_size, bool allow_block_resizing,
+          const typename Transformer::Parameters& transformer_parameters,
+          unsigned int max_parallel_workers);
 
     /**
      * \brief Stream the input image, compute the resampling and stream
      *   output data
      * \param frequency_resampler requested frequency resampler to apply on
      *   stream block
-     * \param filter filter to apply on the stream block
+     * \param parameters transformer parameters
      */
-    void Stream(const IFrequencyResampler& frequency_resampler,
-                const Filter& filter);
+    void Stream(const Transformer& transformer,
+                const typename Transformer::Parameters& parameters);
 
   private:
     /**
@@ -71,10 +75,11 @@ class ImageStreamer {
      *   file
      *
      * \param frequency_resampler frequency zoom to apply on stream block
-     * \param filter filter to apply on stream block
+     * \param parameters transformer parameters
      */
-    void RunMonothreadStream(const IFrequencyResampler& frequency_resampler,
-                             const Filter& filter);
+    void RunMonothreadStream(
+          const Transformer& transformer,
+          const typename Transformer::Parameters& parameters);
 
     /**
      * \brief Stream image in multithreading mode
@@ -86,19 +91,21 @@ class ImageStreamer {
      *   compute the resampled blocks and feed an output queue
      *
      * \param frequency_resampler frequency zoom to apply on stream block
-     * \param filter filter to apply on stream block
+     * \param parameters transformer parameters
      */
-    void RunMultithreadStream(const IFrequencyResampler& frequency_resampler,
-                              const Filter& filter);
+    void RunMultithreadStream(
+          const Transformer& transformer,
+          const typename Transformer::Parameters& parameters);
 
   private:
     unsigned int max_parallel_workers_;
-    Size block_size_;
-    ZoomRatio zoom_ratio_;
-    gdal::InputStream input_stream_;
-    gdal::ResampledOutputStream output_stream_;
+    InputStream input_stream_;
+    OutputStream output_stream_;
 };
 
+}  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_IMAGE_STREAMER_H_
+#include "sirius/gdal/image_streamer.txx"
+
+#endif  // SIRIUS_GDAL_IMAGE_STREAMER_H_

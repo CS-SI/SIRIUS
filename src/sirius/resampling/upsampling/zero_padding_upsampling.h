@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 CS - Systemes d'Information (CS-SI)
+ * Copyright (C) 2018 CS - Systeme d'Information (CS-SI)
  *
  * This file is part of Sirius
  *
@@ -19,26 +19,32 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_RESAMPLING_PROCESSOR_ZERO_PADDING_PROCESSOR_H_
+#define SIRIUS_RESAMPLING_PROCESSOR_ZERO_PADDING_PROCESSOR_H_
 
 #include "sirius/image.h"
-#include "sirius/types.h"
+
+#include "sirius/fftw/types.h"
+
+#include "sirius/resampling/parameters.h"
 
 namespace sirius {
-namespace tests {
+namespace resampling {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tiff";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+/**
+ * \brief Implementation of zero padding frequency upsampling
+ */
+class ZeroPaddingUpsampling {
+  public:
+    Image Process(const Image& padded_image,
+                  const Parameters& parameters) const;
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
+  private:
+    fftw::ComplexUPtr ZeroPadFFT(int zoom, const Image& image,
+                                 fftw::ComplexUPtr image_fft) const;
+};
 
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_RESAMPLER_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_

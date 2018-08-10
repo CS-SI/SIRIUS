@@ -19,7 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/resampler/zoom_strategy/periodization_strategy.h"
+#include "sirius/resampling/upsampling/periodization_upsampling.h"
 
 #include <algorithm>
 
@@ -33,10 +33,11 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
-Image PeriodizationZoomStrategy::Zoom(int zoom, const Image& padded_image,
-                                      const Filter& filter) const {
+Image PeriodizationUpsampling::Process(const Image& padded_image,
+                                       const Parameters& parameters) const {
+    int zoom = parameters.ratio.input_resolution();
     // 1) FFT image
     LOG("periodization_zoom", trace, "compute image FFT");
     auto fft_image = fftw::FFT(padded_image);
@@ -44,15 +45,17 @@ Image PeriodizationZoomStrategy::Zoom(int zoom, const Image& padded_image,
     fftw::ComplexUPtr zoomed_fft;
     // 2) zoom FFT
     LOG("periodization_zoom", trace, "periodize FFT");
-    zoomed_fft = PeriodizeFFT(zoom, padded_image, std::move(fft_image));
+    zoomed_fft = PeriodizeFFT(parameters.ratio.input_resolution(), padded_image,
+                              std::move(fft_image));
 
     Size zoomed_size{padded_image.size.row * zoom,
                      padded_image.size.col * zoom};
 
-    if (filter.IsLoaded()) {
+    if (parameters.filter) {
         // 3) Filter zoomed FFT
         LOG("periodization_zoom", trace, "apply filter");
-        zoomed_fft = filter.Process(zoomed_size, std::move(zoomed_fft));
+        zoomed_fft =
+              parameters.filter->Process(zoomed_size, std::move(zoomed_fft));
     }
 
     // 4) IFFT zoomed FFT
@@ -67,7 +70,7 @@ Image PeriodizationZoomStrategy::Zoom(int zoom, const Image& padded_image,
     return zoomed_image;
 }
 
-fftw::ComplexUPtr PeriodizationZoomStrategy::PeriodizeFFT(
+fftw::ComplexUPtr PeriodizationUpsampling::PeriodizeFFT(
       int zoom, const Image& image, fftw::ComplexUPtr image_fft) const {
     if (zoom <= 1) {
         // nothing to periodize: 1:1 zoom
@@ -181,5 +184,5 @@ fftw::ComplexUPtr PeriodizationZoomStrategy::PeriodizeFFT(
     return zoomed_fft;
 }
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius

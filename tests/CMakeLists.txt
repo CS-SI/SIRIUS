@@ -31,7 +31,6 @@ add_library(unit_test_lib STATIC EXCLUDE_FROM_ALL
 target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(unit_test_lib
     libsirius-static
-    libsirius-gdal-static
     Threads::Threads)
 
 file(GLOB unit_tests *_tests.cc)
@@ -46,6 +45,7 @@ foreach(unit_test_file ${unit_tests})
     add_executable(${unit_test} EXCLUDE_FROM_ALL ${unit_test_file})
     target_link_libraries(${unit_test}
         libsirius-static
+        libsirius-gdal-static
         unit_test_lib
         unit_test_main)
     add_test(${unit_test} ${unit_test})

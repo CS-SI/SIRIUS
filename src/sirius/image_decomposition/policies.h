@@ -19,26 +19,24 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_
+#define SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_
 
+#include "sirius/filter.h"
 #include "sirius/image.h"
-#include "sirius/types.h"
 
 namespace sirius {
-namespace tests {
+namespace image_decomposition {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tiff";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+/**
+ * \brief Enum of supported image decomposition policies
+ */
+enum class Policies {
+    kRegular = 0,   /**< regular image decomposition */
+    kPeriodicSmooth /**< periodic plus smooth image decomposition */
+};
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
-
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace image_decomposition
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_

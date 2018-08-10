@@ -19,28 +19,26 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
-#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+#ifndef SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+#define SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
 
-#include "sirius/filter.h"
-#include "sirius/image.h"
+#include "sirius/image_decomposition/regular_policy.h"
 
 namespace sirius {
-namespace resampler {
+namespace image_decomposition {
 
-/**
- * \brief Implementation of regular image decomposition
- */
-template <class ZoomStrategy>
-class ImageDecompositionRegularPolicy : private ZoomStrategy {
-  public:
-    Image DecomposeAndZoom(int zoom, const Image& padded_image,
-                           const Filter& filter) const;
-};
+template <typename Transformation, typename ImageProcessor,
+          typename ImageInterpolator>
+Image RegularPolicy<Transformation, ImageProcessor, ImageInterpolator>::
+      DecomposeAndProcess(
+            const Image& padded_image,
+            const typename Transformation::Parameters& parameters) const {
+    // method inherited from ZoomStrategy
+    LOG("regular_decomposition", trace, "process image");
+    return this->Process(padded_image, parameters);
+}
 
-}  // namespace resampler
+}  // namespace image_decomposition
 }  // namespace sirius
 
-#include "sirius/resampler/image_decomposition/regular_policy.txx"
-
-#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+#endif  // SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_

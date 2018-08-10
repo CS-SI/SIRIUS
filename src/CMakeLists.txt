@@ -27,30 +27,32 @@ set(LIBSIRIUS_SRC
     sirius/types.h
     sirius/types.cc
 
-    sirius/image.h
-    sirius/image.cc
     sirius/filter.h
     sirius/filter.cc
+    sirius/image.h
+    sirius/image.cc
 
     sirius/i_frequency_resampler.h
     sirius/frequency_resampler_factory.h
     sirius/frequency_resampler_factory.cc
 
-    # resampler
-    sirius/resampler/frequency_resampler.h
-    sirius/resampler/frequency_resampler.txx
+    # image_decomposition
+    sirius/image_decomposition/periodic_smooth_policy.h
+    sirius/image_decomposition/periodic_smooth_policy.txx
+    sirius/image_decomposition/regular_policy.h
+    sirius/image_decomposition/regular_policy.txx
 
-    # resampler zoom strategies
-    sirius/resampler/zoom_strategy/periodization_strategy.h
-    sirius/resampler/zoom_strategy/periodization_strategy.cc
-    sirius/resampler/zoom_strategy/zero_padding_strategy.h
-    sirius/resampler/zoom_strategy/zero_padding_strategy.cc
+    # resampling
+    sirius/resampling/frequency_resampler.h
+    sirius/resampling/frequency_resampler.txx
+    sirius/resampling/interpolator.h
+    sirius/resampling/interpolator.cc
 
-    # resampler image decomposition policies
-    sirius/resampler/image_decomposition/regular_policy.h
-    sirius/resampler/image_decomposition/regular_policy.txx
-    sirius/resampler/image_decomposition/periodic_smooth_policy.h
-    sirius/resampler/image_decomposition/periodic_smooth_policy.txx
+    # resampling upsampling strategies
+    sirius/resampling/upsampling/periodization_upsampling.h
+    sirius/resampling/upsampling/periodization_upsampling.cc
+    sirius/resampling/upsampling/zero_padding_upsampling.h
+    sirius/resampling/upsampling/zero_padding_upsampling.cc
 
     # fftw
     sirius/fftw/exception.h
@@ -126,33 +128,31 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/gsl/gsl/include/gsl
 if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
     set(LIBSIRIUS_GDAL_SRC
         # gdal
-        sirius/gdal/debug.h
-        sirius/gdal/debug.cc
         sirius/gdal/error_code.h
         sirius/gdal/error_code.cc
         sirius/gdal/exception.h
         sirius/gdal/exception.cc
-        sirius/gdal/stream_block.h
+        sirius/gdal/image_streamer.h
+        sirius/gdal/image_streamer.txx
         sirius/gdal/input_stream.h
         sirius/gdal/input_stream.cc
-        sirius/gdal/resampled_output_stream.h
-        sirius/gdal/resampled_output_stream.cc
+        sirius/gdal/output_stream.h
+        sirius/gdal/output_stream.cc
         sirius/gdal/types.h
         sirius/gdal/wrapper.h
-        sirius/gdal/wrapper.cc)
+        sirius/gdal/wrapper.cc
+
+        # gdal/resampling
+        sirius/gdal/resampling/input_stream.h
+        sirius/gdal/resampling/input_stream.cc
+        sirius/gdal/resampling/output_stream.h
+        sirius/gdal/resampling/output_stream.cc)
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL ${LIBSIRIUS_GDAL_SRC})
     target_link_libraries(libsirius-gdal-static gdal libsirius)
 endif ()
 
 if (ENABLE_SIRIUS_EXECUTABLE)
-    set(SIRIUS_MAIN_SRC
-        # main
-        sirius/image_streamer.h
-        sirius/image_streamer.cc
-
-        main.cc)
-
-    add_executable(sirius ${SIRIUS_MAIN_SRC})
+    add_executable(sirius main.cc)
     target_link_libraries(sirius
         libsirius-static
         libsirius-gdal-static

@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_STREAM_H_
-#define SIRIUS_GDAL_STREAM_H_
+#ifndef SIRIUS_GDAL_STREAM_BLOCK_H_
+#define SIRIUS_GDAL_STREAM_BLOCK_H_
 
 #include "sirius/image.h"
 
@@ -66,4 +66,4 @@ struct StreamBlock {
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_STREAM_H_
+#endif  // SIRIUS_GDAL_STREAM_BLOCK_H_
