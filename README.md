@@ -132,12 +132,12 @@ See also `.travis.yml` and `.travis/create_cmake_project.sh`
 
 ### Sirius standalone tool
 
-Sirius is shipped as a standalone tool that offers filtering and resampling features.
+Sirius is shipped as a standalone tool that offers filtering, translation and resampling features.
 
 ```sh
 $ ./sirius -h
 Sirius X.Y.Z (...)
-Standalone tool to resample and filter images in the frequency domain
+Standalone tool to resample, translate and filter images in the frequency domain
 
 Usage:
   ./sirius [OPTION...] input-image output-image
@@ -305,7 +305,9 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 ```
 
 #### Translation
+
 The following command line will only apply a translation by 50.0 pixels on x and y axis to the given image.
+
 ```sh
 ./sirius --trans-row 50.0 --trans-col 50.0 input/lena.jpg output/lena_shift50.tif
 ```
@@ -314,11 +316,13 @@ The following command line will only apply a translation by 50.0 pixels on x and
 
 Sirius is designed to be easy to use.
 
+#### Resampling
+
 The main interface to compute a frequency resampling is `IFrequencyResampler` and it only requires an image, a zoom ratio and an optional filter.
 
 `IFrequencyResampler` objects are instantiated by the `FrequencyResamplerFactory`.
 
-#### Example without filter
+##### Example without filter
 
 ```cpp
 #include "sirius/frequency_resampler_factory.h"
@@ -333,18 +337,18 @@ sirius::Image image = {...};
 sirius::resampling::Parameters resampling_params{sirius::ZoomRatio::Create(7, 5)};
 
 // compose a frequency resampler from sirius::ImageDecompositionPolicies and
-//     sirius::FrequencyZoomStrategies enums
+//     sirius::FrequencyUpsamplingStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
             sirius::image_decomposition::Policies::kPeriodicSmooth,
-            sirius::FrequencyZoomStrategies::kZeroPadding);
+            sirius::FrequencyUpsamplingStrategies::kZeroPadding);
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
       image, {}, resampling_params);
 ```
 
-#### Example with filter
+##### Example with filter
 
 ```cpp
 #include "sirius/filter.h"
@@ -369,19 +373,31 @@ sirius::Filter::UPtr filter = sirius::Filter::Create(filter_image, zoom_ratio);
 sirius::resampling::Parameters resampling_params{zoom_ratio,
                                                  filter.get()};
 
-// compose a frequency resampler from sirius::ImageDecompositionPolicies and
-//     sirius::FrequencyZoomStrategies enums
+// compose a frequency resampler from sirius::image_decomposition::Policies and
+//     sirius::FrequencyUpsamplingStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
             sirius::image_decomposition::Policies::kPeriodicSmooth,
-            sirius::FrequencyZoomStrategies::kPeriodization);
+            sirius::FrequencyUpsamplingStrategies::kPeriodization);
 
 // compute the resampled image
 sirius::Image resampled_image = freq_resampler->Compute(
       image, filter->padding(), resampling_params);
 ```
 
-#### Translation example
+##### Thread safety
+
+Compute a resampled image with Sirius is thread safe so it is possible to use the same `IFrequencyResampler` object in a multi-threaded context.
+
+Process an image with a `Filter` object is also thread safe so you can reuse the same filter in a multi-threaded context.
+
+#### Translation
+
+The main interface to compute a frequency translation is `IFrequencyTranslator` and it only requires an image and row and col shift values.
+
+`IFrequencyTranslator` objects are instantiated by the `FrequencyTranslatorFactory`.
+
+##### Translation example
 
 ```cpp
 #include "sirius/frequency_translator_factory.h"
@@ -391,24 +407,24 @@ sirius::Image resampled_image = freq_resampler->Compute(
 // create an image
 sirius::Image image = {...};
 
-// create two shifts
-float row_shift = 20.5;
-float col_shift = 20.5;
+// configure tranlation parameters:
+//      shift row by 20.5
+//      shift col by 19.5
+sirius::translation::Parameters translation_parameters{20.5, 19.5};
 
-sirius::IFrequencyTranslator::UPtr freq_shifter = 
+// compose a frequency translator from sirius::image_decomposition::Policies enum
+sirius::IFrequencyTranslator::UPtr freq_translator =
       sirius::FrequencyTranslatorFactory::Create(
                   sirius::image_decomposition::Policies::kPeriodicSmooth);
 
 // compute the shifted image
-sirius::Image shifted_image = freq_shifter->Compute(image, {}, {row_shift, col_shift});    
+sirius::Image translated_image = freq_translator->Compute(
+      image, {}, translation_parameters);
 ```
 
+##### Thread safety
 
-#### Thread safety
-
-Compute a resampled image with Sirius is thread safe so it is possible to use the same `IFrequencyResampler` object in a multi-threaded context.
-
-Process an image with a `Filter` object is also thread safe so you can reuse the same filter in a multi-threaded context.
+Compute a translated image with Sirius is thread safe so it is possible to use the same `IFrequencyTranslator` object in a multi-threaded context.
 
 ## Unit tests
 

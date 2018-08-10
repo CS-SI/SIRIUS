@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLING_PROCESSOR_ZERO_PADDING_PROCESSOR_H_
-#define SIRIUS_RESAMPLING_PROCESSOR_ZERO_PADDING_PROCESSOR_H_
+#ifndef SIRIUS_RESAMPLING_UPSAMPLING_ZERO_PADDING_UPSAMPLING_H_
+#define SIRIUS_RESAMPLING_UPSAMPLING_ZERO_PADDING_UPSAMPLING_H_
 
 #include "sirius/image.h"
 
@@ -47,4 +47,4 @@ class ZeroPaddingUpsampling {
 }  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLER_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
+#endif  // SIRIUS_RESAMPLING_UPSAMPLING_ZERO_PADDING_UPSAMPLING_H_

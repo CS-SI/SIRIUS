@@ -38,7 +38,7 @@ template <typename Transformation, typename ImageProcessor,
 class PeriodicSmoothPolicy : private ImageProcessor, private ImageInterpolator {
   public:
     Image DecomposeAndProcess(
-          const Image& even_image,
+          const Image& image,
           const typename Transformation::Parameters& parameters) const;
 };
 

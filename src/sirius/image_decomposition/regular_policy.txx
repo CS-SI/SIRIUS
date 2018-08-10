@@ -31,11 +31,11 @@ template <typename Transformation, typename ImageProcessor,
           typename ImageInterpolator>
 Image RegularPolicy<Transformation, ImageProcessor, ImageInterpolator>::
       DecomposeAndProcess(
-            const Image& padded_image,
+            const Image& image,
             const typename Transformation::Parameters& parameters) const {
-    // method inherited from ZoomStrategy
+    // method inherited from ImageProcessor
     LOG("regular_decomposition", trace, "process image");
-    return this->Process(padded_image, parameters);
+    return this->Process(image, parameters);
 }
 
 }  // namespace image_decomposition

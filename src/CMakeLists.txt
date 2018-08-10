@@ -60,6 +60,7 @@ set(LIBSIRIUS_SRC
 
     # translation
     sirius/translation/frequency_translator.h
+    sirius/translation/frequency_translator.txx
     sirius/translation/interpolator.h
     sirius/translation/interpolator.cc
     sirius/translation/parameters.h

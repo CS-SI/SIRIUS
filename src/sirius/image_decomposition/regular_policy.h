@@ -36,7 +36,7 @@ template <typename Transformation, typename ImageProcessor,
 class RegularPolicy : private ImageProcessor {
   public:
     Image DecomposeAndProcess(
-          const Image& padded_image,
+          const Image& image,
           const typename Transformation::Parameters& parameters) const;
 };
 

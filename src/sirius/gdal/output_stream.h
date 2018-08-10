@@ -58,4 +58,4 @@ class OutputStream : public IOutputStream {
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+#endif  // SIRIUS_GDAL_OUTPUT_STREAM_H_

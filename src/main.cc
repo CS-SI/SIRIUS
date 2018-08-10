@@ -245,11 +245,12 @@ void StreamTransformation(const CliOptions& options,
 CliOptions GetCliOptions(int argc, const char* argv[]) {
     CliOptions cli_options;
     std::stringstream description;
-    description << "Sirius " << sirius::kVersion << " (" << sirius::kGitCommit
-                << ")" << std::endl
-                << "Standalone tool to resample and filter images in the "
-                   "frequency domain"
-                << std::endl;
+    description
+          << "Sirius " << sirius::kVersion << " (" << sirius::kGitCommit << ")"
+          << std::endl
+          << "Standalone tool to resample, translate and filter images in the "
+             "frequency domain"
+          << std::endl;
     cxxopts::Options options(argv[0], description.str());
     options.positional_help("input-image output-image").show_positional_help();
 

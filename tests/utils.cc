@@ -36,5 +36,20 @@ sirius::Image CreateDummyImage(const sirius::Size& size) {
     return image;
 }
 
+sirius::Image CreateSquaredImage(const sirius::Size& size) {
+    sirius::Image image(size);
+
+    for (int row = 0; row < size.row; ++row) {
+        for (int col = 0; col < size.col; ++col) {
+            if ((row < (size.row / 2) && col < (size.col / 2)) ||
+                (row > (size.row / 2) && col > (size.col / 2))) {
+                image.Set(row, col, 65535);
+            }
+        }
+    }
+
+    return image;
+}
+
 }  // namespace tests
 }  // namespace sirius

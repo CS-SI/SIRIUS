@@ -19,31 +19,22 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_I_OUTPUT_STREAM_H_
-#define SIRIUS_GDAL_I_OUTPUT_STREAM_H_
+#ifndef SIRIUS_FREQUENCY_TRANSLATOR_TXX_
+#define SIRIUS_FREQUENCY_TRANSLATOR_TXX_
 
-#include <system_error>
-
-#include "sirius/types.h"
-
-#include "sirius/gdal/stream_block.h"
+#include "sirius/translation/frequency_translator.h"
 
 namespace sirius {
-namespace gdal {
+namespace translation {
 
-class IOutputStream {
-  public:
-    virtual ~IOutputStream() = default;
+template <template <class, class, class> class ImageDecompositionPolicy>
+Image FrequencyTranslator<ImageDecompositionPolicy>::Compute(
+      const Image& input, const Padding&,
+      const Parameters& translation_parameters) const {
+    return this->DecomposeAndProcess(input, translation_parameters);
+}
 
-    /**
-     * \brief Read a block from the image
-     * \param ec error code if operation failed
-     * \return block read
-     */
-    virtual void Write(StreamBlock&& block, std::error_code& ec) = 0;
-};
-
-}  // namespace gdal
+}  // namespace translation
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_I_OUTPUT_STREAM_H_
+#endif  // SIRIUS_FREQUENCY_TRANSLATOR_TXX_

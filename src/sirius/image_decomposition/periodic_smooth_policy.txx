@@ -141,42 +141,43 @@ Image PeriodicSmoothPolicy<Transformation, ImageProcessor, ImageInterpolator>::
     auto periodic_part_image =
           fftw::IFFT(image.size, std::move(periodic_part_fft));
 
-    // 7) apply zoom on periodic part
+    // 7) apply processor on periodic part
     LOG("periodic_smooth_decomposition", trace, "process periodic part");
-    // method inherited from ZoomStrategy
-    auto zoomed_image = this->Process(periodic_part_image, parameters);
+    // method inherited from ImageProcessor
+    auto processed_image = this->Process(periodic_part_image, parameters);
 
-    // 7) ifft smooth part
+    // 8) ifft smooth part
     LOG("periodic_smooth_decomposition", trace, "smooth part IFFT");
     auto smooth_part_image = fftw::IFFT(image.size, std::move(smooth_part_fft));
 
-    // 8) normalize smooth_part_image
+    // 9) normalize smooth_part_image
     LOG("periodic_smooth_decomposition", trace, "normalize smooth image part");
     int image_cell_count = image.CellCount();
     std::for_each(
           smooth_part_image.data.begin(), smooth_part_image.data.end(),
           [image_cell_count](double& cell) { cell /= image_cell_count; });
 
-    // 9) interpolate 2d smooth part image
+    // 10) interpolate 2d smooth part image
     LOG("periodic_smooth_decomposition", trace,
         "interpolate smooth image part");
+    // method inherited from ImageInterpolator
     auto interpolated_smooth_image =
           this->Interpolate2D(smooth_part_image, parameters);
 
-    // 10) normalize periodic_part_image
+    // 11) normalize periodic_part_image
     LOG("periodic_smooth_decomposition", trace,
         "normalize periodic image part");
     std::for_each(
-          zoomed_image.data.begin(), zoomed_image.data.end(),
+          processed_image.data.begin(), processed_image.data.end(),
           [image_cell_count](double& cell) { cell /= image_cell_count; });
 
-    // 11) sum periodic and smooth parts
+    // 12) sum periodic and smooth parts
     LOG("periodic_smooth_decomposition", trace,
         "sum periodic and smooth image parts");
-    Image output_image(zoomed_image.size);
-    for (int i = 0; i < zoomed_image.size.row; i++) {
-        for (int j = 0; j < zoomed_image.size.col; j++) {
-            output_image.Set(i, j, zoomed_image.Get(i, j) +
+    Image output_image(processed_image.size);
+    for (int i = 0; i < processed_image.size.row; i++) {
+        for (int j = 0; j < processed_image.size.col; j++) {
+            output_image.Set(i, j, processed_image.Get(i, j) +
                                          interpolated_smooth_image.Get(i, j));
         }
     }

@@ -38,6 +38,8 @@ static constexpr char kLenaImagePath[] = "./input/lena.jpg";
 
 sirius::Image CreateDummyImage(const sirius::Size& size);
 
+sirius::Image CreateSquaredImage(const sirius::Size& size);
+
 }  // namespace tests
 }  // namespace sirius
 

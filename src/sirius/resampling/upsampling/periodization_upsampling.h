@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_
-#define SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_
+#ifndef SIRIUS_RESAMPLING_UPSAMPLING_PERIODIZATION_UPSAMPLING_H_
+#define SIRIUS_RESAMPLING_UPSAMPLING_PERIODIZATION_UPSAMPLING_H_
 
 #include "sirius/image.h"
 
@@ -47,4 +47,4 @@ class PeriodizationUpsampling {
 }  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLING_PROCESSOR_PERIODIZATION_UPSAMPLING_H_
+#endif  // SIRIUS_RESAMPLING_UPSAMPLING_PERIODIZATION_UPSAMPLING_H_

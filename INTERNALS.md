@@ -90,34 +90,46 @@ C++11 standard guarantees that a unique instance will be initialized and that th
 
 The `FrequencyResampler` is the combination of two algorithms:
 * an image decomposition algorithm
-* a zoom algorithm
+* an upsampling algorithm
 
 Sirius provides an `IFrequencyResampler` factory to compose the resampler requested by a client.
 API clients should only deal with `IFrequencyResampler` interface and should not be concerned by `IFrequencyResampler` implementations.
 
 ### Policy/Strategy
 
-`FrequencyResampler` is the composition of an image decomposition algorithm and a zoom algorithm.
+`FrequencyResampler` is the composition of an image decomposition algorithm and an upsampling algorithm.
 The policy/strategy pattern is used to adapt the internal behavior of this class.
 
-An algorithm implementation must comply with an an algorithm type implicit interface.
+An algorithm implementation must comply with an implicit algorithm interface.
 
-E.g, zoom algorithms should comply with:
+E.g, processing algorithms (upsampling, translation) should comply with:
 
 ```cpp
-class ZoomStrategy {
+class ProcessorStrategy {
   public:
-    Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
+    Image Process(const Image& image, const transformation::Parameters& transformation_parameters) const;
+};
+```
+
+Interpolation algorithms should comply with:
+
+```cpp
+class Interpolator {
+  public:
+    Image Interpolate2D(const Image& image, const transformation::Parameters& parameters) const;
 };
 ```
 
 Image decomposition algorithms should comply with:
 
 ```cpp
-class ImageDecompositionPolicy {
+template <typename Transformation, typename ImageProcessor,
+          typename ImageInterpolator>
+class ImageDecompositionPolicy : private ImageProcessor, private ImageInterpolator {
   public:
-    Image DecomposeAndZoom(int zoom, const Image& padded_image,
-                           const Filter& filter) const;
+    Image DecomposeAndProcess(
+          const Image& image,
+          const typename Transformation::Parameters& parameters) const;
 };
 ```
 

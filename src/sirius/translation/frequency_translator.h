@@ -51,12 +51,12 @@ class FrequencyTranslator final
 
     // IFrequencyResampler interface
     Image Compute(const Image& input, const Padding&,
-                  const Parameters& translation_parameters) const override {
-        return this->DecomposeAndProcess(input, translation_parameters);
-    }
+                  const Parameters& translation_parameters) const override;
 };
 
 }  // namespace translation
 }  // namespace sirius
+
+#include "sirius/translation/frequency_translator.txx"
 
 #endif  // SIRIUS_FREQUENCY_TRANSLATOR_H_
