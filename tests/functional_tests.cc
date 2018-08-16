@@ -19,6 +19,7 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
 #include <string>
 
 #include <catch/catch.hpp>
@@ -32,6 +33,8 @@
 
 #include "sirius/utils/log.h"
 
+#include "utils.h"
+
 void GenerateZoomedImage(const std::string& output_filepath,
                          const sirius::Image& image,
                          const sirius::ZoomRatio& zoom_ratio,
@@ -40,7 +43,9 @@ void GenerateZoomedImage(const std::string& output_filepath,
     LOG("functional_tests", debug, "* generating {}", output_filepath);
     auto output_image =
           freq_resampler.Compute(zoom_ratio, image, filter.padding(), filter);
-    sirius::gdal::SaveImage(output_image, output_filepath);
+    std::stringstream ss;
+    ss << sirius::tests::kOutputDirectoryPath << '/' << output_filepath;
+    sirius::gdal::SaveImage(output_image, ss.str());
 }
 
 TEST_CASE("functional tests", "[sirius]") {
@@ -55,7 +60,7 @@ TEST_CASE("functional tests", "[sirius]") {
     auto zoom_ratio_1_3 = sirius::ZoomRatio::Create(1, 3);
     auto zoom_ratio_210_120 = sirius::ZoomRatio::Create(210, 120);
 
-    auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
+    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
     auto lena_255_image = sirius::gdal::LoadImage("./input/lena-255x255.tif");
     auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
     auto triangle_image = sirius::gdal::LoadImage("./input/triangle_10x10.tif");
@@ -64,10 +69,10 @@ TEST_CASE("functional tests", "[sirius]") {
 
     sirius::Filter no_filter;
     auto dirac_2_1_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"),
+          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath),
           zoom_ratio_2_1);
     auto sinc_2_1_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
           zoom_ratio_2_1);
 
     auto regular_zero_padding_freq_resampler =
@@ -85,47 +90,44 @@ TEST_CASE("functional tests", "[sirius]") {
                 sirius::ImageDecompositionPolicies::kPeriodicSmooth,
                 sirius::FrequencyZoomStrategies::kZeroPadding);
 
-    GenerateZoomedImage("./output/TN1.tif", lena_image, zoom_ratio_1_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN2.tif", lena_image, zoom_ratio_2_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN3.tif", disp0_image, zoom_ratio_2_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN4.tif", disp0_image, zoom_ratio_2_1,
+    GenerateZoomedImage("TN1.tif", lena_image, zoom_ratio_1_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN2.tif", lena_image, zoom_ratio_2_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN3.tif", disp0_image, zoom_ratio_2_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN4.tif", disp0_image, zoom_ratio_2_1,
                         dirac_2_1_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN5.tif", lena_image, zoom_ratio_2_1,
-                        dirac_2_1_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN6.tif", disp0_image, zoom_ratio_2_1,
-                        sinc_2_1_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN7.tif", disp0_image, zoom_ratio_2_1,
-                        sinc_2_1_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN8.tif", disp0_image, zoom_ratio_2_1,
-                        sinc_2_1_filter, *regular_periodization_freq_resampler);
-    GenerateZoomedImage("./output/TN9.tif", triangle_image, zoom_ratio_3_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN10.tif", triangle_image, zoom_ratio_3_1,
-                        no_filter,
+    GenerateZoomedImage("TN5.tif", lena_image, zoom_ratio_2_1, dirac_2_1_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN6.tif", disp0_image, zoom_ratio_2_1, sinc_2_1_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN7.tif", disp0_image, zoom_ratio_2_1, sinc_2_1_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN8.tif", disp0_image, zoom_ratio_2_1, sinc_2_1_filter,
+                        *regular_periodization_freq_resampler);
+    GenerateZoomedImage("TN9.tif", triangle_image, zoom_ratio_3_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN10.tif", triangle_image, zoom_ratio_3_1, no_filter,
                         *periodic_smooth_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN11.tif", door_image, zoom_ratio_3_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN12.tif", door_image, zoom_ratio_3_1,
-                        no_filter,
+    GenerateZoomedImage("TN11.tif", door_image, zoom_ratio_3_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN12.tif", door_image, zoom_ratio_3_1, no_filter,
                         *periodic_smooth_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN13.tif", half_door_image, zoom_ratio_3_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TN14.tif", half_door_image, zoom_ratio_3_1,
-                        no_filter,
+    GenerateZoomedImage("TN13.tif", half_door_image, zoom_ratio_3_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TN14.tif", half_door_image, zoom_ratio_3_1, no_filter,
                         *periodic_smooth_zero_padding_freq_resampler);
 
-    GenerateZoomedImage("./output/TF1.tif", lena_image, zoom_ratio_15_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TF2.tif", lena_255_image, zoom_ratio_2_1,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TF3.tif", lena_image, zoom_ratio_7_4,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TF4.tif", disp0_image, zoom_ratio_1_3,
-                        no_filter, *regular_zero_padding_freq_resampler);
-    GenerateZoomedImage("./output/TF5.tif", triangle_image, zoom_ratio_210_120,
+    GenerateZoomedImage("TF1.tif", lena_image, zoom_ratio_15_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TF2.tif", lena_255_image, zoom_ratio_2_1, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TF3.tif", lena_image, zoom_ratio_7_4, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TF4.tif", disp0_image, zoom_ratio_1_3, no_filter,
+                        *regular_zero_padding_freq_resampler);
+    GenerateZoomedImage("TF5.tif", triangle_image, zoom_ratio_210_120,
                         no_filter,
                         *periodic_smooth_zero_padding_freq_resampler);
 }

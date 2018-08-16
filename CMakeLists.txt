@@ -101,6 +101,12 @@ add_subdirectory(src)
 if (${ENABLE_UNIT_TESTS})
     enable_testing()
     add_subdirectory(tests)
+
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/input
+                        ${CMAKE_CURRENT_BINARY_DIR}/tests/filters
+                        ${CMAKE_CURRENT_BINARY_DIR}/tests/output)
+    file(COPY data/input DESTINATION tests)
+    file(COPY data/filters DESTINATION tests)
 endif()
 
 if (${ENABLE_DOCUMENTATION})

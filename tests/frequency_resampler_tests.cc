@@ -67,15 +67,14 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
-    auto dummy_image = sirius::tests::CreateDummyImage({20, 20});
-    auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
-    auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
+    auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
+    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
 
     // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"), zoom_ratio);
+          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath), zoom_ratio);
     auto sinc_zoom2_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
           zoom_ratio);
 
     // output
@@ -130,8 +129,6 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/lena_no_filter.tif");
     }
 
     SECTION("Lena - dirac filter") {
@@ -145,8 +142,6 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/lena_dirac_filter.tif");
     }
 
     SECTION("Lena - sinc filter") {
@@ -160,50 +155,6 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/lena_sinc_filter.tif");
-    }
-
-    SECTION("disp0 - no filter") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(
-              output = freq_resampler->Compute(zoom_ratio, disp0_image, {}));
-        REQUIRE(output.data.size() > 0);
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/disparity_no_filter.tif");
-    }
-
-    SECTION("disp0 - dirac") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(output = freq_resampler->Compute(
-                              zoom_ratio, disp0_image, dirac_filter.padding(),
-                              dirac_filter));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/disparity_dirac_filter.tif");
-    }
-
-    SECTION("disp0 - sinc") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(output = freq_resampler->Compute(
-                              zoom_ratio, disp0_image,
-                              sinc_zoom2_filter.padding(), sinc_zoom2_filter));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(output, "./output/disparity_sinc_filter.tif");
     }
 }
 
@@ -212,16 +163,15 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
-    // test input
-    auto dummy_image = sirius::tests::CreateDummyImage({4, 4});
-    auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
-    auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
+    // test inputs
+    auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
+    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
 
     // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"), zoom_ratio);
+          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath), zoom_ratio);
     auto sinc_zoom2_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
           zoom_ratio);
 
     // output
@@ -276,9 +226,6 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/lena_periodization_no_filter.tif");
     }
 
     SECTION("Lena - dirac filter") {
@@ -292,9 +239,6 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/lena_periodization_dirac_filter.tif");
     }
 
     SECTION("Lena - sinc filter") {
@@ -308,56 +252,6 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/lena_periodization_sinc_filter.tif");
-    }
-
-    SECTION("disp0 - no filter") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(
-              output = freq_resampler->Compute(zoom_ratio, disp0_image, {}));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(
-              output, "./output/disparity_periodization_no_filter.tif");
-    }
-
-    SECTION("disp0 - dirac") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(output = freq_resampler->Compute(
-                              zoom_ratio, disp0_image, dirac_filter.padding(),
-                              dirac_filter));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(
-              output, "./output/disparity_periodization_dirac_filter.tif");
-    }
-
-    SECTION("disp0 - sinc") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(output = freq_resampler->Compute(
-                              zoom_ratio, disp0_image,
-                              sinc_zoom2_filter.padding(), sinc_zoom2_filter));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(
-              output, "./output/disparity_periodization_sinc_filter.tif");
     }
 }
 
@@ -366,10 +260,9 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding", "[sirius]") {
 
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
-    // test input
-    auto dummy_image = sirius::tests::CreateDummyImage({256, 256});
-    auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
-    auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
+    // test inputs
+    auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
+    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
 
     // output
     sirius::Image output;
@@ -399,36 +292,17 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding", "[sirius]") {
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/lena_periodic_smooth_no_filter.tif");
-    }
-
-    SECTION("disp0 - no filter") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(
-              output = freq_resampler->Compute(zoom_ratio, disp0_image, {}));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size ==
-                (disp0_image.size * zoom_ratio.input_resolution()));
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(
-              output, "./output/disparity_periodic_smooth_no_filter.tif");
     }
 }
 
 TEST_CASE("frequency resampler - real zoom", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
-    auto zoom_ratio = sirius::ZoomRatio::Create(7, 4);
+    auto zoom_ratio = sirius::ZoomRatio::Create(3, 2);
 
-    // test input
-    auto dummy_image = sirius::tests::CreateDummyImage({256, 256});
-    auto lena_image = sirius::gdal::LoadImage("./input/lena.jpg");
-    auto disp0_image = sirius::gdal::LoadImage("./input/disparity.png");
+    // test inputs
+    auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
+    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
 
     // output
     sirius::Image output;
@@ -456,24 +330,7 @@ TEST_CASE("frequency resampler - real zoom", "[sirius]") {
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/lena_unzoom_7_4_no_filter.tif");
     }
-
-    /*SECTION("disp0 - no filter") {
-        sirius::Image output;
-        REQUIRE_NOTHROW(
-              output = freq_resampler->Compute(zoom_ratio, disp0_image, {}));
-        REQUIRE(output.data.size() > 0);
-        REQUIRE(output.size == disp0_image.size * zoom_ratio.ratio());
-
-        LOG("tests", debug, "output size: {}, {}", output.size.row,
-            output.size.col);
-
-        sirius::gdal::SaveImage(output,
-                                "./output/disparity_unzoom_7_4_no_filter.tif");
-    }*/
 }
 
 TEST_CASE("frequency resampler - example", "[sirius]") {
@@ -482,13 +339,15 @@ TEST_CASE("frequency resampler - example", "[sirius]") {
     auto zoom_ratio_2_1 = sirius::ZoomRatio::Create(2, 1);
     auto zoom_ratio_7_4 = sirius::ZoomRatio::Create(7, 4);
 
-    sirius::Image image = sirius::tests::CreateDummyImage({256, 256});
+    // test inputs
+    auto dummy_image = sirius::tests::CreateDummyImage({256, 256});
 
+    // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/dirac_filter.tiff"),
+          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath),
           zoom_ratio_7_4);
-    auto sinc_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"),
+    auto sinc_zoom2_filter = sirius::Filter::Create(
+          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
           zoom_ratio_2_1);
 
     sirius::IFrequencyResampler::UPtr freq_resampler =
@@ -497,8 +356,9 @@ TEST_CASE("frequency resampler - example", "[sirius]") {
                 sirius::FrequencyZoomStrategies::kZeroPadding);
 
     sirius::Image zoomed_image_7_4 = freq_resampler->Compute(
-          zoom_ratio_7_4, image, dirac_filter.padding(), dirac_filter);
+          zoom_ratio_7_4, dummy_image, dirac_filter.padding(), dirac_filter);
 
     sirius::Image zoomed_image_2_1 = freq_resampler->Compute(
-          zoom_ratio_2_1, image, sinc_filter.padding(), sinc_filter);
+          zoom_ratio_2_1, dummy_image, sinc_zoom2_filter.padding(),
+          sinc_zoom2_filter);
 }

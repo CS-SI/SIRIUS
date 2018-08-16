@@ -28,6 +28,17 @@
 namespace sirius {
 namespace tests {
 
+// filter paths
+static constexpr char kDiracFilterPath[] = "./tests/filters/dirac_filter.tif";
+static constexpr char kSincZoom2FilterPath[] =
+      "./tests/filters/sinc_zoom2_filter.tif";
+
+// image paths
+static constexpr char kLenaImagePath[] = "./tests/input/lena.jpg";
+
+// output path
+static constexpr char kOutputDirectoryPath[] = "./tests/output";
+
 sirius::Image CreateDummyImage(const sirius::Size& size);
 
 }  // namespace tests

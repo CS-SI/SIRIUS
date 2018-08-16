@@ -141,7 +141,7 @@ if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
         sirius/gdal/wrapper.h
         sirius/gdal/wrapper.cc)
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL ${LIBSIRIUS_GDAL_SRC})
-    target_link_libraries(libsirius-gdal-static gdal libsirius)
+    target_link_libraries(libsirius-gdal-static gdal libsirius-static)
 endif ()
 
 if (ENABLE_SIRIUS_EXECUTABLE)

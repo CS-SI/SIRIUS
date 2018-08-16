@@ -254,14 +254,14 @@ TEST_CASE("Image - load well-formed image", "[sirius]") {
     sirius::Image image;
 
     REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage("./filters/dirac_filter.tiff"));
+          image = sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
     REQUIRE(image.IsLoaded());
 
     REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"));
+          image = sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);

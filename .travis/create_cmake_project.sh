@@ -3,6 +3,8 @@
 # This script will create the cmake sirius project build directory
 # Usage: ./create_cmake_project.sh BUILD_DIR INSTALL_DIR SIRIUS_VERSION SIRIUS_REVISION_COMMIT
 
+set -ev
+
 BUILD_DIR=$1
 INSTALL_DIR=$2
 SIRIUS_VERSION=$3
