@@ -143,6 +143,18 @@ void SaveImage(const Image& image, const std::string& output_filepath,
     }
 }
 
+GeoReference GetGeoReference(GDALDataset* dataset) {
+    std::vector<double> geo_transform(6);
+    CPLErr err = dataset->GetGeoTransform(geo_transform.data());
+    if (err) {
+        LOG("gdal", debug,
+            "GDAL error: {} - could not read input geo transform", err);
+        return {};
+    }
+
+    return {geo_transform, dataset->GetProjectionRef()};
+}
+
 GeoReference ComputeResampledGeoReference(const std::string& input_path,
                                           const ZoomRatio& zoom_ratio) {
     auto input_dataset = sirius::gdal::LoadDataset(input_path);

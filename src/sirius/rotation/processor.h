@@ -19,24 +19,24 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TRANSLATION_PARAMETERS_H_
-#define SIRIUS_TRANSLATION_PARAMETERS_H_
+#ifndef SIRIUS_ROTATION_PROCESSOR_H_
+#define SIRIUS_ROTATION_PROCESSOR_H_
+
+#include "sirius/image.h"
+#include "sirius/types.h"
+
+#include "sirius/rotation/parameters.h"
 
 namespace sirius {
-namespace translation {
+namespace rotation {
 
-/**
- * \brief Data class that represents translation parameters
- */
-struct Parameters {
-    Parameters(float i_row_shift, float i_col_shift)
-        : row_shift(i_row_shift), col_shift(i_col_shift) {}
+class Processor {
+  public:
+    Processor() = default;
 
-    float row_shift;
-    float col_shift;
+    Image Process(const Image& image, const Parameters& parameters) const;
 };
-
-}  // namespace translation
+}  // namespace rotation
 }  // namespace sirius
 
-#endif  // SIRIUS_TRANSLATION_PARAMETERS_H_
+#endif  // SIRIUS_ROTATION_PROCESSOR_H_

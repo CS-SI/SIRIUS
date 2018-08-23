@@ -19,38 +19,38 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_I_FREQUENCY_TRANSLATOR_H_
-#define SIRIUS_I_FREQUENCY_TRANSLATOR_H_
+#ifndef SIRIUS_I_FREQUENCY_ROTATOR_H_
+#define SIRIUS_I_FREQUENCY_ROTATOR_H_
 
 #include <memory>
 
 #include "sirius/image.h"
 
-#include "sirius/translation/parameters.h"
+#include "sirius/rotation/parameters.h"
 
 namespace sirius {
 
 /**
- * \class IFrequencyTranslation
- * \brief Interface that frequency translation should implement
+ * \class IFrequencyRotation
+ * \brief Interface that frequency rotation should implement
  */
-class IFrequencyTranslator {
+class IFrequencyRotator {
   public:
-    using UPtr = std::unique_ptr<IFrequencyTranslator>;
-    using Parameters = translation::Parameters;
+    using UPtr = std::unique_ptr<IFrequencyRotator>;
+    using Parameters = rotation::Parameters;
 
   public:
-    virtual ~IFrequencyTranslator() = default;
+    virtual ~IFrequencyRotator() = default;
 
     /**
-     * \brief Shift an image
+     * \brief Rotate an image
      *
      * \remark This method is thread safe
      *
-     * \param input image to shift
+     * \param input image to rotate
      * \param image_padding expected padding to add to the image
-     * \param parameters translation parameters
-     * \return Shifted image
+     * \param parameters rotation parameters
+     * \return Rotated image
      *
      * \throw SiriusException if a computing issue happens
      */
@@ -60,4 +60,4 @@ class IFrequencyTranslator {
 
 }  // namespace sirius
 
-#endif  // SIRIUS_I_FREQUENCY_TRANSLATOR_H_
+#endif  // SIRIUS_I_FREQUENCY_ROTATOR_H_

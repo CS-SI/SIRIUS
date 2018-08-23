@@ -19,24 +19,30 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TRANSLATION_PARAMETERS_H_
-#define SIRIUS_TRANSLATION_PARAMETERS_H_
+#ifndef SIRIUS_FREQUENCY_ROTATOR_FACTORY_H_
+#define SIRIUS_FREQUENCY_ROTATOR_FACTORY_H_
+
+#include "sirius/i_frequency_rotator.h"
+
+#include "sirius/image_decomposition/policies.h"
 
 namespace sirius {
-namespace translation {
 
 /**
- * \brief Data class that represents translation parameters
+ * \brief Factory of IFrequencyRotation
  */
-struct Parameters {
-    Parameters(float i_row_shift, float i_col_shift)
-        : row_shift(i_row_shift), col_shift(i_col_shift) {}
-
-    float row_shift;
-    float col_shift;
+class FrequencyRotatorFactory {
+  public:
+    /**
+     * \brief IFrequencyRotator factory
+     * \param image_decomposition cf. image_decomposition::Policies enum
+     * \return requested composition of IFrequencyRotation | nullptr if not
+     * available
+     */
+    static IFrequencyRotator::UPtr Create(
+          image_decomposition::Policies image_decomposition);
 };
 
-}  // namespace translation
 }  // namespace sirius
 
-#endif  // SIRIUS_TRANSLATION_PARAMETERS_H_
+#endif  // SIRIUS_FREQUENCY_ROTATOR_FACTORY_H_

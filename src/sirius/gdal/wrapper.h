@@ -59,6 +59,8 @@ DatasetUPtr LoadDataset(const std::string& filepath);
 DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,
                           int n_bands, const GeoReference& geo_ref = {});
 
+GeoReference GetGeoReference(GDALDataset* dataset);
+
 /**
  * \brief Compute resampled georeference information
  * \param input_path input image path

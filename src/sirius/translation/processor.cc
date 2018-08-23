@@ -53,8 +53,6 @@ Image Processor::Process(const Image& image,
         col_shift /= static_cast<float>(image.size.col);
     }
 
-    // LOG("sirius", trace, "Translation x:{}, y:{}", col_shift_, row_shift_);
-
     float reduced_x_shift = col_shift - static_cast<int>(col_shift);
     float reduced_y_shift = row_shift - static_cast<int>(row_shift);
 

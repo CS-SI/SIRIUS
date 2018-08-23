@@ -44,6 +44,11 @@ void FFTShift2D(const double* data, const Size& size, double* shifted_data);
 void IFFTShift2D(const double* data, const Size& size, double* shifted_data);
 
 /**
+ * \brief IFFTShift of a vector
+ */
+void IFFTShift(const int* data, const int size, int* shifted_data);
+
+/**
  * \brief IFFTShift 2D matrix in which hot point is not centered
  * \param data input data
  * \param size dimensions of the image to be shifted
