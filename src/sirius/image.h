@@ -143,7 +143,7 @@ class Image {
 
     /**
      * \brief Create a padded image using mirroring on borders
-     * \param padding_size size of the margins
+     * \param mirror_padding size of the margins
      * \return generated image
      */
     Image CreateMirrorPaddedImage(const Padding& mirror_padding) const;

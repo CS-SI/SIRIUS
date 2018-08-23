@@ -56,8 +56,9 @@ struct RealDeleter {
 
 using ComplexUPtr = std::unique_ptr<::fftw_complex[], detail::ComplexDeleter>;
 
-#if (!defined(__GNUC__) && __cplusplus <= 201402L) || \
-      (defined(__GNUC__) && __GNUC__ < 7 && __cplusplus <= 201402L)
+#if (!defined(__GNUC__) && !defined(_MSC_VER) && __cplusplus <= 201402L) || \
+      (defined(__GNUC__) && __GNUC__ < 7 && __cplusplus <= 201402L) ||      \
+      (defined(_MSC_VER) && _MSC_VER < 1900)
 
 // C++14: no shared_ptr array syntax, classic definition
 using ComplexSPtr = std::shared_ptr<::fftw_complex>;
@@ -66,7 +67,7 @@ using ComplexSPtr = std::shared_ptr<::fftw_complex>;
 
 // C++17: std::shared_ptr array syntax
 
-// compiling with GCC7 breaks the build if C++14 syntax is used
+// compiling with GCC7 and VS2017 breaks the build if C++14 syntax is used
 // definition of std::shared_ptr<T>::element_type has changed:
 // <7: typedef _Tp element_type;
 // >=7: using element_type = typename remove_extent<_Tp>::type;
@@ -78,8 +79,9 @@ using ComplexSPtr = std::shared_ptr<::fftw_complex>;
 
 using ComplexSPtr = std::shared_ptr<::fftw_complex[]>;
 
-#endif  // (!defined(__GNUC__) && __cplusplus <= 201402L) ||
-        //   (defined(__GNUC__) && __GNUC__ < 7 && __cplusplus <= 201402L)
+#endif  // (!defined(__GNUC__) && !defined(_MSC_VER) && __cplusplus <= 201402L) ||
+        //   (defined(__GNUC__) && __GNUC__ < 7 && __cplusplus <= 201402L) ||
+        //   (defined(_MSC_VER) && _MSC_VER < 1900)
 
 using RealUPtr = std::unique_ptr<double[], detail::RealDeleter>;
 

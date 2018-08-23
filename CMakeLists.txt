@@ -24,8 +24,8 @@ project(Sirius CXX)
 
 include(cmake/BuildType.cmake)
 
-set(SIRIUS_VERSION "0.0.0" CACHE STRING "Sirius version")
-set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit" CACHE STRING "Sirius revision commit")
+set(SIRIUS_VERSION "" CACHE STRING "Sirius version")
+set(SIRIUS_REVISION_COMMIT "" CACHE STRING "Sirius revision commit")
 
 option(ENABLE_SIRIUS_EXECUTABLE "Enable Sirius executable target" ON)
 option(ENABLE_CACHE_OPTIMIZATION "Enable cache optimization (FFTW plan, Filter FFT)" ON)
@@ -33,6 +33,10 @@ option(ENABLE_LOGS "Enable logs" ON)
 option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
+
+if (WIN32)
+	option(ENABLE_WINDOWS_STATIC_RUNTIME "Build libraries and executables with static runtime" OFF)
+endif()
 
 # path to additional cmake modules
 list(APPEND CMAKE_MODULE_PATH
@@ -45,7 +49,7 @@ if(GIT_FOUND AND "${SIRIUS_VERSION}" STREQUAL ""
     # try to extract version and revision commit from Git using git describe
     include(GetGitRevisionDescription)
     get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_REVISION_COMMIT)
-    git_describe(SIRIUS_GIT_DESCRIBE)
+    git_describe(SIRIUS_GIT_DESCRIBE --tags)
     if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
         message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
         set(SIRIUS_VERSION "0.0.0")
@@ -78,6 +82,9 @@ message(STATUS "Enable logs: ${ENABLE_LOGS}")
 message(STATUS "Enable GSL contracts: ${ENABLE_GSL_CONTRACTS}")
 message(STATUS "Enable documentation: ${ENABLE_DOCUMENTATION}")
 message(STATUS "Enable unit tests: ${ENABLE_UNIT_TESTS}")
+if (WIN32)
+	message(STATUS "Enable windows static runtime: ${ENABLE_WINDOWS_STATIC_RUNTIME}")
+endif()
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -87,9 +94,24 @@ set(SIRIUS_CXX_FLAGS "")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
       "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # Clang or GCC
-    set(SIRIUS_CXX_FLAGS  "-Wall -Wextra")
+    set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -Wall -Wextra")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # MSVC compiler
+    # /D_USE_MATH_DEFINES will allow M_PI declaration from #include <cmath>
+    set(SIRIUS_CXX_FLAGS "${SIRIUS_CXX_FLAGS} /D_USE_MATH_DEFINES")
+    # disable 4251 (from gdal): 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+    set(SIRIUS_CXX_FLAGS "${SIRIUS_CXX_FLAGS} /wd4251")
+    if (ENABLE_WINDOWS_STATIC_RUNTIME)
+        # extracted from https://gitlab.kitware.com/cmake/community/wikis/FAQ#dynamic-replace
+        foreach(flag_var
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            if(${flag_var} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            endif(${flag_var} MATCHES "/MD")
+        endforeach(flag_var)
+    endif()
+
 endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 

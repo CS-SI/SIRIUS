@@ -77,7 +77,7 @@ fftw::ComplexUPtr ZeroPaddingZoomStrategy::ZeroPadFFT(
 
     int image_row_count = image.size.row;
     int image_col_count = image.size.col;
-    int half_row_count = std::ceil(image_row_count / 2.0);
+    int half_row_count = static_cast<int>(std::ceil(image_row_count / 2.0));
 
     int fft_row_count = image_row_count;
     int fft_col_count = (image_col_count / 2) + 1;

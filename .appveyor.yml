@@ -1,0 +1,74 @@
+# version format
+version: 0.1.0.{build}
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# clone directory
+clone_folder: C:\projects\SIRIUS
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: x64
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# environment variables
+environment:
+  VCPKG_DIR: C:/Tools/vcpkg
+  VCPKG_TRIPLET: x64-windows-release
+  CMAKE_GENERATOR: Visual Studio 15 2017 Win64
+
+# scripts that run after cloning repository
+install:
+  # check if cache exists
+  - IF EXIST %VCPKG_DIR%\installed (set CACHE_EXISTS=1) ELSE (set CACHE_EXISTS=0)
+  # if the cache exists, CI will skip install scripts
+  - IF "%CACHE_EXISTS%"=="1" appveyor AddMessage "Project cache exists. Skipping install scripts. Delete the cache (REST API) and re-build the commit to update cached dependencies." -Category Warning
+  # if the cache does not exist, this build will only generate the project cache (fftw3 and gdal dependencies)
+  - IF "%CACHE_EXISTS%"=="0" appveyor AddMessage "This build will only generate the project cache (fftw3 and gdal dependencies)" -Category Warning
+  - IF "%CACHE_EXISTS%"=="0" .appveyor\windows\install.cmd
+  # terminate current build with success if cache did not exist
+  # this build should only create the cache since dependencies build time is quite long (~50min) and cache must be saved before AppVeyor timeout (1h)
+  # re-build the commit to actually build the project and run its tests
+  - IF "%CACHE_EXISTS%"=="0" appveyor AddMessage "This build only generated the project cache (fftw3 and gdal dependencies). Re-build the commit to actually build the project and run its tests" -Category Warning
+  - IF "%CACHE_EXISTS%"=="0" appveyor exit
+
+before_build:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - git fetch --tags
+  - mkdir %APPVEYOR_BUILD_FOLDER%\.build
+  - mkdir %APPVEYOR_BUILD_FOLDER%\.install-directory
+  - cd .build
+  - appveyor AddMessage "Creating Sirius Visual Studio solution..."
+  - cmake .. -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/.install-directory -DENABLE_CACHE_OPTIMIZATION=ON -DENABLE_GSL_CONTRACTS=ON -DENABLE_LOGS=ON -DENABLE_UNIT_TESTS=ON -DENABLE_DOCUMENTATION=OFF
+
+build: Script
+
+build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%/.build
+  - appveyor AddMessage "Building sirius shared library..."
+  - cmake --build . --target libsirius --config %configuration% -- /m
+  - appveyor AddMessage "Building sirius static library..."
+  - cmake --build . --target libsirius-static --config %configuration% -- /m
+  - appveyor AddMessage "Building tests..."
+  - cmake --build . --target build_tests --config %configuration% -- /m
+  - appveyor AddMessage "Building sirius executable..."
+  - cmake --build . --target sirius --config %configuration% -- /m
+  - appveyor AddMessage "Installing sirius..."
+  - cmake --build . --target install --config %configuration% -- /m
+
+test_script:
+  - cd %APPVEYOR_BUILD_FOLDER%/.build
+  - appveyor AddMessage "Running tests..."
+  - ctest --output-on-failure
+  - appveyor AddMessage "Running sirius..."
+  - src\%configuration%\sirius.exe -h
+
+# to disable deployment
+deploy: off
+
+# build cache to preserve files/folders between builds
+# workaround to clear cache: https://github.com/appveyor/ci/issues/985
+cache:
+  - c:\tools\vcpkg\installed\

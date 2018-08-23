@@ -35,10 +35,10 @@ ResampledOutputStream::ResampledOutputStream(const std::string& input_path,
     : zoom_ratio_(zoom_ratio) {
     auto input_dataset = gdal::LoadDataset(input_path);
 
-    int output_h =
-          std::ceil(input_dataset->GetRasterYSize() * zoom_ratio_.ratio());
-    int output_w =
-          std::ceil(input_dataset->GetRasterXSize() * zoom_ratio_.ratio());
+    int output_h = static_cast<int>(
+          std::ceil(input_dataset->GetRasterYSize() * zoom_ratio_.ratio()));
+    int output_w = static_cast<int>(
+          std::ceil(input_dataset->GetRasterXSize() * zoom_ratio_.ratio()));
 
     auto geo_ref = gdal::ComputeResampledGeoReference(input_path, zoom_ratio);
     output_dataset_ =
@@ -48,12 +48,12 @@ ResampledOutputStream::ResampledOutputStream(const std::string& input_path,
 }
 
 void ResampledOutputStream::Write(StreamBlock&& block, std::error_code& ec) {
-    int out_row_idx =
+    int out_row_idx = static_cast<int>(
           std::floor(block.row_idx * zoom_ratio_.input_resolution() /
-                     static_cast<double>(zoom_ratio_.output_resolution()));
-    int out_col_idx =
+                     static_cast<double>(zoom_ratio_.output_resolution())));
+    int out_col_idx = static_cast<int>(
           std::floor(block.col_idx * zoom_ratio_.input_resolution() /
-                     static_cast<double>(zoom_ratio_.output_resolution()));
+                     static_cast<double>(zoom_ratio_.output_resolution())));
 
     LOG("resampled_output_stream", debug,
         "writing block ({},{}) to ({},{}) (size: {}x{})", block.row_idx,
@@ -75,4 +75,4 @@ void ResampledOutputStream::Write(StreamBlock&& block, std::error_code& ec) {
 }
 
 }  // namespace gdal
-}  // namespace sirus
+}  // namespace sirius

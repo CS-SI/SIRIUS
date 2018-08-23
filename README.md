@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="https://travis-ci.org/CS-SI/SIRIUS"><img src="https://travis-ci.org/CS-SI/SIRIUS.svg?branch=master"></a>
+  <a href="https://ci.appveyor.com/project/hlysunnaram/sirius-9d2u7"><img src="https://ci.appveyor.com/api/projects/status/ukanyf270wdunpp5/branch/master?svg=true"/></a>
   <a href="https://hub.docker.com/r/ldumas/sirius_dockerfile/tags/"><img src="https://img.shields.io/docker/automated/ldumas/sirius_dockerfile.svg"></a>
   <a href="https://github.com/CS-SI/SIRIUS/issues"><img src="https://img.shields.io/github/issues/CS-SI/SIRIUS.svg"></a>
   <a href="https://opensource.org/licenses/GPL-3.0/"><img src="https://img.shields.io/badge/licence-GPL-blue.svg"></a>
@@ -72,7 +73,7 @@ Sirius is using [CMake] to build its libraries and executables.
 
 ### Requirements
 
-* C++14 compiler (GCC >= 5)
+* C++14 compiler (GCC >= 5, XCode >=8.3, Visual Studio 2017)
 * [CMake] >=3.2
 * [GDAL] development kit, >=2
 * [FFTW] development kit, >=3
@@ -98,8 +99,9 @@ Sirius is using [CMake] to build its libraries and executables.
 * `ENABLE_LOGS`: set to `ON` if you want to build Sirius with the logs
 * `ENABLE_UNIT_TESTS`: set to `ON` if you want to build the unit tests
 * `ENABLE_DOCUMENTATION`: set to `ON` if you want to build the documentation
+* `ENABLE_WINDOWS_STATIC_RUNTIME`: set to `ON` to statically link Sirius binaries with Windows runtime (Windows only)
 
-Sirius version can be extracted from `git describe` and revision commit from `git rev-parse HEAD`.
+Sirius version can be extracted from `git describe --tags` and revision commit from `git rev-parse HEAD`.
 If version and revision commit are not provided, [CMake] will try to extract them with the latter git commands.
 
 ### Example
@@ -121,7 +123,45 @@ cmake --build . --target doc
 cmake --build . --target install
 ```
 
-See also `.travis.yml` and `.travis/*/build.sh`
+See also [.travis.yml](.travis.yml) and `.travis/*/build.sh`
+
+### Example on Windows using [vcpkg]
+
+Clone [vcpkg repository][vcpkg] into VCPKG_DIR and bootstrap [vcpkg] project
+
+```sh
+git clone https://github.com/Microsoft/vcpkg.git %VCPKG_DIR%
+cd %VCPKG_DIR%
+bootstrap-vcpkg.bat
+```
+
+Install FFTW3 and GDAL with [vcpkg]
+
+```sh
+cd %VCPKG_DIR%
+vcpkg install fftw3:x64-windows
+vcpkg install gdal:x64-windows
+```
+
+Create Visual Studio solution and build sirius executable.
+
+```sh
+:: CWD is Sirius root directory
+mkdir .build
+cd .build
+cmake .. -DVCPKG_TARGET_TRIPLET=x64-windows ^
+         -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake ^
+         -G "Visual Studio 15 2017 Win64" ^
+         -DENABLE_SIRIUS_EXECUTABLE=ON ^
+         -DENABLE_CACHE_OPTIMIZATION=ON ^
+         -DENABLE_GSL_CONTRACTS=OFF ^
+         -DENABLE_LOGS=ON ^
+         -DENABLE_UNIT_TESTS=OFF ^
+         -DENABLE_DOCUMENTATION=OFF
+cmake --build . --target sirius --config Release
+```
+
+See also [.appveyor.yml](.appveyor.yml)
 
 ## How to use
 
@@ -421,6 +461,7 @@ Sirius developers would like to thank:
 
 [CS-SI]: https://uk.c-s.fr/ "CS Systèmes d'information"
 [CMake]: https://cmake.org/ "CMake"
+[vcpkg]: https://github.com/Microsoft/vcpkg "vcpkg"
 [GDAL]: http://www.gdal.org/ "Geospatial Data Abstraction Library"
 [FFTW]: http://www.fftw.org/ "Fastest Fourier Transform in the West"
 [Doxygen]: http://www.doxygen.org "Doxygen"

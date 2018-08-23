@@ -49,10 +49,10 @@ struct GeoReference {
     bool is_initialized{false};
 };
 
-Image LoadImage(const std::string& filepath);
+Image Load(const std::string& filepath);
 
-void SaveImage(const Image& image, const std::string& output_filepath,
-               const GeoReference& geoRef = {});
+void Save(const Image& image, const std::string& output_filepath,
+          const GeoReference& geoRef = {});
 
 DatasetUPtr LoadDataset(const std::string& filepath);
 

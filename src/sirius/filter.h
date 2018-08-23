@@ -60,6 +60,7 @@ class Filter {
      * \brief Filter which is adapted specifically for a particular zoom ratio
      * \param filter_image image of the filter
      * \param zoom_ratio ratio on which the filter must be applied
+     * \param hot_point hot point coordinates
      * \param padding_type padding type
      * \param normalize normalize filter
      *

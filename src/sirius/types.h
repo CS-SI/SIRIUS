@@ -64,8 +64,8 @@ struct Size {
 
     Size operator*(double scale) const {
         Size result(*this);
-        result.row = std::ceil(result.row * scale);
-        result.col = std::ceil(result.col * scale);
+        result.row = static_cast<int>(std::ceil(result.row * scale));
+        result.col = static_cast<int>(std::ceil(result.col * scale));
         return result;
     }
 

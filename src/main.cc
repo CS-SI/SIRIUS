@@ -133,7 +133,7 @@ int main(int argc, const char* argv[]) {
             LOG("sirius", info, "filter path: {}", params.filter_path);
             sirius::Point hp(params.hot_point_x, params.hot_point_y);
             filter = sirius::Filter::Create(
-                  sirius::gdal::LoadImage(params.filter_path), zoom_ratio, hp,
+                  sirius::gdal::Load(params.filter_path), zoom_ratio, hp,
                   padding_type, params.filter_normalize);
         }
 
@@ -192,7 +192,7 @@ void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
                     const sirius::ZoomRatio& zoom_ratio,
                     const CliParameters& params) {
     LOG("sirius", info, "regular mode");
-    auto input_image = sirius::gdal::LoadImage(params.input_image_path);
+    auto input_image = sirius::gdal::Load(params.input_image_path);
     LOG("sirius", info, "input image '{}' ({}x{})", params.input_image_path,
         input_image.size.row, input_image.size.col);
 
@@ -204,8 +204,8 @@ void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
     LOG("sirius", info, "resampled image '{}' ({}x{})",
         params.output_image_path, resampled_image.size.row,
         resampled_image.size.col);
-    sirius::gdal::SaveImage(resampled_image, params.output_image_path,
-                            resampled_geo_ref);
+    sirius::gdal::Save(resampled_image, params.output_image_path,
+                       resampled_geo_ref);
 }
 
 void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,

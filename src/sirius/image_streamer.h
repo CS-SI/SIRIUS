@@ -44,7 +44,7 @@ class ImageStreamer {
      * \param block_size stream block size
      * \param zoom_ratio zoom ratio
      * \param filter_metadata filter metadata
-     * \param padding_type filter padding type
+     * \param max_parallel_workers max parallel workers
      * \param max_parallel_workers max parallel workers to compute the zoom on
      *        stream blocks
      */

@@ -122,8 +122,8 @@ fftw::ComplexUPtr Filter::Process(const Size& image_size,
 #else
     // no cache version
     fftw::ComplexUPtr uptr_filter_fft = CreateFilterFFT(image_size);
-    fftw::ComplexSPtr filter_fft = {uptr_filter_fft.release(),
-                                    uptr_filter_fft.get_deleter()};
+    fftw::ComplexSPtr filter_fft{uptr_filter_fft.release(),
+                                 uptr_filter_fft.get_deleter()};
 #endif  // SIRIUS_ENABLE_CACHE_OPTIMIZATION
 
     auto image_fft_span = utils::MakeSmartPtrArraySpan(image_fft, image_size);

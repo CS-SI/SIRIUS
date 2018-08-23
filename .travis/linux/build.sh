@@ -35,12 +35,23 @@ cmake ${PROJECT_DIR} \
     -DENABLE_UNIT_TESTS=ON \
     -DENABLE_DOCUMENTATION=OFF
 
-# build and run tests
-make -j4 build_tests
-${PROJECT_DIR}/.travis/run_tests.sh
+# build sirius shared library
+make -j4 libsirius
 
-# build executables
-make -j4
+# build sirius static library
+make -j4 libsirius-static
+
+# build tests
+make -j4 build_tests
+
+# run tests
+ctest --output-on-failure
+
+# build sirius executable
+make -j4 sirius
+
+# execute sirius
+./src/sirius -h
 
 # install project
 make -j4 install

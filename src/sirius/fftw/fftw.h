@@ -66,6 +66,7 @@ class Fftw {
 
     /**
      * \brief Get a r2c fftw plan of the given size
+     * \param size plan size
      * \param in real input array complying with the size
      * \param out complex output array complying with the size
      * \return unique ptr to the created plan

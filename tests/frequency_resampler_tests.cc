@@ -68,14 +68,13 @@ TEST_CASE("frequency resampler - classic decomposition - zero padding zoom",
 
     // test inputs
     auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
-    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
+    auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
 
     // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath), zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kDiracFilterPath), zoom_ratio);
     auto sinc_zoom2_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
-          zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath), zoom_ratio);
 
     // output
     sirius::Image output;
@@ -165,14 +164,13 @@ TEST_CASE("frequency resampler - classic - periodization zoom", "[sirius]") {
 
     // test inputs
     auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
-    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
+    auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
 
     // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath), zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kDiracFilterPath), zoom_ratio);
     auto sinc_zoom2_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
-          zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath), zoom_ratio);
 
     // output
     sirius::Image output;
@@ -262,7 +260,7 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding", "[sirius]") {
 
     // test inputs
     auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
-    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
+    auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
 
     // output
     sirius::Image output;
@@ -302,7 +300,7 @@ TEST_CASE("frequency resampler - real zoom", "[sirius]") {
 
     // test inputs
     auto dummy_image = sirius::tests::CreateDummyImage({2048, 1536});
-    auto lena_image = sirius::gdal::LoadImage(sirius::tests::kLenaImagePath);
+    auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
 
     // output
     sirius::Image output;
@@ -344,10 +342,9 @@ TEST_CASE("frequency resampler - example", "[sirius]") {
 
     // filters
     auto dirac_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath),
-          zoom_ratio_7_4);
+          sirius::gdal::Load(sirius::tests::kDiracFilterPath), zoom_ratio_7_4);
     auto sinc_zoom2_filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
+          sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath),
           zoom_ratio_2_1);
 
     sirius::IFrequencyResampler::UPtr freq_resampler =

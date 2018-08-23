@@ -49,7 +49,7 @@ TEST_CASE("filter - dirac filter", "[sirius]") {
     std::memset(complex_array.get(), 1, size.CellCount());
 
     auto filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath), zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kDiracFilterPath), zoom_ratio);
     REQUIRE(filter.IsLoaded());
 
     auto output = filter.Process(size, std::move(complex_array));
@@ -59,8 +59,7 @@ TEST_CASE("filter - sinc2 filter", "[sirius]") {
     LOG_SET_LEVEL(trace);
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
     auto filter = sirius::Filter::Create(
-          sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath),
-          zoom_ratio);
+          sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath), zoom_ratio);
     sirius::Size regular_size = {100, 100};
     sirius::Size large_size = {1000, 1000};
 

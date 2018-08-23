@@ -19,6 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <string>
+
 #include <catch/catch.hpp>
 
 #include "sirius/image.h"
@@ -215,7 +217,7 @@ TEST_CASE("Image - load empty path", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
     sirius::Image image;
-    REQUIRE_NOTHROW(image = sirius::gdal::LoadImage(""));
+    REQUIRE_NOTHROW(image = sirius::gdal::Load(""));
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -226,9 +228,8 @@ TEST_CASE("GDAL - load unknown image", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
     sirius::Image image;
-    REQUIRE_THROWS_AS(
-          image = sirius::gdal::LoadImage("/this/is/not/a/file.ext"),
-          sirius::gdal::Exception);
+    REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
+                      sirius::gdal::Exception);
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -239,9 +240,8 @@ TEST_CASE("Image - load invalid image", "[sirius]") {
     LOG_SET_LEVEL(trace);
 
     sirius::Image image;
-    REQUIRE_THROWS_AS(
-          image = sirius::gdal::LoadImage("/this/is/not/a/file.ext"),
-          sirius::gdal::Exception);
+    REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
+                      sirius::gdal::Exception);
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -253,15 +253,15 @@ TEST_CASE("Image - load well-formed image", "[sirius]") {
 
     sirius::Image image;
 
-    REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage(sirius::tests::kDiracFilterPath));
+    REQUIRE_NOTHROW(image =
+                          sirius::gdal::Load(sirius::tests::kDiracFilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
     REQUIRE(image.IsLoaded());
 
     REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage(sirius::tests::kSincZoom2FilterPath));
+          image = sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
