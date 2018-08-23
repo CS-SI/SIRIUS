@@ -45,10 +45,22 @@ Image Processor::Process(const Image& image,
                          const Parameters& parameters) const {
     Image im;
     int angle = parameters.angle;
-    if (image.size.row <= image.size.col) {
+    if (image.size.row / static_cast<double>(image.size.col) > 0.5 &&
+        image.size.row / static_cast<double>(image.size.col) < 2) {
         im = Image({2 * image.size.row, 2 * image.size.col});
     } else {
-        im = Image({3 * image.size.row, 3 * image.size.col});
+        int ratio = 0;
+        if (image.size.row > image.size.col) {
+            ratio = std::ceil(image.size.row /
+                              static_cast<double>(image.size.col));
+        } else {
+            ratio = std::ceil(image.size.col /
+                              static_cast<double>(image.size.row));
+        }
+        if (ratio < 2) {
+            ratio = 2;
+        }
+        im = Image({ratio * image.size.row, ratio * image.size.col});
     }
 
     Point center(std::floor(im.size.col / 2.0), std::floor(im.size.row / 2.0));

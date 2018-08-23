@@ -89,18 +89,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         return {};
     }
 
-    ///////
-    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-    GDALDataset* dataset = driver->Create(
-          "/home/mbelloc/tmp/read_block.tif", output_buffer.size.col,
-          output_buffer.size.row, 1, GDT_Float32, NULL);
-    dataset->GetRasterBand(1)->RasterIO(
-          GF_Write, 0, 0, output_buffer.size.col, output_buffer.size.row,
-          output_buffer.data.data(), output_buffer.size.col,
-          output_buffer.size.row, GDT_Float64, 0, 0, NULL);
-    GDALClose(dataset);
-    ///////
-
     if (row_idx_ == 0 && col_idx_ == 0) {
         // initialize output indexes to the top left corner of the
         // rotated output image
@@ -125,7 +113,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 // because BL inside a block should always
                 // have the same coordinates for 1 block row
                 tl_ref_.x += bl.x;
-                tl_ref_.y += bl.y;
+                tl_ref_.y += bl.y - tl.y;
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
@@ -141,7 +129,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
             } else {
-                block_col_idx_ += tr.x;
+                block_col_idx_ += tr.x - tl.x;
                 block_row_idx_ += tr.y;
             }
         }
