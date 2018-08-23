@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 unit_tests=(
     concurrent_queue_tests \
@@ -10,7 +10,8 @@ unit_tests=(
 
 echo "Unit tests:"
 
-test_exit_status=0
+tests_exit_status=0
+
 for unit_test in "${unit_tests[@]}"
 do
     echo "* running ${unit_test}"

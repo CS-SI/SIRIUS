@@ -22,6 +22,7 @@
 #ifndef SIRIUS_GDAL_ERROR_CODE_H_
 #define SIRIUS_GDAL_ERROR_CODE_H_
 
+#include <string>
 #include <system_error>
 
 #include <cpl_error.h>

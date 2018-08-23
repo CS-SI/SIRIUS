@@ -116,12 +116,14 @@ fftw::ComplexUPtr Filter::Process(const Size& image_size,
         LOG("filter", trace, "cache filter fft for image {}x{}", image_size.row,
             image_size.col);
         fftw::ComplexUPtr uptr_filter_fft = CreateFilterFFT(image_size);
-        filter_fft = {std::move(uptr_filter_fft)};
+        filter_fft = {uptr_filter_fft.release(), uptr_filter_fft.get_deleter()};
         filter_fft_cache_->Insert(image_size, filter_fft);
     }
 #else
     // no cache version
-    fftw::ComplexSPtr filter_fft{std::move(CreateFilterFFT(image_size))};
+    fftw::ComplexUPtr uptr_filter_fft = CreateFilterFFT(image_size);
+    fftw::ComplexSPtr filter_fft = {uptr_filter_fft.release(),
+                                    uptr_filter_fft.get_deleter()};
 #endif  // SIRIUS_ENABLE_CACHE_OPTIMIZATION
 
     auto image_fft_span = utils::MakeSmartPtrArraySpan(image_fft, image_size);

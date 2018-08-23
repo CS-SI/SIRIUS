@@ -121,7 +121,7 @@ cmake --build . --target doc
 cmake --build . --target install
 ```
 
-See also `.travis.yml` and `.travis/create_cmake_project.sh`
+See also `.travis.yml` and `.travis/*/build.sh`
 
 ## How to use
 

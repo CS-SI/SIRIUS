@@ -1,28 +1,93 @@
-services:
-- docker
+# travis config checker: http://config.travis-ci.org/
+
+language: cpp
 
 git:
   depth: false
 
-before_install:
-- docker pull ldumas/sirius_dockerfile:sirius_build
-- docker pull ldumas/sirius_dockerfile:sirius_pages
+before_install: git fetch --tags
 
-before_script:
-- export SRCDIR=/data
-- export SIRIUS_BUILD_DIR=.build
-- export INSTALL_DIR=/opt/sirius
-- SIRIUS_VERSION=$(git describe 2> /dev/null); if [ "x${SIRIUS_VERSION}" = "x" ]; then SIRIUS_VERSION="0.0.0"; fi; export SIRIUS_VERSION;
+stages:
+  - test
+  - deploy
 
-script:
-- docker run -v $TRAVIS_BUILD_DIR/:/data ldumas/sirius_dockerfile:sirius_build /bin/sh -c "source /opt/rh/devtoolset-6/enable; ${SRCDIR}/.travis/build_install_sirius.sh ${SRCDIR} ${INSTALL_DIR} ${SIRIUS_VERSION} ${TRAVIS_COMMIT}"
-- export BUILD_CONTAINER_ID=$(docker ps --latest --quiet)
+matrix:
+  include:
+  # OS X
+  - &osx-template
+    stage: test
+    name: "OS X - Xcode 8.3"
+    os: osx
+    osx_image: xcode8.3
+    install: .travis/osx/install_deps.sh
+    before_script: source .travis/osx/before_build.sh
+    script: .travis/osx/build.sh
 
-after_success:
-- .travis/on_success.sh
+  - <<: *osx-template
+    name: "OS X - Xcode 9.4"
+    osx_image: xcode9.4
 
-deploy:
-  provider: script
-  script: .travis/deploy.sh
-  on:
-    branch: master
+  # Ubuntu trusty
+  - &ubuntu-trusty-template
+    stage: test
+    name: "Ubuntu Trusty GCC 5"
+    os: linux
+    dist: trusty
+    before_script: source .travis/linux/before_build.sh
+    script: .travis/linux/build.sh
+    env: CXX_COMPILER=/usr/bin/g++-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-5
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty GCC 6"
+    env: CXX_COMPILER=/usr/bin/g++-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-6
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty GCC 7"
+    env: CXX_COMPILER=/usr/bin/g++-7
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-7
+          - libfftw3-dev
+          - libgdal-dev
+
+  # Docker
+  - &centos-7-template
+    name: "CentOS Docker"
+    stage: test
+    os: linux
+    services:
+      - docker
+    install: .travis/docker/install_deps.sh
+    before_script: source .travis/docker/before_build.sh
+    script: .travis/docker/build.sh
+
+  - <<: *centos-7-template
+    name: "CentOS Docker - Deploy"
+    stage: deploy
+    deploy:
+      provider: script
+      script: .travis/docker/deploy.sh
+      on:
+        branch: master
