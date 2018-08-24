@@ -26,6 +26,7 @@
 #include "sirius/rotation/utils.h"
 
 #include "sirius/utils/log.h"
+#include "sirius/utils/numeric.h"
 
 namespace sirius {
 namespace gdal {
@@ -45,6 +46,11 @@ OutputStream::OutputStream(
     sirius::rotation::RecoverCorners(
           {input_dataset->GetRasterYSize(), input_dataset->GetRasterXSize()},
           angle_, output_size, tr, tl, br, bl);
+
+    LOG("OutputStream", debug, "TL x = {}, y = {}", tl.x, tl.y);
+    LOG("OutputStream", debug, "TR = {}, y = {}", tr.x, tr.y);
+    LOG("OutputStream", debug, "BL x = {}, y = {}", bl.x, bl.y);
+    LOG("OutputStream", debug, "BR x = {}, y = {}", br.x, br.y);
 
     if (angle_ > 0) {
         slope_tr_br_ = (br.y - tr.y) / static_cast<double>(br.x - tr.x);
@@ -93,22 +99,61 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
                                   const int angle, const Point& tr,
                                   const Point& tl, const Point& br,
                                   const Point& bl) {
-    LOG("OutputStream", debug, "hull size = {}x{}", block.buffer.size.row,
-        block.buffer.size.col);
+    LOG("rotation_output_stream", trace,
+        "Copy convex hull to output image, hull_size = {}x{}, row_idx = {}, "
+        "col_idx = {}",
+        block.buffer.size.row, block.buffer.size.col, block.row_idx,
+        block.col_idx);
 
     int row_idx = block.row_idx;
     int col_idx = block.col_idx;
     double col_idx_real = col_idx;
 
-    LOG("OutputStream", debug, "initial row_idx = {}, col_idx = {}", row_idx,
-        col_idx);
+    if (angle_ == 90) {
+        for (int i = block.buffer.size.row - 1; i >= 0; --i) {
+            row_idx--;
+            CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
+                  GF_Write, col_idx, row_idx, block.buffer.size.col, 1,
+                  const_cast<double*>(block.buffer.data.data()) +
+                        i * block.buffer.size.col,
+                  block.buffer.size.col, 1, GDT_Float64, 0, 0, NULL);
+            if (err) {
+                LOG("output_stream", error,
+                    "GDAL error: {} - could not write to the given dataset",
+                    err);
+                return;
+            }
+        }
+        return;
+    }
+
+    if (angle_ == -90) {
+        for (int i = 0; i < block.buffer.size.row; ++i) {
+            CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
+                  GF_Write, col_idx - block.buffer.size.col, row_idx,
+                  block.buffer.size.col, 1,
+                  const_cast<double*>(block.buffer.data.data()) +
+                        i * block.buffer.size.col,
+                  block.buffer.size.col, 1, GDT_Float64, 0, 0, NULL);
+            if (err) {
+                LOG("output_stream", error,
+                    "GDAL error: {} - could not write to the given dataset",
+                    err);
+                return;
+            }
+
+            row_idx++;
+        }
+        return;
+    }
+
     if (angle >= 0) {
         // block row_idx and col_idx are set to the top left corner, but we
         // start copying from top right corner when angle > 0 so we have to
         // shift it the right corner
         row_idx -= tl.y;
-        col_idx += tr.x - 1;
-        col_idx_real += tr.x - 1;
+        col_idx += tr.x;
+        col_idx_real += tr.x;
         // first and second points used to detect when we have to change slopes
         Point first_point;
         Point second_point;
@@ -129,29 +174,25 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
                 second_point = tl;
             }
         }
-        LOG("OutputStream", debug, "shifted to TR row_idx = {}, col_idx = {}",
-            row_idx, col_idx);
 
-        int begin_line = tr.x - 1;
-        int end_line = tr.x;
+        int begin_line = tr.x;
+        int end_line = tr.x + 1;
         double begin_line_real = begin_line;
         double end_line_real = end_line;
         double slope_begin = slope_tr_tl_;
         double slope_end = slope_tr_br_;
         // copy from the point with coordinate y=0 to the first point of the
         // hull
-        LOG("OutputStream", debug, "copy first part");
         for (int i = 0; i < first_point.y; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
             }
+
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",
@@ -186,18 +227,16 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // copy from the first point with coordinate y != 0 to the second point
         // of the hull
-        LOG("OutputStream", debug, "copy second part");
         for (int i = first_point.y; i < second_point.y; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
             }
+
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",
@@ -230,18 +269,16 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // copy from the second point we encountered until we reach image's
         // height
-        LOG("OutputStream", debug, "copy third part");
         for (int i = second_point.y; i < block.buffer.size.row; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
             }
+
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",
@@ -286,8 +323,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         // copy from the point with coordinate y=0 to the first point of the
         // hull
         for (int i = 0; i < first_point.y; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
@@ -296,7 +331,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",
@@ -331,8 +366,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         // copy from the first point with coordinate y != 0 to the second point
         // of the hull
         for (int i = first_point.y; i < second_point.y; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
@@ -341,7 +374,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",
@@ -375,8 +408,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         // copy from the second point we encountered until we reach image's
         // height
         for (int i = second_point.y; i < block.buffer.size.row; ++i) {
-            LOG("OutputStream", debug, "row_idx = {}, col_idx = {}", row_idx,
-                col_idx);
             int line_len = end_line - begin_line;
             if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
                 line_len = output_dataset_->GetRasterXSize() - col_idx;
@@ -385,7 +416,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
             CPLErr err = output_dataset_->GetRasterBand(1)->RasterIO(
                   GF_Write, col_idx, row_idx, line_len, 1,
                   const_cast<double*>(block.buffer.data.data()) + begin_line,
-                  end_line - begin_line, 1, GDT_Float64, 0, 0, NULL);
+                  line_len, 1, GDT_Float64, 0, 0, NULL);
             if (err) {
                 LOG("output_stream", error,
                     "GDAL error: {} - could not write to the given dataset",

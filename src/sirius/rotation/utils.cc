@@ -59,21 +59,15 @@ void RecoverCorners(const Size& image_size, const int angle,
     if (angle >= 0) {
         tr = Point(image_size.col * std::cos(angle_rad), 0);
         br = Point(hull_size.col, image_size.row * std::cos(angle_rad));
-        tl = Point(0, hull_size.row - image_size.row * std::cos(angle_rad));
-        bl = Point(hull_size.col - image_size.col * std::cos(angle_rad),
-                   hull_size.row);
+        tl = Point(0, image_size.col * std::sin(angle_rad));
+        bl = Point(image_size.row * std::sin(angle_rad), hull_size.row);
     } else {
         tr = Point(hull_size.col,
-                   hull_size.row - image_size.row * std::cos(angle_rad));
+                   std::abs(image_size.col * std::sin(angle_rad)));
         br = Point(image_size.col * std::cos(angle_rad), hull_size.row);
-        tl = Point(hull_size.col - image_size.col * std::cos(angle_rad), 0);
+        tl = Point(std::abs(image_size.row * std::sin(angle_rad)), 0);
         bl = Point(0, image_size.row * std::cos(angle_rad));
     }
-
-    LOG("Rotation", debug, "TL x = {}, y = {}", tl.x, tl.y);
-    LOG("Rotation", debug, "TR x = {}, y = {}", tr.x, tr.y);
-    LOG("Rotation", debug, "BL x = {}, y = {}", bl.x, bl.y);
-    LOG("Rotation", debug, "BR x = {}, y = {}", br.x, br.y);
 }
 
 }  // namespace rotation

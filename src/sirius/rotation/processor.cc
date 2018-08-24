@@ -45,23 +45,18 @@ Image Processor::Process(const Image& image,
                          const Parameters& parameters) const {
     Image im;
     int angle = parameters.angle;
-    if (image.size.row / static_cast<double>(image.size.col) > 0.5 &&
-        image.size.row / static_cast<double>(image.size.col) < 2) {
-        im = Image({2 * image.size.row, 2 * image.size.col});
+
+    int ratio = 0;
+    if (image.size.row > image.size.col) {
+        ratio =
+              std::ceil(image.size.row / static_cast<double>(image.size.col)) +
+              1;
     } else {
-        int ratio = 0;
-        if (image.size.row > image.size.col) {
-            ratio = std::ceil(image.size.row /
-                              static_cast<double>(image.size.col));
-        } else {
-            ratio = std::ceil(image.size.col /
-                              static_cast<double>(image.size.row));
-        }
-        if (ratio < 2) {
-            ratio = 2;
-        }
-        im = Image({ratio * image.size.row, ratio * image.size.col});
+        ratio =
+              std::ceil(image.size.col / static_cast<double>(image.size.row)) +
+              1;
     }
+    im = Image({ratio * image.size.row, ratio * image.size.col});
 
     Point center(std::floor(im.size.col / 2.0), std::floor(im.size.row / 2.0));
 
@@ -84,15 +79,15 @@ Image Processor::Process(const Image& image,
     // get the shift vector to recover top left corner coordinates from
     // the center
     auto hypotenuse =
-          std::sqrt(std::pow(min_size.row, 2) + std::pow(min_size.col, 2));
+          std::sqrt(std::pow(min_size.row, 2.0) + std::pow(min_size.col, 2.0));
+
     auto angle_diag_rad = std::acos(min_size.col / hypotenuse);
     Size shift;
     if (angle == 90 || angle == -90) {
-        shift = {static_cast<int>(std::ceil(hypotenuse / 2.0) *
-                                  std::sin(angle_diag_rad)),
-                 static_cast<int>(std::ceil(hypotenuse / 2.0) *
-                                        std::cos(angle_diag_rad) -
-                                  1)};
+        shift = {static_cast<int>(
+                       std::floor(hypotenuse / 2.0 * std::sin(angle_diag_rad))),
+                 static_cast<int>(std::floor(hypotenuse / 2.0 *
+                                             std::cos(angle_diag_rad)))};
     } else {
         shift = {static_cast<int>(std::ceil(hypotenuse / 2.0) *
                                   std::sin(angle_diag_rad)),
@@ -243,9 +238,11 @@ Image Processor::Process(const Image& image,
     Point top_left(static_cast<int>(std::ceil(center.x - shift.col)),
                    static_cast<int>(std::ceil(center.y - shift.row)));
 
-    // crop rotated image to its rectangular hull
-    int offset = top_left.y * rotated_im.size.col + top_left.x;
+    int offset = 0;
+    offset = top_left.y * rotated_im.size.col + top_left.x;
+
     int offset_out = 0;
+    // crop rotated image to its rectangular hull
     for (int i = center.y; i < center.y + min_size.row; ++i) {
         std::copy(rotated_im.data.begin() + offset,
                   rotated_im.data.begin() + offset + min_size.col,

@@ -147,6 +147,14 @@ int Rotate(const CliOptions& options) {
               "Rotation angle out of the [-180, 180] interval");
     }
 
+    if (options.stream.block_size.col % 2 == 0) {
+        const_cast<CliOptions&>(options).stream.block_size.col++;
+    }
+
+    if (options.stream.block_size.row % 2 == 0) {
+        const_cast<CliOptions&>(options).stream.block_size.row++;
+    }
+
     sirius::image_decomposition::Policies image_decomposition_policy =
           sirius::image_decomposition::Policies::kRegular;
 
