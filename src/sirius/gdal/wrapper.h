@@ -54,6 +54,18 @@ Image LoadImage(const std::string& filepath);
 void SaveImage(const Image& image, const std::string& output_filepath,
                const GeoReference& geoRef = {});
 
+/**
+ * \brief Write data to the given coordinates
+ * \param dataset dataset to be modified
+ * \param row_idx y offset from top border
+ * \param col_idx x offset from left border
+ * \param height height of the block to be copied
+ * \param width width of the block to be copied
+ * \param data data to be copied
+ */
+void WriteToDataset(GDALDataset* dataset, int row_idx, int col_idx, int height,
+                    int width, const double* data);
+
 DatasetUPtr LoadDataset(const std::string& filepath);
 
 DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,

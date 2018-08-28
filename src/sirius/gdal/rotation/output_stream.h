@@ -56,16 +56,40 @@ class OutputStream : public IOutputStream {
   private:
     /**
      * \brief copy data inside the convex hull
-     * \param block image contained in its minimal non rotated rectangular
-     * \param angle rotation angle
+     * \param block image contained in its minimal non rotated rectangle
      * \param tr top right corner
      * \param tl top left corner
      * \param br bottom right corner
      * \param bl bottom left corner
      */
-    void CopyConvexHull(const sirius::gdal::StreamBlock& block, const int angle,
-                        const Point& tr, const Point& tl, const Point& br,
-                        const Point& bl);
+    void CopyConvexHull(const sirius::gdal::StreamBlock& block, const Point& tr,
+                        const Point& tl, const Point& br, const Point& bl);
+
+    /**
+     * \brief copy part of the hull from one distinctive point to another
+     * \param block image contained in its minimal non rotated rectangle
+     * \param begin_line index at which we start reading block
+     * \param end_line, index at which we stop reading block
+     * \param begin_line_real used to compute the exact beginning index (without
+     * rounding)
+     * \param end_line_real used to compute the exact ending index (without
+     * rounding)
+     * \param row_idx y coordinate at which we start reading block
+     * \param col_idx x coordinate at which we start reading block
+     * \param col_idx_real used to compute the exact x coordinate (without
+     * rounding)
+     * \param first_y y coordinate used to start iterating
+     * \param second_y y coordinate used to stop iterating
+     * \param slope_begin slope of the line joining the two points on the
+     * left of the rectangle
+     * \param slope_end slope of the line joining the two points on the
+     * right of the rectangle
+     */
+    void CopyHullPart(const sirius::gdal::StreamBlock& block, int& begin_line,
+                      int& end_line, double& begin_line_real,
+                      double& end_line_real, int& row_idx, int& col_idx,
+                      double& col_idx_real, int first_y, int second_y,
+                      double slope_begin, double slope_end);
 
   private:
     gdal::OutputStream output_stream_;
