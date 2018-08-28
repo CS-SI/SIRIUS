@@ -34,8 +34,11 @@ option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
 
-if (WIN32)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	option(ENABLE_WINDOWS_STATIC_RUNTIME "Build libraries and executables with static runtime" OFF)
+endif()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
 endif()
 
 # path to additional cmake modules
@@ -82,8 +85,11 @@ message(STATUS "Enable logs: ${ENABLE_LOGS}")
 message(STATUS "Enable GSL contracts: ${ENABLE_GSL_CONTRACTS}")
 message(STATUS "Enable documentation: ${ENABLE_DOCUMENTATION}")
 message(STATUS "Enable unit tests: ${ENABLE_UNIT_TESTS}")
-if (WIN32)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	message(STATUS "Enable windows static runtime: ${ENABLE_WINDOWS_STATIC_RUNTIME}")
+endif()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	message(STATUS "Force use of libc++: ${ENABLE_CLANG_LIBCPP}")
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
@@ -91,10 +97,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set CXX flags
 set(SIRIUS_CXX_FLAGS "")
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
-      "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    # Clang or GCC
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    # GCC or Clang
     set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -Wall -Wextra")
+    if (ENABLE_CLANG_LIBCPP)
+        set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -stdlib=libc++")
+    endif()
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # MSVC compiler
     # /D_USE_MATH_DEFINES will allow M_PI declaration from #include <cmath>
@@ -111,7 +119,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
             endif(${flag_var} MATCHES "/MD")
         endforeach(flag_var)
     endif()
-
 endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 

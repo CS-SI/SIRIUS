@@ -67,8 +67,8 @@ void ImageStreamer::RunMonothreadStream(
             break;
         }
 
-        block.buffer = std::move(frequency_resampler.Compute(
-              zoom_ratio_, block.buffer, block.padding, filter));
+        block.buffer = frequency_resampler.Compute(
+              zoom_ratio_, block.buffer, block.padding, filter);
 
         std::error_code write_ec;
         output_stream_.Write(std::move(block), write_ec);
@@ -129,8 +129,8 @@ void ImageStreamer::RunMultithreadStream(
                     break;
                 }
 
-                block.buffer = std::move(frequency_resampler.Compute(
-                      zoom_ratio_, block.buffer, block.padding, filter));
+                block.buffer = frequency_resampler.Compute(
+                      zoom_ratio_, block.buffer, block.padding, filter);
 
                 std::error_code push_output_ec;
                 output_queue.Push(std::move(block), push_output_ec);

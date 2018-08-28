@@ -30,7 +30,7 @@ matrix:
   # Ubuntu trusty
   - &ubuntu-trusty-template
     stage: test
-    name: "Ubuntu Trusty GCC 5"
+    name: "Ubuntu Trusty 14.04 GCC 5"
     os: linux
     dist: trusty
     before_script: source .travis/linux/before_build.sh
@@ -47,7 +47,7 @@ matrix:
           - libgdal-dev
 
   - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty GCC 6"
+    name: "Ubuntu Trusty 14.04 GCC 6"
     env: CXX_COMPILER=/usr/bin/g++-6
     addons:
       apt:
@@ -60,7 +60,7 @@ matrix:
           - libgdal-dev
 
   - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty GCC 7"
+    name: "Ubuntu Trusty 14.04 GCC 7"
     env: CXX_COMPILER=/usr/bin/g++-7
     addons:
       apt:
@@ -69,6 +69,104 @@ matrix:
           - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
         packages:
           - g++-7
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 4.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-4.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 5.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-5.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 4.0 - stdlibc++ 5"
+    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-4.0
+          - libstdc++-5-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 5.0 - stdlibc++ 6"
+    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-5.0
+          - libstdc++-6-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - stdlibc++ 7"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libstdc++-7-dev
           - libfftw3-dev
           - libgdal-dev
 
