@@ -294,22 +294,5 @@ void CreateMeshgrid(const int x_min, const int x_max, const int y_min,
     }
 }
 
-std::vector<double> VectorAdd(std::vector<double> v1, std::vector<double> v2) {
-    if (v1.size() != v2.size()) {
-        LOG("numeric", warn,
-            "Vectors are not the same size, could not perform addition");
-        return std::vector<double>();
-    }
-
-    LOG("numeric", debug, "v1 size = {}, v2 size = {}", v1.size(), v2.size());
-
-    std::vector<double> output(v1.size());
-    for (size_t i = 0; i < v1.size(); ++i) {
-        output[i] = v1[i] + v2[i];
-    }
-
-    return output;
-}
-
 }  // namespace utils
 }  // namespace sirius
