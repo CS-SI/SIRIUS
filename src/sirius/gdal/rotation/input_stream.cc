@@ -39,8 +39,15 @@ InputStream::InputStream(
       col_idx_(0),
       angle_(rotation_parameters.angle) {
     if (block_size_.row <= 0 || block_size_.col <= 0) {
-        LOG("rotation_input_stream", error, "invalid block size");
+        LOG("rotation_input_stream", error, "invalid block size {}x{}",
+            block_size_.row, block_size_.col);
         throw sirius::Exception("invalid block size");
+    }
+
+    if (block_size_.row > input_dataset_->GetRasterYSize() ||
+        block_size_.col > input_dataset_->GetRasterXSize()) {
+        const_cast<Size&>(block_size_).row = input_dataset_->GetRasterYSize();
+        const_cast<Size&>(block_size_).col = input_dataset_->GetRasterXSize();
     }
 
     LOG("rotation_input_stream", info, "input image '{}' ({}x{})", image_path,

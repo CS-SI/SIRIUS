@@ -147,12 +147,11 @@ int Rotate(const CliOptions& options) {
               "Rotation angle out of the [-180, 180] interval");
     }
 
-    if (options.stream.block_size.col % 2 == 0) {
-        const_cast<CliOptions&>(options).stream.block_size.col++;
-    }
-
-    if (options.stream.block_size.row % 2 == 0) {
-        const_cast<CliOptions&>(options).stream.block_size.row++;
+    if (options.stream.block_size.col != 256 ||
+        options.stream.block_size.row != 256) {
+        LOG("sirius", warn, "Block options are not available in rotation mode");
+        const_cast<CliOptions&>(options).stream.block_size.col = 256;
+        const_cast<CliOptions&>(options).stream.block_size.row = 256;
     }
 
     sirius::image_decomposition::Policies image_decomposition_policy =
