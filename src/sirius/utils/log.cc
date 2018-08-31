@@ -40,29 +40,21 @@ LoggerManager& LoggerManager::Instance() {
 }
 
 void LoggerManager::SetLogLevel(spdlog::level::level_enum level) {
-    log_level_ = level;
     spdlog::set_level(level);
 }
 
 LoggerManager::Logger* LoggerManager::Get(const std::string& channel) {
     std::lock_guard<std::mutex> lock(loggers_mutex_);
-    if (loggers_.count(channel)) {
-        return loggers_[channel].get();
+    auto logger = spdlog::get(channel);
+    if (logger) {
+        return logger.get();
     }
 
-    std::vector<spdlog::sink_ptr> sinks;
 #ifdef _WIN32
-    sinks.push_back(std::make_shared<spdlog::sinks::wincolor_stderr_sink_mt>());
+    logger = spdlog::create<spdlog::sinks::wincolor_stderr_sink_mt>(channel);
 #else
-    sinks.push_back(
-          std::make_shared<spdlog::sinks::ansicolor_stderr_sink_mt>());
+    logger = spdlog::create<spdlog::sinks::ansicolor_stderr_sink_mt>(channel);
 #endif  // _WIN32
-
-    auto logger =
-          std::make_shared<spdlog::logger>(channel, begin(sinks), end(sinks));
-    logger->set_level(log_level_);
-    spdlog::register_logger(logger);
-    loggers_[channel] = logger;
 
     return logger.get();
 }

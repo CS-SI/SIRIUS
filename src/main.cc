@@ -82,7 +82,7 @@ struct CliParameters {
     }
 };
 
-CliParameters GetCliParameters(int argc, const char* argv[]);
+CliParameters GetCliParameters(int argc, char* argv[]);
 void RunRegularMode(const sirius::IFrequencyResampler& frequency_resampler,
                     const sirius::Filter& filter,
                     const sirius::ZoomRatio& zoom_ratio,
@@ -92,7 +92,7 @@ void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
                    const sirius::ZoomRatio& zoom_ratio,
                    const CliParameters& params);
 
-int main(int argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
     CliParameters params = GetCliParameters(argc, argv);
     if (params.help_requested || !params.parsed) {
         std::cerr << params.help_message;
@@ -242,7 +242,7 @@ void RunStreamMode(const sirius::IFrequencyResampler& frequency_resampler,
     streamer.Stream(frequency_resampler, filter);
 }
 
-CliParameters GetCliParameters(int argc, const char* argv[]) {
+CliParameters GetCliParameters(int argc, char* argv[]) {
     CliParameters params;
     std::stringstream description;
     description << "Sirius " << sirius::kVersion << " (" << sirius::kGitCommit

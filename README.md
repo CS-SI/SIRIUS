@@ -81,9 +81,9 @@ Sirius is using [CMake] to build its libraries and executables.
 
 ### Internal dependencies
 
-* [spdlog v0.17.0]
-* [cxxopts v2.1.0]
-* [GSL v1.0.0]
+* [spdlog v1.1.0]
+* [cxxopts v2.1.1]
+* [GSL v2.0.0]
 * [catch v2.2.3]
 * [cmake-modules]
 
@@ -466,12 +466,17 @@ Sirius developers would like to thank:
 [FFTW]: http://www.fftw.org/ "Fastest Fourier Transform in the West"
 [Doxygen]: http://www.doxygen.org "Doxygen"
 [FFTW3]: http://www.fftw.org/fftw-paper-ieee.pdf "Matteo Frigo and Steven G. Johnson, “The design and implementation of FFTW3,” Proc. IEEE 93 (2), 216231 (2005)"
+
 [spdlog]: https://github.com/gabime/spdlog "spdlog"
-[spdlog v0.17.0]: https://github.com/gabime/spdlog/tree/v0.17.0 "spdlog v0.17.0"
+[spdlog v1.1.0]: https://github.com/gabime/spdlog/tree/v1.1.0 "spdlog v1.1.0"
+
 [cxxopts]: https://github.com/jarro2783/cxxopts "cxxopts"
-[cxxopts v2.1.0]: https://github.com/jarro2783/cxxopts/tree/v2.1.0 "cxxopts v2.1.0"
+[cxxopts v2.1.1]: https://github.com/jarro2783/cxxopts/tree/v2.1.1 "cxxopts v2.1.1"
+
 [GSL]: https://github.com/Microsoft/GSL "Guideline Support Library"
-[GSL v1.0.0]: https://github.com/Microsoft/GSL/tree/v1.0.0 "Guideline Support Library v1.0.0"
-[catch2]: https://github.com/catchorg/Catch2/tree/v2.2.3 "Catch2"
-[catch v2.2.3]: https://github.com/catchorg/Catch2/tree/v2.2.3 "Catch v2.2.3"
+[GSL v2.0.0]: https://github.com/Microsoft/GSL/tree/v2.0.0 "Guideline Support Library v2.0.0"
+
+[catch2]: https://github.com/catchorg/Catch2 "Catch2"
+[catch v2.3.0]: https://github.com/catchorg/Catch2/tree/v2.3.0 "Catch2 v2.3.0"
+
 [cmake-modules]: https://github.com/rpavlik/cmake-modules "CMake Modules"
