@@ -20,12 +20,19 @@
 #
 
 cmake_minimum_required(VERSION 3.2)
-project(Sirius CXX)
 
-include(cmake/BuildType.cmake)
+# path to additional cmake modules
+list(APPEND CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
 
 set(SIRIUS_VERSION "" CACHE STRING "Sirius version")
 set(SIRIUS_REVISION_COMMIT "" CACHE STRING "Sirius revision commit")
+
+include(cmake/BuildType.cmake)
+include(cmake/ExtractVersion.cmake)
+
+project(Sirius VERSION ${SIRIUS_VERSION} LANGUAGES CXX)
 
 option(ENABLE_SIRIUS_EXECUTABLE "Enable Sirius executable target" ON)
 option(ENABLE_CACHE_OPTIMIZATION "Enable cache optimization (FFTW plan, Filter FFT)" ON)
@@ -41,42 +48,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
 endif()
 
-# path to additional cmake modules
-list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
-     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmake-modules")
-
-find_package(Git QUIET)
-if(GIT_FOUND AND "${SIRIUS_VERSION}" STREQUAL ""
-             AND "${SIRIUS_REVISION_COMMIT}" STREQUAL "")
-    # try to extract version and revision commit from Git using git describe
-    include(GetGitRevisionDescription)
-    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_REVISION_COMMIT)
-    git_describe(SIRIUS_GIT_DESCRIBE --tags)
-    if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
-        message(STATUS "No recent tag in the commit history, set SIRIUS_VERSION to 0.0.0")
-        set(SIRIUS_VERSION "0.0.0")
-    else()
-        set(SIRIUS_VERSION "${SIRIUS_GIT_DESCRIBE}")
-    endif()
-    if (SIRIUS_REVISION_COMMIT MATCHES ".*NOTFOUND")
-        set(SIRIUS_REVISION_COMMIT "")
-    endif()
-endif()
-
-if ("${SIRIUS_VERSION}" STREQUAL "")
-    set(SIRIUS_VERSION "0.0.0")
-endif()
-if ("${SIRIUS_REVISION_COMMIT}" STREQUAL "")
-    set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit")
-endif()
-
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     message(STATUS "Force GSL contracts on Debug build type")
     set(ENABLE_GSL_CONTRACTS "ON")
 endif()
 
-message(STATUS "Sirius ${SIRIUS_VERSION} (${SIRIUS_REVISION_COMMIT})")
+message(STATUS "CMake version: ${CMAKE_VERSION}")
+message(STATUS "Sirius ${SIRIUS_EXTENDED_VERSION} (${SIRIUS_REVISION_COMMIT})")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "Enable Sirius executable: ${ENABLE_SIRIUS_EXECUTABLE}")

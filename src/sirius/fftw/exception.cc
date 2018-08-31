@@ -34,6 +34,16 @@ Exception::Exception(ErrorCode code) : sirius::Exception(""), err_code_(code) {
 
 const char* Exception::what() const noexcept {
     switch (err_code_) {
+        case ErrorCode::kSuccess:
+            return "success";
+        case ErrorCode::kMemoryAllocationFailed:
+            return "memory allocation failed";
+        case ErrorCode::kPlanCreationFailed:
+            return "plan creation failed";
+        case ErrorCode::kComplexAllocationFailed:
+            return "complex allocation failed";
+        case ErrorCode::kRealAllocationFailed:
+            return "real allocation failed";
         default:
             return default_err_msg_.c_str();
     }

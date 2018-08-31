@@ -1,0 +1,32 @@
+find_package(Git QUIET)
+if(GIT_FOUND AND "${SIRIUS_VERSION}" STREQUAL ""
+             AND "${SIRIUS_REVISION_COMMIT}" STREQUAL "")
+    # try to extract version and revision commit from Git using git describe
+    include(GetGitRevisionDescription)
+    get_git_head_revision(SIRIUS_GIT_REFSPEC SIRIUS_REVISION_COMMIT)
+    git_describe(SIRIUS_GIT_DESCRIBE --tags)
+    if (SIRIUS_GIT_DESCRIBE MATCHES ".*NOTFOUND")
+        message(STATUS "No recent tag in the commit history. Specify the version using SIRIUS_VERSION variable.")
+        set(SIRIUS_VERSION "")
+    else()
+        set(SIRIUS_VERSION "${SIRIUS_GIT_DESCRIBE}")
+    endif()
+    if (SIRIUS_REVISION_COMMIT MATCHES ".*NOTFOUND")
+        message(STATUS "No revision commit in the commit history. Specify the version using SIRIUS_REVISION_COMMIT variable.")
+        set(SIRIUS_REVISION_COMMIT "")
+    endif()
+endif()
+
+set(VERSION_REGEX "^([0-9]+)[.]([0-9]+)[.]([0-9]+)")
+
+if ("${SIRIUS_VERSION}" STREQUAL "")
+    message(STATUS "No version found. Setting project version to '0.0.0'")
+    set(SIRIUS_VERSION "0.0.0")
+endif()
+set(SIRIUS_EXTENDED_VERSION "${SIRIUS_VERSION}")
+string(REGEX MATCH ${VERSION_REGEX} SIRIUS_VERSION ${SIRIUS_VERSION})
+
+if ("${SIRIUS_REVISION_COMMIT}" STREQUAL "")
+    message(STATUS "No revision commit found. Setting project revision commit to 'sirius-no-revision-commit'")
+    set(SIRIUS_REVISION_COMMIT "sirius-no-revision-commit")
+endif()
