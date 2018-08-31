@@ -23,6 +23,8 @@
 
 #include <cstring>
 
+#include "sirius/config.h"
+
 #include "sirius/exception.h"
 #include "sirius/frequency_resampler_factory.h"
 #include "sirius/i_frequency_resampler.h"

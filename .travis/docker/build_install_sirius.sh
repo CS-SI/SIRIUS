@@ -51,6 +51,7 @@ make -j4 sirius
 
 # execute sirius
 ./src/sirius -h
+./src/sirius -v trace -r 2 ../data/input/lena.jpg lena_z2.tif
 
 # install project
 make -j4 install

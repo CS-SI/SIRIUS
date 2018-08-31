@@ -53,6 +53,19 @@ make -j4 sirius
 
 # execute sirius
 ./src/sirius -h
+ ./src/sirius -v trace -r 2 ../data/input/lena.jpg lena_z2.tif
 
 # install project
 make -j4 install
+
+# test find_package(SIRIUS)
+cd ${PROJECT_DIR}
+mkdir ${PROJECT_DIR}/.build-test-find-package
+cd ${PROJECT_DIR}/.build-test-find-package
+cmake ../tests/find-package-test \
+    -G "Unix Makefiles" \
+    -DCMAKE_CXX_COMPILER="${CXX_COMPILER}" \
+    -DSIRIUS_ROOT=${INSTALL_DIR} \
+    -DENABLE_CLANG_LIBCPP=${ENABLE_CLANG_LIBCPP}
+make -j4
+./basic_sirius_static_test

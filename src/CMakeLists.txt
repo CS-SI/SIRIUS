@@ -23,22 +23,38 @@ cmake_minimum_required(VERSION 3.2)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius)
 
-set(SIRIUS_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/sirius/sirius.h.in)
-set(SIRIUS_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/include/sirius/sirius.h)
+message(STATUS "Generating sirius/sirius.h")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sirius/sirius.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/sirius/sirius.h
+               @ONLY)
 
-configure_file(${SIRIUS_CONFIG_IN} ${SIRIUS_CONFIG_OUT} @ONLY)
+# configuration definitions that will populate sirius/config.h
+if (ENABLE_LOGS)
+    set(SIRIUS_ENABLE_LOGS 1)
+endif()
+if (ENABLE_CACHE_OPTIMIZATION)
+    set(SIRIUS_ENABLE_CACHE_OPTIMIZATION 1)
+endif()
+if (ENABLE_GSL_CONTRACTS)
+    message(STATUS "Enable GSL contract violation policy: ON (terminate on violation)")
+    set(GSL_TERMINATE_ON_CONTRACT_VIOLATION 1)
+else()
+    message(STATUS "Enable GSL contract violation policy: OFF")
+    set(GSL_UNENFORCED_ON_CONTRACT_VIOLATION 1)
+endif()
+
+message(STATUS "Generating sirius/config.h")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sirius/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/sirius/config.h
+               @ONLY)
 
 # sirius shared library (use as a model for compilation options, definitions and link libraries properties of libsirius-objects and libsirius-static)
 # TODO: when using cmake 3.12, add all those settings into libsirius-objects only and link libsirius and libsirius-static with libsirius-objects (https://cmake.org/cmake/help/v3.12/release/3.12.html#index-0-command:target_link_libraries)
 add_library(libsirius SHARED $<TARGET_OBJECTS:libsirius-objects>)
-if (${ENABLE_LOGS})
-    # build with logs
-    target_compile_definitions(libsirius PUBLIC SIRIUS_ENABLE_LOGS=1)
-endif ()
-if (${ENABLE_CACHE_OPTIMIZATION})
-    # build with cache
-    target_compile_definitions(libsirius PUBLIC SIRIUS_ENABLE_CACHE_OPTIMIZATION=1)
-endif ()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # export symbols for windows
+    set_target_properties(libsirius PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
 
 target_include_directories(libsirius PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -57,13 +73,7 @@ target_link_libraries(libsirius-static $<TARGET_PROPERTY:libsirius,INTERFACE_LIN
 install(TARGETS libsirius-static DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/sirius)
 
 # sirius objects library
-add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL)
-set_target_properties(libsirius-objects PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_include_directories(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
-target_compile_definitions(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
-target_compile_options(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_OPTIONS>)
-
-target_sources(libsirius-objects PRIVATE
+add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/sirius.h
     sirius/exception.h
 
@@ -115,10 +125,15 @@ target_sources(libsirius-objects PRIVATE
     sirius/utils/lru_cache.h
     sirius/utils/numeric.h
     sirius/utils/numeric.cc)
+set_target_properties(libsirius-objects PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_include_directories(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
+target_compile_definitions(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
+target_compile_options(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_OPTIONS>)
 
 # copy sirius include directory into install directory
-install(FILES ${SIRIUS_CONFIG_OUT}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius/sirius)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/sirius
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius
         FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")

@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include "sirius/config.h"
+
 #ifdef SIRIUS_ENABLE_LOGS
 
 #include <map>

@@ -19,29 +19,25 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_UTILS_GSL_H_
-#define SIRIUS_UTILS_GSL_H_
+#include <sirius/utils/log.h>
 
-#include "sirius/config.h"
+#include "sirius/filter.h"
+#include <sirius/frequency_resampler_factory.h>
+#include "sirius/image.h"
+#include <sirius/types.h>
 
-#include <gsl/gsl>
+int main(int, char**) {
+    LOG_SET_LEVEL(trace);
 
-namespace sirius {
-namespace utils {
+    auto zoom_ratio_2_1 = sirius::ZoomRatio::Create(2, 1);
 
-/**
- * \brief Make a GSL span from a smart pointer pointing to an array of data
- * \param smart_ptr smart pointer to array to wrap as span
- * \param size size of the array
- * \return span view of the array
- */
-template <typename SmartPtr>
-auto MakeSmartPtrArraySpan(const SmartPtr& smart_ptr, const Size& size) {
-    return gsl::span<typename SmartPtr::element_type>(smart_ptr.get(),
-                                                      size.CellCount());
+    auto dummy_image = sirius::Image({5, 5});
+
+    sirius::IFrequencyResampler::UPtr freq_resampler =
+          sirius::FrequencyResamplerFactory::Create(
+                sirius::ImageDecompositionPolicies::kRegular,
+                sirius::FrequencyZoomStrategies::kZeroPadding);
+
+    sirius::Image zoomed_image_2_1 =
+          freq_resampler->Compute(zoom_ratio_2_1, dummy_image, {0, 0, 0, 0});
 }
-
-}  // namespace utils
-}  // namespace sirius
-
-#endif  // SIRIUS_UTILS_GSL_H_

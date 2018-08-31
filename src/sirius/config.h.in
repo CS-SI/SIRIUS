@@ -19,29 +19,21 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_UTILS_GSL_H_
-#define SIRIUS_UTILS_GSL_H_
+#ifndef SIRIUS_CONFIG_H_
+#define SIRIUS_CONFIG_H_
 
-#include "sirius/config.h"
+// This file contains Sirius configuration
 
-#include <gsl/gsl>
+// define SIRIUS_ENABLE_LOGS to enable logs
+#cmakedefine SIRIUS_ENABLE_LOGS
 
-namespace sirius {
-namespace utils {
+// define SIRIUS_ENABLE_CACHE_OPTIMIZATIONS to enable cache optimization
+#cmakedefine SIRIUS_ENABLE_CACHE_OPTIMIZATION
 
-/**
- * \brief Make a GSL span from a smart pointer pointing to an array of data
- * \param smart_ptr smart pointer to array to wrap as span
- * \param size size of the array
- * \return span view of the array
- */
-template <typename SmartPtr>
-auto MakeSmartPtrArraySpan(const SmartPtr& smart_ptr, const Size& size) {
-    return gsl::span<typename SmartPtr::element_type>(smart_ptr.get(),
-                                                      size.CellCount());
-}
+// define GSL_TERMINATE_ON_CONTRACT_VIOLATION to terminate execution on GSL contract violation
+#cmakedefine GSL_TERMINATE_ON_CONTRACT_VIOLATION
 
-}  // namespace utils
-}  // namespace sirius
+// define GSL_UNENFORCED_ON_CONTRACT_VIOLATION to disable GSL contract violation checking
+#cmakedefine GSL_UNENFORCED_ON_CONTRACT_VIOLATION
 
-#endif  // SIRIUS_UTILS_GSL_H_
+#endif  // SIRIUS_CONFIG_H_

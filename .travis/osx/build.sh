@@ -50,6 +50,18 @@ make -j4 sirius
 
 # execute sirius
 ./src/sirius -h
+ ./src/sirius -v trace -r 2 ../data/input/lena.jpg lena_z2.tif
 
 # install project
 make -j4 install
+
+# test find_package(SIRIUS)
+cd ${PROJECT_DIR}
+mkdir ${PROJECT_DIR}/.build-test-find-package
+cd ${PROJECT_DIR}/.build-test-find-package
+cmake ../tests/find-package-test \
+    -G "Unix Makefiles" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DSIRIUS_ROOT=${INSTALL_DIR}
+make -j4
+./basic_sirius_static_test

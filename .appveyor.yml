@@ -64,6 +64,13 @@ test_script:
   - ctest --output-on-failure
   - appveyor AddMessage "Running sirius..."
   - src\%configuration%\sirius.exe -h
+  - src\%configuration%\sirius.exe -v trace -r 2 ..\data\input\lena.jpg lena_z2.tif
+  - appveyor AddMessage "Testing find_package(SIRIUS)..."
+  - mkdir %APPVEYOR_BUILD_FOLDER%\.build-test-find-package
+  - cd %APPVEYOR_BUILD_FOLDER%\.build-test-find-package
+  - cmake ..\tests\find-package-test -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DSIRIUS_ROOT=%APPVEYOR_BUILD_FOLDER%/.install-directory
+  - cmake --build . --config %configuration%
+  - Release\basic_sirius_static_test.exe
 
 # to disable deployment
 deploy: off
