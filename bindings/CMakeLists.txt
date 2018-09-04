@@ -20,7 +20,7 @@ add_custom_command(OUTPUT "${stamp_file}"
 
 add_custom_target(siriuspy ALL DEPENDS libsirius ${stamp_file})
 
-add_custom_target(test_siriuspy COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test.py)
+add_custom_target(test_siriuspy COMMAND PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_EXECUTABLE} -m unittest test.py  -v)
 
 #python3 setup.py build_ext --include-dirs=SIRIUS_INCLUDE_DIR:PYBIND11_INCLUDE_DIR:FFTW_INCLUDE_DIR --library-dirs=SIRIUS_LIB_DIR
 
