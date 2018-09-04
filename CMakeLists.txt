@@ -33,6 +33,7 @@ option(ENABLE_LOGS "Enable logs" ON)
 option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
+option(ENABLE_BINDINGS "Enable unit test targets" OFF)
 
 # path to additional cmake modules
 list(APPEND CMAKE_MODULE_PATH
@@ -101,6 +102,10 @@ add_subdirectory(src)
 if (${ENABLE_UNIT_TESTS})
     enable_testing()
     add_subdirectory(tests)
+endif()
+
+if(ENABLE_BINDINGS)
+  add_subdirectory(bindings)
 endif()
 
 if (${ENABLE_DOCUMENTATION})

@@ -1,0 +1,7 @@
+[metadata]
+version = @SIRIUS_VERSION@
+
+[build_ext]
+#inplace=1
+include_dirs=@SIRIUS_INCLUDE_DIR@:@PYBIND11_INCLUDE_DIR@:@FFTW3_INCLUDE_DIR@:@SPDLOG_INCLUDE_DIR@
+library_dirs=@SIRIUS_LIBRARY_DIR@
