@@ -75,6 +75,7 @@ set(LIBSIRIUS_SRC
     # rotation
     sirius/rotation/frequency_rotator.h
     sirius/rotation/interpolator.h
+    sirius/rotation/interpolator.cc
     sirius/rotation/parameters.h
     sirius/rotation/processor.cc
     sirius/rotation/processor.h

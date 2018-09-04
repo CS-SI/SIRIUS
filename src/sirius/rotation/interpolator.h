@@ -33,6 +33,8 @@ namespace rotation {
 class Interpolator {
   public:
     Interpolator() = default;
+
+    Image Interpolate2D(const Image& image, const Parameters& parameters) const;
 };
 
 }  // namespace rotation

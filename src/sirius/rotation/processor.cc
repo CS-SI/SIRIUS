@@ -39,6 +39,7 @@ namespace rotation {
 /*
    Implementation of the rotation in frequency domain thanks to the method
    exposed in "Fast Fourier method for the accurate rotation of sampled images"
+   (http://www.nontrivialzeros.net/KGL_Papers/27_Rotation_Paper_1997_qualityscan_OCR.pdf)
 */
 
 Image Processor::Process(const Image& image,

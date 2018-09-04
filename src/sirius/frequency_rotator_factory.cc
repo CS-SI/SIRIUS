@@ -34,17 +34,16 @@ IFrequencyRotator::UPtr FrequencyRotatorFactory::Create(
     using FrequencyRotatorRegular =
           rotation::FrequencyRotator<image_decomposition::RegularPolicy>;
 
-    /*using FrequencyRotatorPeriodicSmooth =
-       rotation::FrequencyRotator<
-          image_decomposition::PeriodicSmoothPolicy>;*/
+    using FrequencyRotatorPeriodicSmooth =
+          rotation::FrequencyRotator<image_decomposition::PeriodicSmoothPolicy>;
 
     switch (image_decomposition) {
         case image_decomposition::Policies::kRegular:
             return std::make_unique<FrequencyRotatorRegular>();
             break;
-        /*case image_decomposition::Policies::kPeriodicSmooth:
+        case image_decomposition::Policies::kPeriodicSmooth:
             return std::make_unique<FrequencyRotatorPeriodicSmooth>();
-            break;*/
+            break;
         default:
             break;
     }
