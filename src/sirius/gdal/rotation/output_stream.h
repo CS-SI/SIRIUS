@@ -101,6 +101,11 @@ class OutputStream : public IOutputStream {
     double slope_tl_bl_ = 0;
     double slope_tl_tr_ = 0;
     double slope_bl_br_ = 0;
+    int i_ = 0;
+
+    //////
+    Size block_margin_size_ = {50, 50};
+    //////
 };
 
 }  // namespace rotation

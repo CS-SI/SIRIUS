@@ -30,7 +30,7 @@
 
 #include "sirius/gdal/error_code.h"
 #include "sirius/gdal/i_input_stream.h"
-#include "sirius/gdal/input_stream.h"
+#include "sirius/gdal/types.h"
 #include "sirius/gdal/wrapper.h"
 
 #include "sirius/rotation/parameters.h"
@@ -76,6 +76,16 @@ class InputStream : public IInputStream {
     int block_row_idx_ = 0;
     int block_col_idx_ = 0;
     Point tl_ref_;
+
+    ///////
+    Size block_margin_size_ = {50, 50};
+    PaddingType block_padding_type_ = PaddingType::kMirrorPadding;
+    Point tl_prev_, tr_prev_, bl_prev_, br_prev_;
+    int blocks_per_band_;
+    int block_count_ = 0;
+    int nb_bands_;
+    int band_count_ = 0;
+    ///////
 };
 
 }  // namespace rotation

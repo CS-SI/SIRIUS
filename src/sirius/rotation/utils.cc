@@ -42,10 +42,10 @@ Size ComputeNonRotatedHull(const Size& image_size, const int angle) {
         auto h_tmp = image_size.col;
         auto w_tmp = image_size.row;
         auto angle_tmp_rad = (angle - 90) * M_PI / 180.0;
-        min_width = w_tmp * std::abs(std::cos(angle_tmp_rad)) +
-                    h_tmp * std::abs(std::sin(angle_tmp_rad));
-        min_height = w_tmp * std::abs(std::sin(angle_tmp_rad)) +
-                     h_tmp * std::abs(std::cos(angle_tmp_rad));
+        min_width = std::round(w_tmp * std::abs(std::cos(angle_tmp_rad)) +
+                               h_tmp * std::abs(std::sin(angle_tmp_rad)));
+        min_height = std::round(w_tmp * std::abs(std::sin(angle_tmp_rad)) +
+                                h_tmp * std::abs(std::cos(angle_tmp_rad)));
     }
 
     return {min_height, min_width};
@@ -68,6 +68,10 @@ void RecoverCorners(const Size& image_size, const int angle,
         tl = Point(std::abs(image_size.row * std::sin(angle_rad)), 0);
         bl = Point(0, image_size.row * std::cos(angle_rad));
     }
+
+    LOG("RecoverCorners", debug,
+        "block corners : tl = {}, {}, tr = {}, {}, bl = {}, {}, br = {}, {}",
+        tl.x, tl.y, tr.x, tr.y, bl.x, bl.y, br.x, br.y);
 }
 
 }  // namespace rotation

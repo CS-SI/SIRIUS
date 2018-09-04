@@ -143,8 +143,7 @@ int Rotate(const CliOptions& options) {
     LOG("sirius", info, "rotation mode");
     if (options.rotation.angle < -180 || options.rotation.angle > 180) {
         LOG("sirius", error, "Rotation angle must be contained in [-180, 180]");
-        throw sirius::Exception(
-              "Rotation angle out of the [-180, 180] interval");
+        throw sirius::Exception("Rotation angle out of the [-180, 180] range");
     }
 
     if (options.stream.block_size.col != 256 ||
@@ -155,7 +154,15 @@ int Rotate(const CliOptions& options) {
     }
 
     sirius::image_decomposition::Policies image_decomposition_policy =
-          sirius::image_decomposition::Policies::kRegular;
+          sirius::image_decomposition::Policies::kPeriodicSmooth;
+
+    if (options.no_image_decomposition) {
+        LOG("sirius", info, "image decomposition: none");
+        image_decomposition_policy =
+              sirius::image_decomposition::Policies::kRegular;
+    } else {
+        LOG("sirius", info, "image decomposition: periodic plus smooth");
+    }
 
     auto frequency_rotator =
           sirius::FrequencyRotatorFactory::Create(image_decomposition_policy);
