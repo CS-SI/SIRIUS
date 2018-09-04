@@ -36,7 +36,7 @@ target_link_libraries(unit_test_lib
 
 file(GLOB unit_tests *_tests.cc)
 
-# group test targets into one to easify build
+# group test targets into one to make build easier
 add_custom_target(build_tests)
 
 # create unit test target from test file

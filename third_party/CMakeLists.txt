@@ -24,30 +24,23 @@ cmake_minimum_required(VERSION 3.2)
 # create library from package dependencies
 find_package(FFTW3 REQUIRED)
 
-if (WIN32)
-    add_library(fftw3 UNKNOWN IMPORTED GLOBAL)
-else()
-    add_library(fftw3 SHARED IMPORTED GLOBAL)
-endif()
-set_target_properties(fftw3 PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIR}
-    IMPORTED_LOCATION ${FFTW3_LIBRARY})
-
 add_subdirectory(spdlog)
 add_subdirectory(gsl)
 
 if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
     find_package(GDAL REQUIRED)
 
-    if (WIN32)
-        add_library(gdal UNKNOWN IMPORTED GLOBAL)
-    else()
-        add_library(gdal SHARED IMPORTED GLOBAL)
-    endif()
+    add_library(gdal SHARED IMPORTED GLOBAL)
     set_target_properties(gdal PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES ${GDAL_INCLUDE_DIR}
-        IMPORTED_LOCATION ${GDAL_LIBRARY}
         INTERFACE_COMPILE_DEFINITIONS CPL_LOG=${ENABLE_LOGS})
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        set_target_properties(gdal PROPERTIES
+            IMPORTED_IMPLIB ${GDAL_LIBRARY})
+    else()
+        set_target_properties(gdal PROPERTIES
+            IMPORTED_LOCATION ${GDAL_LIBRARY})
+    endif()
 endif ()
 
 if (ENABLE_SIRIUS_EXECUTABLE)

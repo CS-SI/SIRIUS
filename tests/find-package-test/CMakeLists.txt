@@ -42,14 +42,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/BuildType.cmake)
 
 # FFTW3 headers are required
 find_package(FFTW3 REQUIRED)
-if (WIN32)
-    add_library(fftw3 UNKNOWN IMPORTED GLOBAL)
-else()
-    add_library(fftw3 SHARED IMPORTED GLOBAL)
-endif()
-set_target_properties(fftw3 PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIR}
-    IMPORTED_LOCATION ${FFTW3_LIBRARY})
 
 # set CXX flags
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -64,8 +56,8 @@ find_package(SIRIUS REQUIRED)
 
 add_executable(basic_sirius_shared_test
     basic_sirius_test.cc)
-target_link_libraries(basic_sirius_shared_test sirius::shared fftw3)
+target_link_libraries(basic_sirius_shared_test SIRIUS::libsirius FFTW3::fftw3)
 
 add_executable(basic_sirius_static_test
     basic_sirius_test.cc)
-target_link_libraries(basic_sirius_static_test sirius::static fftw3)
+target_link_libraries(basic_sirius_static_test SIRIUS::libsirius-static FFTW3::fftw3)

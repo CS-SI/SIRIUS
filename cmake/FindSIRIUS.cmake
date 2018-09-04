@@ -34,6 +34,9 @@
 #   SIRIUS_LIBRARIES           - List of libraries when using sirius.
 #   SIRIUS_STATIC_LIBRARIES    - List of static libraries when using sirius.
 #   SIRIUS_FOUND               - True if sirius found.
+#
+# If sirius library is found, this helper provides CMake targets: SIRIUS::libsirius and SIRIUS::libsirius-static
+#
 
 find_path(SIRIUS_INCLUDE_DIR
     sirius/sirius.h
@@ -51,7 +54,7 @@ find_library(SIRIUS_LIBRARY
     PATH_SUFFIXES
         lib/sirius)
 
-if (WIN32)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     find_file(SIRIUS_DLL_LIBRARY
         NAMES libsirius.dll
     HINTS
@@ -69,10 +72,6 @@ find_library(SIRIUS_STATIC_LIBRARY
     PATH_SUFFIXES
         lib/sirius)
 
-set(SIRIUS_LIBRARIES ${SIRIUS_LIBRARY})
-set(SIRIUS_STATIC_LIBRARIES ${SIRIUS_STATIC_LIBRARY})
-set(SIRIUS_INCLUDE_DIRS ${SIRIUS_INCLUDE_DIR})
-
 include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(SIRIUS DEFAULT_MSG SIRIUS_LIBRARY SIRIUS_STATIC_LIBRARY SIRIUS_INCLUDE_DIR)
@@ -80,24 +79,28 @@ find_package_handle_standard_args(SIRIUS DEFAULT_MSG SIRIUS_LIBRARY SIRIUS_STATI
 mark_as_advanced(SIRIUS_INCLUDE_DIR SIRIUS_LIBRARY SIRIUS_STATIC_LIBRARY)
 
 if (SIRIUS_FOUND)
-    if(NOT(TARGET sirius::shared) AND NOT(TARGET sirius::static))
-        add_library(sirius::shared SHARED IMPORTED GLOBAL)
-        set_target_properties(sirius::shared PROPERTIES
+    set(SIRIUS_LIBRARIES ${SIRIUS_LIBRARY})
+    set(SIRIUS_STATIC_LIBRARIES ${SIRIUS_STATIC_LIBRARY})
+    set(SIRIUS_INCLUDE_DIRS ${SIRIUS_INCLUDE_DIR})
+    if(NOT TARGET SIRIUS::libsirius)
+        add_library(SIRIUS::libsirius SHARED IMPORTED GLOBAL)
+        set_target_properties(SIRIUS::libsirius PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS})
-        if (WIN32)
-            set_target_properties(sirius::shared PROPERTIES
+        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+            set_target_properties(SIRIUS::libsirius PROPERTIES
                 IMPORTED_LOCATION ${SIRIUS_DLL_LIBRARY}
                 IMPORTED_IMPLIB ${SIRIUS_LIBRARIES})
         else()
-            set_target_properties(sirius::shared PROPERTIES
+            set_target_properties(SIRIUS::libsirius PROPERTIES
                 IMPORTED_LOCATION ${SIRIUS_LIBRARIES})
         endif()
-
-        add_library(sirius::static STATIC IMPORTED GLOBAL)
-        set_target_properties(sirius::static PROPERTIES
+    endif()
+    if (NOT TARGET SIRIUS::libsirius-static)
+        add_library(SIRIUS::libsirius-static STATIC IMPORTED GLOBAL)
+        set_target_properties(SIRIUS::libsirius-static PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS}
             IMPORTED_LOCATION ${SIRIUS_STATIC_LIBRARIES})
-        message(STATUS "find_package(SIRIUS) provides CMake targets: sirius::shared and sirius::static")
     endif()
+    message(STATUS "find_package(SIRIUS) provides CMake targets: SIRIUS::libsirius and SIRIUS::libsirius-static")
 endif ()
 

@@ -60,7 +60,7 @@ target_include_directories(libsirius PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/include)
 set_target_properties(libsirius PROPERTIES PREFIX "")
-target_link_libraries(libsirius PUBLIC fftw3 spdlog gsl)
+target_link_libraries(libsirius PUBLIC FFTW3::fftw3 spdlog gsl)
 install(TARGETS libsirius DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/sirius)
 
 # sirius static library
