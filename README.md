@@ -97,9 +97,9 @@ Sirius is using [CMake] to build its libraries and executables.
 * `ENABLE_CACHE_OPTIMIZATION`: set to `ON` to build with cache optimization for FFTW and Filter
 * `ENABLE_GSL_CONTRACTS`: set to `ON` to build with GSL contracts (e.g. bounds checking). This option should be `OFF` on release mode.
 * `ENABLE_LOGS`: set to `ON` if you want to build Sirius with the logs
-* `ENABLE_UNIT_TESTS`: set to `ON` if you want to build the unit tests
+* `BUILD_TESTING`: set to `ON` if you want to build the unit tests
 * `ENABLE_DOCUMENTATION`: set to `ON` if you want to build the documentation
-* `ENABLE_WINDOWS_STATIC_RUNTIME`: set to `ON` to statically link Sirius binaries with Windows runtime (Windows only)
+* `USE_CXX_STATIC_RUNTIME`: set to `ON` to statically link Sirius binaries with C++ runtime library
 
 Sirius version can be extracted from `git describe --tags` and revision commit from `git rev-parse HEAD`.
 If version and revision commit are not provided, [CMake] will try to extract them with the latter git commands.
@@ -116,7 +116,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DENABLE_CACHE_OPTIMIZATION=ON \
          -DENABLE_GSL_CONTRACTS=OFF \
          -DENABLE_LOGS=ON \
-         -DENABLE_UNIT_TESTS=OFF \
+         -DBUILD_TESTING=OFF \
          -DENABLE_DOCUMENTATION=ON
 cmake --build . --target sirius
 cmake --build . --target doc
@@ -156,7 +156,7 @@ cmake .. -DVCPKG_TARGET_TRIPLET=x64-windows ^
          -DENABLE_CACHE_OPTIMIZATION=ON ^
          -DENABLE_GSL_CONTRACTS=OFF ^
          -DENABLE_LOGS=ON ^
-         -DENABLE_UNIT_TESTS=OFF ^
+         -DBUILD_TESTING=OFF ^
          -DENABLE_DOCUMENTATION=OFF
 cmake --build . --target sirius --config Release
 ```

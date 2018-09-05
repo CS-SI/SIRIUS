@@ -35,8 +35,11 @@
 #
 # if fftw3 library is found (mandatory), this helper provides CMake target FFTW3::fftw3
 # if fftw3f library is found (optional), this helper provides variable FFTW3F_LIBRARIES and CMake target FFTW3::fftw3f
+# if fftw3f static library is found (optional), this helper provides variable FFTW3F_STATIC_LIBRARIES and CMake target FFTW3::fftw3f-static
 # if fftw3l library is found (optional), this helper provides variable FFTW3L_LIBRARIES and CMake target FFTW3::fftw3l
+# if fftw3l static library is found (optional), this helper provides variable FFTW3L_STATIC_LIBRARIES and CMake target FFTW3::fftw3l-static
 # if fftw3q library is found (optional), this helper provides variable FFTW3Q_LIBRARIES and CMake target FFTW3::fftw3Q
+# if fftw3q static library is found (optional), this helper provides variable FFTW3Q_STATIC_LIBRARIES and CMake target FFTW3::fftw3Q-static
 #
 # this implementation is slightly inspired by
 #    https://github.com/InsightSoftwareConsortium/ITK/blob/master/CMake/FindFFTW.cmake
@@ -65,32 +68,33 @@ find_library(FFTW3_LIBRARY
     NAMES fftw3
     HINTS ${FFTW_LIB_SEARCHPATH})
 
+find_library(FFTW3_STATIC_LIBRARY
+    NAMES libfftw3.a
+    HINTS ${FFTW_LIB_SEARCHPATH})
+
 find_library(FFTW3F_LIBRARY
     NAMES fftw3f
+    HINTS ${FFTW_LIB_SEARCHPATH})
+
+find_library(FFTW3F_STATIC_LIBRARY
+    NAMES libfftw3f.a
     HINTS ${FFTW_LIB_SEARCHPATH})
 
 find_library(FFTW3L_LIBRARY
     NAMES fftw3l
     HINTS ${FFTW_LIB_SEARCHPATH})
 
+find_library(FFTW3L_STATIC_LIBRARY
+    NAMES libfftw3l.a
+    HINTS ${FFTW_LIB_SEARCHPATH})
+
 find_library(FFTW3Q_LIBRARY
     NAMES fftw3q
     HINTS ${FFTW_LIB_SEARCHPATH})
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    find_file(FFTW3_DLL_LIBRARY
-        NAMES fftw3.dll
-        HINTS ${FFTW_LIB_SEARCHPATH})
-    find_file(FFTW3F_DLL_LIBRARY
-        NAMES fftw3f.dll
-        HINTS ${FFTW_LIB_SEARCHPATH})
-    find_file(FFTW3L_DLL_LIBRARY
-        NAMES fftw3l.dll
-        HINTS ${FFTW_LIB_SEARCHPATH})
-    find_file(FFTW3Q_DLL_LIBRARY
-        NAMES fftw3q.dll
-        HINTS ${FFTW_LIB_SEARCHPATH})
-endif()
+find_library(FFTW3Q_STATIC_LIBRARY
+    NAMES libfftw3q.a
+    HINTS ${FFTW_LIB_SEARCHPATH})
 
 include(FindPackageHandleStandardArgs)
 
@@ -98,74 +102,91 @@ find_package_handle_standard_args(FFTW3 DEFAULT_MSG FFTW3_LIBRARY FFTW3_INCLUDE_
 
 mark_as_advanced(FFTW3_INCLUDE_DIR FFTW3_LIBRARY)
 
+set(_FFTW3_LIBRARY_TYPE SHARED)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(_FFTW3_LIBRARY_TYPE UNKNOWN)
+endif()
+
 if (FFTW3_FOUND)
     set(FFTW3_LIBRARIES ${FFTW3_LIBRARY})
     set(FFTW3_INCLUDE_DIRS ${FFTW3_INCLUDE_DIR})
     if (NOT TARGET FFTW3::fftw3)
         # double precision
-        add_library(FFTW3::fftw3 SHARED IMPORTED GLOBAL)
+        add_library(FFTW3::fftw3 ${_FFTW3_LIBRARY_TYPE} IMPORTED GLOBAL)
         set_target_properties(FFTW3::fftw3 PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS})
-        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-            set_target_properties(FFTW3::fftw3 PROPERTIES
-                IMPORTED_LOCATION ${FFTW3_DLL_LIBRARY}
-                IMPORTED_IMPLIB ${FFTW3_LIBRARIES})
-        else()
-            set_target_properties(FFTW3::fftw3 PROPERTIES
-                IMPORTED_LOCATION ${FFTW3_LIBRARIES})
-        endif()
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3_LIBRARIES})
         list(APPEND FFTW3_TARGETS "FFTW3::fftw3")
+    endif()
+
+    if (FFTW3_STATIC_LIBRARY AND NOT(TARGET FFTW3::fftw3-static))
+        # double precision
+        set(FFTW3_STATIC_LIBRARIES ${FFTW3_STATIC_LIBRARY})
+        add_library(FFTW3::fftw3-static STATIC IMPORTED GLOBAL)
+        set_target_properties(FFTW3::fftw3-static PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3_STATIC_LIBRARIES})
+        list(APPEND FFTW3_TARGETS "FFTW3::fftw3-static")
     endif()
 
     if (FFTW3F_LIBRARY AND NOT(TARGET FFTW3::fftw3f))
         # float precision
         set(FFTW3F_LIBRARIES ${FFTW3F_LIBRARY})
-        add_library(FFTW3::fftw3f SHARED IMPORTED GLOBAL)
+        add_library(FFTW3::fftw3f ${_FFTW3_LIBRARY_TYPE} IMPORTED GLOBAL)
         set_target_properties(FFTW3::fftw3f PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS})
-        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-            set_target_properties(FFTW3::fftw3f PROPERTIES
-                IMPORTED_LOCATION ${FFTW3F_DLL_LIBRARY}
-                IMPORTED_IMPLIB ${FFTW3F_LIBRARIES})
-        else()
-            set_target_properties(FFTW3::fftw3f PROPERTIES
-                IMPORTED_LOCATION ${FFTW3F_LIBRARIES})
-        endif()
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3F_LIBRARIES})
         list(APPEND FFTW3_TARGETS "FFTW3::fftw3f")
+    endif()
+
+    if (FFTW3F_STATIC_LIBRARY AND NOT(TARGET FFTW3::fftw3f-static))
+        # float precision
+        set(FFTW3F_STATIC_LIBRARIES ${FFTW3F_STATIC_LIBRARY})
+        add_library(FFTW3::fftw3f-static STATIC IMPORTED GLOBAL)
+        set_target_properties(FFTW3::fftw3f-static PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3F_STATIC_LIBRARIES})
+        list(APPEND FFTW3_TARGETS "FFTW3::fftw3f-static")
     endif()
 
     if (FFTW3L_LIBRARY AND NOT(TARGET FFTW3::fftw3l))
         # long double precision
         set(FFTW3L_LIBRARIES ${FFTW3F_LIBRARY})
-        add_library(FFTW3::fftw3l SHARED IMPORTED GLOBAL)
+        add_library(FFTW3::fftw3l ${_FFTW3_LIBRARY_TYPE} IMPORTED GLOBAL)
         set_target_properties(FFTW3::fftw3l PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS})
-        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-            set_target_properties(FFTW3::fftw3l PROPERTIES
-                IMPORTED_LOCATION ${FFTW3L_DLL_LIBRARY}
-                IMPORTED_IMPLIB ${FFTW3L_LIBRARIES})
-        else()
-            set_target_properties(FFTW3::fftw3l PROPERTIES
-                IMPORTED_LOCATION ${FFTW3L_LIBRARIES})
-        endif()
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3L_LIBRARIES})
         list(APPEND FFTW3_TARGETS "FFTW3::fftw3l")
+    endif()
+
+    if (FFTW3L_STATIC_LIBRARY AND NOT(TARGET FFTW3::fftw3l-static))
+        # long double precision
+        set(FFTW3L_STATIC_LIBRARIES ${FFTW3L_STATIC_LIBRARY})
+        add_library(FFTW3::fftw3l-static STATIC IMPORTED GLOBAL)
+        set_target_properties(FFTW3::fftw3l-static PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3L_STATIC_LIBRARIES})
+        list(APPEND FFTW3_TARGETS "FFTW3::fftw3l-static")
     endif()
 
     if (FFTW3Q_LIBRARY AND NOT(TARGET FFTW3::fftw3q))
         # quad precision
         set(FFTW3Q_LIBRARIES ${FFTW3F_LIBRARY})
-        add_library(FFTW3::fftw3q SHARED IMPORTED GLOBAL)
+        add_library(FFTW3::fftw3q ${_FFTW3_LIBRARY_TYPE} IMPORTED GLOBAL)
         set_target_properties(FFTW3::fftw3q PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS})
-        if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-            set_target_properties(FFTW3::fftw3q PROPERTIES
-                IMPORTED_LOCATION ${FFTW3Q_DLL_LIBRARY}
-                IMPORTED_IMPLIB ${FFTW3Q_LIBRARIES})
-        else()
-            set_target_properties(FFTW3::fftw3q PROPERTIES
-                IMPORTED_LOCATION ${FFTW3Q_LIBRARIES})
-        endif()
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3Q_LIBRARIES})
         list(APPEND FFTW3_TARGETS "FFTW3::fftw3q")
+    endif()
+
+    if (FFTW3Q_STATIC_LIBRARY AND NOT(TARGET FFTW3::fftw3q-static))
+        # quad precision
+        set(FFTW3Q_STATIC_LIBRARIES ${FFTW3Q_STATIC_LIBRARY})
+        add_library(FFTW3::fftw3q-static STATIC IMPORTED GLOBAL)
+        set_target_properties(FFTW3::fftw3q-static PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${FFTW3_INCLUDE_DIRS}
+            IMPORTED_LOCATION ${FFTW3Q_STATIC_LIBRARIES})
+        list(APPEND FFTW3_TARGETS "FFTW3::fftw3q-static")
     endif()
 endif()
 

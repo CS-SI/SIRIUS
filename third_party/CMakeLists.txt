@@ -27,7 +27,7 @@ find_package(FFTW3 REQUIRED)
 add_subdirectory(spdlog)
 add_subdirectory(gsl)
 
-if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
+if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
     find_package(GDAL REQUIRED)
 
     add_library(gdal SHARED IMPORTED GLOBAL)
@@ -47,6 +47,6 @@ if (ENABLE_SIRIUS_EXECUTABLE)
     add_subdirectory(cxxopts)
 endif()
 
-if (ENABLE_UNIT_TESTS)
+if (BUILD_TESTING)
     add_subdirectory(catch)
 endif()

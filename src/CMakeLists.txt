@@ -146,7 +146,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/spdlog/spdlog/inclu
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/gsl/gsl/include/gsl
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius)
 
-if (ENABLE_SIRIUS_EXECUTABLE OR ENABLE_UNIT_TESTS)
+if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL
         # gdal
         sirius/gdal/debug.h

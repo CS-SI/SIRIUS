@@ -38,10 +38,14 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - git fetch --tags
   - mkdir %APPVEYOR_BUILD_FOLDER%\.build
+  - mkdir %APPVEYOR_BUILD_FOLDER%\.build-static-runtime
   - mkdir %APPVEYOR_BUILD_FOLDER%\.install-directory
-  - cd .build
+  - cd %APPVEYOR_BUILD_FOLDER%/.build
   - appveyor AddMessage "Creating Sirius Visual Studio solution..."
-  - cmake .. -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/.install-directory -DENABLE_CACHE_OPTIMIZATION=ON -DENABLE_GSL_CONTRACTS=ON -DENABLE_LOGS=ON -DENABLE_UNIT_TESTS=ON -DENABLE_DOCUMENTATION=OFF
+  - cmake .. -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/.install-directory -DENABLE_CACHE_OPTIMIZATION=ON -DENABLE_GSL_CONTRACTS=ON -DENABLE_LOGS=ON -DBUILD_TESTING=ON -DENABLE_DOCUMENTATION=OFF
+  - cd %APPVEYOR_BUILD_FOLDER%/.build-static-runtime
+  - appveyor AddMessage "Creating Sirius Visual Studio solution (static runtime)..."
+  - cmake .. -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/.install-directory -DENABLE_CACHE_OPTIMIZATION=ON -DENABLE_GSL_CONTRACTS=ON -DENABLE_LOGS=ON -DBUILD_TESTING=ON -DENABLE_DOCUMENTATION=OFF -DUSE_CXX_STATIC_RUNTIME=ON
 
 build: Script
 
@@ -57,6 +61,9 @@ build_script:
   - cmake --build . --target sirius --config %configuration% -- /m
   - appveyor AddMessage "Installing sirius..."
   - cmake --build . --target install --config %configuration% -- /m
+  - cd %APPVEYOR_BUILD_FOLDER%/.build-static-runtime
+  - appveyor AddMessage "Compiling sirius (static runtime)..."
+  - cmake --build . --target sirius
 
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%/.build

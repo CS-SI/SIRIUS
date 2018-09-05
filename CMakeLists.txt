@@ -39,13 +39,11 @@ option(ENABLE_CACHE_OPTIMIZATION "Enable cache optimization (FFTW plan, Filter F
 option(ENABLE_LOGS "Enable logs" ON)
 option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
-option(ENABLE_UNIT_TESTS "Enable unit test targets" OFF)
+option(BUILD_TESTING "Enable unit tests" OFF)
+option(USE_CXX_STATIC_RUNTIME "Build targets with C++ static runtime library" OFF)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-	option(ENABLE_WINDOWS_STATIC_RUNTIME "Build libraries and executables with static runtime" OFF)
-endif()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
+    option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
 endif()
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -62,19 +60,19 @@ message(STATUS "Enable cache: ${ENABLE_CACHE_OPTIMIZATION}")
 message(STATUS "Enable logs: ${ENABLE_LOGS}")
 message(STATUS "Enable GSL contracts: ${ENABLE_GSL_CONTRACTS}")
 message(STATUS "Enable documentation: ${ENABLE_DOCUMENTATION}")
-message(STATUS "Enable unit tests: ${ENABLE_UNIT_TESTS}")
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    message(STATUS "Enable windows static runtime: ${ENABLE_WINDOWS_STATIC_RUNTIME}")
-endif()
+message(STATUS "Enable unit tests: ${BUILD_TESTING}")
+message(STATUS "Link Sirius binaries with static C++ runtime library: ${USE_CXX_STATIC_RUNTIME}")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "Force use of libc++: ${ENABLE_CLANG_LIBCPP}")
 endif()
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# set CXX flags
+# set CXX global flags
 set(SIRIUS_CXX_FLAGS "")
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # GCC or Clang
     set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -Wall -Wextra")
@@ -87,7 +85,13 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(SIRIUS_CXX_FLAGS "${SIRIUS_CXX_FLAGS} /D_USE_MATH_DEFINES")
     # disable 4251 (from gdal): 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
     set(SIRIUS_CXX_FLAGS "${SIRIUS_CXX_FLAGS} /wd4251")
-    if (ENABLE_WINDOWS_STATIC_RUNTIME)
+endif()
+
+if (USE_CXX_STATIC_RUNTIME)
+    # build with C++ static runtime flags
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         # extracted from https://gitlab.kitware.com/cmake/community/wikis/FAQ#dynamic-replace
         foreach(flag_var
                 CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
@@ -98,6 +102,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         endforeach(flag_var)
     endif()
 endif()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 
 find_package(Threads)
@@ -105,7 +110,7 @@ find_package(Threads)
 add_subdirectory(third_party)
 add_subdirectory(src)
 
-if (ENABLE_UNIT_TESTS)
+if (BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
 
