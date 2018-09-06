@@ -61,7 +61,10 @@ target_include_directories(libsirius PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}/include)
 set_target_properties(libsirius PROPERTIES PREFIX "")
 target_link_libraries(libsirius PUBLIC FFTW3::fftw3 spdlog gsl)
-install(TARGETS libsirius DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/sirius)
+install(TARGETS libsirius
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 # sirius static library
 add_library(libsirius-static STATIC $<TARGET_OBJECTS:libsirius-objects>)
@@ -70,7 +73,10 @@ target_include_directories(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,I
 target_compile_definitions(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
 target_compile_options(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_OPTIONS>)
 target_link_libraries(libsirius-static $<TARGET_PROPERTY:libsirius,INTERFACE_LINK_LIBRARIES>)
-install(TARGETS libsirius-static DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/sirius)
+install(TARGETS libsirius-static
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 # sirius objects library
 add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
@@ -179,5 +185,8 @@ if (ENABLE_SIRIUS_EXECUTABLE)
         cxxopts
         Threads::Threads)
 
-    install(TARGETS sirius DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+    install(TARGETS sirius
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()

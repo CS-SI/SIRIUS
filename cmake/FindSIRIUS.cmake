@@ -52,7 +52,7 @@ find_library(SIRIUS_LIBRARY
     HINTS
         ${SIRIUS_ROOT}
     PATH_SUFFIXES
-        lib/sirius)
+        lib)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     find_file(SIRIUS_DLL_LIBRARY
@@ -60,7 +60,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     HINTS
         ${SIRIUS_ROOT}
     PATH_SUFFIXES
-        lib/sirius)
+        bin)
 endif()
 
 find_library(SIRIUS_STATIC_LIBRARY
@@ -70,7 +70,7 @@ find_library(SIRIUS_STATIC_LIBRARY
     HINTS
         ${SIRIUS_ROOT}
     PATH_SUFFIXES
-        lib/sirius)
+        lib)
 
 include(FindPackageHandleStandardArgs)
 
