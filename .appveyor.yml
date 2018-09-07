@@ -63,7 +63,7 @@ build_script:
   - cmake --build . --target install --config %configuration% -- /m
   - cd %APPVEYOR_BUILD_FOLDER%/.build-static-runtime
   - appveyor AddMessage "Compiling sirius (static runtime)..."
-  - cmake --build . --target sirius
+  - cmake --build . --target sirius --config %configuration% -- /m
 
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%/.build
@@ -75,8 +75,14 @@ test_script:
   - appveyor AddMessage "Testing find_package(SIRIUS)..."
   - mkdir %APPVEYOR_BUILD_FOLDER%\.build-test-find-package
   - cd %APPVEYOR_BUILD_FOLDER%\.build-test-find-package
-  - cmake ..\tests\find-package-test -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DSIRIUS_ROOT=%APPVEYOR_BUILD_FOLDER%/.install-directory
-  - cmake --build . --config %configuration%
+  - cmake ..\tests\find-package-test -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DSIRIUS_ROOT=%APPVEYOR_BUILD_FOLDER%/.install-directory -DENABLE_FIND_PACKAGE_SIRIUS_CONFIG=OFF
+  - cmake --build . --config %configuration% -- /m
+  - Release\basic_sirius_static_test.exe
+  - appveyor AddMessage "Testing find_package(SIRIUS CONFIG)..."
+  - mkdir %APPVEYOR_BUILD_FOLDER%\.build-test-find-package-config
+  - cd %APPVEYOR_BUILD_FOLDER%\.build-test-find-package-config
+  - cmake ..\tests\find-package-test -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% -DCMAKE_TOOLCHAIN_FILE=%VCPKG_DIR%/scripts/buildsystems/vcpkg.cmake -G "%CMAKE_GENERATOR%" -DSIRIUS_DIR=%APPVEYOR_BUILD_FOLDER%/.install-directory/share/cmake -DENABLE_FIND_PACKAGE_SIRIUS_CONFIG=ON
+  - cmake --build . --config %configuration% -- /m
   - Release\basic_sirius_static_test.exe
 
 # to disable deployment

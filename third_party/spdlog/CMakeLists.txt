@@ -22,4 +22,14 @@
 cmake_minimum_required(VERSION 3.2)
 
 add_library(spdlog INTERFACE)
-target_include_directories(spdlog INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include)
+target_include_directories(spdlog INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include>
+    $<INSTALL_INTERFACE:${SIRIUS_CONFIG_INCLUDE_DIR}>)
+
+# copy spdlog library into install directory
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include/spdlog
+        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR})
+
+install(TARGETS spdlog
+    EXPORT "${SIRIUS_CONFIG_TARGETS_EXPORT_NAME}"
+    INCLUDES DESTINATION "${SIRIUS_CONFIG_INCLUDE_DIR}")

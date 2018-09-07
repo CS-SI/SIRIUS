@@ -30,15 +30,16 @@ if(POLICY CMP0074)
     cmake_policy(SET CMP0074 NEW)
 endif()
 
+option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
+option(ENABLE_FIND_PACKAGE_SIRIUS_CONFIG "Force use of mode config of find_package(SIRIUS)" OFF)
+
 project(TestFindPackage CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# path to additional cmake modules
+# provide FFTW3 find_package helper
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake")
-
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/BuildType.cmake)
 
 # FFTW3 headers are required
 find_package(FFTW3 REQUIRED)
@@ -52,7 +53,12 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STRE
     endif()
 endif()
 
-find_package(SIRIUS REQUIRED)
+set (SIRIUS_FIND_PACKAGE "MODULE")
+if (ENABLE_FIND_PACKAGE_SIRIUS_CONFIG)
+    set(SIRIUS_FIND_PACKAGE "CONFIG")
+endif ()
+
+find_package(SIRIUS ${SIRIUS_FIND_PACKAGE} REQUIRED)
 
 add_executable(basic_sirius_shared_test
     basic_sirius_test.cc)

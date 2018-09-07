@@ -25,7 +25,7 @@ cd ${BUILD_DIR}
 cmake ${PROJECT_DIR} \
     -G "Unix Makefiles" \
     -DCMAKE_CXX_COMPILER="${CXX_COMPILER}" \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
     -DSIRIUS_VERSION="${SIRIUS_VERSION}" \
     -DSIRIUS_REVISION_COMMIT="${SIRIUS_REVISION_COMMIT}" \
@@ -60,13 +60,27 @@ make -j4 sirius
 make -j4 install
 
 # test find_package(SIRIUS)
-cd ${PROJECT_DIR}
 mkdir ${PROJECT_DIR}/.build-test-find-package
 cd ${PROJECT_DIR}/.build-test-find-package
 cmake ../tests/find-package-test \
     -G "Unix Makefiles" \
     -DCMAKE_CXX_COMPILER="${CXX_COMPILER}" \
+    -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
     -DSIRIUS_ROOT=${INSTALL_DIR} \
-    -DENABLE_CLANG_LIBCPP=${ENABLE_CLANG_LIBCPP}
+    -DENABLE_CLANG_LIBCPP=${ENABLE_CLANG_LIBCPP} \
+    -DENABLE_FIND_PACKAGE_SIRIUS_CONFIG=OFF
+make -j4
+./basic_sirius_static_test
+
+# test find_package(SIRIUS CONFIG)
+mkdir ${PROJECT_DIR}/.build-test-find-package-config
+cd ${PROJECT_DIR}/.build-test-find-package-config
+cmake ../tests/find-package-test \
+    -G "Unix Makefiles" \
+    -DCMAKE_CXX_COMPILER="${CXX_COMPILER}" \
+    -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+    -DSIRIUS_DIR=${INSTALL_DIR}/share/cmake \
+    -DENABLE_CLANG_LIBCPP=${ENABLE_CLANG_LIBCPP} \
+    -DENABLE_FIND_PACKAGE_SIRIUS_CONFIG=ON
 make -j4
 ./basic_sirius_static_test

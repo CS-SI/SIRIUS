@@ -11,6 +11,10 @@ stages:
   - test
   - deploy
 
+env:
+  global:
+    - CMAKE_BUILD_TYPE=Release
+
 matrix:
   include:
   # OS X

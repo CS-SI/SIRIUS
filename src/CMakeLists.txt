@@ -57,26 +57,20 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 target_include_directories(libsirius PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/include)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+    $<INSTALL_INTERFACE:${SIRIUS_CONFIG_INCLUDE_DIR}>)
 set_target_properties(libsirius PROPERTIES PREFIX "")
 target_link_libraries(libsirius PUBLIC FFTW3::fftw3 spdlog gsl)
-install(TARGETS libsirius
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 # sirius static library
 add_library(libsirius-static STATIC $<TARGET_OBJECTS:libsirius-objects>)
 set_target_properties(libsirius-static PROPERTIES PREFIX "")
-target_include_directories(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(libsirius-static PUBLIC
+    $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
 target_compile_definitions(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
 target_compile_options(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_OPTIONS>)
 target_link_libraries(libsirius-static $<TARGET_PROPERTY:libsirius,INTERFACE_LINK_LIBRARIES>)
-install(TARGETS libsirius-static
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 # sirius objects library
 add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
@@ -132,25 +126,53 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/utils/numeric.h
     sirius/utils/numeric.cc)
 set_target_properties(libsirius-objects PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_include_directories(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(libsirius-objects PUBLIC
+    $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
 target_compile_definitions(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
 target_compile_options(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_OPTIONS>)
 
+# generate find package config mode
+include(CMakePackageConfigHelpers)
+
+set(SIRIUS_CMAKE_GENERATED_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/cmake-generated-config")
+set(SIRIUS_CONFIG_VERSION "${SIRIUS_CMAKE_GENERATED_CONFIG}/${PROJECT_NAME}ConfigVersion.cmake")
+set(SIRIUS_CONFIG_PROJECT "${SIRIUS_CMAKE_GENERATED_CONFIG}/${PROJECT_NAME}Config.cmake")
+
+# generate SIRIUSConfigVersion.cmake file
+write_basic_package_version_file(
+    "${SIRIUS_CONFIG_VERSION}" COMPATIBILITY SameMajorVersion
+)
+
+# generate SIRIUSConfig.cmake file
+configure_package_config_file(
+    "cmake/Config.cmake.in"
+    "${SIRIUS_CONFIG_PROJECT}"
+    INSTALL_DESTINATION "${SIRIUS_CONFIG_CMAKE_INSTALL_DIR}"
+)
+
+# copy SIRIUSConfig.cmake and SIRIUSConfigVersion.cmake into install directory
+install(
+    FILES
+        "${SIRIUS_CONFIG_PROJECT}"
+        "${SIRIUS_CONFIG_VERSION}"
+    DESTINATION "${SIRIUS_CONFIG_CMAKE_INSTALL_DIR}"
+)
+
 # copy sirius include directory into install directory
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius
+        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/sirius
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius
+        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")
 
-# copy spdlog library into install directory
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/spdlog/spdlog/include/spdlog
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius)
-
-# copy gsl library into install directory
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/gsl/gsl/include/gsl
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/sirius)
+# install and export libsirius and libsirius-static
+install(TARGETS libsirius libsirius-static
+    EXPORT ${SIRIUS_CONFIG_TARGETS_EXPORT_NAME}
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${SIRIUS_CONFIG_INCLUDE_DIR}")
 
 if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL
@@ -186,7 +208,8 @@ if (ENABLE_SIRIUS_EXECUTABLE)
         Threads::Threads)
 
     install(TARGETS sirius
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+        EXPORT ${SIRIUS_CONFIG_TARGETS_EXPORT_NAME}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()

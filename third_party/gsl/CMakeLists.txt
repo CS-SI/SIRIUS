@@ -22,6 +22,17 @@
 cmake_minimum_required(VERSION 3.2)
 
 add_library(gsl INTERFACE)
-target_include_directories(gsl INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/gsl/include)
+target_include_directories(gsl INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/gsl/include>
+    $<INSTALL_INTERFACE:${SIRIUS_CONFIG_INCLUDE_DIR}>
+)
 
 target_compile_options(gsl INTERFACE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wno-unknown-attributes>)
+
+# copy gsl library into install directory
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/gsl/include/gsl
+        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR})
+
+install(TARGETS gsl
+    EXPORT "${SIRIUS_CONFIG_TARGETS_EXPORT_NAME}"
+    INCLUDES DESTINATION "${SIRIUS_CONFIG_INCLUDE_DIR}")

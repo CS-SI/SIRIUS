@@ -32,7 +32,7 @@ set(SIRIUS_REVISION_COMMIT "" CACHE STRING "Sirius revision commit")
 include(cmake/BuildType.cmake)
 include(cmake/ExtractVersion.cmake)
 
-project(Sirius VERSION ${SIRIUS_VERSION} LANGUAGES CXX)
+project(SIRIUS VERSION ${SIRIUS_VERSION} LANGUAGES CXX)
 
 option(ENABLE_SIRIUS_EXECUTABLE "Enable Sirius executable target" ON)
 option(ENABLE_CACHE_OPTIMIZATION "Enable cache optimization (FFTW plan, Filter FFT)" ON)
@@ -105,10 +105,31 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 
+# define GNU standard installation directories (CMAKE_INSTALL_XXXDIR)
+include(GNUInstallDirs)
+
+# define common variables for install directory structure
+set(SIRIUS_CONFIG_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_DATAROOTDIR}/cmake")
+set(SIRIUS_CONFIG_CMAKE_MODULES_INSTALL_DIR "${CMAKE_INSTALL_DATAROOTDIR}/cmake-modules")
+set(SIRIUS_CONFIG_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/sirius")
+set(SIRIUS_CONFIG_TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
+set(SIRIUS_CONFIG_NAMESPACE "${PROJECT_NAME}::")
+
 find_package(Threads)
 
 add_subdirectory(third_party)
 add_subdirectory(src)
+
+# copy find_package as module for SIRIUS and FFTW3
+install(FILES cmake/FindSIRIUS.cmake DESTINATION ${SIRIUS_CONFIG_CMAKE_MODULES_INSTALL_DIR})
+install(FILES cmake/FindFFTW3.cmake DESTINATION ${SIRIUS_CONFIG_CMAKE_MODULES_INSTALL_DIR})
+
+# add namespace "SIRIUS::" to exported targets
+install(
+    EXPORT "${SIRIUS_CONFIG_TARGETS_EXPORT_NAME}"
+    NAMESPACE "${SIRIUS_CONFIG_NAMESPACE}"
+    DESTINATION "${SIRIUS_CONFIG_CMAKE_INSTALL_DIR}"
+)
 
 if (BUILD_TESTING)
     enable_testing()
