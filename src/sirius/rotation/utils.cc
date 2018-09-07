@@ -57,21 +57,21 @@ void RecoverCorners(const Size& image_size, const int angle,
     auto angle_rad = angle * M_PI / 180.0;
 
     if (angle >= 0) {
-        tr = Point(image_size.col * std::cos(angle_rad), 0);
-        br = Point(hull_size.col, image_size.row * std::cos(angle_rad));
-        tl = Point(0, image_size.col * std::sin(angle_rad));
-        bl = Point(image_size.row * std::sin(angle_rad), hull_size.row);
+        tr = Point(std::round(image_size.col * std::cos(angle_rad)), 0);
+        br = Point(hull_size.col,
+                   std::round(image_size.row * std::cos(angle_rad)));
+        tl = Point(0, std::round(image_size.col * std::sin(angle_rad)));
+        bl = Point(std::round(image_size.row * std::sin(angle_rad)),
+                   hull_size.row);
     } else {
         tr = Point(hull_size.col,
-                   std::abs(image_size.col * std::sin(angle_rad)));
-        br = Point(image_size.col * std::cos(angle_rad), hull_size.row);
-        tl = Point(std::abs(image_size.row * std::sin(angle_rad)), 0);
-        bl = Point(0, image_size.row * std::cos(angle_rad));
+                   std::round(std::abs(image_size.col * std::sin(angle_rad))));
+        br = Point(std::round(image_size.col * std::cos(angle_rad)),
+                   hull_size.row);
+        tl = Point(std::round(std::abs(image_size.row * std::sin(angle_rad))),
+                   0);
+        bl = Point(0, std::round(image_size.row * std::cos(angle_rad)));
     }
-
-    LOG("RecoverCorners", debug,
-        "block corners : tl = {}, {}, tr = {}, {}, bl = {}, {}, br = {}, {}",
-        tl.x, tl.y, tr.x, tr.y, bl.x, bl.y, br.x, br.y);
 }
 
 }  // namespace rotation

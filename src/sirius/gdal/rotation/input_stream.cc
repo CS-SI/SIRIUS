@@ -62,120 +62,6 @@ InputStream::InputStream(
         block_size_.col);
 }
 
-/*StreamBlock InputStream::Read(std::error_code& ec) {
-    if (is_ended_) {
-        ec = make_error_code(CPLE_ObjectNull);
-        return {};
-    }
-
-    int w = input_dataset_->GetRasterXSize();
-    int h = input_dataset_->GetRasterYSize();
-    int w_to_read = block_size_.col;
-    int h_to_read = block_size_.row;
-
-    if (w_to_read > w || h_to_read > h) {
-        LOG("rotation_input_stream", warn,
-            "requested block size ({}x{}) is bigger than source image "
-            "({}x{}). ",
-            w_to_read, h_to_read, w, h);
-        w_to_read = w;
-        h_to_read = h;
-    }
-
-    // resize block if needed
-    if (row_idx_ + h_to_read > h) {
-        // assign size that can be read
-        h_to_read -= (row_idx_ + h_to_read - h);
-    }
-    if (col_idx_ + w_to_read > w) {
-        w_to_read -= (col_idx_ + w_to_read - w);
-    }
-
-    Image output_buffer({h_to_read, w_to_read});
-
-    CPLErr err = input_dataset_->GetRasterBand(1)->RasterIO(
-          GF_Read, col_idx_, row_idx_, w_to_read, h_to_read,
-          output_buffer.data.data(), w_to_read, h_to_read, GDT_Float64, 0, 0);
-
-    if (err) {
-        LOG("rotation_input_stream", error,
-            "GDAL error: {} - could not read from the dataset", err);
-        ec = make_error_code(err);
-        return {};
-    }
-
-    if (row_idx_ == 0 && col_idx_ == 0) {
-        // initialize output indexes to the top left corner of the
-        // rotated output image
-        Point tr, tl, br, bl;
-        auto min_output_size =
-              sirius::rotation::ComputeNonRotatedHull({h, w}, angle_);
-        sirius::rotation::RecoverCorners({h, w}, angle_, min_output_size, tr,
-                                         tl, br, bl);
-        block_row_idx_ = tl.y;
-        block_col_idx_ = tl.x;
-        tl_ref_ = tl;
-    } else {
-        // update indexes thanks to corners coordinates inside block
-        Point tr, tl, br, bl;
-        auto min_block_size =
-              sirius::rotation::ComputeNonRotatedHull(block_size_, angle_);
-        sirius::rotation::RecoverCorners(block_size_, angle_, min_block_size,
-                                         tr, tl, br, bl);
-        if (angle_ > 0) {
-            if (reset_row_) {
-                // add BL coordinates to reference top left
-                // because BL inside a block should always
-                // have the same coordinates for 1 block row
-                tl_ref_.x += bl.x;
-                tl_ref_.y += bl.y - tl.y;
-                block_row_idx_ = tl_ref_.y;
-                block_col_idx_ = tl_ref_.x;
-                reset_row_ = false;
-            } else {
-                block_col_idx_ += tr.x - 1;
-                block_row_idx_ -= tl.y;
-            }
-        } else {
-            if (reset_row_) {
-                tl_ref_.x -= tl.x;
-                tl_ref_.y += bl.y;
-                block_row_idx_ = tl_ref_.y;
-                block_col_idx_ = tl_ref_.x;
-                reset_row_ = false;
-            } else {
-                block_col_idx_ += tr.x - tl.x;
-                block_row_idx_ += tr.y + 1;
-            }
-        }
-    }
-
-    StreamBlock output_block(std::move(output_buffer), block_row_idx_,
-                             block_col_idx_, Padding(0, 0, 0, 0),
-                             {h_to_read, w_to_read});
-
-    LOG("rotation_input_stream", debug,
-        "reading block of size {}x{} at ({},{})", h_to_read, w_to_read,
-        row_idx_, col_idx_);
-
-    if (((row_idx_ + block_size_.row) >= h) &&
-        ((col_idx_ + block_size_.col) >= w)) {
-        is_ended_ = true;
-    }
-
-    if (col_idx_ >= w - block_size_.col) {
-        col_idx_ = 0;
-        row_idx_ += block_size_.row;
-        reset_row_ = true;
-    } else {
-        col_idx_ += block_size_.col;
-    }
-
-    ec = make_error_code(CPLE_None);
-
-    return output_block;
-}*/
-
 StreamBlock InputStream::Read(std::error_code& ec) {
     if (is_ended_) {
         ec = make_error_code(CPLE_ObjectNull);
@@ -221,7 +107,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
             padded_block_w -= (col_idx_ + padded_block_w - w);
 
             if (padded_block_w < block_margin_size_.col) {
-                LOG("ReadBlock", error,
+                LOG("rotation_input_stream", error,
                     "block at coordinates {}, {}, cannot be read because "
                     "available "
                     "reading width {} is less than margin size {}",
@@ -266,9 +152,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         w_to_read -= (col_idx_ + w_to_read - w);
     }
 
-    LOG("OutputStream", debug, "h_to_read = {}, w_to_read = {}", h_to_read,
-        w_to_read);
-
     Image output_buffer({h_to_read, w_to_read});
 
     CPLErr err = input_dataset_->GetRasterBand(1)->RasterIO(
@@ -281,18 +164,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         ec = make_error_code(err);
         return {};
     }
-
-    ///////
-
-    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-    GDALDataset* dataset = driver->Create(
-          "/home/mbelloc/tmp/read_block.tif", output_buffer.size.col,
-          output_buffer.size.row, 1, GDT_Float32, NULL);
-    dataset->GetRasterBand(1)->RasterIO(
-          GF_Write, 0, 0, output_buffer.size.col, output_buffer.size.row,
-          output_buffer.data.data(), output_buffer.size.col,
-          output_buffer.size.row, GDT_Float64, 0, 0, NULL);
-    GDALClose(dataset);
 
     Size src_size(h_to_read, w_to_read);
     if (block_padding.top == 0 ||
@@ -329,7 +200,8 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     } else {
         // update indexes thanks to corners coordinates inside block
         Point tr, tl, br, bl;
-
+        // use previous corners if we are at the end of a band because we need
+        // to use previous block size to shift output indexes
         if (block_count_ == blocks_per_band_ - 1 ||
             band_count_ == nb_bands_ - 1) {
             tr = tr_prev_;
@@ -357,7 +229,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 reset_row_ = false;
                 block_count_ = 0;
             } else {
-                block_col_idx_ += tr.x - 1;
+                block_col_idx_ += tr.x;
                 block_row_idx_ -= tl.y;
             }
         } else {
@@ -369,8 +241,8 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 reset_row_ = false;
                 block_count_ = 0;
             } else {
-                block_col_idx_ += tr.x - tl.x - 1;
-                block_row_idx_ += tr.y + 1;
+                block_col_idx_ += tr.x - tl.x;
+                block_row_idx_ += tr.y;
             }
         }
         if (block_count_ != blocks_per_band_ - 1 &&
@@ -383,14 +255,14 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     }
     LOG("InputStream", debug, "block col_idx = {}, row_idx = {}",
         block_col_idx_, block_row_idx_);
-    ///////////
 
     StreamBlock output_block(std::move(output_buffer), block_row_idx_,
-                             block_col_idx_, block_padding, src_size);
+                             block_col_idx_, block_padding, src_size,
+                             {h_to_read, w_to_read});
 
     LOG("rotation_input_stream", debug,
         "reading block of size {}x{} at ({},{})", output_block.buffer.size.row,
-        output_block.buffer.size.col, row_idx_, col_idx_);
+        output_block.buffer.size.col, col_idx_, row_idx_);
 
     if (((row_idx_ + padded_block_h - block_margin_size_.row) >= h) &&
         ((col_idx_ + padded_block_w - block_margin_size_.col) >= w)) {
