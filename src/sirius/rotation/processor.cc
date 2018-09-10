@@ -44,10 +44,9 @@ namespace rotation {
 
 Image Processor::Process(const Image& image,
                          const Parameters& parameters) const {
-    Image im;
     int angle = parameters.angle;
-
     int ratio = 0;
+    // allocate output according to input dimensions ratio
     if (image.size.row > image.size.col) {
         ratio =
               std::ceil(image.size.row / static_cast<double>(image.size.col)) +
@@ -57,7 +56,7 @@ Image Processor::Process(const Image& image,
               std::ceil(image.size.col / static_cast<double>(image.size.row)) +
               1;
     }
-    im = Image({ratio * image.size.row, ratio * image.size.col});
+    Image im({ratio * image.size.row, ratio * image.size.col});
 
     Point center(std::floor(im.size.col / 2.0), std::floor(im.size.row / 2.0));
 

@@ -30,6 +30,10 @@
 namespace sirius {
 namespace rotation {
 
+/**
+ * \brief Class to perform rotations. Rotation angle is limited to -90 / 90° to
+ * reduce the padding size needed to apply 3 translations
+ */
 class Processor {
   public:
     Processor() = default;

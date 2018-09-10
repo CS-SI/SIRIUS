@@ -208,7 +208,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         Point first_point;
         Point second_point;
 
-        if (br_src.y <= tl_src.y) {
+        if (br.y <= tl.y) {
             first_point = br_src;
             second_point = tl_src;
         } else {
@@ -291,7 +291,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         Point first_point;
         Point second_point;
 
-        if (bl_src.y <= tr_src.y) {
+        if (bl.y <= tr.y) {
             first_point = bl_src;
             second_point = tr_src;
         } else {
@@ -391,10 +391,10 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
             col_idx = std::round(col_idx_real);
         } else {
             row_idx++;
-            // experimental (1/6 only viable for 256x256 block size)
-            col_idx_real += 1 / (6 * slope_begin);
+            // experimental (1/3 only viable for 256x256 block size)
+            col_idx_real += 1 / (3 * slope_begin);
             col_idx = std::round(col_idx_real);
-            begin_line_real += block.buffer.size.col + 1 / (6 * slope_begin);
+            begin_line_real += block.buffer.size.col + 1 / (3 * slope_begin);
             end_line_real += block.buffer.size.col + 1 / slope_end;
             begin_line = std::round(begin_line_real);
             end_line = std::round(end_line_real);
