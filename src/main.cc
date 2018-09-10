@@ -146,6 +146,12 @@ int Rotate(const CliOptions& options) {
         throw sirius::Exception("Rotation angle out of the [-180, 180] range");
     }
 
+    if (options.rotation.angle == 0) {
+        LOG("sirius", warn,
+            "Rotation angle is 0. Output file will not be created");
+        return 0;
+    }
+
     if (options.stream.block_size.col != 256 ||
         options.stream.block_size.row != 256) {
         LOG("sirius", warn, "Block options are not available in rotation mode");
@@ -167,10 +173,30 @@ int Rotate(const CliOptions& options) {
     auto frequency_rotator =
           sirius::FrequencyRotatorFactory::Create(image_decomposition_policy);
 
+    int angle = options.rotation.angle;
+    if (options.rotation.angle > 90 || options.rotation.angle < -90) {
+        int angle1 =
+              (options.rotation.angle / std::abs(options.rotation.angle)) * 90;
+        int angle2 =
+              (options.rotation.angle / std::abs(options.rotation.angle)) *
+              (std::abs(options.rotation.angle) - 90);
+
+        std::string real_output_image_path = options.output_image_path;
+        const_cast<CliOptions&>(options).output_image_path = "/tmp/rot_tmp.tif";
+        StreamTransformation<sirius::IFrequencyRotator,
+                             sirius::gdal::rotation::InputStream,
+                             sirius::gdal::rotation::OutputStream>(
+              options, *frequency_rotator, {angle1});
+        const_cast<CliOptions&>(options).input_image_path = "/tmp/rot_tmp.tif";
+        const_cast<CliOptions&>(options).output_image_path =
+              real_output_image_path;
+        angle = angle2;
+    }
+
     StreamTransformation<sirius::IFrequencyRotator,
                          sirius::gdal::rotation::InputStream,
                          sirius::gdal::rotation::OutputStream>(
-          options, *frequency_rotator, {options.rotation.angle});
+          options, *frequency_rotator, {angle});
 
     return 0;
 }

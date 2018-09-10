@@ -374,9 +374,12 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
             line_len = output_dataset_->GetRasterXSize() - col_idx;
         }
 
-        sirius::gdal::WriteToDataset(output_dataset_, row_idx, col_idx, 1,
-                                     line_len,
-                                     block.buffer.data.data() + begin_line);
+        if (row_idx >= 0) {
+            sirius::gdal::WriteToDataset(output_dataset_, row_idx, col_idx, 1,
+                                         line_len,
+                                         block.buffer.data.data() + begin_line);
+        }
+
         if (angle_ >= 45 ||
             (i != second_y - 1 && (angle_ >= -90 && angle_ < 45))) {
             begin_line_real += block.buffer.size.col + 1 / slope_begin;

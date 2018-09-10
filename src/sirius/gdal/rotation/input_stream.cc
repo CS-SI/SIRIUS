@@ -253,8 +253,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
             br_prev_ = br;
         }
     }
-    LOG("InputStream", debug, "block col_idx = {}, row_idx = {}",
-        block_col_idx_, block_row_idx_);
 
     StreamBlock output_block(std::move(output_buffer), block_row_idx_,
                              block_col_idx_, block_padding, src_size,
