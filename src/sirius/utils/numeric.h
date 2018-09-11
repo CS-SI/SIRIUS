@@ -107,14 +107,6 @@ Size GenerateZoomCompliantSize(const Size& size, const ZoomRatio& zoom_r);
 void CreateMeshgrid(int x_min, int x_max, int y_min, int y_max,
                     std::vector<int>& xx, std::vector<int>& yy);
 
-/**
- * \brief add 2 vectors element wise
- * \param v1 first vector
- * \param v2 second vector
- * \return sum of vectors
- */
-std::vector<double> VectorAdd(std::vector<double> v1, std::vector<double> v2);
-
 }  // namespace utils
 }  // namespace sirius
 

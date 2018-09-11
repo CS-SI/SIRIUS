@@ -140,7 +140,7 @@ Sirius X.Y.Z (...)
 Standalone tool to resample and filter images in the frequency domain
 
 Usage:
-  ./sirius [OPTION...] input-image output-image
+  ./src/sirius [OPTION...] input-image output-image
 
   -h, --help                    Show help
   -v, --verbosity arg           Set verbosity level
@@ -160,6 +160,9 @@ Usage:
  translation options:
       --trans-row arg  Translation on y axis (default: 0.0)
       --trans-col arg  Translation on x axis (default: 0.0)
+
+ rotation options:
+      --rot-angle arg  Rotation angle applied on both axis (default: 0)
 
  filter options:
       --filter arg           Path to the filter image to apply to the source
@@ -233,6 +236,15 @@ Translation parameters can be specified with options `--trans-row` and `--trans-
 By default these two options are set to 0.0 so no translation is applied. If these parameters are set up, only the translation will be performed even if zoom parameters are also set.
 Note that any translation will result in a cropped image due to the removing of periodized borders. The cropped size on x and y axis is equivalent to the given parameters.
 
+#### Rotation option
+
+A rotation angle in degrees can be provided with option `--rot-angle`. 
+ANGLE specified in `--rot-angle ANGLE` must be an integer between -180° and 180°. By default this option is set to 0. If this parameter is set up only the rotation will be performed, unless translation parameters are also set up. In this case the translation will be prioritized.
+
+Streaming options `--block-width` and `--block-height` are disabled in this mode. However it is possible to use the streaming with 256x256 blocks.
+
+Note that any rotation out of [-90°, 90°] will be performed in two passes in order to reduce the padding size needed to perform the rotation in frequency domain, and so the processing time. 
+
 #### Filter options
 
 A filter image path can be specified with the option `--filter`. This filter will be applied:
@@ -305,9 +317,17 @@ The following command line will zoom out `input/sentinel2_10m.tif` by 1/2 using 
 ```
 
 #### Translation
-The following command line will only apply a translation by 50.0 pixels on x and y axis to the given image.
+
+The following command line will apply a translation by 50.0 pixels on x and y axis to the given image.
 ```sh
 ./sirius --trans-row 50.0 --trans-col 50.0 input/lena.jpg output/lena_shift50.tif
+```
+
+#### Rotation
+
+The following command line will apply a rotation by 135° degrees to the given image.
+```sh
+./sirius --rot-angle 135 input/lena.jpg output/lena_rot135.tif
 ```
 
 ### Sirius library API
@@ -402,6 +422,28 @@ sirius::IFrequencyTranslator::UPtr freq_shifter =
 // compute the shifted image
 sirius::Image shifted_image = freq_shifter->Compute(image, {}, {row_shift, col_shift});    
 ```
+
+#### Rotation example
+
+```cpp
+#include "sirius/frequency_rotator_factory.h"
+#include "sirius/image.h"
+#include "sirius/types.h"
+
+// create an image
+sirius::Image image = {...};
+
+// create the rotation angle
+int angle = 70;
+
+sirius::IFrequencyRotator::UPtr freq_rotator = 
+      sirius::FrequencyRotatorFactory::Create(
+                  sirius::image_decomposition::Policies::kPeriodicSmooth);
+
+// compute the rotated image
+sirius::Image rotated_image = freq_rotator->Compute(image, {}, {angle});    
+```
+
 
 
 #### Thread safety

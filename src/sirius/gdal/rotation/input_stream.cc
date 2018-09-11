@@ -51,6 +51,7 @@ InputStream::InputStream(
         const_cast<Size&>(block_size_).col = input_dataset_->GetRasterXSize();
     }
 
+    // used to know when we have to use previous block size to update indexes
     blocks_per_band_ = std::ceil(input_dataset_->GetRasterXSize() /
                                  static_cast<float>(block_size_.col));
     nb_bands_ = std::ceil(input_dataset_->GetRasterYSize() /
@@ -165,6 +166,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         return {};
     }
 
+    // recover size without margins
     Size src_size(h_to_read, w_to_read);
     if (block_padding.top == 0 ||
         (block_padding.top > 0 && block_padding.top < block_margin_size_.row)) {
@@ -216,12 +218,9 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         }
 
         // block indexes must be increased / decreased by corners coordinates
-        // that correspond to a minimal hull of the block without any padding
         if (angle_ > 0) {
             if (reset_row_) {
-                // add BL coordinates to reference top left
-                // because BL inside a block should always
-                // have the same coordinates for 1 block row
+                // shift reference top left to band's bottom left (new TL)
                 tl_ref_.x += bl.x;
                 tl_ref_.y += bl.y - tl.y;
                 block_row_idx_ = tl_ref_.y;
@@ -229,6 +228,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 reset_row_ = false;
                 block_count_ = 0;
             } else {
+                // shift next block indexes to current block's top right corner
                 block_col_idx_ += tr.x;
                 block_row_idx_ -= tl.y;
             }
@@ -267,6 +267,7 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         is_ended_ = true;
     }
 
+    // update reading indexes
     if (col_idx_ >= w - block_size_.col - block_margin_size_.col) {
         reset_row_ = true;
         band_count_++;

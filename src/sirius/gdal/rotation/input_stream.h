@@ -68,24 +68,24 @@ class InputStream : public IInputStream {
   private:
     gdal::DatasetUPtr input_dataset_;
     sirius::Size block_size_{256, 256};
+    Size block_margin_size_ = {50, 50};
+    PaddingType block_padding_type_ = PaddingType::kMirrorPadding;
+
     bool is_ended_ = false;
     bool reset_row_ = false;
+
     int row_idx_ = 0;
     int col_idx_ = 0;
     int angle_ = 0;
     int block_row_idx_ = 0;
     int block_col_idx_ = 0;
-    Point tl_ref_;
-
-    ///////
-    Size block_margin_size_ = {50, 50};
-    PaddingType block_padding_type_ = PaddingType::kMirrorPadding;
-    Point tl_prev_, tr_prev_, bl_prev_, br_prev_;
     int blocks_per_band_;
     int block_count_ = 0;
     int nb_bands_;
     int band_count_ = 0;
-    ///////
+
+    Point tl_ref_;  // reference top left corner of an entire band
+    Point tl_prev_, tr_prev_, bl_prev_, br_prev_;
 };
 
 }  // namespace rotation

@@ -104,6 +104,7 @@ Image Processor::Process(const Image& image,
     int begin_y_range = -std::floor(im.size.col / 2.0);
     int end_y_range = std::ceil(im.size.col / 2.0);
 
+    // get samples indexes
     std::vector<int> x_range;
     std::vector<int> y_range;
     for (int i = begin_x_range; i < end_x_range; ++i) {
