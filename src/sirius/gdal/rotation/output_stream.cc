@@ -139,8 +139,9 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         // height and width are swapped because of -90° rotation so we add
         // height dim to x shift and width dim to y shift
         int begin_x = begin_marged_block.x - block.original_size.row;
-        int begin_block_x = block_margin_size_.row - block.padding.bottom + 1;
+        int begin_block_x = block_margin_size_.row - block.padding.bottom;
         int begin_block_y = block_margin_size_.col - block.padding.left;
+
         for (int i = begin_marged_block.y;
              i < begin_marged_block.y + block.original_size.col; ++i) {
             sirius::gdal::WriteToDataset(
@@ -375,7 +376,12 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
     }
 
     for (int i = first_y; i < end_it; ++i) {
+        int tmp_col_idx = 0;
+        double tmp_col_idx_real = 0;
         if (col_idx < 0) {
+            tmp_col_idx = col_idx;
+            tmp_col_idx_real = col_idx_real;
+            // set col index to zero so gdal is able to write
             col_idx = 0;
             col_idx_real = 0;
         }
@@ -394,6 +400,12 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
                                          block.buffer.data.data() + begin_line);
         }
 
+        if (tmp_col_idx < 0) {
+            // reset indexes with negative value so the slope is not modified
+            col_idx = tmp_col_idx;
+            col_idx_real = tmp_col_idx_real;
+        }
+
         if (angle_ >= 45 ||
             // update indexes thanks to slopes
             (i != second_y - 1 && (angle_ >= -90 && angle_ < 45))) {
@@ -406,15 +418,26 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
             col_idx = std::round(col_idx_real);
         } else {
             row_idx++;
-            // experimental (1/3 only viable for 256x256 block size).
-            // the row at index sencond_y does not contain 1/slope_begin more
-            // pixels than the line before
-            col_idx_real += 1 / (3 * slope_begin);
-            col_idx = std::round(col_idx_real);
-            begin_line_real += block.buffer.size.col + 1 / (3 * slope_begin);
-            end_line_real += block.buffer.size.col + 1 / slope_end;
-            begin_line = std::round(begin_line_real);
-            end_line = std::round(end_line_real);
+            if (block.buffer.size.row == block.buffer.size.col) {
+                // experimental (1/3 only viable for 256x256 block size).
+                // the row at index sencond_y does not contain 1/slope_begin
+                // more pixels than the line before
+                col_idx_real += 1 / (3 * slope_begin);
+                col_idx = std::round(col_idx_real);
+                begin_line_real +=
+                      block.buffer.size.col + 1 / (3 * slope_begin);
+                end_line_real += block.buffer.size.col + 1 / slope_end;
+                begin_line = std::round(begin_line_real);
+                end_line = std::round(end_line_real);
+            } else {
+                // specific case for blocks at the end of a band
+                col_idx_real += 1 / slope_begin;
+                col_idx = std::round(col_idx_real);
+                begin_line_real += block.buffer.size.col + 1 / slope_begin;
+                end_line_real += block.buffer.size.col + 1 / slope_end;
+                begin_line = std::round(begin_line_real);
+                end_line = std::round(end_line_real);
+            }
         }
     }
 }

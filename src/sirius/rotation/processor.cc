@@ -104,7 +104,7 @@ Image Processor::Process(const Image& image,
     int begin_y_range = -std::floor(im.size.col / 2.0);
     int end_y_range = std::ceil(im.size.col / 2.0);
 
-    // get samples indexes
+    // get samples' index
     std::vector<int> x_range;
     std::vector<int> y_range;
     for (int i = begin_x_range; i < end_x_range; ++i) {
@@ -236,8 +236,20 @@ Image Processor::Process(const Image& image,
     }
 
     Image output_image(min_size);
-    Point top_left(static_cast<int>(std::ceil(center.x - shift.col)),
-                   static_cast<int>(std::ceil(center.y - shift.row)));
+    Point top_left;
+    if (angle == -90) {
+        top_left.x = static_cast<int>(std::ceil(center.x - shift.col + 1));
+        top_left.y = static_cast<int>(std::ceil(center.y - shift.row));
+    } else if (angle == 90) {
+        top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
+        top_left.y = static_cast<int>(std::ceil(center.y - shift.row + 1));
+    } else {
+        top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
+        top_left.y = static_cast<int>(std::ceil(center.y - shift.row));
+    }
+
+    LOG("Processor", debug, "top_left : x = {}, y = {}", top_left.x,
+        top_left.y);
 
     int offset = 0;
     offset = top_left.y * rotated_im.size.col + top_left.x;
