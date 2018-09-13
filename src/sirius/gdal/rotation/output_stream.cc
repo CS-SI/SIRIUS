@@ -100,7 +100,6 @@ void OutputStream::Write(StreamBlock&& block, std::error_code& ec) {
     }
 
     Point begin_marged_block(block.col_idx, block.row_idx);
-
     CopyConvexHull(block, begin_marged_block, tr, tl, br, bl);
     ec = make_error_code(CPLE_None);
 }
@@ -155,68 +154,40 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
     }
 
     if (angle_ >= 0) {
-        Point tr_src = tr;
-
-        // process shifts needed to recover source block (without margins)
-        // inside the block with margins
-        if (block.padding.top != block_margin_size_.row) {
+        Point tl_src = tl;
+        if (block.padding.left != block_margin_size_.col) {
             // margin may not be completely read
-            int read_margin = block_margin_size_.row - block.padding.top;
+            int read_margin = block_margin_size_.col - block.padding.left;
             double angle_rad = (90 - angle_) * M_PI / 180.0;
-            int shift_x = std::round(read_margin * std::cos(angle_rad));
-            int shift_y = std::round(read_margin * std::sin(angle_rad));
-            tr_src.x += shift_x;
-            tr_src.y += shift_y;
-            // shift the "global" point where we'll start to write in the final
-            // image
-            if (block.padding.bottom == block_margin_size_.row) {
-                begin_marged_block.x -= shift_x;
-                begin_marged_block.y += shift_y;
-            }
+            int shift_x = std::round(read_margin * std::sin(angle_rad));
+            int shift_y = std::round(read_margin * std::cos(angle_rad));
+            tl_src.x += shift_x;
+            tl_src.y -= shift_y;
         }
 
-        int shift_x = 0;
-        int shift_y = 0;
-        if (block.padding.right != block_margin_size_.col) {
-            int read_margin = block_margin_size_.col - block.padding.right;
+        if (block.padding.top != block_margin_size_.row) {
+            int read_margin = block_margin_size_.row - block.padding.top;
             double angle_rad = angle_ * M_PI / 180.0;
-            shift_x = std::round(read_margin * std::cos(angle_rad));
-            shift_y = std::round(read_margin * std::sin(angle_rad));
-            tr_src.x -= shift_x;
-            tr_src.y += shift_y;
-            begin_marged_block.y += shift_y;
+            int shift_x = std::round(read_margin * std::sin(angle_rad));
+            int shift_y = std::round(read_margin * std::cos(angle_rad));
+            tl_src.x += shift_x;
+            tl_src.y += shift_y;
         }
 
-        Point tl_src(tr_src.x + tr_tl_vector_.col,
-                     tr_src.y + tr_tl_vector_.row);
+        Point tr_src(tl_src.x - tr_tl_vector_.col,
+                     tl_src.y - tr_tl_vector_.row);
         Point br_src(tr_src.x + tr_br_vector_.col,
                      tr_src.y + tr_br_vector_.row);
         Point bl_src(tl_src.x + tl_bl_vector_.col,
                      tl_src.y + tl_bl_vector_.row);
 
-        begin_marged_block.x += tr_src.x;
-        begin_marged_block.y -= tl_src.y;
+        // shift beginning index in the final image
+        begin_marged_block.x -= tr_tl_vector_.col;
+        begin_marged_block.y -= tr_tl_vector_.row;
         col_idx_real = begin_marged_block.x;
-        if (block.padding.left != block_margin_size_.col) {
-            int read_margin = block_margin_size_.col - block.padding.left;
-            double angle_rad = angle_ * M_PI / 180.0;
-            shift_x = std::round(read_margin * std::cos(angle_rad));
-            begin_marged_block.x -= shift_x;
-            col_idx_real = begin_marged_block.x;
-        }
 
-        if (block.padding.bottom != block_margin_size_.row &&
-            block.padding.top != block_margin_size_.row) {
-            int read_margin = block_margin_size_.row - block.padding.bottom;
-            double angle_rad = (90 - angle_) * M_PI / 180.0;
-            shift_x = std::round(read_margin * std::cos(angle_rad));
-            shift_y = std::round(read_margin * std::sin(angle_rad));
-            begin_marged_block.x -= shift_x;
-            col_idx_real = begin_marged_block.x;
-            begin_marged_block.y += shift_y;
-        }
-
-        // first and second points used to detect when we have to change slopes
+        // first and second points used to detect when we have to change
+        // slopes
         Point first_point;
         Point second_point;
 
@@ -326,8 +297,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         double slope_begin = slope_tl_bl_;
         double slope_end = slope_tl_tr_;
 
-        // copy from the point with coordinate y=0 to the first point of the
-        // hull
+        // copy from the top corner to the first point of the hull
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
                      col_idx_real, tl_src.y, first_point.y, slope_begin,
