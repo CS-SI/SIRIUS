@@ -100,6 +100,7 @@ void OutputStream::Write(StreamBlock&& block, std::error_code& ec) {
     }
 
     Point begin_marged_block(block.col_idx, block.row_idx);
+
     CopyConvexHull(block, begin_marged_block, tr, tl, br, bl);
     ec = make_error_code(CPLE_None);
 }
@@ -375,6 +376,9 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
         end_it = first_y + (output_dataset_->GetRasterYSize() - row_idx);
     }
 
+    double current_line_begin = begin_line_real;
+    double current_line_end = end_line_real;
+
     for (int i = first_y; i < end_it; ++i) {
         int tmp_col_idx = 0;
         double tmp_col_idx_real = 0;
@@ -407,12 +411,16 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
         }
 
         if (angle_ >= 45 ||
-            // update indexes thanks to slopes
             (i != second_y - 1 && (angle_ >= -90 && angle_ < 45))) {
-            begin_line_real += block.buffer.size.col + 1 / slope_begin;
-            end_line_real += block.buffer.size.col + 1 / slope_end;
-            begin_line = std::round(begin_line_real);
-            end_line = std::round(end_line_real);
+            // update indexes thanks to slopes
+            current_line_begin =
+                  begin_line_real +
+                  (i - first_y + 1) * (block.buffer.size.col + 1 / slope_begin);
+            current_line_end =
+                  end_line_real +
+                  (i - first_y + 1) * (block.buffer.size.col + 1 / slope_end);
+            begin_line = std::round(current_line_begin);
+            end_line = std::round(current_line_end);
             row_idx++;
             col_idx_real += 1 / slope_begin;
             col_idx = std::round(col_idx_real);
@@ -424,22 +432,24 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
                 // more pixels than the line before
                 col_idx_real += 1 / (3 * slope_begin);
                 col_idx = std::round(col_idx_real);
-                begin_line_real +=
+                current_line_begin +=
                       block.buffer.size.col + 1 / (3 * slope_begin);
-                end_line_real += block.buffer.size.col + 1 / slope_end;
-                begin_line = std::round(begin_line_real);
-                end_line = std::round(end_line_real);
+                current_line_end += block.buffer.size.col + 1 / slope_end;
+                begin_line = std::round(current_line_begin);
+                end_line = std::round(current_line_end);
             } else {
                 // specific case for blocks at the end of a band
                 col_idx_real += 1 / slope_begin;
                 col_idx = std::round(col_idx_real);
-                begin_line_real += block.buffer.size.col + 1 / slope_begin;
-                end_line_real += block.buffer.size.col + 1 / slope_end;
-                begin_line = std::round(begin_line_real);
-                end_line = std::round(end_line_real);
+                current_line_begin += block.buffer.size.col + 1 / slope_begin;
+                current_line_end += block.buffer.size.col + 1 / slope_end;
+                begin_line = std::round(current_line_begin);
+                end_line = std::round(current_line_end);
             }
         }
     }
+    begin_line_real = current_line_begin;
+    end_line_real = current_line_end;
 }
 
 }  // namespace rotation

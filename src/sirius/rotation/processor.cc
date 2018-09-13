@@ -244,12 +244,9 @@ Image Processor::Process(const Image& image,
         top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row + 1));
     } else {
-        top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
+        top_left.x = static_cast<int>(std::ceil(center.x - shift.col + 1));
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row));
     }
-
-    LOG("Processor", debug, "top_left : x = {}, y = {}", top_left.x,
-        top_left.y);
 
     int offset = 0;
     offset = top_left.y * rotated_im.size.col + top_left.x;

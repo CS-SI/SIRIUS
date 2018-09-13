@@ -142,7 +142,7 @@ int main(int argc, const char* argv[]) {
 int Rotate(const CliOptions& options) {
     LOG("sirius", info, "rotation mode");
     if (options.rotation.angle < -180 || options.rotation.angle > 180) {
-        LOG("sirius", error, "Rotation angle must be contained in [-180, 180]");
+        LOG("sirius", error, "Rotation angle must be between [-180, 180]");
         throw sirius::Exception("Rotation angle out of the [-180, 180] range");
     }
 

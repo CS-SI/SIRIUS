@@ -243,6 +243,10 @@ StreamBlock InputStream::Read(std::error_code& ec) {
             } else {
                 block_col_idx_ += tr.x - tl.x;
                 block_row_idx_ += tr.y;
+                // fix 1 pixel shift between blocks
+                if (angle_ > -80 && angle_ < -90) {
+                    block_col_idx_++;
+                }
             }
         }
         if (block_count_ != blocks_per_band_ - 1 &&
