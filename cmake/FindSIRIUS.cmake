@@ -52,7 +52,8 @@ find_library(SIRIUS_LIBRARY
     HINTS
         ${SIRIUS_ROOT}
     PATH_SUFFIXES
-        lib)
+        lib
+        lib64)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     find_file(SIRIUS_DLL_LIBRARY
@@ -63,14 +64,44 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         bin)
 endif()
 
-find_library(SIRIUS_STATIC_LIBRARY
+find_library(SIRIUS_DEBUG_LIBRARY
     NAMES
-        sirius-static # linux/os x naming (default library prefix is lib)
-        libsirius-static # windows naming (default library prefix is '')
+        siriusd # linux/os x naming (default library prefix is lib)
+        libsiriusd # windows naming (default library prefix is '')
     HINTS
         ${SIRIUS_ROOT}
     PATH_SUFFIXES
-        lib)
+        lib
+        lib64)
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    find_file(SIRIUS_DEBUG_DLL_LIBRARY
+        NAMES libsiriusd.dll
+    HINTS
+        ${SIRIUS_ROOT}
+    PATH_SUFFIXES
+        bin)
+endif()
+
+find_library(SIRIUS_STATIC_LIBRARY
+    NAMES
+        libsirius.a
+        libsirius_s # windows naming (default library prefix is '')
+    HINTS
+        ${SIRIUS_ROOT}
+    PATH_SUFFIXES
+        lib
+        lib64)
+
+find_library(SIRIUS_DEBUG_STATIC_LIBRARY
+    NAMES
+        libsirius.a
+        libsirius_s # windows naming (default library prefix is '')
+    HINTS
+        ${SIRIUS_ROOT}
+    PATH_SUFFIXES
+        lib
+        lib64)
 
 include(FindPackageHandleStandardArgs)
 
@@ -88,18 +119,32 @@ if (SIRIUS_FOUND)
             INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS})
         if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
             set_target_properties(SIRIUS::libsirius PROPERTIES
-                IMPORTED_LOCATION ${SIRIUS_DLL_LIBRARY}
-                IMPORTED_IMPLIB ${SIRIUS_LIBRARIES})
+                IMPORTED_LOCATION_RELEASE ${SIRIUS_DLL_LIBRARY}
+                IMPORTED_IMPLIB_RELEASE ${SIRIUS_LIBRARIES})
+            if (SIRIUS_DEBUG_LIBRARY)
+                set_target_properties(SIRIUS::libsirius PROPERTIES
+                    IMPORTED_LOCATION_DEBUG ${SIRIUS_DEBUG_DLL_LIBRARY}
+                    IMPORTED_IMPLIB_DEBUG ${SIRIUS_DEBUG_LIBRARIES})
+            endif()
         else()
             set_target_properties(SIRIUS::libsirius PROPERTIES
-                IMPORTED_LOCATION ${SIRIUS_LIBRARIES})
+                IMPORTED_LOCATION_RELEASE ${SIRIUS_LIBRARIES})
+            if (SIRIUS_DEBUG_LIBRARY)
+                set_target_properties(SIRIUS::libsirius PROPERTIES
+                    IMPORTED_LOCATION_DEBUG ${SIRIUS_DEBUG_LIBRARIES})
+            endif()
         endif()
     endif()
     if (NOT TARGET SIRIUS::libsirius-static)
         add_library(SIRIUS::libsirius-static STATIC IMPORTED GLOBAL)
         set_target_properties(SIRIUS::libsirius-static PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES ${SIRIUS_INCLUDE_DIRS}
-            IMPORTED_LOCATION ${SIRIUS_STATIC_LIBRARIES})
+            IMPORTED_LOCATION_RELEASE ${SIRIUS_STATIC_LIBRARIES})
+
+        if (SIRIUS_DEBUG_LIBRARY)
+            set_target_properties(SIRIUS::libsirius-static PROPERTIES
+                IMPORTED_LOCATION_DEBUG ${SIRIUS_DEBUG_STATIC_LIBRARIES})
+        endif()
     endif()
     message(STATUS "find_package(SIRIUS) provides CMake targets: SIRIUS::libsirius and SIRIUS::libsirius-static")
 endif ()

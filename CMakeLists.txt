@@ -41,6 +41,7 @@ option(ENABLE_GSL_CONTRACTS "Enable GSL contracts" OFF)
 option(ENABLE_DOCUMENTATION "Enable documentation generation" OFF)
 option(BUILD_TESTING "Enable unit tests" OFF)
 option(USE_CXX_STATIC_RUNTIME "Build targets with C++ static runtime library" OFF)
+option(DISABLE_INSTALL_HEADERS "Disable install headers" OFF)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     option(ENABLE_CLANG_LIBCPP "Force use of libc++" OFF)
@@ -65,10 +66,13 @@ message(STATUS "Link Sirius binaries with static C++ runtime library: ${USE_CXX_
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "Force use of libc++: ${ENABLE_CLANG_LIBCPP}")
 endif()
+message(STATUS "Disable install headers: ${DISABLE_INSTALL_HEADERS}")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_DEBUG_POSTFIX "d")
 
 # set CXX global flags
 set(SIRIUS_CXX_FLAGS "")

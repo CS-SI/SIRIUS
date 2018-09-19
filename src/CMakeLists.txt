@@ -21,6 +21,8 @@
 
 cmake_minimum_required(VERSION 3.2)
 
+find_package(FFTW3 REQUIRED)
+
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius)
 
 message(STATUS "Generating sirius/sirius.h")
@@ -66,6 +68,11 @@ target_link_libraries(libsirius PUBLIC FFTW3::fftw3 spdlog gsl)
 # sirius static library
 add_library(libsirius-static STATIC $<TARGET_OBJECTS:libsirius-objects>)
 set_target_properties(libsirius-static PROPERTIES PREFIX "")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set_target_properties(libsirius-static PROPERTIES OUTPUT_NAME "libsirius_s")
+else()
+    set_target_properties(libsirius-static PROPERTIES OUTPUT_NAME "libsirius")
+endif()
 target_include_directories(libsirius-static PUBLIC
     $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
 target_compile_definitions(libsirius-static PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
@@ -158,13 +165,22 @@ install(
     DESTINATION "${SIRIUS_CONFIG_CMAKE_INSTALL_DIR}"
 )
 
-# copy sirius include directory into install directory
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius
-        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR}
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/sirius
-        DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR}
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.txx")
+if (NOT DISABLE_INSTALL_HEADERS)
+    # copy sirius include directory into install directory
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/sirius
+            DESTINATION ${SIRIUS_CONFIG_INCLUDE_DIR}
+            FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.txx")
+    install(DIRECTORY
+                ${CMAKE_CURRENT_SOURCE_DIR}/sirius
+            DESTINATION
+                ${SIRIUS_CONFIG_INCLUDE_DIR}
+            FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.txx"
+                PATTERN "gdal*" EXCLUDE)
+endif()
 
 # install and export libsirius and libsirius-static
 install(TARGETS libsirius libsirius-static
@@ -175,6 +191,20 @@ install(TARGETS libsirius libsirius-static
     INCLUDES DESTINATION "${SIRIUS_CONFIG_INCLUDE_DIR}")
 
 if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
+    find_package(GDAL REQUIRED)
+
+    add_library(gdal SHARED IMPORTED)
+    set_target_properties(gdal PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES ${GDAL_INCLUDE_DIR}
+        INTERFACE_COMPILE_DEFINITIONS CPL_LOG=${ENABLE_LOGS})
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        set_target_properties(gdal PROPERTIES
+            IMPORTED_IMPLIB ${GDAL_LIBRARY})
+    else()
+        set_target_properties(gdal PROPERTIES
+            IMPORTED_LOCATION ${GDAL_LIBRARY})
+    endif()
+
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL
         # gdal
         sirius/gdal/debug.h
