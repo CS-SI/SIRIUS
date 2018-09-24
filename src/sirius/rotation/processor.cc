@@ -244,7 +244,8 @@ Image Processor::Process(const Image& image,
         top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row + 1));
     } else {
-        top_left.x = static_cast<int>(std::ceil(center.x - shift.col + 1));
+        top_left.x =
+              static_cast<int>(std::ceil(center.x - shift.col));  /////// + 1
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row));
     }
 
@@ -253,7 +254,7 @@ Image Processor::Process(const Image& image,
 
     int offset_out = 0;
     // crop rotated image to its rectangular hull
-    for (int i = center.y; i < center.y + min_size.row; ++i) {
+    for (int i = 0; i < min_size.row; ++i) {
         std::copy(rotated_im.data.begin() + offset,
                   rotated_im.data.begin() + offset + min_size.col,
                   output_image.data.data() + offset_out);

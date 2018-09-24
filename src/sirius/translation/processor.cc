@@ -126,7 +126,7 @@ Image Processor::Process(const Image& image,
                           output_image.data.data());
 
         // normalize output image
-        int pixel_count = output_image.CellCount();
+        int pixel_count = image.CellCount();
         std::for_each(output_image.data.begin(), output_image.data.end(),
                       [pixel_count](double& pixel) { pixel /= pixel_count; });
     } else {

@@ -99,20 +99,44 @@ void OutputStream::Write(StreamBlock&& block, std::error_code& ec) {
         tl_bl_vector_ = {bl_src.y - tl_src.y, bl_src.x - tl_src.x};
     }
 
+    ///////
+    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
+    GDALDataset* dataset = driver->Create(
+          "/home/mbelloc/tmp/rotated_block.tif", block.buffer.size.col,
+          block.buffer.size.row, 1, GDT_Float32, NULL);
+    dataset->GetRasterBand(1)->RasterIO(
+          GF_Write, 0, 0, block.buffer.size.col, block.buffer.size.row,
+          block.buffer.data.data(), block.buffer.size.col,
+          block.buffer.size.row, GDT_Float64, 0, 0, NULL);
+    GDALClose(dataset);
+    ///////
+
     Point begin_marged_block(block.col_idx, block.row_idx);
-    CopyConvexHull(block, begin_marged_block, tr, tl, br, bl);
+    i_++;
+    // if (i_ == 1 || i_ == 2 || i_ == 22 || i_ == 21) {
+    CopyConvexHull(block, begin_marged_block, tl);
+    //}
     ec = make_error_code(CPLE_None);
+
+    /*if (i_ == 22) {
+        exit(-1);
+    }*/
+
+    LOG("OutputStream", debug, "\n");
 }
 
 void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
-                                  Point& begin_marged_block, const Point& tr,
-                                  const Point& tl, const Point& br,
-                                  const Point& bl) {
+                                  Point& begin_marged_block, const Point& tl) {
     LOG("rotation_output_stream", trace,
         "Copy convex hull to output image, hull_size = {}x{}, row_idx = "
         "{}, col_idx = {}",
         block.buffer.size.row, block.buffer.size.col, begin_marged_block.x,
         begin_marged_block.y);
+
+    LOG("OutputStream", debug,
+        "block padding : top = {}, bottom = {}, left = {}, right = {}",
+        block.padding.top, block.padding.bottom, block.padding.left,
+        block.padding.right);
 
     double col_idx_real = begin_marged_block.x;
 
@@ -191,7 +215,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         Point first_point;
         Point second_point;
 
-        if (br.y <= tl.y) {
+        if (br_src.y <= tl_src.y) {
             first_point = br_src;
             second_point = tl_src;
         } else {
@@ -217,7 +241,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // updates slopes that allows us to know when to start and stop
         // copying a line
-        if (br.y <= tl.y) {
+        if (br_src.y <= tl_src.y) {
             slope_end = slope_br_bl_;
         } else {
             slope_begin = slope_tl_bl_;
@@ -231,13 +255,14 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
                      slope_end);
 
         // update slopes
-        if (br.y <= tl.y) {
+        if (br_src.y <= tl_src.y) {
             slope_begin = slope_tl_bl_;
         } else {
             slope_end = slope_br_bl_;
         }
 
-        // copy from the second point we encountered until we reach source point
+        // copy from the second point we encountered until we reach source
+        // point
         // with the highest height
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
@@ -245,7 +270,8 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
                      slope_end);
     } else {
         Point tl_src = tl;
-
+        LOG("OutputStream", debug, "tl_src_init : x = {}, y = {}", tl_src.x,
+            tl_src.y);
         // process shifts needed to recover source block (without margins)
         // inside the block with margins
         if (block.padding.top != block_margin_size_.row) {
@@ -274,10 +300,19 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         Point br_src(tr_src.x + tr_br_vector_.col,
                      tr_src.y + tr_br_vector_.row);
 
+        LOG("OutputStream", debug, "tl_src : x = {}, y = {}", tl_src.x,
+            tl_src.y);
+        LOG("OutputStream", debug, "tr_src : x = {}, y = {}", tr_src.x,
+            tr_src.y);
+        LOG("OutputStream", debug, "bl_src : x = {}, y = {}", bl_src.x,
+            bl_src.y);
+        LOG("OutputStream", debug, "br_src : x = {}, y = {}", br_src.x,
+            br_src.y);
+
         Point first_point;
         Point second_point;
 
-        if (bl.y <= tr.y) {
+        if (bl_src.y <= tr_src.y) {
             first_point = bl_src;
             second_point = tr_src;
         } else {
@@ -292,11 +327,18 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         int end_line = tl_src.y * block.buffer.size.col + tl_src.x +
                        std::ceil(1 / slope_tl_tr_);
 
+        begin_marged_block.x += std::ceil(1 / slope_tl_bl_);
+        col_idx_real += std::ceil(1 / slope_tl_bl_);
+
+        LOG("OutputStream", debug, "begin_line = {}, end_line = {}", begin_line,
+            end_line);
+
         double begin_line_real = begin_line;
         double end_line_real = end_line;
         double slope_begin = slope_tl_bl_;
         double slope_end = slope_tl_tr_;
 
+        LOG("OutputStream", debug, "copy first part");
         // copy from the top corner to the first point of the hull
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
@@ -305,7 +347,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // updates slopes that allows us to know when to start and stop
         // reading
-        if (bl.y <= tr.y) {
+        if (bl_src.y <= tr_src.y) {
             slope_begin = slope_bl_br_;
         } else {
             slope_end = slope_tr_br_;
@@ -313,20 +355,23 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // copy from the first point with coordinate y != 0 to the second
         // point of the hull
+        LOG("OutputStream", debug, "\ncopy second part");
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
                      col_idx_real, first_point.y, second_point.y, slope_begin,
                      slope_end);
 
         // update slopes
-        if (bl.y <= tr.y) {
+        if (bl_src.y <= tr_src.y) {
             slope_end = slope_tr_br_;
         } else {
             slope_begin = slope_bl_br_;
         }
 
-        // copy from the second point we encountered until we reach source point
+        // copy from the second point we encountered until we reach source
+        // point
         // with the highest height
+        LOG("OutputStream", debug, "\ncopy third part");
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
                      col_idx_real, second_point.y, br_src.y, slope_begin,
@@ -361,6 +406,7 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
         }
 
         int line_len = end_line - begin_line;
+
         if (line_len > block.buffer.size.col) {
             line_len = block.buffer.size.col;
         }
@@ -375,14 +421,14 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
         }
 
         if (tmp_col_idx < 0) {
-            // reset indexes with negative value so the slope is not modified
+            // reset indexes with negative value so the slope is not
+            // modified
             col_idx = tmp_col_idx;
             col_idx_real = tmp_col_idx_real;
         }
 
-        if (angle_ >= 45 ||
-            (i != second_y - 1 && (angle_ >= -90 && angle_ < 45))) {
-            // update indexes thanks to slopes
+        // update indexes thanks to slopes
+        if (i != second_y - 1) {
             current_line_begin =
                   begin_line_real +
                   (i - first_y + 1) * (block.buffer.size.col + 1 / slope_begin);
@@ -395,27 +441,14 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
             col_idx_real += 1 / slope_begin;
             col_idx = std::round(col_idx_real);
         } else {
+            current_line_begin +=
+                  (block.buffer.size.col + 1 / (3 * slope_begin));
+            current_line_end += (block.buffer.size.col + 1 / slope_end);
+            begin_line = std::round(current_line_begin);
+            end_line = std::round(current_line_end);
             row_idx++;
-            if (block.buffer.size.row == block.buffer.size.col) {
-                // experimental (1/3 only viable for 256x256 block size).
-                // the row at index sencond_y does not contain 1/slope_begin
-                // more pixels than the line before
-                col_idx_real += 1 / (3 * slope_begin);
-                col_idx = std::round(col_idx_real);
-                current_line_begin +=
-                      block.buffer.size.col + 1 / (3 * slope_begin);
-                current_line_end += block.buffer.size.col + 1 / slope_end;
-                begin_line = std::round(current_line_begin);
-                end_line = std::round(current_line_end);
-            } else {
-                // specific case for blocks at the end of a band
-                col_idx_real += 1 / slope_begin;
-                col_idx = std::round(col_idx_real);
-                current_line_begin += block.buffer.size.col + 1 / slope_begin;
-                current_line_end += block.buffer.size.col + 1 / slope_end;
-                begin_line = std::round(current_line_begin);
-                end_line = std::round(current_line_end);
-            }
+            col_idx_real += 1 / (3 * slope_begin);
+            col_idx = std::round(col_idx_real);
         }
     }
     begin_line_real = current_line_begin;

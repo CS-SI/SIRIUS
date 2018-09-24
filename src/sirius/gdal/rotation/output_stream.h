@@ -59,14 +59,10 @@ class OutputStream : public IOutputStream {
      * \param block image contained in its minimal non rotated rectangle
      * \param begin_marged_block marged blocks indexes where we may start
      * copying (if no top & left margins)
-     * \param tr rotated block with margins' top right corner coordinates
      * \param tl rotated block with margins' top left corner coordinates
-     * \param br rotated block with margins' bottom right corner coordinates
-     * \param bl rotated block with margins' bottom left corner coordinates
      */
     void CopyConvexHull(const sirius::gdal::StreamBlock& block,
-                        Point& begin_marged_block, const Point& tr,
-                        const Point& tl, const Point& br, const Point& bl);
+                        Point& begin_marged_block, const Point& tl);
 
     /**
      * \brief copy part of the hull from one distinctive point to another
@@ -111,6 +107,8 @@ class OutputStream : public IOutputStream {
     Size bl_br_vector_;
     Size br_bl_vector_;
     Size tr_tl_vector_;
+
+    int i_ = 0;
 };
 
 }  // namespace rotation

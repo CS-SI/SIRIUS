@@ -166,6 +166,18 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         return {};
     }
 
+    ////////
+    /*GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
+    GDALDataset* dataset = driver->Create(
+          "/home/mbelloc/tmp/read_block.tif", output_buffer.size.col,
+          output_buffer.size.row, 1, GDT_Float32, NULL);
+    dataset->GetRasterBand(1)->RasterIO(
+          GF_Write, 0, 0, output_buffer.size.col, output_buffer.size.row,
+          output_buffer.data.data(), output_buffer.size.col,
+          output_buffer.size.row, GDT_Float64, 0, 0, NULL);
+    GDALClose(dataset);*/
+    ////////
+
     // recover size without margins
     Size src_size(h_to_read, w_to_read);
     if (block_padding.top == 0 ||
@@ -223,6 +235,10 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 // shift reference top left to band's bottom left (new TL)
                 tl_ref_.x += bl.x;
                 tl_ref_.y += bl.y - tl.y;
+                /*if ((angle_ >= 60 && angle_ < 70) ||
+                    (angle_ >= 30 && angle_ < 40)) {
+                    tl_ref_.y++;
+                }*/
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
@@ -233,9 +249,17 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 block_row_idx_ -= tl.y;
             }
         } else {
+            LOG("InputStream", debug,
+                "tl = x = {}, y = {}, tr = x = {}, y = {}, bl = x = {}, y = "
+                "{}, br = x {}, y = {}",
+                tl.x, tl.y, tr.x, tr.y, bl.x, bl.y, br.x, br.y);
             if (reset_row_) {
                 tl_ref_.x -= tl.x;
                 tl_ref_.y += bl.y;
+                /*if (angle_ == -85 && band_count_ == 1) {
+                    tl_ref_.x++;
+                    tl_ref_.y++;
+                }*/
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
@@ -243,10 +267,36 @@ StreamBlock InputStream::Read(std::error_code& ec) {
             } else {
                 block_col_idx_ += tr.x - tl.x;
                 block_row_idx_ += tr.y;
-                // fix 1 pixel shift between blocks
-                if (angle_ > -80 && angle_ < -90) {
+                ///////
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ <= -60) {
                     block_col_idx_++;
-                }
+                }*/
+
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ < -60 &&
+                    angle_ > -85 && angle_ % 10 == 5) {
+                    block_row_idx_++;
+                }*/
+
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ >= -30 &&
+                    angle_ % 10 == -5) {
+                    block_row_idx_++;
+                }*/
+
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ > -30 &&
+                    angle_ < -5 && angle_ % 10 == -5) {
+                    block_col_idx_++;
+                }*/
+
+                // fix first and second block alignment for triangle image /
+                // unfix Pleiade ....
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ == -20) {
+                    block_col_idx_ += 3;
+                }*/
+
+                /*if (block_count_ == 1 && band_count_ == 0 && angle_ == -40) {
+                    block_row_idx_++;
+                }*/
+                ///////
             }
         }
         if (block_count_ != blocks_per_band_ - 1 &&

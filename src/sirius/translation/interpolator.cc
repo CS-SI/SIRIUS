@@ -38,8 +38,8 @@ namespace translation {
 
 Image Interpolator::Interpolate2D(const Image& image,
                                   const Parameters& parameters) const {
-    int row_shift = parameters.row_shift;
-    int col_shift = parameters.col_shift;
+    float row_shift = parameters.row_shift;
+    float col_shift = parameters.col_shift;
 
     LOG("translation_interpolator", trace, "input image size {}x{}",
         image.size.row, image.size.col);
@@ -48,7 +48,7 @@ Image Interpolator::Interpolate2D(const Image& image,
 
     float beta = row_shift - static_cast<int>(row_shift);
     float alpha = col_shift - static_cast<int>(col_shift);
-    LOG("translation_interpolator", trace, "alpha = {}, beta={}", alpha, beta);
+    LOG("translation_interpolator", debug, "alpha = {}, beta={}", alpha, beta);
     std::vector<double> BLN_kernel(4, 0);
     BLN_kernel[0] = (1 - alpha) * (1 - beta);
     BLN_kernel[1] = (1 - beta) * alpha;
