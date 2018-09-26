@@ -107,8 +107,6 @@ class OutputStream : public IOutputStream {
     Size bl_br_vector_;
     Size br_bl_vector_;
     Size tr_tl_vector_;
-
-    int i_ = 0;
 };
 
 }  // namespace rotation

@@ -99,30 +99,9 @@ void OutputStream::Write(StreamBlock&& block, std::error_code& ec) {
         tl_bl_vector_ = {bl_src.y - tl_src.y, bl_src.x - tl_src.x};
     }
 
-    ///////
-    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-    GDALDataset* dataset = driver->Create(
-          "/home/mbelloc/tmp/rotated_block.tif", block.buffer.size.col,
-          block.buffer.size.row, 1, GDT_Float32, NULL);
-    dataset->GetRasterBand(1)->RasterIO(
-          GF_Write, 0, 0, block.buffer.size.col, block.buffer.size.row,
-          block.buffer.data.data(), block.buffer.size.col,
-          block.buffer.size.row, GDT_Float64, 0, 0, NULL);
-    GDALClose(dataset);
-    ///////
-
     Point begin_marged_block(block.col_idx, block.row_idx);
-    i_++;
-    // if (i_ == 1 || i_ == 2 || i_ == 22 || i_ == 21) {
     CopyConvexHull(block, begin_marged_block, tl);
-    //}
     ec = make_error_code(CPLE_None);
-
-    /*if (i_ == 22) {
-        exit(-1);
-    }*/
-
-    LOG("OutputStream", debug, "\n");
 }
 
 void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
@@ -162,6 +141,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
     if (angle_ == -90) {
         // height and width are swapped because of -90° rotation so we add
         // height dim to x shift and width dim to y shift
+
         int begin_x = begin_marged_block.x - block.original_size.row;
         int begin_block_x = block_margin_size_.row - block.padding.bottom;
         int begin_block_y = block_margin_size_.col - block.padding.left;
@@ -270,8 +250,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
                      slope_end);
     } else {
         Point tl_src = tl;
-        LOG("OutputStream", debug, "tl_src_init : x = {}, y = {}", tl_src.x,
-            tl_src.y);
         // process shifts needed to recover source block (without margins)
         // inside the block with margins
         if (block.padding.top != block_margin_size_.row) {
@@ -300,15 +278,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         Point br_src(tr_src.x + tr_br_vector_.col,
                      tr_src.y + tr_br_vector_.row);
 
-        LOG("OutputStream", debug, "tl_src : x = {}, y = {}", tl_src.x,
-            tl_src.y);
-        LOG("OutputStream", debug, "tr_src : x = {}, y = {}", tr_src.x,
-            tr_src.y);
-        LOG("OutputStream", debug, "bl_src : x = {}, y = {}", bl_src.x,
-            bl_src.y);
-        LOG("OutputStream", debug, "br_src : x = {}, y = {}", br_src.x,
-            br_src.y);
-
         Point first_point;
         Point second_point;
 
@@ -330,15 +299,11 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         begin_marged_block.x += std::ceil(1 / slope_tl_bl_);
         col_idx_real += std::ceil(1 / slope_tl_bl_);
 
-        LOG("OutputStream", debug, "begin_line = {}, end_line = {}", begin_line,
-            end_line);
-
         double begin_line_real = begin_line;
         double end_line_real = end_line;
         double slope_begin = slope_tl_bl_;
         double slope_end = slope_tl_tr_;
 
-        LOG("OutputStream", debug, "copy first part");
         // copy from the top corner to the first point of the hull
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
@@ -355,7 +320,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
 
         // copy from the first point with coordinate y != 0 to the second
         // point of the hull
-        LOG("OutputStream", debug, "\ncopy second part");
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
                      col_idx_real, first_point.y, second_point.y, slope_begin,
@@ -369,9 +333,7 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         }
 
         // copy from the second point we encountered until we reach source
-        // point
-        // with the highest height
-        LOG("OutputStream", debug, "\ncopy third part");
+        // point with the highest height
         CopyHullPart(block, begin_line, end_line, begin_line_real,
                      end_line_real, begin_marged_block.y, begin_marged_block.x,
                      col_idx_real, second_point.y, br_src.y, slope_begin,

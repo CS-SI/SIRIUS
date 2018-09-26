@@ -57,6 +57,17 @@ InputStream::InputStream(
     nb_bands_ = std::ceil(input_dataset_->GetRasterYSize() /
                           static_cast<float>(block_size_.row));
 
+    Size image_size(input_dataset_->GetRasterYSize(),
+                    input_dataset_->GetRasterXSize());
+    Size hull_size =
+          sirius::rotation::ComputeNonRotatedHull(image_size, angle_);
+    Point tl, tr, bl, br;
+    sirius::rotation::RecoverCorners(image_size, angle_, hull_size, tr, tl, br,
+                                     bl);
+
+    slope_tl_tr_ = (tr.y - tl.y) / static_cast<double>(tr.x - tl.x);
+    slope_tl_bl_ = (bl.y - tl.y) / static_cast<double>(bl.x - tl.x);
+
     LOG("rotation_input_stream", info, "input image '{}' ({}x{})", image_path,
         input_dataset_->GetRasterYSize(), input_dataset_->GetRasterXSize());
     LOG("rotation_input_stream", info, "block size = {}x{}", block_size_.row,
@@ -166,18 +177,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         return {};
     }
 
-    ////////
-    /*GDALDriver* driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-    GDALDataset* dataset = driver->Create(
-          "/home/mbelloc/tmp/read_block.tif", output_buffer.size.col,
-          output_buffer.size.row, 1, GDT_Float32, NULL);
-    dataset->GetRasterBand(1)->RasterIO(
-          GF_Write, 0, 0, output_buffer.size.col, output_buffer.size.row,
-          output_buffer.data.data(), output_buffer.size.col,
-          output_buffer.size.row, GDT_Float64, 0, 0, NULL);
-    GDALClose(dataset);*/
-    ////////
-
     // recover size without margins
     Size src_size(h_to_read, w_to_read);
     if (block_padding.top == 0 ||
@@ -233,70 +232,43 @@ StreamBlock InputStream::Read(std::error_code& ec) {
         if (angle_ > 0) {
             if (reset_row_) {
                 // shift reference top left to band's bottom left (new TL)
-                tl_ref_.x += bl.x;
+                if (angle_ != 90) {
+                    tl_ref_.x += std::round((bl.y - tl.y - 1 + 1 / 3.) *
+                                            (1 / slope_tl_bl_));
+                } else {
+                    tl_ref_.x += bl.x;
+                }
                 tl_ref_.y += bl.y - tl.y;
-                /*if ((angle_ >= 60 && angle_ < 70) ||
-                    (angle_ >= 30 && angle_ < 40)) {
-                    tl_ref_.y++;
-                }*/
+                if (angle_ >= 45) {
+                    tl_ref_.y--;
+                }
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
                 block_count_ = 0;
             } else {
                 // shift next block indexes to current block's top right corner
-                block_col_idx_ += tr.x;
+                block_col_idx_ -=
+                      std::round((tl.y + 1 / 3.) * (1 / slope_tl_tr_));
                 block_row_idx_ -= tl.y;
             }
         } else {
-            LOG("InputStream", debug,
-                "tl = x = {}, y = {}, tr = x = {}, y = {}, bl = x = {}, y = "
-                "{}, br = x {}, y = {}",
-                tl.x, tl.y, tr.x, tr.y, bl.x, bl.y, br.x, br.y);
             if (reset_row_) {
-                tl_ref_.x -= tl.x;
+                if (angle_ != -90) {
+                    tl_ref_.x +=
+                          std::round((bl.y + 1 / 3.) * (1 / slope_tl_bl_));
+                } else {
+                    tl_ref_.x -= tl.x;
+                }
                 tl_ref_.y += bl.y;
-                /*if (angle_ == -85 && band_count_ == 1) {
-                    tl_ref_.x++;
-                    tl_ref_.y++;
-                }*/
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
                 block_count_ = 0;
             } else {
-                block_col_idx_ += tr.x - tl.x;
+                block_col_idx_ +=
+                      std::round((tr.y + 1 / 3.) * (1 / slope_tl_tr_));
                 block_row_idx_ += tr.y;
-                ///////
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ <= -60) {
-                    block_col_idx_++;
-                }*/
-
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ < -60 &&
-                    angle_ > -85 && angle_ % 10 == 5) {
-                    block_row_idx_++;
-                }*/
-
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ >= -30 &&
-                    angle_ % 10 == -5) {
-                    block_row_idx_++;
-                }*/
-
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ > -30 &&
-                    angle_ < -5 && angle_ % 10 == -5) {
-                    block_col_idx_++;
-                }*/
-
-                // fix first and second block alignment for triangle image /
-                // unfix Pleiade ....
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ == -20) {
-                    block_col_idx_ += 3;
-                }*/
-
-                /*if (block_count_ == 1 && band_count_ == 0 && angle_ == -40) {
-                    block_row_idx_++;
-                }*/
-                ///////
             }
         }
         if (block_count_ != blocks_per_band_ - 1 &&

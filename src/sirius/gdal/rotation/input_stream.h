@@ -86,6 +86,9 @@ class InputStream : public IInputStream {
 
     Point tl_ref_;  // reference top left corner of an entire band
     Point tl_prev_, tr_prev_, bl_prev_, br_prev_;
+
+    double slope_tl_tr_;
+    double slope_tl_bl_;
 };
 
 }  // namespace rotation

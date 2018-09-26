@@ -47,8 +47,6 @@
 
 #include "sirius/utils/log.h"
 
-#include "sirius/rotation/processor.h"
-
 struct CliOptions {
     struct Resampling {
         std::string ratio = "1:1";
@@ -160,12 +158,6 @@ int Rotate(const CliOptions& options) {
         const_cast<CliOptions&>(options).stream.block_size.col = 256;
         const_cast<CliOptions&>(options).stream.block_size.row = 256;
     }
-
-    /*auto processor = sirius::rotation::Processor();
-    auto input_image = sirius::gdal::LoadImage(options.input_image_path);
-    auto output_image =
-          processor.Process(input_image, {options.rotation.angle});
-    sirius::gdal::SaveImage(output_image, options.output_image_path, {});*/
 
     sirius::image_decomposition::Policies image_decomposition_policy =
           sirius::image_decomposition::Policies::kPeriodicSmooth;

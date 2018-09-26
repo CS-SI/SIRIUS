@@ -73,28 +73,6 @@ Image Processor::Process(const Image& image,
         dst_data += im.size.col;
     }
 
-    // get minimal size that contains the rotated image
-    auto min_size = ComputeNonRotatedHull(image.size, angle);
-
-    // get the shift vector to recover top left corner coordinates from
-    // the center
-    auto hypotenuse =
-          std::sqrt(std::pow(min_size.row, 2.0) + std::pow(min_size.col, 2.0));
-
-    auto angle_diag_rad = std::acos(min_size.col / hypotenuse);
-    Size shift;
-    if (angle == 90 || angle == -90) {
-        shift = {static_cast<int>(
-                       std::floor(hypotenuse / 2.0 * std::sin(angle_diag_rad))),
-                 static_cast<int>(std::floor(hypotenuse / 2.0 *
-                                             std::cos(angle_diag_rad)))};
-    } else {
-        shift = {static_cast<int>(std::ceil(hypotenuse / 2.0) *
-                                  std::sin(angle_diag_rad)),
-                 static_cast<int>(std::ceil(hypotenuse / 2.0) *
-                                  std::cos(angle_diag_rad))};
-    }
-
     auto teta = (angle * M_PI) / 180.0;
     auto a = std::tan(teta / 2.0);
     auto b = -std::sin(teta);
@@ -235,6 +213,13 @@ Image Processor::Process(const Image& image,
                   rotated_im.data.begin() + (i * N));
     }
 
+    // get minimal size that contains the rotated image
+    auto min_size = ComputeNonRotatedHull(image.size, angle);
+
+    // get the shift vector to recover top left corner coordinates from
+    // the center
+    Size shift(min_size.row / 2, min_size.col / 2);
+
     Image output_image(min_size);
     Point top_left;
     if (angle == -90) {
@@ -244,8 +229,7 @@ Image Processor::Process(const Image& image,
         top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row + 1));
     } else {
-        top_left.x =
-              static_cast<int>(std::ceil(center.x - shift.col));  /////// + 1
+        top_left.x = static_cast<int>(std::ceil(center.x - shift.col));
         top_left.y = static_cast<int>(std::ceil(center.y - shift.row));
     }
 

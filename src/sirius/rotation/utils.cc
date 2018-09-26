@@ -29,23 +29,18 @@ namespace rotation {
 
 Size ComputeNonRotatedHull(const Size& image_size, const int angle) {
     double angle_rad = angle * M_PI / 180.0;
-
     // get minimal size that contains the rotated image
-    int min_width;
-    int min_height;
-    if (angle < 90) {
-        min_width = image_size.col * std::abs(std::cos(angle_rad)) +
-                    image_size.row * std::abs(std::sin(angle_rad));
-        min_height = image_size.col * std::abs(std::sin(angle_rad)) +
-                     image_size.row * std::abs(std::cos(angle_rad));
-    } else {
-        auto h_tmp = image_size.col;
-        auto w_tmp = image_size.row;
-        auto angle_tmp_rad = (angle - 90) * M_PI / 180.0;
-        min_width = std::round(w_tmp * std::abs(std::cos(angle_tmp_rad)) +
-                               h_tmp * std::abs(std::sin(angle_tmp_rad)));
-        min_height = std::round(w_tmp * std::abs(std::sin(angle_tmp_rad)) +
-                                h_tmp * std::abs(std::cos(angle_tmp_rad)));
+    int min_width = 0;
+    int min_height = 0;
+    if (angle <= 90) {
+        // - 0.001 because min_width / min_height for 90 / -90° are inaccurate
+        // at the 15th decimal and get ceiled
+        min_width =
+              std::ceil(image_size.col * std::abs(std::cos(angle_rad)) +
+                        image_size.row * std::abs(std::sin(angle_rad)) - 0.001);
+        min_height =
+              std::ceil(image_size.col * std::abs(std::sin(angle_rad)) +
+                        image_size.row * std::abs(std::cos(angle_rad)) - 0.001);
     }
 
     return {min_height, min_width};
