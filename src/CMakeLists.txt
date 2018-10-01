@@ -62,12 +62,16 @@ target_include_directories(libsirius PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:${SIRIUS_CONFIG_INCLUDE_DIR}>)
-set_target_properties(libsirius PROPERTIES PREFIX "")
+set_target_properties(libsirius PROPERTIES
+    PREFIX ""
+    FOLDER "lib")
 target_link_libraries(libsirius PUBLIC FFTW3::fftw3 spdlog gsl)
 
 # sirius static library
 add_library(libsirius-static STATIC $<TARGET_OBJECTS:libsirius-objects>)
-set_target_properties(libsirius-static PROPERTIES PREFIX "")
+set_target_properties(libsirius-static PROPERTIES
+    PREFIX ""
+    FOLDER "lib")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set_target_properties(libsirius-static PROPERTIES OUTPUT_NAME "libsirius_s")
 else()
@@ -132,7 +136,9 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/utils/lru_cache.h
     sirius/utils/numeric.h
     sirius/utils/numeric.cc)
-set_target_properties(libsirius-objects PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(libsirius-objects PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    FOLDER lib)
 target_include_directories(libsirius-objects PUBLIC
     $<TARGET_PROPERTY:libsirius,INTERFACE_INCLUDE_DIRECTORIES>)
 target_compile_definitions(libsirius-objects PUBLIC $<TARGET_PROPERTY:libsirius,INTERFACE_COMPILE_DEFINITIONS>)
@@ -221,6 +227,7 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
         sirius/gdal/types.h
         sirius/gdal/wrapper.h
         sirius/gdal/wrapper.cc)
+    set_target_properties(libsirius-gdal-static PROPERTIES FOLDER lib)
     target_link_libraries(libsirius-gdal-static PUBLIC gdal libsirius-static)
 endif ()
 
@@ -232,6 +239,9 @@ if (ENABLE_SIRIUS_EXECUTABLE)
 
         main.cc)
 
+    set_target_properties(sirius PROPERTIES
+        FOLDER bin
+        DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
     target_link_libraries(sirius
         libsirius-gdal-static
         cxxopts

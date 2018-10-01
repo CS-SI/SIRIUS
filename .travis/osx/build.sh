@@ -43,14 +43,14 @@ make -j4 libsirius-static
 make -j4 build_tests
 
 # run tests
-ctest --output-on-failure
+ctest -C ${CMAKE_BUILD_TYPE} --output-on-failure
 
 # build sirius executable
 make -j4 sirius
 
 # execute sirius
-./src/sirius -h
- ./src/sirius -v trace -r 2 ../data/input/lena.jpg lena_z2.tif
+./bin/sirius -h
+ ./bin/sirius -v trace -r 2 ../data/input/lena.jpg lena_z2.tif
 
 # install project
 make -j4 install

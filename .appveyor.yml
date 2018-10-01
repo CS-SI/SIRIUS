@@ -68,10 +68,10 @@ build_script:
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%/.build
   - appveyor AddMessage "Running tests..."
-  - ctest --output-on-failure
+  - ctest -C %configuration% --output-on-failure
   - appveyor AddMessage "Running sirius..."
-  - src\%configuration%\sirius.exe -h
-  - src\%configuration%\sirius.exe -v trace -r 2 ..\data\input\lena.jpg lena_z2.tif
+  - bin\sirius.exe -h
+  - bin\sirius.exe -v trace -r 2 ..\data\input\lena.jpg lena_z2.tif
   - appveyor AddMessage "Testing find_package(SIRIUS)..."
   - mkdir %APPVEYOR_BUILD_FOLDER%\.build-test-find-package
   - cd %APPVEYOR_BUILD_FOLDER%\.build-test-find-package

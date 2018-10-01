@@ -72,8 +72,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_DEBUG_POSTFIX "d")
-
 # set CXX global flags
 set(SIRIUS_CXX_FLAGS "")
 
@@ -109,8 +107,23 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SIRIUS_CXX_FLAGS}")
 
+# add debug postfix to library output names
+set(CMAKE_DEBUG_POSTFIX "d")
+
+# allow target organizations into folders
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # define GNU standard installation directories (CMAKE_INSTALL_XXXDIR)
 include(GNUInstallDirs)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+foreach(config DEBUG RELEASE)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${config} "${CMAKE_CURRENT_BINARY_DIR}/lib")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${config} "${CMAKE_CURRENT_BINARY_DIR}/lib")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${config} "${CMAKE_CURRENT_BINARY_DIR}/bin")
+endforeach()
 
 # define common variables for install directory structure
 set(SIRIUS_CONFIG_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_DATAROOTDIR}/cmake")
@@ -139,14 +152,8 @@ install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 install(FILES LICENSE-3RD-PARTY.md DESTINATION ${CMAKE_INSTALL_DATAROOTDIR})
 
 if (BUILD_TESTING)
-    enable_testing()
+    include(CTest)
     add_subdirectory(tests)
-
-    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/input
-                        ${CMAKE_CURRENT_BINARY_DIR}/tests/filters
-                        ${CMAKE_CURRENT_BINARY_DIR}/tests/output)
-    file(COPY data/input DESTINATION tests)
-    file(COPY data/filters DESTINATION tests)
 endif()
 
 if (ENABLE_DOCUMENTATION)
@@ -176,8 +183,8 @@ if (ENABLE_DOCUMENTATION)
         # else()
         #     message(STATUS "Cannot build pdf manual (LaTeX not found)")
         # endif()
-    # copy doxygen documentation into install directory
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
+        # copy doxygen documentation into install directory
+        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
             DESTINATION ${CMAKE_INSTALL_PREFIX}/doc/api-doc)
     else()
         message(STATUS "Doxygen is needed to build the documentation.")
