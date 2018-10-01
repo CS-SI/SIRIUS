@@ -38,8 +38,10 @@ using Buffer = std::vector<double>;
 struct Size {
     Size() = default;
 
-    Size(int row, int col);
-    Size(const std::array<int, 2>& size);
+    constexpr Size(int row, int col) noexcept : row(row), col(col) {}
+
+    constexpr Size(const std::array<int, 2>& size) noexcept : row(size[0]),
+                                                              col(size[1]) {}
 
     ~Size() = default;
     Size(const Size&) = default;

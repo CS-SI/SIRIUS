@@ -38,8 +38,13 @@ enum class PaddingType {
  */
 struct Padding {
     Padding() = default;
-    Padding(int top, int bottom, int left, int right,
-            PaddingType type = PaddingType::kMirrorPadding);
+    constexpr Padding(int i_top, int i_bottom, int i_left, int i_right,
+                      PaddingType i_type = PaddingType::kMirrorPadding)
+        : top(i_top),
+          bottom(i_bottom),
+          left(i_left),
+          right(i_right),
+          type(i_type) {}
 
     ~Padding() = default;
     Padding(const Padding&) = default;

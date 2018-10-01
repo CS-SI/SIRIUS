@@ -19,10 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
-#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#ifndef SIRIUS_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#define SIRIUS_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
 
-#include "sirius/resampler/image_decomposition/periodic_smooth_policy.h"
+#include "sirius/image_decomposition/periodic_smooth_policy.h"
 
 #include "sirius/fftw/fftw.h"
 #include "sirius/fftw/types.h"
@@ -31,11 +31,14 @@
 #include "sirius/utils/gsl.h"
 
 namespace sirius {
-namespace resampler {
+namespace image_decomposition {
 
-template <class ZoomStrategy>
-Image ImageDecompositionPeriodicSmoothPolicy<ZoomStrategy>::DecomposeAndZoom(
-      int zoom, const Image& image, const Filter& filter) const {
+template <typename Transformation, typename ImageProcessor,
+          typename ImageInterpolator>
+Image PeriodicSmoothPolicy<Transformation, ImageProcessor, ImageInterpolator>::
+      DecomposeAndProcess(
+            const Image& image,
+            const typename Transformation::Parameters& parameters) const {
     // 1) compute intensity changes between two opposite borders
     LOG("periodic_smooth_decomposition", trace, "compute intensity changes");
     Image border_intensity_changes(image.size);
@@ -138,116 +141,52 @@ Image ImageDecompositionPeriodicSmoothPolicy<ZoomStrategy>::DecomposeAndZoom(
     auto periodic_part_image =
           fftw::IFFT(image.size, std::move(periodic_part_fft));
 
-    // 7) apply zoom on periodic part
-    LOG("periodic_smooth_decomposition", trace, "zoom periodic part");
-    // method inherited from ZoomStrategy
-    auto zoomed_image = this->Zoom(zoom, periodic_part_image, filter);
+    // 7) apply processor on periodic part
+    LOG("periodic_smooth_decomposition", trace, "process periodic part");
+    // method inherited from ImageProcessor
+    auto processed_image = this->Process(periodic_part_image, parameters);
 
-    // 7) ifft smooth part
+    // 8) ifft smooth part
     LOG("periodic_smooth_decomposition", trace, "smooth part IFFT");
     auto smooth_part_image = fftw::IFFT(image.size, std::move(smooth_part_fft));
 
-    // 8) normalize smooth_part_image
+    // 9) normalize smooth_part_image
     LOG("periodic_smooth_decomposition", trace, "normalize smooth image part");
     int image_cell_count = image.CellCount();
     std::for_each(
           smooth_part_image.data.begin(), smooth_part_image.data.end(),
           [image_cell_count](double& cell) { cell /= image_cell_count; });
 
-    // 9) interpolate 2d smooth part image
+    // 10) interpolate 2d smooth part image
     LOG("periodic_smooth_decomposition", trace,
         "interpolate smooth image part");
-    auto interpolated_smooth_image = Interpolate2D(zoom, smooth_part_image);
+    // method inherited from ImageInterpolator
+    auto interpolated_smooth_image =
+          this->Interpolate2D(smooth_part_image, parameters);
 
     // 10) normalize periodic_part_image
     LOG("periodic_smooth_decomposition", trace,
         "normalize periodic image part");
     std::for_each(
-          zoomed_image.data.begin(), zoomed_image.data.end(),
+          processed_image.data.begin(), processed_image.data.end(),
           [image_cell_count](double& cell) { cell /= image_cell_count; });
 
-    // 11) sum periodic and smooth parts
+    // 12) sum periodic and smooth parts
     LOG("periodic_smooth_decomposition", trace,
         "sum periodic and smooth image parts");
-    Image output_image(zoomed_image.size);
-    for (int i = 0; i < zoomed_image.size.row; i++) {
-        for (int j = 0; j < zoomed_image.size.col; j++) {
-            output_image.Set(i, j, zoomed_image.Get(i, j) +
-                                         interpolated_smooth_image.Get(i, j));
+    Image output_image(processed_image.size);
+    for (int i = 0; i < processed_image.size.row; i++) {
+        for (int j = 0; j < processed_image.size.col; j++) {
+            output_image.Set(i, j,
+                             processed_image.Get(i, j) +
+                                   interpolated_smooth_image.Get(i, j));
         }
     }
 
     return output_image;
 }
 
-template <class ZoomStrategy>
-Image ImageDecompositionPeriodicSmoothPolicy<ZoomStrategy>::Interpolate2D(
-      int zoom, const Image& image) const {
-    Image interpolated_im(image.size * zoom);
-
-    std::vector<double> BLN_kernel(4, 0);
-    Size img_mirror_size(image.size.row + 1, image.size.col + 1);
-
-    std::vector<double> img_mirror(img_mirror_size.CellCount(), 0);
-    auto img_mirror_span = gsl::as_multi_span(img_mirror);
-    for (int i = 0; i < image.size.row; i++) {
-        for (int j = 0; j < image.size.col; j++) {
-            img_mirror_span[i * (image.size.col + 1) + j] = image.Get(i, j);
-        }
-    }
-
-    // duplicate last row
-    for (int j = 0; j < image.size.col + 1; j++) {
-        img_mirror_span[image.size.row * (image.size.col + 1) + j] =
-              img_mirror_span[(image.size.row - 1) * (image.size.col + 1) + j];
-    }
-
-    // duplicate last col
-    for (int i = 0; i < image.size.row + 1; i++) {
-        img_mirror_span[(i + 1) * (image.size.col + 1) - 1] =
-              img_mirror_span[(i + 1) * (image.size.col + 1) - 2];
-    }
-
-    for (int fx = 0; fx < zoom; fx++) {
-        for (int fy = 0; fy < zoom; fy++) {
-            BLN_kernel[0] = (1 - fx / static_cast<double>(zoom)) *
-                            (1 - fy / static_cast<double>(zoom));
-            BLN_kernel[1] = (1 - fx / static_cast<double>(zoom)) *
-                            (fy / static_cast<double>(zoom));
-            BLN_kernel[2] = (fx / static_cast<double>(zoom)) *
-                            (1 - fy / static_cast<double>(zoom));
-            BLN_kernel[3] = (fx / static_cast<double>(zoom)) *
-                            (fy / static_cast<double>(zoom));
-
-            // convolve. BLN_kernel is already flipped
-            for (int i = fx; i < image.size.row * zoom; i += zoom) {
-                for (int j = fy; j < image.size.col * zoom; j += zoom) {
-                    interpolated_im.Set(
-                          i, j,
-                          img_mirror_span[(i / zoom) * (image.size.col + 1) +
-                                          (j / zoom)] *
-                                      BLN_kernel[0] +
-                                img_mirror_span[(i / zoom + 1) *
-                                                      (image.size.col + 1) +
-                                                (j / zoom)] *
-                                      BLN_kernel[2] +
-                                img_mirror_span[(i / zoom) *
-                                                      (image.size.col + 1) +
-                                                (j / zoom + 1)] *
-                                      BLN_kernel[1] +
-                                img_mirror_span[(i / zoom + 1) *
-                                                      (image.size.col + 1) +
-                                                (j / zoom + 1)] *
-                                      BLN_kernel[3]);
-                }
-            }
-        }
-    }
-
-    return interpolated_im;
-}
-
-}  // namespace resampler
+}  // namespace image_decomposition
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_
+#endif  // SIRIUS_IMAGE_DECOMPOSITION_PERIODIC_SMOOTH_POLICY_TXX_

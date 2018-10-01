@@ -21,10 +21,10 @@
 
 #include <sirius/utils/log.h>
 
-#include "sirius/filter.h"
 #include <sirius/frequency_resampler_factory.h>
-#include "sirius/image.h"
 #include <sirius/types.h>
+#include "sirius/filter.h"
+#include "sirius/image.h"
 
 int main(int, char**) {
     LOG_SET_LEVEL(trace);
@@ -35,9 +35,9 @@ int main(int, char**) {
 
     sirius::IFrequencyResampler::UPtr freq_resampler =
           sirius::FrequencyResamplerFactory::Create(
-                sirius::ImageDecompositionPolicies::kRegular,
-                sirius::FrequencyZoomStrategies::kZeroPadding);
+                sirius::image_decomposition::Policies::kRegular,
+                sirius::FrequencyUpsamplingStrategies::kZeroPadding);
 
     sirius::Image zoomed_image_2_1 =
-          freq_resampler->Compute(zoom_ratio_2_1, dummy_image, {0, 0, 0, 0});
+          freq_resampler->Compute(dummy_image, {}, {zoom_ratio_2_1, nullptr});
 }

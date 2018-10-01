@@ -148,4 +148,3 @@ if (SIRIUS_FOUND)
     endif()
     message(STATUS "find_package(SIRIUS) provides CMake targets: SIRIUS::libsirius and SIRIUS::libsirius-static")
 endif ()
-

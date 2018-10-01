@@ -77,7 +77,7 @@ set(SIRIUS_CXX_FLAGS "")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # GCC or Clang
-    set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -Wall -Wextra")
+    set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -Wall -Wextra -Werror")
     if (ENABLE_CLANG_LIBCPP)
         set(SIRIUS_CXX_FLAGS  "${SIRIUS_CXX_FLAGS} -stdlib=libc++")
     endif()

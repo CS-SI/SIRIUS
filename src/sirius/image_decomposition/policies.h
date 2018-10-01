@@ -19,35 +19,24 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "utils.h"
+#ifndef SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_
+#define SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_
+
+#include "sirius/filter.h"
+#include "sirius/image.h"
 
 namespace sirius {
-namespace tests {
+namespace image_decomposition {
 
-sirius::Image CreateDummyImage(const sirius::Size& size) {
-    sirius::Image image(size);
+/**
+ * \brief Enum of supported image decomposition policies
+ */
+enum class Policies {
+    kRegular = 0,   /**< regular image decomposition */
+    kPeriodicSmooth /**< periodic plus smooth image decomposition */
+};
 
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            image.Set(row, col, row * 10 + col + 1);
-        }
-    }
-
-    return image;
-}
-
-sirius::Image CreateSquaredImage(const sirius::Size& size) {
-    sirius::Image image(size);
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            if ((row < (size.row / 2) && col < (size.col / 2)) ||
-                (row > (size.row / 2) && col > (size.col / 2))) {
-                image.Set(row, col, 65535);
-            }
-        }
-    }
-    return image;
-}
-
-}  // namespace tests
+}  // namespace image_decomposition
 }  // namespace sirius
+
+#endif  // SIRIUS_IMAGE_DECOMPOSITION_POLICIES_H_

@@ -19,36 +19,30 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_INPUT_STREAM_H_
-#define SIRIUS_GDAL_INPUT_STREAM_H_
+#ifndef SIRIUS_GDAL_RESAMPLING_INPUT_STREAM_H_
+#define SIRIUS_GDAL_RESAMPLING_INPUT_STREAM_H_
+
+#include <string>
+
+#include "sirius/image.h"
+#include "sirius/types.h"
 
 #include "sirius/gdal/i_input_stream.h"
+#include "sirius/gdal/input_stream.h"
 
-#include "sirius/gdal/types.h"
+#include "sirius/resampling/parameters.h"
 
 namespace sirius {
 namespace gdal {
+namespace resampling {
 
-/**
- * \brief Stream an image in block
- */
 class InputStream : public IInputStream {
   public:
-    InputStream() = default;
-
-    /**
-     * \brief Instanciate an InputStreamer and set its block size
-     * \param image_path path to the input image
-     * \param block_size blocks size
-     * \param block_margin_size block margin size
-     * \param block_padding_type block padding type
-     */
     InputStream(const std::string& image_path, const sirius::Size& block_size,
-                const sirius::Size& block_margin_size,
-                PaddingType block_padding_type);
+                bool allow_block_resizing,
+                const sirius::resampling::Parameters& resampling_parameters);
 
     ~InputStream() = default;
-
     InputStream(const InputStream&) = delete;
     InputStream& operator=(const InputStream&) = delete;
     InputStream(InputStream&&) = default;
@@ -59,25 +53,22 @@ class InputStream : public IInputStream {
      * \param ec error code if operation failed
      * \return block read
      */
-    StreamBlock Read(std::error_code& ec) override;
+    StreamBlock Read(std::error_code& ec) override {
+        return input_stream_.Read(ec);
+    }
 
     /**
      * \brief Indicate end of image
      * \return boolean if end is reached
      */
-    bool IsEnded() const override { return is_ended_; }
+    bool IsEnded() const override { return input_stream_.IsEnded(); }
 
   private:
-    gdal::DatasetUPtr input_dataset_;
-    sirius::Size block_size_{256, 256};
-    sirius::Size block_margin_size_;
-    PaddingType block_padding_type_;
-    bool is_ended_ = false;
-    int row_idx_ = 0;
-    int col_idx_ = 0;
+    gdal::InputStream input_stream_;
 };
 
+}  // namespace resampling
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_INPUT_STREAM_H_
+#endif  // SIRIUS_GDAL_RESAMPLING_INPUT_STREAM_H_

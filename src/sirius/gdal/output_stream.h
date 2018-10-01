@@ -19,14 +19,11 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
-#define SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+#ifndef SIRIUS_GDAL_OUTPUT_STREAM_H_
+#define SIRIUS_GDAL_OUTPUT_STREAM_H_
 
-#include <system_error>
+#include "sirius/gdal/i_output_stream.h"
 
-#include "sirius/types.h"
-
-#include "sirius/gdal/stream_block.h"
 #include "sirius/gdal/types.h"
 
 namespace sirius {
@@ -35,31 +32,30 @@ namespace gdal {
 /**
  * \brief Write a resampled image by block
  */
-class ResampledOutputStream {
+class OutputStream : public IOutputStream {
   public:
-    ResampledOutputStream(const std::string& input_path,
-                          const std::string& output_path,
-                          const ZoomRatio& zoom_ratio);
+    OutputStream() = default;
 
-    ~ResampledOutputStream() = default;
-    ResampledOutputStream(const ResampledOutputStream&) = delete;
-    ResampledOutputStream& operator=(const ResampledOutputStream&) = delete;
-    ResampledOutputStream(ResampledOutputStream&&) = delete;
-    ResampledOutputStream& operator=(ResampledOutputStream&&) = delete;
+    OutputStream(gdal::DatasetUPtr output_dataset);
+
+    ~OutputStream() = default;
+    OutputStream(const OutputStream&) = delete;
+    OutputStream& operator=(const OutputStream&) = delete;
+    OutputStream(OutputStream&&) = default;
+    OutputStream& operator=(OutputStream&&) = default;
 
     /**
      * \brief Write a zoomed block in the output file
      * \param block block to write
      * \param ec error code if operation failed
      */
-    void Write(StreamBlock&& block, std::error_code& ec);
+    void Write(StreamBlock&& block, std::error_code& ec) override;
 
   private:
     gdal::DatasetUPtr output_dataset_;
-    ZoomRatio zoom_ratio_;
 };
 
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_RESAMPLED_OUTPUT_STREAM_H_
+#endif  // SIRIUS_GDAL_OUTPUT_STREAM_H_

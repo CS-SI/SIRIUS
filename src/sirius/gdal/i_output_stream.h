@@ -19,28 +19,31 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
-#define SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+#ifndef SIRIUS_GDAL_I_OUTPUT_STREAM_H_
+#define SIRIUS_GDAL_I_OUTPUT_STREAM_H_
 
-#include "sirius/filter.h"
-#include "sirius/image.h"
+#include <system_error>
+
+#include "sirius/types.h"
+
+#include "sirius/gdal/stream_block.h"
 
 namespace sirius {
-namespace resampler {
+namespace gdal {
 
-/**
- * \brief Implementation of regular image decomposition
- */
-template <class ZoomStrategy>
-class ImageDecompositionRegularPolicy : private ZoomStrategy {
+class IOutputStream {
   public:
-    Image DecomposeAndZoom(int zoom, const Image& padded_image,
-                           const Filter& filter) const;
+    virtual ~IOutputStream() = default;
+
+    /**
+     * \brief Read a block from the image
+     * \param ec error code if operation failed
+     * \return block read
+     */
+    virtual void Write(StreamBlock&& block, std::error_code& ec) = 0;
 };
 
-}  // namespace resampler
+}  // namespace gdal
 }  // namespace sirius
 
-#include "sirius/resampler/image_decomposition/regular_policy.txx"
-
-#endif  // SIRIUS_RESAMPLER_IMAGE_DECOMPOSITION_REGULAR_POLICY_H_
+#endif  // SIRIUS_GDAL_I_OUTPUT_STREAM_H_

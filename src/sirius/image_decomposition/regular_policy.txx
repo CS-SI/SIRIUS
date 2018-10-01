@@ -19,35 +19,26 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "utils.h"
+#ifndef SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+#define SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_
+
+#include "sirius/image_decomposition/regular_policy.h"
 
 namespace sirius {
-namespace tests {
+namespace image_decomposition {
 
-sirius::Image CreateDummyImage(const sirius::Size& size) {
-    sirius::Image image(size);
-
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            image.Set(row, col, row * 10 + col + 1);
-        }
-    }
-
-    return image;
+template <typename Transformation, typename ImageProcessor,
+          typename ImageInterpolator>
+Image RegularPolicy<Transformation, ImageProcessor, ImageInterpolator>::
+      DecomposeAndProcess(
+            const Image& image,
+            const typename Transformation::Parameters& parameters) const {
+    // method inherited from ImageProcessor
+    LOG("regular_decomposition", trace, "process image");
+    return this->Process(image, parameters);
 }
 
-sirius::Image CreateSquaredImage(const sirius::Size& size) {
-    sirius::Image image(size);
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            if ((row < (size.row / 2) && col < (size.col / 2)) ||
-                (row > (size.row / 2) && col > (size.col / 2))) {
-                image.Set(row, col, 65535);
-            }
-        }
-    }
-    return image;
-}
-
-}  // namespace tests
+}  // namespace image_decomposition
 }  // namespace sirius
+
+#endif  // SIRIUS_IMAGE_DECOMPOSITION_REGULAR_POLICY_TXX_

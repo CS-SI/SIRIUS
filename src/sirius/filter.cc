@@ -47,9 +47,9 @@ Image FrequencyShift(const Image& filter_image, const Point& hot_point,
 
 Image CenterFilterImage(const Image& filter_image, const Point& hot_point);
 
-Filter Filter::Create(Image filter_image, const ZoomRatio& zoom_ratio,
-                      const Point& hot_point, PaddingType padding_type,
-                      bool normalize) {
+Filter::UPtr Filter::Create(Image filter_image, const ZoomRatio& zoom_ratio,
+                            const Point& hot_point, PaddingType padding_type,
+                            bool normalize) {
     if (hot_point.x < -1 || hot_point.x >= filter_image.size.col ||
         hot_point.y < -1 || hot_point.y >= filter_image.size.row) {
         LOG("filter", error, "Invalid hot point with coordinates {}, {}",
@@ -93,10 +93,6 @@ Filter::Filter(Image&& filter_image, const Size& padding_size,
 
 fftw::ComplexUPtr Filter::Process(const Size& image_size,
                                   fftw::ComplexUPtr image_fft) const {
-    if (!IsLoaded()) {
-        return image_fft;
-    }
-
     if (image_size.row < filter_.size.row ||
         image_size.col < filter_.size.col) {
         LOG("filter", error,
@@ -175,10 +171,10 @@ fftw::ComplexUPtr Filter::CreateFilterFFT(const Size& image_size) const {
     return fftw::FFT(shifted_values.get(), image_size);
 }
 
-Filter Filter::CreateZoomOutFilter(Image filter_image,
-                                   const ZoomRatio& zoom_ratio,
-                                   PaddingType padding_type,
-                                   const Point& hot_point) {
+Filter::UPtr Filter::CreateZoomOutFilter(Image filter_image,
+                                         const ZoomRatio& zoom_ratio,
+                                         PaddingType padding_type,
+                                         const Point& hot_point) {
     LOG("filter", info, "filter: downsampling");
     if (hot_point.x != -1 && hot_point.y != -1) {
         filter_image = CenterFilterImage(filter_image, hot_point);
@@ -191,17 +187,15 @@ Filter Filter::CreateZoomOutFilter(Image filter_image,
                             ? (filter_image.size.col / 2)
                             : (filter_image.size.col - 1) / 2;
 
-    return {std::move(filter_image),
-            {padding_row, padding_col},
-            zoom_ratio,
-            padding_type,
-            hot_point};
+    return std::make_unique<Filter>(std::move(filter_image),
+                                    Size{padding_row, padding_col}, zoom_ratio,
+                                    padding_type, hot_point);
 }
 
-Filter Filter::CreateZoomInFilter(Image filter_image,
-                                  const ZoomRatio& zoom_ratio,
-                                  PaddingType padding_type,
-                                  const Point& hot_point) {
+Filter::UPtr Filter::CreateZoomInFilter(Image filter_image,
+                                        const ZoomRatio& zoom_ratio,
+                                        PaddingType padding_type,
+                                        const Point& hot_point) {
     LOG("filter", info, "filter: upsampling");
     if (hot_point.x != -1 && hot_point.y != -1) {
         filter_image = CenterFilterImage(filter_image, hot_point);
@@ -228,17 +222,15 @@ Filter Filter::CreateZoomInFilter(Image filter_image,
                static_cast<double>(zoom_ratio.input_resolution())));
     }
 
-    return {std::move(filter_image),
-            {padding_row, padding_col},
-            zoom_ratio,
-            padding_type,
-            hot_point};
+    return std::make_unique<Filter>(std::move(filter_image),
+                                    Size{padding_row, padding_col}, zoom_ratio,
+                                    padding_type, hot_point);
 }
 
-Filter Filter::CreateRealZoomFilter(Image filter_image,
-                                    const ZoomRatio& zoom_ratio,
-                                    PaddingType padding_type,
-                                    const Point& hot_point) {
+Filter::UPtr Filter::CreateRealZoomFilter(Image filter_image,
+                                          const ZoomRatio& zoom_ratio,
+                                          PaddingType padding_type,
+                                          const Point& hot_point) {
     LOG("filter", info,
         "filter: float upsampling factor (upsample filter to input "
         "resolution)");
@@ -263,31 +255,28 @@ Filter Filter::CreateRealZoomFilter(Image filter_image,
         padding_col = static_cast<int>(filter_image.size.col / 2. *
                                        (1. / zoom_ratio.input_resolution()));
     }
-    return {std::move(filter_image),
-            {padding_row, padding_col},
-            zoom_ratio,
-            padding_type,
-            hot_point};
+    return std::make_unique<Filter>(std::move(filter_image),
+                                    Size{padding_row, padding_col}, zoom_ratio,
+                                    padding_type, hot_point);
 }
 
 Image ZoomFilterImageToInputResolution(const Image& filter_image,
                                        const ZoomRatio& zoom_ratio) {
     LOG("filter", trace, "zoom filter to input resolution");
-    ImageDecompositionPolicies image_decomposition_policy =
-          ImageDecompositionPolicies::kRegular;
-    FrequencyZoomStrategies zoom_strategy =
-          FrequencyZoomStrategies::kZeroPadding;
+    image_decomposition::Policies image_decomposition_policy =
+          image_decomposition::Policies::kRegular;
+    FrequencyUpsamplingStrategies zoom_strategy =
+          FrequencyUpsamplingStrategies::kZeroPadding;
     auto frequency_resampler = FrequencyResamplerFactory::Create(
           image_decomposition_policy, zoom_strategy);
-
-    auto new_zoom_ratio = ZoomRatio::Create(zoom_ratio.output_resolution(), 1);
 
     Image shifted_filter(filter_image.size);
     utils::IFFTShift2D(filter_image.data.data(), filter_image.size,
                        shifted_filter.data.data());
 
     auto zoomed_filter = frequency_resampler->Compute(
-          new_zoom_ratio, shifted_filter, {0, 0, 0, 0}, {});
+          shifted_filter, {0, 0, 0, 0},
+          {ZoomRatio::Create(zoom_ratio.output_resolution(), 1)});
 
     Image unshifted_zoomed_filter(zoomed_filter.size);
     // centered FFTShift so filter's hot point remains centered

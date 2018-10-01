@@ -46,7 +46,6 @@ target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(unit_test_lib PROPERTIES FOLDER test)
 target_link_libraries(unit_test_lib
     libsirius-static
-    libsirius-gdal-static
     Threads::Threads)
 
 file(GLOB unit_tests *_tests.cc)
@@ -66,6 +65,7 @@ foreach(unit_test_file ${unit_tests})
         DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
     target_link_libraries(${unit_test}
         libsirius-static
+        libsirius-gdal-static
         unit_test_lib
         unit_test_main)
     add_test(NAME ${unit_test} COMMAND ${unit_test}

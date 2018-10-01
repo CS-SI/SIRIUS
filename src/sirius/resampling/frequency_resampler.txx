@@ -19,10 +19,10 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_
-#define SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_
+#ifndef SIRIUS_RESAMPLING_FREQUENCY_RESAMPLER_TXX_
+#define SIRIUS_RESAMPLING_FREQUENCY_RESAMPLER_TXX_
 
-#include "sirius/resampler/frequency_resampler.h"
+#include "sirius/resampling/frequency_resampler.h"
 
 #include <algorithm>
 
@@ -34,49 +34,47 @@
 #include "sirius/utils/log.h"
 
 namespace sirius {
-namespace resampler {
+namespace resampling {
 
-template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::Compute(
-      const ZoomRatio& zoom_ratio, const Image& input_image,
-      const Padding& image_padding, const Filter& filter) const {
+template <template <class, class, class> class ImageDecompositionPolicy,
+          class UpsamplingStrategy>
+Image FrequencyResampler<ImageDecompositionPolicy, UpsamplingStrategy>::Compute(
+      const Image& input_image, const Padding& image_padding,
+      const Parameters& parameters) const {
     LOG("frequency_resampler", trace, "compute {}/{} zoom of the image",
-        zoom_ratio.input_resolution(), zoom_ratio.output_resolution());
-
-    // basic checks
-    if (filter.IsLoaded() && !filter.CanBeApplied(zoom_ratio)) {
-        LOG("frequency_resampler", error,
-            "cannot apply this filter on this zoom ratio");
-        throw Exception("cannot apply this filter on this zoom ratio");
-    }
+        parameters.ratio.input_resolution(),
+        parameters.ratio.output_resolution());
 
     LOG("frequency_resampler", trace, "pad image");
     auto padded_image = input_image.CreatePaddedImage(image_padding);
 
     LOG("frequency_resampler", trace, "decompose and zoom image");
     // method inherited from ImageDecompositionPolicy
-    Image result_image = this->DecomposeAndZoom(zoom_ratio.input_resolution(),
-                                                padded_image, filter);
+    Image result_image = this->DecomposeAndProcess(padded_image, parameters);
 
     LOG("frequency_resampler", trace, "unpad zoomed image");
-    auto result = UnpadImage(zoom_ratio, input_image, result_image,
-                             image_padding, filter);
+    auto result = UnpadImage(parameters.ratio, input_image, result_image,
+                             image_padding, parameters.filter);
 
-    if (zoom_ratio.IsRealZoom()) {
-        result = DecimateImage(result, zoom_ratio);
+    if (parameters.ratio.IsRealZoom()) {
+        result = DecimateImage(result, parameters.ratio);
     }
 
     return result;
 }
 
-template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
-      const ZoomRatio& zoom_ratio, const Image& original_image,
-      const Image& zoomed_image, const Padding& padding,
-      const Filter& filter) const {
+template <template <class, class, class> class ImageDecompositionPolicy,
+          class UpsamplingStrategy>
+Image FrequencyResampler<ImageDecompositionPolicy, UpsamplingStrategy>::
+      UnpadImage(const ZoomRatio& zoom_ratio, const Image& original_image,
+                 const Image& zoomed_image, const Padding& padding,
+                 const Filter* filter) const {
     auto input_size = original_image.size;
 
-    auto filter_padding_size = filter.padding_size();
+    Size filter_padding_size;
+    if (filter) {
+        filter_padding_size = filter->padding_size();
+    }
 
     if (padding.top == 0) {
         // input is already padded top for filter so substract 1 filter row
@@ -131,9 +129,11 @@ Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::UnpadImage(
     return result;
 }
 
-template <template <class> class ImageDecompositionPolicy, class ZoomStrategy>
-Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::DecimateImage(
-      const Image& zoomed_image, const ZoomRatio& zoom_ratio) const {
+template <template <class, class, class> class ImageDecompositionPolicy,
+          class UpsamplingStrategy>
+Image FrequencyResampler<ImageDecompositionPolicy, UpsamplingStrategy>::
+      DecimateImage(const Image& zoomed_image,
+                    const ZoomRatio& zoom_ratio) const {
     LOG("frequency_resampler", trace, "decimate zoomed image by {}",
         zoom_ratio.output_resolution());
 
@@ -160,7 +160,7 @@ Image FrequencyResampler<ImageDecompositionPolicy, ZoomStrategy>::DecimateImage(
     return decimated_image;
 }
 
-}  // namespace resampler
+}  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_RESAMPLER_FREQUENCY_RESAMPLER_TXX_
+#endif  // SIRIUS_RESAMPLING_FREQUENCY_RESAMPLER_TXX_

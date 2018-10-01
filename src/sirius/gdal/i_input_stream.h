@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 CS - Systeme d'Information (CS-SI)
+ * Copyright (C) 2018 CS - Systemes d'Information (CS-SI)
  *
  * This file is part of Sirius
  *
@@ -19,30 +19,37 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
-#define SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
+#ifndef SIRIUS_GDAL_I_INPUT_STREAM_H_
+#define SIRIUS_GDAL_I_INPUT_STREAM_H_
 
-#include "sirius/filter.h"
-#include "sirius/image.h"
+#include <system_error>
 
-#include "sirius/fftw/types.h"
+#include "sirius/types.h"
+
+#include "sirius/gdal/stream_block.h"
 
 namespace sirius {
-namespace resampler {
+namespace gdal {
 
-/**
- * \brief Implementation of zero padding frequency zoom
- */
-class ZeroPaddingZoomStrategy {
+class IInputStream {
   public:
-    Image Zoom(int zoom, const Image& padded_image, const Filter& filter) const;
+    virtual ~IInputStream() = default;
 
-  private:
-    fftw::ComplexUPtr ZeroPadFFT(int zoom, const Image& image,
-                                 fftw::ComplexUPtr image_fft) const;
+    /**
+     * \brief Read a block from the image
+     * \param ec error code if operation failed
+     * \return block read
+     */
+    virtual StreamBlock Read(std::error_code& ec) = 0;
+
+    /**
+     * \brief Indicate end of image
+     * \return boolean if end is reached
+     */
+    virtual bool IsEnded() const = 0;
 };
 
-}  // namespace resampler
+}  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_ZOOM_ZOOM_STRATEGY_ZERO_PADDING_STRATEGY_H_
+#endif  // SIRIUS_GDAL_I_INPUT_STREAM_H_

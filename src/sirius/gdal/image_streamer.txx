@@ -19,46 +19,43 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sirius/image_streamer.h"
+#ifndef SIRIUS_GDAL_IMAGE_STREAMER_TXX_
+#define SIRIUS_GDAL_IMAGE_STREAMER_TXX_
 
-#include <future>
-#include <vector>
-
-#include "sirius/gdal/stream_block.h"
-
-#include "sirius/utils/concurrent_queue.h"
-#include "sirius/utils/log.h"
+#include "sirius/gdal/image_streamer.h"
 
 namespace sirius {
+namespace gdal {
 
-ImageStreamer::ImageStreamer(const std::string& input_path,
-                             const std::string& output_path,
-                             const Size& block_size,
-                             const ZoomRatio& zoom_ratio,
-                             const FilterMetadata& filter_metadata,
-                             unsigned int max_parallel_workers)
-    : max_parallel_workers_(max_parallel_workers),
-      block_size_(block_size),
-      zoom_ratio_(zoom_ratio),
-      input_stream_(input_path, block_size, filter_metadata.margin_size,
-                    filter_metadata.padding_type),
-      output_stream_(input_path, output_path, zoom_ratio) {}
+template <typename Transformer, typename InputStream, typename OutputStream>
+ImageStreamer<Transformer, InputStream, OutputStream>::ImageStreamer(
+      const std::string& input_path, const std::string& output_path,
+      const Size& block_size, bool allow_block_resizing,
+      const typename Transformer::Parameters& transformer_parameters,
+      unsigned int max_parallel_workers)
+    : max_parallel_workers_(std::min(max_parallel_workers,
+                                     std::thread::hardware_concurrency())),
+      input_stream_(input_path, block_size, allow_block_resizing,
+                    transformer_parameters),
+      output_stream_(input_path, output_path, transformer_parameters) {}
 
-void ImageStreamer::Stream(const IFrequencyResampler& frequency_resampler,
-                           const Filter& filter) {
-    LOG("image_streamer", info, "stream block size: {}x{}", block_size_.row,
-        block_size_.col);
+template <typename Transformer, typename InputStream, typename OutputStream>
+void ImageStreamer<Transformer, InputStream, OutputStream>::Stream(
+      const Transformer& transformer,
+      const typename Transformer::Parameters& parameters) {
     if (max_parallel_workers_ == 1) {
-        RunMonothreadStream(frequency_resampler, filter);
+        RunMonothreadStream(transformer, parameters);
     } else {
-        RunMultithreadStream(frequency_resampler, filter);
+        RunMultithreadStream(transformer, parameters);
     }
 }
 
-void ImageStreamer::RunMonothreadStream(
-      const IFrequencyResampler& frequency_resampler, const Filter& filter) {
+template <typename Transformer, typename InputStream, typename OutputStream>
+void ImageStreamer<Transformer, InputStream, OutputStream>::RunMonothreadStream(
+      const Transformer& transformer,
+      const typename Transformer::Parameters& parameters) {
     LOG("image_streamer", info, "start monothreaded streaming");
-    while (!input_stream_.IsAtEnd()) {
+    while (!input_stream_.IsEnded()) {
         std::error_code read_ec;
         auto block = input_stream_.Read(read_ec);
         if (read_ec) {
@@ -67,9 +64,8 @@ void ImageStreamer::RunMonothreadStream(
             break;
         }
 
-        block.buffer = frequency_resampler.Compute(
-              zoom_ratio_, block.buffer, block.padding, filter);
-
+        block.buffer = transformer.Compute(block.buffer,
+                                           block.padding, parameters);
         std::error_code write_ec;
         output_stream_.Write(std::move(block), write_ec);
         if (write_ec) {
@@ -81,19 +77,19 @@ void ImageStreamer::RunMonothreadStream(
     LOG("image_streamer", info, "end monothreaded streaming");
 }
 
-void ImageStreamer::RunMultithreadStream(
-      const IFrequencyResampler& frequency_resampler, const Filter& filter) {
+template <typename Transformer, typename InputStream, typename OutputStream>
+void ImageStreamer<Transformer, InputStream, OutputStream>::
+      RunMultithreadStream(const Transformer& transformer,
+                           const typename Transformer::Parameters& parameters) {
     LOG("image_streamer", info, "start multithreaded streaming");
 
     // use block queues
-    utils::ConcurrentQueue<gdal::StreamBlock> input_queue(
-          max_parallel_workers_);
-    utils::ConcurrentQueue<gdal::StreamBlock> output_queue(
-          max_parallel_workers_);
+    utils::ConcurrentQueue<StreamBlock> input_queue(max_parallel_workers_);
+    utils::ConcurrentQueue<StreamBlock> output_queue(max_parallel_workers_);
 
     auto input_stream_task = [this, &input_queue]() {
         LOG("image_streamer", info, "start reading blocks");
-        while (!input_stream_.IsAtEnd() && input_queue.IsActive()) {
+        while (!input_stream_.IsEnded() && input_queue.IsActive()) {
             std::error_code read_ec;
             auto block = input_stream_.Read(read_ec);
             if (read_ec) {
@@ -115,8 +111,8 @@ void ImageStreamer::RunMultithreadStream(
         LOG("image_streamer", info, "end reading blocks");
     };
 
-    auto worker_task = [this, &input_queue, &output_queue, &frequency_resampler,
-                        &filter]() {
+    auto worker_task = [&input_queue, &output_queue, &transformer,
+                        &parameters]() {
         try {
             while (input_queue.CanPop()) {
                 std::error_code pop_input_ec;
@@ -129,8 +125,8 @@ void ImageStreamer::RunMultithreadStream(
                     break;
                 }
 
-                block.buffer = frequency_resampler.Compute(
-                      zoom_ratio_, block.buffer, block.padding, filter);
+                block.buffer = transformer.Compute(
+                      block.buffer, block.padding, parameters);
 
                 std::error_code push_output_ec;
                 output_queue.Push(std::move(block), push_output_ec);
@@ -174,7 +170,7 @@ void ImageStreamer::RunMultithreadStream(
           std::async(std::launch::async, output_stream_task);
     auto input_task_future = std::async(std::launch::async, input_stream_task);
 
-    LOG("image_streamer", info, "start zoom processing with {} workers",
+    LOG("image_streamer", info, "start transform processing with {} workers",
         max_parallel_workers_);
     using WorkerTasks = std::vector<std::future<void>>;
     WorkerTasks worker_task_futures;
@@ -191,11 +187,14 @@ void ImageStreamer::RunMultithreadStream(
                 e.what());
         }
     }
-    LOG("image_streamer", info, "end zoom processing");
+    LOG("image_streamer", info, "end transform processing");
     output_queue.Deactivate();
     output_task_future.get();
     input_task_future.get();
     LOG("image_streamer", info, "end multithreaded streaming");
 }
 
+}  // namespace gdal
 }  // namespace sirius
+
+#endif  // SIRIUS_GDAL_IMAGE_STREAMER_TXX_

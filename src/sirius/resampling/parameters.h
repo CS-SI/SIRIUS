@@ -19,35 +19,34 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "utils.h"
+#ifndef SIRIUS_RESAMPLING_PARAMETERS_H_
+#define SIRIUS_RESAMPLING_PARAMETERS_H_
+
+#include "sirius/filter.h"
+#include "sirius/types.h"
 
 namespace sirius {
-namespace tests {
+namespace resampling {
 
-sirius::Image CreateDummyImage(const sirius::Size& size) {
-    sirius::Image image(size);
+/**
+ * \brief Data class that represents resampling parameters
+ *
+ * Parameters instance is not responsible of the lifetime of the filter. User
+ * must insure that the filter will remain valid during lifetime of Parameters
+ * instance.
+ */
+struct Parameters {
+    Parameters(const ZoomRatio& i_zoom_ratio)
+        : ratio(i_zoom_ratio), filter(nullptr) {}
 
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            image.Set(row, col, row * 10 + col + 1);
-        }
-    }
+    Parameters(const ZoomRatio& i_zoom_ratio, const Filter* i_filter)
+        : ratio(i_zoom_ratio), filter(i_filter) {}
 
-    return image;
-}
+    ZoomRatio ratio;
+    const Filter* filter{nullptr};
+};
 
-sirius::Image CreateSquaredImage(const sirius::Size& size) {
-    sirius::Image image(size);
-    for (int row = 0; row < size.row; ++row) {
-        for (int col = 0; col < size.col; ++col) {
-            if ((row < (size.row / 2) && col < (size.col / 2)) ||
-                (row > (size.row / 2) && col > (size.col / 2))) {
-                image.Set(row, col, 65535);
-            }
-        }
-    }
-    return image;
-}
-
-}  // namespace tests
+}  // namespace resampling
 }  // namespace sirius
+
+#endif  // SIRIUS_RESAMPLING_PARAMETERS_H_
