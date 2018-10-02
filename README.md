@@ -418,6 +418,12 @@ Unit tests can be enabled by providing the [CMake] option `-DBUILD_TESTING=ON`.
 
 To run the tests, build the target `build_tests` and run `ctest -C BUILD_TYPE` where `BUILD_TYPE` is `Debug`, `RelWithDebInfo`, `Release` or `MinSizeRel`.
 
+Sirius verbosity level can be set at runtime using `-V` option:
+
+```sh
+./image_tests -V trace
+```
+
 ## Acknowledgement
 
 Sirius developers would like to thank:

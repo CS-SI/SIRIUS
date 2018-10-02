@@ -41,8 +41,6 @@
 #include "utils.h"
 
 TEST_CASE("image streamer - resampling", "[sirius]") {
-    LOG_SET_LEVEL(info);
-
     const char kStreamResamplingInputFile[] =
           "./output/stream_resampling_input.tif";
     const char kStreamResamplingOutputFile[] =

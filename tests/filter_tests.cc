@@ -33,7 +33,6 @@
 #include "utils.h"
 
 TEST_CASE("filter - dirac filter", "[sirius]") {
-    LOG_SET_LEVEL(trace);
     sirius::Size size = {10, 10};
 
     auto zoom_ratio = sirius::ZoomRatio::Create(1, 1);
@@ -48,7 +47,6 @@ TEST_CASE("filter - dirac filter", "[sirius]") {
 }
 
 TEST_CASE("filter - sinc2 filter", "[sirius]") {
-    LOG_SET_LEVEL(trace);
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
     auto filter = sirius::Filter::Create(
           sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath), zoom_ratio);

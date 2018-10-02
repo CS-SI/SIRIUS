@@ -71,8 +71,6 @@ TEST_CASE("Image - Basics move", "[image]") {
 }
 
 TEST_CASE("Image - Zero pad image", "[image]") {
-    LOG_SET_LEVEL(trace);
-
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
@@ -135,8 +133,6 @@ TEST_CASE("Image - Zero pad image", "[image]") {
 }
 
 TEST_CASE("Image - Mirror pad image", "[image]") {
-    LOG_SET_LEVEL(trace);
-
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
@@ -214,8 +210,6 @@ TEST_CASE("Image - Mirror pad image", "[image]") {
 }
 
 TEST_CASE("Image - load empty path", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
     REQUIRE_NOTHROW(image = sirius::gdal::Load(""));
 
@@ -225,8 +219,6 @@ TEST_CASE("Image - load empty path", "[sirius]") {
 }
 
 TEST_CASE("GDAL - load unknown image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
     REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
                       sirius::gdal::Exception);
@@ -237,8 +229,6 @@ TEST_CASE("GDAL - load unknown image", "[sirius]") {
 }
 
 TEST_CASE("Image - load invalid image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
     REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
                       sirius::gdal::Exception);
@@ -249,8 +239,6 @@ TEST_CASE("Image - load invalid image", "[sirius]") {
 }
 
 TEST_CASE("Image - load well-formed image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
 
     REQUIRE_NOTHROW(image =

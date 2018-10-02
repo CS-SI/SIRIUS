@@ -37,7 +37,9 @@ set_target_properties(unit_test_init_data PROPERTIES FOLDER test)
 # unit_test_main contains catch2 main (speed up unit test compilation)
 add_library(unit_test_main STATIC EXCLUDE_FROM_ALL catch_main.cc)
 set_target_properties(unit_test_main PROPERTIES FOLDER test)
-target_link_libraries(unit_test_main catch)
+target_link_libraries(unit_test_main
+    catch
+    libsirius-static)
 
 add_library(unit_test_lib STATIC EXCLUDE_FROM_ALL
     utils.h
@@ -68,7 +70,7 @@ foreach(unit_test_file ${unit_tests})
         libsirius-gdal-static
         unit_test_lib
         unit_test_main)
-    add_test(NAME ${unit_test} COMMAND ${unit_test}
+    add_test(NAME ${unit_test} COMMAND ${unit_test} -V trace
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     add_dependencies(build_tests ${unit_test})
 endforeach()

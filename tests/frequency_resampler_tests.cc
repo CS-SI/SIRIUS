@@ -64,8 +64,6 @@ TEST_CASE("frequency resampler - factory", "[sirius]") {
 TEST_CASE(
       "frequency resampler - regular decomposition - zero padding upsampling",
       "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
@@ -164,8 +162,6 @@ TEST_CASE(
 TEST_CASE(
       "frequency resampler - regular decomposition - periodization upsampling",
       "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
@@ -261,8 +257,6 @@ TEST_CASE(
 
 TEST_CASE("frequency resampler - periodic smooth - zero padding upsampling",
           "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
@@ -301,8 +295,6 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding upsampling",
 }
 
 TEST_CASE("frequency resampler - real zoom", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     auto zoom_ratio = sirius::ZoomRatio::Create(3, 2);
 
     // test inputs
@@ -339,8 +331,6 @@ TEST_CASE("frequency resampler - real zoom", "[sirius]") {
 }
 
 TEST_CASE("frequency resampler - example", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     auto zoom_ratio_2_1 = sirius::ZoomRatio::Create(2, 1);
     auto zoom_ratio_7_4 = sirius::ZoomRatio::Create(7, 4);
 

@@ -22,7 +22,37 @@
 /**
  * \file catch_main.cc
  * \brief This compilation unit contains catch2 main
+ * This implementation is inspired by
+ *     https://github.com/catchorg/Catch2/blob/master/docs/own-main.md
  */
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 #include <catch/catch.hpp>
+
+#include "sirius/utils/log.h"
+
+int main(int argc, char* argv[]) {
+    Catch::Session session;  // There must be exactly one instance
+
+    std::string verbosity_level = "info";  // Some user variable you want to be able to set
+
+    // Build a new parser on top of Catch's
+    using namespace Catch::clara;
+    auto cli =
+          session.cli()
+          | Opt(verbosity_level, "sirius verbosity level")["-V"]["--sirius-verbosity"]
+            ("verbosity level (trace, debug, info, warn, error, critical, off");
+
+    // Now pass the new composite back to Catch so it uses that
+    session.cli(cli);
+
+    // Let Catch (using Clara) parse the command line
+    int return_code = session.applyCommandLine(argc, argv);
+    if (return_code != 0) {
+        return return_code;
+    }
+
+    sirius::utils::SetVerbosityLevel(verbosity_level);
+
+    return session.run();
+}
