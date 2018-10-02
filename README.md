@@ -255,8 +255,8 @@ Sirius can use two upsampling strategies:
 
 
 Upsampling strategies can be forced with the following options:
-* `--upsampling-zero-padding`
-* `--upsampling-periodization`
+* `--upsample-zero-padding`
+* `--upsample-periodization`
 
 *Force periodization upsampling without providing a filter will result in an error.*
 
@@ -357,11 +357,11 @@ sirius::Image image = {...};
 // configure resampling parameters
 sirius::resampling::Parameters resampling_params{sirius::ZoomRatio::Create(7, 5)};
 
-// compose a frequency resampler from sirius::ImageDecompositionPolicies and
-//     sirius::FrequencyUpsamplingStrategies  enums
+// compose a frequency resampler from sirius::image_decomposition::Policies and
+//     sirius::FrequencyUpsamplingStrategies enums
 sirius::IFrequencyResampler::UPtr freq_resampler =
       sirius::FrequencyResamplerFactory::Create(
-            sirius::ImageDecompositionPolicies::kPeriodicSmooth,
+            sirius::image_decomposition::Policies::kPeriodicSmooth,
             sirius::FrequencyUpsamplingStrategies::kZeroPadding);
 
 // compute the resampled image
@@ -445,8 +445,8 @@ Sirius developers would like to thank:
 [Doxygen]: https://CS-SI.github.io/SIRIUS/doxy_html/index.html
 [Internals]: INTERNALS.md "Internals"
 [Sirius doc]: https://CS-SI.github.io/SIRIUS/html/Sirius.html
-[Sirius periodization]: https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded
-[Sirius Kernel Interpolator]: https://dumasl.github.io/SIRIUS/html/upsampling/user_kernel.html
+[Sirius periodization]: https://CS-SI.github.io/SIRIUS/html/upsampling/user_kernel.html#when-sirius-uses-a-filter-to-upsample-the-spectrum-is-periodized-instead-of-zero-padded
+[Sirius Kernel Interpolator]: https://CS-SI.github.io/SIRIUS/html/upsampling/user_kernel.html
 [Sirius test data features]: https://github.com/CS-SI/SIRIUS "Sirius test data features"
 
 [CS-SI]: https://uk.c-s.fr/ "CS Systèmes d'information"

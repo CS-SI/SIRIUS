@@ -3,7 +3,7 @@
 ## 0.2.0
 
 ### Features
-* export `libsirius` and `libsirius-static` CMake targets when installing Sirius: use `find_package(SIRIUS CONFIG)` with `-DSIRIUS_DIR=/path/to/install/directory/share/cmake` to find Sirius libraries (#41)
+* Export `libsirius` and `libsirius-static` CMake targets when installing Sirius: use `find_package(SIRIUS CONFIG)` with `-DSIRIUS_DIR=/path/to/install/directory/share/cmake` to find Sirius libraries (#41)
 
 ### Bug fixes
 * Windows support: Visual Studio 2017 (#41)
