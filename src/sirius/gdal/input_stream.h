@@ -43,8 +43,8 @@ class InputStream : public IInputStream {
      * \param block_margin_size block margin size
      * \param block_padding_type block padding type
      */
-    InputStream(const std::string& image_path, const sirius::Size& block_size,
-                const sirius::Size& block_margin_size,
+    InputStream(const std::string& image_path, const Size& block_size,
+                const Size& block_margin_size,
                 PaddingType block_padding_type);
 
     ~InputStream() = default;
@@ -69,8 +69,8 @@ class InputStream : public IInputStream {
 
   private:
     gdal::DatasetUPtr input_dataset_;
-    sirius::Size block_size_{256, 256};
-    sirius::Size block_margin_size_;
+    Size block_size_{256, 256};
+    Size block_margin_size_ = kEmptySize;
     PaddingType block_padding_type_;
     bool is_ended_ = false;
     int row_idx_ = 0;

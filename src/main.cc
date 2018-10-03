@@ -52,7 +52,7 @@ struct CliOptions {
         std::string path;
         bool zero_pad_real_edges = false;
         bool normalize = false;
-        sirius::Point hot_point = sirius::filter_default_hot_point;
+        sirius::Point hot_point = sirius::kDefaultFilterHotPoint;
     };
     struct Stream {
         sirius::Size block_size = {256, 256};
@@ -78,11 +78,18 @@ struct CliOptions {
 };
 
 template <typename Transformer, typename InputStream, typename OutputStream>
-void StreamTransformation(const CliOptions& cli_options,
+void StreamTransformation(const std::string& input_path,
+                          const std::string& output_path,
+                          const CliOptions::Stream& stream_options,
                           const Transformer& transformer,
                           const typename Transformer::Parameters& parameters);
+
 CliOptions GetCliOptions(int argc, char* argv[]);
-int Resample(const CliOptions& options);
+
+void Resample(const std::string& input_path, const std::string& output_path,
+              const CliOptions::Resampling& resampling_options,
+              const CliOptions::Filter& filter_options,
+              const CliOptions::Stream& stream_options);
 
 int main(int argc, char* argv[]) {
     CliOptions options = GetCliOptions(argc, argv);
@@ -103,42 +110,48 @@ int main(int argc, char* argv[]) {
     LOG("sirius", info, "Sirius {} - {}", sirius::kVersion, sirius::kGitCommit);
 
     try {
-        return Resample(options);
+        Resample(options.input_image_path, options.output_image_path,
+                 options.resampling, options.filter, options.stream);
     } catch (const std::exception& e) {
-        std::cerr << "sirius: exception while computing resampling: "
-                  << e.what() << std::endl;
+        LOG("sirius", error, "exception while computing resampling: {}",
+            e.what());
         return 1;
     }
+
+    return 0;
 }
 
-int Resample(const CliOptions& options) {
+void Resample(const std::string& input_path, const std::string& output_path,
+              const CliOptions::Resampling& resampling_options,
+              const CliOptions::Filter& filter_options,
+              const CliOptions::Stream& stream_options) {
     sirius::ZoomRatio resampling_ratio =
-          sirius::ZoomRatio::Create(options.resampling.ratio);
+          sirius::ZoomRatio::Create(resampling_options.ratio);
     LOG("sirius", info, "resampling ratio: {}:{}",
         resampling_ratio.input_resolution(),
         resampling_ratio.output_resolution());
 
     // filter parameters
     sirius::PaddingType padding_type = sirius::PaddingType::kMirrorPadding;
-    if (options.filter.zero_pad_real_edges) {
+    if (filter_options.zero_pad_real_edges) {
         LOG("sirius", info, "filter: border zero padding");
         padding_type = sirius::PaddingType::kZeroPadding;
     } else {
         LOG("sirius", info, "filter: mirror padding");
     }
 
-    if (options.filter.normalize) {
+    if (filter_options.normalize) {
         LOG("sirius", info, "filter: normalize");
     }
 
-    sirius::Filter::UPtr filter;
-    if (!options.filter.path.empty()) {
-        LOG("sirius", info, "filter path: {}", options.filter.path);
-        sirius::Point hp(options.filter.hot_point.x,
-                         options.filter.hot_point.y);
-        filter = sirius::Filter::Create(sirius::gdal::Load(options.filter.path),
+    sirius::Filter::UPtr filter = nullptr;
+    if (!filter_options.path.empty()) {
+        LOG("sirius", info, "filter path: {}", filter_options.path);
+        sirius::Point hp(filter_options.hot_point.x,
+                         filter_options.hot_point.y);
+        filter = sirius::Filter::Create(sirius::gdal::Load(filter_options.path),
                                         resampling_ratio, hp, padding_type,
-                                        options.filter.normalize);
+                                        filter_options.normalize);
     }
 
     // resampling parameters
@@ -147,7 +160,7 @@ int Resample(const CliOptions& options) {
     sirius::FrequencyUpsamplingStrategies upsampling_strategy =
           sirius::FrequencyUpsamplingStrategies::kPeriodization;
 
-    if (options.resampling.no_image_decomposition) {
+    if (resampling_options.no_image_decomposition) {
         LOG("sirius", info, "image decomposition: none");
         image_decomposition_policy =
               sirius::image_decomposition::Policies::kRegular;
@@ -157,17 +170,16 @@ int Resample(const CliOptions& options) {
 
     if (resampling_ratio.ratio() > 1) {
         // choose the upsampling algorithm only if ratio > 1
-        if (options.resampling.upsample_periodization && !filter) {
-            LOG("sirius", error,
-                "filter is required with periodization upsampling");
-            return 1;
-        } else if (options.resampling.upsample_zero_padding || !filter) {
+        if (resampling_options.upsample_periodization && !filter) {
+            throw sirius::Exception(
+                  "filter is required with periodization upsampling");
+        } else if (resampling_options.upsample_zero_padding || !filter) {
             LOG("sirius", info, "upsampling: zero padding");
             upsampling_strategy =
                   sirius::FrequencyUpsamplingStrategies::kZeroPadding;
             if (filter) {
                 LOG("sirius", warn,
-                    "filter will be used with zero padding upsampling");
+                    "upsampling: filter will be used with zero padding");
             }
         } else {
             LOG("sirius", info, "upsampling: periodization");
@@ -182,24 +194,25 @@ int Resample(const CliOptions& options) {
     StreamTransformation<sirius::IFrequencyResampler,
                          sirius::gdal::resampling::InputStream,
                          sirius::gdal::resampling::OutputStream>(
-          options, *frequency_resampler, {resampling_ratio, filter.get()});
-
-    return 0;
+          input_path, output_path, stream_options, *frequency_resampler,
+          {resampling_ratio, filter.get()});
 }
 
 template <typename Transformer, typename InputStream, typename OutputStream>
-void StreamTransformation(const CliOptions& options,
+void StreamTransformation(const std::string& input_path,
+                          const std::string& output_path,
+                          const CliOptions::Stream& stream_options,
                           const Transformer& transformer,
                           const typename Transformer::Parameters& parameters) {
     unsigned int max_parallel_workers =
-          std::max(std::min(options.stream.parallel_workers,
+          std::max(std::min(stream_options.parallel_workers,
                             std::thread::hardware_concurrency()),
                    1u);
 
     sirius::gdal::ImageStreamer<Transformer, InputStream, OutputStream>
-          streamer(options.input_image_path, options.output_image_path,
-                   options.stream.block_size, !options.stream.no_block_resizing,
-                   parameters, max_parallel_workers);
+          streamer(input_path, output_path, stream_options.block_size,
+                   !stream_options.no_block_resizing, parameters,
+                   max_parallel_workers);
     streamer.Stream(transformer, parameters);
 }
 
@@ -303,6 +316,5 @@ CliOptions GetCliOptions(int argc, char* argv[]) {
         return cli_options;
     }
 
-    cli_options.parsed = true;
     return cli_options;
 }

@@ -215,16 +215,24 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
 
     add_library(libsirius-gdal-static STATIC EXCLUDE_FROM_ALL
         # gdal
+        sirius/gdal/debug.h
+        sirius/gdal/debug.cc
+
         sirius/gdal/error_code.h
         sirius/gdal/error_code.cc
         sirius/gdal/exception.h
         sirius/gdal/exception.cc
+
         sirius/gdal/image_streamer.h
         sirius/gdal/image_streamer.txx
+        sirius/gdal/i_input_stream.h
+        sirius/gdal/i_output_stream.h
         sirius/gdal/input_stream.h
         sirius/gdal/input_stream.cc
         sirius/gdal/output_stream.h
         sirius/gdal/output_stream.cc
+
+        sirius/gdal/stream_block.h
         sirius/gdal/types.h
         sirius/gdal/wrapper.h
         sirius/gdal/wrapper.cc

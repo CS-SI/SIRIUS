@@ -35,16 +35,7 @@
 
 namespace sirius {
 
-/**
- * \brief Data class that contains Filter metadata
- */
-struct FilterMetadata {
-    Size size;
-    Size margin_size{0, 0};
-    PaddingType padding_type{PaddingType::kMirrorPadding};
-};
-
-constexpr Point filter_default_hot_point{-1, -1};
+constexpr Point kDefaultFilterHotPoint{-1, -1};
 
 /**
  * \brief Frequency filter
@@ -70,7 +61,7 @@ class Filter {
      * \throw sirius::Exception if the filter image cannot be loaded
      */
     static UPtr Create(Image filter_image, const ZoomRatio& zoom_ratio,
-                       const Point& hot_point = filter_default_hot_point,
+                       const Point& hot_point = kDefaultFilterHotPoint,
                        PaddingType padding_type = PaddingType::kMirrorPadding,
                        bool normalize = false);
 
@@ -112,10 +103,6 @@ class Filter {
      * \return padding type
      */
     PaddingType padding_type() const { return padding_type_; }
-
-    FilterMetadata Metadata() const {
-        return {filter_.size, padding_size_, padding_type_};
-    }
 
     /**
      * \brief Zero padding needed for the filter
@@ -162,8 +149,8 @@ class Filter {
     Image filter_{};
     Size padding_size_{0, 0};
     ZoomRatio zoom_ratio_{};
-    PaddingType padding_type_{PaddingType::kMirrorPadding};
-    Point hot_point_{filter_default_hot_point};
+    PaddingType padding_type_ = PaddingType::kMirrorPadding;
+    Point hot_point_ = kDefaultFilterHotPoint;
 
     FilterFFTCacheUPtr filter_fft_cache_{nullptr};
 };

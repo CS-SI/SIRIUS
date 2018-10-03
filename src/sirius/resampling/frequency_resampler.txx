@@ -71,7 +71,7 @@ Image FrequencyResampler<ImageDecompositionPolicy, UpsamplingStrategy>::
                  const Filter* filter) const {
     auto input_size = original_image.size;
 
-    Size filter_padding_size;
+    Size filter_padding_size = kEmptySize;
     if (filter) {
         filter_padding_size = filter->padding_size();
     }

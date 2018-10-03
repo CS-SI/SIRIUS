@@ -74,13 +74,13 @@ TEST_CASE("Image - Zero pad image", "[image]") {
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
-        sirius::Padding padding(0, 0, 0, 0, sirius::PaddingType::kZeroPadding);
-        auto output = input.CreateZeroPaddedImage(padding);
+        auto output = input.CreateZeroPaddedImage(sirius::kEmptyPadding);
 
         REQUIRE(input.size == output.size);
 
         // identical image
-        sirius::tests::CheckZeroPaddingImage(input, output, padding);
+        sirius::tests::CheckZeroPaddingImage(input, output,
+                                             sirius::kEmptyPadding);
     }
 
     SECTION("Padding top") {
@@ -136,12 +136,11 @@ TEST_CASE("Image - Mirror pad image", "[image]") {
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
-        sirius::Padding padding(0, 0, 0, 0,
-                                sirius::PaddingType::kMirrorPadding);
-        auto output = input.CreateMirrorPaddedImage(padding);
+        auto output = input.CreateMirrorPaddedImage(sirius::kEmptyPadding);
 
         REQUIRE(input.size == output.size);
-        sirius::tests::CheckMirrorPaddingImage(input, output, padding);
+        sirius::tests::CheckMirrorPaddingImage(input, output,
+                                               sirius::kEmptyPadding);
     }
 
     SECTION("Padding top") {
@@ -246,14 +245,12 @@ TEST_CASE("Image - load well-formed image", "[sirius]") {
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
-    REQUIRE(image.IsLoaded());
 
     REQUIRE_NOTHROW(
           image = sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
-    REQUIRE(image.IsLoaded());
 }
 
 namespace sirius {

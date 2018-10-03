@@ -35,11 +35,11 @@ struct StreamBlock {
 
     /**
      * \brief Instanciate a stream block from its block image and its position
-     *        in the input image
+     *        in the image
      *
      * \param i_block_image image buffer of this block
-     * \param i_row_idx row index of the top left corner in the input image
-     * \param i_col_idx col index of the top left corner in the input image
+     * \param i_row_idx row index of the top left corner of the image
+     * \param i_col_idx col index of the top left corner if the image
      * \param i_padding required filter padding
      */
     StreamBlock(Image&& i_block_image, int i_row_idx, int i_col_idx,
@@ -59,7 +59,7 @@ struct StreamBlock {
     Image buffer{};
     int row_idx = 0;
     int col_idx = 0;
-    Padding padding{};
+    Padding padding = kEmptyPadding;
     bool is_initialized = false;
 };
 

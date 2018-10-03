@@ -33,8 +33,8 @@ namespace sirius {
 namespace gdal {
 
 InputStream::InputStream(const std::string& image_path,
-                         const sirius::Size& block_size,
-                         const sirius::Size& block_margin_size,
+                         const Size& block_size,
+                         const Size& block_margin_size,
                          PaddingType block_padding_type)
     : input_dataset_(gdal::LoadDataset(image_path)),
       block_size_(block_size),

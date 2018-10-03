@@ -28,7 +28,7 @@ namespace gdal {
 namespace resampling {
 
 InputStream::InputStream(
-      const std::string& image_path, const sirius::Size& block_size,
+      const std::string& image_path, const Size& block_size,
       bool allow_block_resizing,
       const sirius::resampling::Parameters& resampling_parameters) {
     auto stream_block_size = block_size;
@@ -44,7 +44,7 @@ InputStream::InputStream(
     // improve stream_block_size if requested or required
     if (!resampling_parameters.ratio.IsRealZoom()) {
         if (allow_block_resizing) {
-            stream_block_size = sirius::utils::GenerateDyadicSize(
+            stream_block_size = utils::GenerateDyadicSize(
                   stream_block_size,
                   resampling_parameters.ratio.input_resolution(),
                   filter_padding_size);
@@ -56,7 +56,7 @@ InputStream::InputStream(
         // real zoom needs specific block size (row and col should be
         // multiple
         // of input resolution and output resolution)
-        stream_block_size = sirius::utils::GenerateZoomCompliantSize(
+        stream_block_size = utils::GenerateZoomCompliantSize(
               stream_block_size, resampling_parameters.ratio);
         LOG("resampled_input_stream", warn,
             "stream block resized to comply with zoom: {}x{}",

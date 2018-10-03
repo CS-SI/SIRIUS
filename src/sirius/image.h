@@ -39,7 +39,7 @@ enum class PaddingType {
 struct Padding {
     Padding() = default;
     constexpr Padding(int i_top, int i_bottom, int i_left, int i_right,
-                      PaddingType i_type = PaddingType::kMirrorPadding)
+                      PaddingType i_type = PaddingType::kMirrorPadding) noexcept
         : top(i_top),
           bottom(i_bottom),
           left(i_left),
@@ -52,17 +52,18 @@ struct Padding {
     Padding(Padding&&) = default;
     Padding& operator=(Padding&&) = default;
 
-    int top{0};
-    int bottom{0};
-    int left{0};
-    int right{0};
-
     bool IsEmpty() const {
         return (top == 0 && bottom == 0 && left == 0 && right == 0);
     }
 
+    int top{0};
+    int bottom{0};
+    int left{0};
+    int right{0};
     PaddingType type{PaddingType::kMirrorPadding};
 };
+
+constexpr Padding kEmptyPadding = {0, 0, 0, 0, PaddingType::kZeroPadding};
 
 /**
  * \brief Data class that represents an image (Size + Buffer)
@@ -120,16 +121,6 @@ class Image {
     }
 
     /**
-     * \brief Check that the image is loaded
-     *        Row, col and data are set
-     * \return bool
-     */
-    bool IsLoaded() const {
-        return size.row != 0 && size.col != 0 &&
-               data.size() >= static_cast<std::size_t>(CellCount());
-    }
-
-    /**
      * \brief Create padded image from the current image
      *
      * Padding strategy is selected according to padding.type
@@ -159,7 +150,7 @@ class Image {
     void CreateEvenImage();
 
   public:
-    Size size{0, 0};
+    Size size = kEmptySize;
     Buffer data;
 };
 

@@ -38,7 +38,7 @@ namespace resampling {
 
 class InputStream : public IInputStream {
   public:
-    InputStream(const std::string& image_path, const sirius::Size& block_size,
+    InputStream(const std::string& image_path, const Size& block_size,
                 bool allow_block_resizing,
                 const sirius::resampling::Parameters& resampling_parameters);
 

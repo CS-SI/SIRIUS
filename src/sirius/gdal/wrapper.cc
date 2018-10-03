@@ -145,7 +145,7 @@ void Save(const Image& image, const std::string& output_filepath,
 
 GeoReference ComputeResampledGeoReference(const std::string& input_path,
                                           const ZoomRatio& zoom_ratio) {
-    auto input_dataset = sirius::gdal::LoadDataset(input_path);
+    auto input_dataset = LoadDataset(input_path);
 
     return {ComputeResampledGeoTransform(input_dataset.get(), zoom_ratio),
             input_dataset->GetProjectionRef()};
