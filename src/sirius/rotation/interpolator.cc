@@ -34,6 +34,8 @@
 namespace sirius {
 namespace rotation {
 
+// TODO : fix this. on 90° rotation there is a entire column of poluted data
+// that is copied and should not
 Image Interpolator::Interpolate2D(const Image& image,
                                   const Parameters& parameters) const {
     Point tr, tl, br, bl;

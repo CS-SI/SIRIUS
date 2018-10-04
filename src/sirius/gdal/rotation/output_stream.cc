@@ -73,10 +73,6 @@ OutputStream::OutputStream(
 }
 
 void OutputStream::Write(StreamBlock&& block, std::error_code& ec) {
-    LOG("rotation_output_stream", debug,
-        "writing block of size {}x{} at ({}, {})", block.buffer.size.row,
-        block.buffer.size.col, block.col_idx, block.row_idx);
-
     Point tr_src, tl_src, br_src, bl_src, tr, tl, br, bl;
     Size hull_original_size =
           sirius::rotation::ComputeNonRotatedHull(block.original_size, angle_);
@@ -111,11 +107,6 @@ void OutputStream::CopyConvexHull(const sirius::gdal::StreamBlock& block,
         "{}, col_idx = {}",
         block.buffer.size.row, block.buffer.size.col, begin_marged_block.x,
         begin_marged_block.y);
-
-    LOG("OutputStream", debug,
-        "block padding : top = {}, bottom = {}, left = {}, right = {}",
-        block.padding.top, block.padding.bottom, block.padding.left,
-        block.padding.right);
 
     double col_idx_real = begin_marged_block.x;
 
@@ -359,19 +350,24 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
     for (int i = first_y; i < end_it; ++i) {
         int tmp_col_idx = 0;
         double tmp_col_idx_real = 0;
+
         if (col_idx < 0) {
             tmp_col_idx = col_idx;
             tmp_col_idx_real = col_idx_real;
+
             // set col index to zero so gdal is able to write
             col_idx = 0;
             col_idx_real = 0;
+            begin_line += std::abs(tmp_col_idx);
         }
 
         int line_len = end_line - begin_line;
 
-        if (line_len > block.buffer.size.col) {
-            line_len = block.buffer.size.col;
+        int block_col_idx = begin_line - (i * block.buffer.size.col);
+        if (block_col_idx + line_len > block.buffer.size.col) {
+            line_len = block.buffer.size.col - block_col_idx;
         }
+
         if (col_idx + line_len > output_dataset_->GetRasterXSize()) {
             line_len = output_dataset_->GetRasterXSize() - col_idx;
         }
@@ -397,22 +393,52 @@ void OutputStream::CopyHullPart(const sirius::gdal::StreamBlock& block,
             current_line_end =
                   end_line_real +
                   (i - first_y + 1) * (block.buffer.size.col + 1 / slope_end);
+            // avoid current_line_end finishing on a different line than
+            // current_line_begin...
             begin_line = std::round(current_line_begin);
             end_line = std::round(current_line_end);
             row_idx++;
             col_idx_real += 1 / slope_begin;
             col_idx = std::round(col_idx_real);
         } else {
-            current_line_begin +=
-                  (block.buffer.size.col + 1 / (3 * slope_begin));
+            if ((angle_ >= -85 && angle_ < 0) || (angle_ >= 5)) {
+                current_line_begin += (block.buffer.size.col + 1 / slope_begin);
+            } else {
+                if (angle_ == -87) {
+                    current_line_begin +=
+                          (block.buffer.size.col + 1 / (3 * slope_begin));
+                } else {
+                    if (angle_ == -89) {
+                        current_line_begin +=
+                              (block.buffer.size.col + 1 / (3 * slope_begin));
+                    } else {
+                        current_line_begin +=
+                              (block.buffer.size.col + 1 / (50 * slope_begin));
+                    }
+                }
+            }
+
             current_line_end += (block.buffer.size.col + 1 / slope_end);
             begin_line = std::round(current_line_begin);
             end_line = std::round(current_line_end);
             row_idx++;
-            col_idx_real += 1 / (3 * slope_begin);
+            if ((angle_ >= -85 && angle_ < 0) || (angle_ >= 5)) {
+                col_idx_real += 1 / slope_begin;
+            } else {
+                if (angle_ == -87) {
+                    col_idx_real += 1 / (3 * slope_begin);
+                } else {
+                    if (angle_ == -89) {
+                        col_idx_real += 1 / (2 * slope_begin);
+                    } else {
+                        col_idx_real += 1 / (50 * slope_begin);
+                    }
+                }
+            }
             col_idx = std::round(col_idx_real);
         }
     }
+
     begin_line_real = current_line_begin;
     end_line_real = current_line_end;
 }

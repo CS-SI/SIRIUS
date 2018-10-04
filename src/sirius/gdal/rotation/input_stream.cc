@@ -233,13 +233,28 @@ StreamBlock InputStream::Read(std::error_code& ec) {
             if (reset_row_) {
                 // shift reference top left to band's bottom left (new TL)
                 if (angle_ != 90) {
+                    // 1/3 rely on the observation that last row of a block
+                    // contains (1/3) * (1/slope) more / less pixels than
+                    // the row before instead of 1/slope more/less pixels. Only
+                    // viable for blocks with size 256x256
                     tl_ref_.x += std::round((bl.y - tl.y - 1 + 1 / 3.) *
                                             (1 / slope_tl_bl_));
                 } else {
                     tl_ref_.x += bl.x;
                 }
                 tl_ref_.y += bl.y - tl.y;
-                if (angle_ >= 45) {
+
+                // try to fix joints for some angles
+                if (angle_ >= 45 && angle_ < 50) {
+                    tl_ref_.y--;
+                }
+                if (angle_ == 45) {
+                    tl_ref_.y--;
+                }
+                if (angle_ == 25) {
+                    tl_ref_.x++;
+                }
+                if (angle_ >= 25 && angle_ < 30) {
                     tl_ref_.y--;
                 }
                 block_row_idx_ = tl_ref_.y;
@@ -251,16 +266,47 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 block_col_idx_ -=
                       std::round((tl.y + 1 / 3.) * (1 / slope_tl_tr_));
                 block_row_idx_ -= tl.y;
+                if (angle_ == 20) {
+                    block_col_idx_ -= 2;
+                }
             }
         } else {
             if (reset_row_) {
                 if (angle_ != -90) {
                     tl_ref_.x +=
                           std::round((bl.y + 1 / 3.) * (1 / slope_tl_bl_));
+                    // hard code handling of angles < -85 or > -5
+                    if (angle_ == -89) {
+                        tl_ref_.x -= 7;
+                        tl_ref_.y++;
+                    }
+                    if (angle_ == -88) {
+                        tl_ref_.x += 12;
+                    }
+                    if (angle_ == -87) {
+                        tl_ref_.x++;
+                        tl_ref_.y++;
+                    }
+                    if (angle_ == -86) {
+                        tl_ref_.x += 7;
+                        tl_ref_.y--;
+                    }
+
+                    if (angle_ == -2 && band_count_ == 1) {
+                        tl_ref_.x--;
+                    }
+                    if (angle_ == -4 && band_count_ == 1) {
+                        tl_ref_.x++;
+                    }
                 } else {
                     tl_ref_.x -= tl.x;
                 }
+
+                if (angle_ <= -70 && angle_ > -80) {
+                    tl_ref_.x++;
+                }
                 tl_ref_.y += bl.y;
+
                 block_row_idx_ = tl_ref_.y;
                 block_col_idx_ = tl_ref_.x;
                 reset_row_ = false;
@@ -269,6 +315,27 @@ StreamBlock InputStream::Read(std::error_code& ec) {
                 block_col_idx_ +=
                       std::round((tr.y + 1 / 3.) * (1 / slope_tl_tr_));
                 block_row_idx_ += tr.y;
+                if (angle_ == -4) {
+                    block_col_idx_ -= 7;
+                    if (block_count_ == 1) {
+                        block_row_idx_--;
+                    }
+                }
+                if (angle_ == -3) {
+                    block_col_idx_ += 2;
+                    block_row_idx_++;
+                }
+
+                if (angle_ == -2) {
+                    block_col_idx_ -= 12;
+                }
+
+                if (angle_ == -1) {
+                    block_col_idx_ += 7;
+                    if (block_count_ == 1) {
+                        block_row_idx_++;
+                    }
+                }
             }
         }
         if (block_count_ != blocks_per_band_ - 1 &&
@@ -283,11 +350,6 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     StreamBlock output_block(std::move(output_buffer), block_row_idx_,
                              block_col_idx_, block_padding, src_size,
                              {h_to_read, w_to_read});
-
-    LOG("rotation_input_stream", debug,
-        "reading block of size {}x{} at ({},{})", output_block.buffer.size.row,
-        output_block.buffer.size.col, col_idx_, row_idx_);
-
     if (((row_idx_ + padded_block_h - block_margin_size_.row) >= h) &&
         ((col_idx_ + padded_block_w - block_margin_size_.col) >= w)) {
         is_ended_ = true;
