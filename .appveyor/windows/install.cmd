@@ -4,17 +4,7 @@ cd %VCPKG_DIR%
 
 appveyor AddMessage "Updating vcpkg knowledge base..."
 :: update vcpkg knowledge base
-::   git pull
-
-:: TODO: remove after merges of vcpkg PR #4413 (geos) and #4433 (gdal)
-:: use fork to fix multiple build issues with release only version of the dependencies
-git config --global user.email "test@test.com"
-git config --global user.name "Test Test"
-git remote add release-build https://github.com/hlysunnaram/vcpkg.git || goto error
-git fetch release-build update/gdal-2.3.2 || goto error
-git fetch release-build update/geos-3.6.3 || goto error
-git checkout update/gdal-2.3.2 || goto error
-git merge release-build/update/geos-3.6.3 || goto error
+git pull
 
 :: need to execute bootstrapping in a new process since it exits the current cmd process at the end of its execution...
 cmd.exe /C "bootstrap-vcpkg.bat -disableMetrics" || goto error
