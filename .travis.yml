@@ -31,10 +31,50 @@ matrix:
     name: "OS X - Xcode 9.4"
     osx_image: xcode9.4
 
+  - <<: *osx-template
+    name: "OS X - Xcode 10.3"
+    osx_image: xcode10.3
+
+  - <<: *osx-template
+    name: "OS X - Xcode 11.3"
+    osx_image: xcode11.3
+
+  # Ubuntu xenial
+  - &ubuntu-xenial-template
+    stage: test
+    name: "Ubuntu Xenial 16.04 GCC 6"
+    os: linux
+    dist: xenial
+    before_script: source .travis/linux/before_build.sh
+    script: .travis/linux/build.sh
+    env: CXX_COMPILER=/usr/bin/g++-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-6
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-xenial-template
+    name: "Ubuntu Xenial 16.04 GCC 6 - C++ static runtime"
+    env: CXX_COMPILER=/usr/bin/g++-6 USE_CXX_STATIC_RUNTIME=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-6
+          - libfftw3-dev
+          - libgdal-dev
+
   # Ubuntu bionic
   - &ubuntu-bionic-template
     stage: test
-    name: "Ubuntu Bionic 18.04 GCC 7"
+    name: "Ubuntu Bionic 18.04 GCC 7 - C++"
     os: linux
     dist: bionic
     before_script: source .travis/linux/before_build.sh
