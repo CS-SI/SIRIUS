@@ -31,40 +31,14 @@ matrix:
     name: "OS X - Xcode 9.4"
     osx_image: xcode9.4
 
-  # Ubuntu trusty
-  - &ubuntu-trusty-template
+  # Ubuntu bionic
+  - &ubuntu-bionic-template
     stage: test
-    name: "Ubuntu Trusty 14.04 GCC 5"
+    name: "Ubuntu Bionic 18.04 GCC 7"
     os: linux
-    dist: trusty
+    dist: bionic
     before_script: source .travis/linux/before_build.sh
     script: .travis/linux/build.sh
-    env: CXX_COMPILER=/usr/bin/g++-5
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - g++-5
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 GCC 6"
-    env: CXX_COMPILER=/usr/bin/g++-6
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - g++-6
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 GCC 7"
     env: CXX_COMPILER=/usr/bin/g++-7
     addons:
       apt:
@@ -76,8 +50,8 @@ matrix:
           - libfftw3-dev
           - libgdal-dev
 
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 GCC 7 - C++ static runtime"
+  - <<: *ubuntu-bionic-template
+    name: "Ubuntu Bionic 18.04 GCC 7 - C++ static runtime"
     env: CXX_COMPILER=/usr/bin/g++-7 USE_CXX_STATIC_RUNTIME=ON
     addons:
       apt:
@@ -86,138 +60,6 @@ matrix:
           - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
         packages:
           - g++-7
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 4.0 - libc++"
-    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=ON
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-4.0
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-4.0
-          - libc++-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 5.0 - libc++"
-    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=ON
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-5.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-5.0
-          - libc++-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 6.0 - libc++"
-    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=ON
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-6.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-6.0
-          - libc++-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 6.0 - libc++ - C++ static runtime"
-    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=ON USE_CXX_STATIC_RUNTIME=ON
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-6.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-6.0
-          - libc++-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 4.0 - stdlibc++ 5"
-    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=OFF
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-4.0
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-4.0
-          - libstdc++-5-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 5.0 - stdlibc++ 6"
-    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=OFF
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-5.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-5.0
-          - libstdc++-6-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 6.0 - stdlibc++ 7"
-    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-6.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-6.0
-          - libstdc++-7-dev
-          - libfftw3-dev
-          - libgdal-dev
-
-  - <<: *ubuntu-trusty-template
-    name: "Ubuntu Trusty 14.04 Clang 6.0 - stdlibc++ 7 - C++ static runtime"
-    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF USE_CXX_STATIC_RUNTIME=ON
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-6.0
-          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
-            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-        packages:
-          - clang-6.0
-          - libstdc++-7-dev
           - libfftw3-dev
           - libgdal-dev
 
