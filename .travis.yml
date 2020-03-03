@@ -20,16 +20,12 @@ matrix:
   # OS X
   - &osx-template
     stage: test
-    name: "OS X - Xcode 8.3"
+    name: "OS X - Xcode 9.4"
     os: osx
-    osx_image: xcode8.3
+    osx_image: xcode9.4
     install: .travis/osx/install_deps.sh
     before_script: source .travis/osx/before_build.sh
     script: .travis/osx/build.sh
-
-  - <<: *osx-template
-    name: "OS X - Xcode 9.4"
-    osx_image: xcode9.4
 
   - <<: *osx-template
     name: "OS X - Xcode 10.3"
@@ -71,6 +67,21 @@ matrix:
           - libfftw3-dev
           - libgdal-dev
 
+  - <<: *ubuntu-xenial-template
+    name: "Ubuntu Xenial 16.04 Clang 5.0 - stdlibc++ 6"
+    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-5.0
+          - libstdc++-6-dev
+          - libfftw3-dev
+          - libgdal-dev
+
   # Ubuntu bionic
   - &ubuntu-bionic-template
     stage: test
@@ -100,6 +111,21 @@ matrix:
           - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
         packages:
           - g++-7
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-bionic-template
+    name: "Ubuntu Bionic 18.04 Clang 6.0 - stdlibc++ 7"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libstdc++-7-dev
           - libfftw3-dev
           - libgdal-dev
 
