@@ -22,6 +22,7 @@
 #ifndef SIRIUS_UTILS_CONCURRENT_ERROR_CODE_H_
 #define SIRIUS_UTILS_CONCURRENT_ERROR_CODE_H_
 
+#include <string>
 #include <system_error>
 
 // This implementation is inspired by

@@ -36,10 +36,10 @@ using Buffer = std::vector<double>;
  * \brief Data class that represents the size of an image
  */
 struct Size {
-    Size() = default;
+    constexpr Size(int row, int col) noexcept : row(row), col(col) {}
 
-    Size(int row, int col);
-    Size(const std::array<int, 2>& size);
+    constexpr Size(const std::array<int, 2>& size) noexcept : row(size[0]),
+                                                              col(size[1]) {}
 
     ~Size() = default;
     Size(const Size&) = default;
@@ -64,8 +64,8 @@ struct Size {
 
     Size operator*(double scale) const {
         Size result(*this);
-        result.row = std::ceil(result.row * scale);
-        result.col = std::ceil(result.col * scale);
+        result.row = static_cast<int>(std::ceil(result.row * scale));
+        result.col = static_cast<int>(std::ceil(result.col * scale));
         return result;
     }
 
@@ -76,16 +76,16 @@ struct Size {
 
     int CellCount() const { return row * col; }
 
-    int row{0};
-    int col{0};
+    int row;
+    int col;
 };
+
+constexpr Size kEmptySize = Size(0, 0);
 
 /**
  * \brief Data class that represents the 2D coordinates of a point
  */
 struct Point {
-    Point() = default;
-
     constexpr Point(int x, int y) noexcept : x(x), y(y) {}
 
     ~Point() = default;
@@ -94,8 +94,8 @@ struct Point {
     Point(Point&&) = default;
     Point& operator=(Point&&) = default;
 
-    int x{0};
-    int y{0};
+    int x;
+    int y;
 };
 
 /**
@@ -112,6 +112,7 @@ class ZoomRatio {
      * \return zoom ratio
      *
      * \throw sirius::Exception if string format or ratio is invalid
+     * \throw std::invalid_argument if conversion from string to int failed
      */
     static ZoomRatio Create(const std::string& ratio_string);
 
@@ -123,7 +124,6 @@ class ZoomRatio {
      * \return zoom ratio
      *
      * \throw sirius::Exception if ratio is invalid
-     * \throw std::invalid_argument if conversion from string to int failed
      */
     static ZoomRatio Create(int input_resolution, int output_resolution = 1);
 

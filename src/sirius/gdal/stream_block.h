@@ -19,8 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_GDAL_STREAM_H_
-#define SIRIUS_GDAL_STREAM_H_
+#ifndef SIRIUS_GDAL_STREAM_BLOCK_H_
+#define SIRIUS_GDAL_STREAM_BLOCK_H_
 
 #include "sirius/image.h"
 
@@ -35,12 +35,12 @@ struct StreamBlock {
 
     /**
      * \brief Instanciate a stream block from its block image and its position
-     *        in the input image
+     *        in the image
      *
-     * \param block_image image buffer of this block
-     * \param row_idx row index of the top left corner in the input image
-     * \param col_idx col index of the top left corner in the input image
-     * \param padding required filter padding
+     * \param i_block_image image buffer of this block
+     * \param i_row_idx row index of the top left corner of the image
+     * \param i_col_idx col index of the top left corner if the image
+     * \param i_padding required filter padding
      */
     StreamBlock(Image&& i_block_image, int i_row_idx, int i_col_idx,
                 const Padding& i_padding)
@@ -59,11 +59,11 @@ struct StreamBlock {
     Image buffer{};
     int row_idx = 0;
     int col_idx = 0;
-    Padding padding{};
+    Padding padding = kEmptyPadding;
     bool is_initialized = false;
 };
 
 }  // namespace gdal
 }  // namespace sirius
 
-#endif  // SIRIUS_GDAL_STREAM_H_
+#endif  // SIRIUS_GDAL_STREAM_BLOCK_H_

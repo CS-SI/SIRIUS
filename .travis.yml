@@ -1,32 +1,242 @@
-services:
-- docker
+# travis config checker: http://config.travis-ci.org/
+
+language: cpp
 
 git:
   depth: false
 
-before_install:
-- docker pull ldumas/sirius_dockerfile:sirius_build
-- docker pull ldumas/sirius_dockerfile:sirius_pages
+before_install: git fetch --tags
 
-before_script:
-- if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; fi
-- export SRCDIR=/data
-- export SIRIUS_BUILD_DIR=.build
-- export INSTALL_DIR=/opt/sirius
-- SIRIUS_VERSION=$(git describe 2> /dev/null); if [ "x${SIRIUS_VERSION}" = "x" ]; then SIRIUS_VERSION="0.0.0"; fi; export SIRIUS_VERSION;
+stages:
+  - test
+  - deploy
 
-script:
-- docker run -v $TRAVIS_BUILD_DIR/:/data ldumas/sirius_dockerfile:sirius_build /bin/sh -c "source /opt/rh/devtoolset-6/enable; cd $SRCDIR; .travis/create_cmake_project.sh $SIRIUS_BUILD_DIR $INSTALL_DIR $SIRIUS_VERSION $TRAVIS_COMMIT; cd $SIRIUS_BUILD_DIR; make -j4 build_tests && make -j4 && make install; cd ..; mv $SIRIUS_BUILD_DIR/html doxy_html; mv $SIRIUS_BUILD_DIR/xml doxy_xml; rm -rf $SIRIUS_BUILD_DIR"
-- CID=$(docker ps --latest --quiet)
-- if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker commit --change "ENV PATH $PATH:/opt/sirius/bin" $CID sirius_built; fi
-- if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker tag sirius_built ldumas/sirius_dockerfile:sirius_built; fi
-- if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then docker push ldumas/sirius_dockerfile:sirius_built; fi
+env:
+  global:
+    - CMAKE_BUILD_TYPE=Release
 
-deploy:
-  provider: script
-  script: if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then .travis/deploy.sh; fi
-  on:
-    branch: master
+matrix:
+  include:
+  # OS X
+  - &osx-template
+    stage: test
+    name: "OS X - Xcode 8.3"
+    os: osx
+    osx_image: xcode8.3
+    install: .travis/osx/install_deps.sh
+    before_script: source .travis/osx/before_build.sh
+    script: .travis/osx/build.sh
 
-after_success:
-- if [ "x${TRAVIS_PULL_REQUEST}" = "xfalse" ]; then .travis/on_success.sh; fi
+  - <<: *osx-template
+    name: "OS X - Xcode 9.4"
+    osx_image: xcode9.4
+
+  # Ubuntu trusty
+  - &ubuntu-trusty-template
+    stage: test
+    name: "Ubuntu Trusty 14.04 GCC 5"
+    os: linux
+    dist: trusty
+    before_script: source .travis/linux/before_build.sh
+    script: .travis/linux/build.sh
+    env: CXX_COMPILER=/usr/bin/g++-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-5
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 GCC 6"
+    env: CXX_COMPILER=/usr/bin/g++-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-6
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 GCC 7"
+    env: CXX_COMPILER=/usr/bin/g++-7
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-7
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 GCC 7 - C++ static runtime"
+    env: CXX_COMPILER=/usr/bin/g++-7 USE_CXX_STATIC_RUNTIME=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - g++-7
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 4.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-4.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 5.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-5.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - libc++"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - libc++ - C++ static runtime"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=ON USE_CXX_STATIC_RUNTIME=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libc++-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 4.0 - stdlibc++ 5"
+    env: CXX_COMPILER=/usr/bin/clang++-4.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-4.0
+          - libstdc++-5-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 5.0 - stdlibc++ 6"
+    env: CXX_COMPILER=/usr/bin/clang++-5.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-5.0
+          - libstdc++-6-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - stdlibc++ 7"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libstdc++-7-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  - <<: *ubuntu-trusty-template
+    name: "Ubuntu Trusty 14.04 Clang 6.0 - stdlibc++ 7 - C++ static runtime"
+    env: CXX_COMPILER=/usr/bin/clang++-6.0 ENABLE_CLANG_LIBCPP=OFF USE_CXX_STATIC_RUNTIME=ON
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-6.0
+          - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+          - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+        packages:
+          - clang-6.0
+          - libstdc++-7-dev
+          - libfftw3-dev
+          - libgdal-dev
+
+  # Docker
+  - &centos-7-template
+    name: "CentOS Docker"
+    stage: test
+    os: linux
+    services:
+      - docker
+    install: .travis/docker/install_deps.sh
+    before_script: source .travis/docker/before_build.sh
+    script: .travis/docker/build.sh
+
+  - <<: *centos-7-template
+    name: "CentOS Docker - Deploy"
+    stage: deploy
+    deploy:
+      provider: script
+      script: .travis/docker/deploy.sh
+      on:
+        branch: master

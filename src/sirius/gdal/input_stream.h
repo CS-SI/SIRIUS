@@ -22,12 +22,8 @@
 #ifndef SIRIUS_GDAL_INPUT_STREAM_H_
 #define SIRIUS_GDAL_INPUT_STREAM_H_
 
-#include <system_error>
+#include "sirius/gdal/i_input_stream.h"
 
-#include "sirius/image.h"
-#include "sirius/types.h"
-
-#include "sirius/gdal/stream_block.h"
 #include "sirius/gdal/types.h"
 
 namespace sirius {
@@ -36,8 +32,10 @@ namespace gdal {
 /**
  * \brief Stream an image in block
  */
-class InputStream {
+class InputStream : public IInputStream {
   public:
+    InputStream() = default;
+
     /**
      * \brief Instanciate an InputStreamer and set its block size
      * \param image_path path to the input image
@@ -45,43 +43,34 @@ class InputStream {
      * \param block_margin_size block margin size
      * \param block_padding_type block padding type
      */
-    InputStream(const std::string& image_path, const sirius::Size& block_size,
-                const sirius::Size& block_margin_size,
+    InputStream(const std::string& image_path, const Size& block_size,
+                const Size& block_margin_size,
                 PaddingType block_padding_type);
 
     ~InputStream() = default;
 
     InputStream(const InputStream&) = delete;
     InputStream& operator=(const InputStream&) = delete;
-    InputStream(InputStream&&) = delete;
-    InputStream& operator=(InputStream&&) = delete;
-
-    /**
-     * \brief Get the size of the input file
-     * \return input file size
-     */
-    sirius::Size Size() {
-        return {input_dataset_->GetRasterYSize(),
-                input_dataset_->GetRasterXSize()};
-    }
+    InputStream(InputStream&&) = default;
+    InputStream& operator=(InputStream&&) = default;
 
     /**
      * \brief Read a block from the image
      * \param ec error code if operation failed
      * \return block read
      */
-    StreamBlock Read(std::error_code& ec);
+    StreamBlock Read(std::error_code& ec) override;
 
     /**
      * \brief Indicate end of image
      * \return boolean if end is reached
      */
-    bool IsAtEnd() { return is_ended_; }
+    bool IsEnded() const override { return is_ended_; }
 
   private:
     gdal::DatasetUPtr input_dataset_;
-    sirius::Size block_size_{256, 256};
-    sirius::Size block_margin_size_;
+    Size block_size_{256, 256};
+    Size block_margin_size_ = kEmptySize;
     PaddingType block_padding_type_;
     bool is_ended_ = false;
     int row_idx_ = 0;

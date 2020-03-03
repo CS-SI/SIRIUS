@@ -19,6 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <string>
+
 #include <catch/catch.hpp>
 
 #include "sirius/image.h"
@@ -69,18 +71,16 @@ TEST_CASE("Image - Basics move", "[image]") {
 }
 
 TEST_CASE("Image - Zero pad image", "[image]") {
-    LOG_SET_LEVEL(trace);
-
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
-        sirius::Padding padding(0, 0, 0, 0, sirius::PaddingType::kZeroPadding);
-        auto output = input.CreateZeroPaddedImage(padding);
+        auto output = input.CreateZeroPaddedImage(sirius::kEmptyPadding);
 
         REQUIRE(input.size == output.size);
 
         // identical image
-        sirius::tests::CheckZeroPaddingImage(input, output, padding);
+        sirius::tests::CheckZeroPaddingImage(input, output,
+                                             sirius::kEmptyPadding);
     }
 
     SECTION("Padding top") {
@@ -133,17 +133,14 @@ TEST_CASE("Image - Zero pad image", "[image]") {
 }
 
 TEST_CASE("Image - Mirror pad image", "[image]") {
-    LOG_SET_LEVEL(trace);
-
     auto input = sirius::tests::CreateDummyImage({5, 5});
 
     SECTION("No padding") {
-        sirius::Padding padding(0, 0, 0, 0,
-                                sirius::PaddingType::kMirrorPadding);
-        auto output = input.CreateMirrorPaddedImage(padding);
+        auto output = input.CreateMirrorPaddedImage(sirius::kEmptyPadding);
 
         REQUIRE(input.size == output.size);
-        sirius::tests::CheckMirrorPaddingImage(input, output, padding);
+        sirius::tests::CheckMirrorPaddingImage(input, output,
+                                               sirius::kEmptyPadding);
     }
 
     SECTION("Padding top") {
@@ -212,10 +209,8 @@ TEST_CASE("Image - Mirror pad image", "[image]") {
 }
 
 TEST_CASE("Image - load empty path", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
-    REQUIRE_NOTHROW(image = sirius::gdal::LoadImage(""));
+    REQUIRE_NOTHROW(image = sirius::gdal::Load(""));
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -223,12 +218,9 @@ TEST_CASE("Image - load empty path", "[sirius]") {
 }
 
 TEST_CASE("GDAL - load unknown image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
-    REQUIRE_THROWS_AS(
-          image = sirius::gdal::LoadImage("/this/is/not/a/file.ext"),
-          sirius::gdal::Exception);
+    REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
+                      sirius::gdal::Exception);
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -236,12 +228,9 @@ TEST_CASE("GDAL - load unknown image", "[sirius]") {
 }
 
 TEST_CASE("Image - load invalid image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
-    REQUIRE_THROWS_AS(
-          image = sirius::gdal::LoadImage("/this/is/not/a/file.ext"),
-          sirius::gdal::Exception);
+    REQUIRE_THROWS_AS(image = sirius::gdal::Load("/this/is/not/a/file.ext"),
+                      sirius::gdal::Exception);
 
     REQUIRE(image.data.empty());
     REQUIRE(image.size.row == 0);
@@ -249,23 +238,19 @@ TEST_CASE("Image - load invalid image", "[sirius]") {
 }
 
 TEST_CASE("Image - load well-formed image", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     sirius::Image image;
 
-    REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage("./filters/dirac_filter.tiff"));
+    REQUIRE_NOTHROW(image =
+                          sirius::gdal::Load(sirius::tests::kDiracFilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
-    REQUIRE(image.IsLoaded());
 
     REQUIRE_NOTHROW(
-          image = sirius::gdal::LoadImage("./filters/sinc_zoom2_filter.tif"));
+          image = sirius::gdal::Load(sirius::tests::kSincZoom2FilterPath));
     REQUIRE(!image.data.empty());
     REQUIRE(image.size.row > 0);
     REQUIRE(image.size.col > 0);
-    REQUIRE(image.IsLoaded());
 }
 
 namespace sirius {

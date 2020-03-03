@@ -58,8 +58,10 @@ void FFTShift2D(const double* data, const Size& size, double* shifted_data) {
 }
 
 void IFFTShift2D(const double* data, const Size& size, double* shifted_data) {
-    int row_shift = std::ceil(static_cast<double>(size.row) / 2);
-    int col_shift = std::ceil(static_cast<double>(size.col) / 2);
+    int row_shift =
+          static_cast<int>(std::ceil(static_cast<double>(size.row) / 2));
+    int col_shift =
+          static_cast<int>(std::ceil(static_cast<double>(size.col) / 2));
 
     for (int row = 0; row < size.row; ++row) {
         int shifted_row = (row + row_shift) % size.row;

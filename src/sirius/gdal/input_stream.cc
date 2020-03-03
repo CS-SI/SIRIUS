@@ -33,8 +33,8 @@ namespace sirius {
 namespace gdal {
 
 InputStream::InputStream(const std::string& image_path,
-                         const sirius::Size& block_size,
-                         const sirius::Size& block_margin_size,
+                         const Size& block_size,
+                         const Size& block_margin_size,
                          PaddingType block_padding_type)
     : input_dataset_(gdal::LoadDataset(image_path)),
       block_size_(block_size),
@@ -64,53 +64,54 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     int padded_block_h = block_size_.row + 2 * block_margin_size_.row;
 
     if (padded_block_w > w || padded_block_h > h) {
-        LOG("input_stream", critical,
+        LOG("input_stream", warn,
             "requested block size ({}x{}) is bigger than source image ({}x{}). "
-            "You should use regular processing",
+            "Read only one block",
             padded_block_w, padded_block_h, w, h);
-        ec = make_error_code(CPLE_ObjectNull);
-        return {};
-    }
+        padded_block_h = h + 2 * block_margin_size_.row;
+        padded_block_w = w + 2 * block_margin_size_.col;
+    } else {
+        // resize block if needed
+        if (row_idx_ + padded_block_h > h) {
+            // assign size that can be read
+            padded_block_h -= (row_idx_ + padded_block_h - h);
 
-    // resize block if needed
-    if (row_idx_ + padded_block_h > h) {
-        // assign size that can be read
-        padded_block_h -= (row_idx_ + padded_block_h - h);
+            if (padded_block_h < block_margin_size_.row) {
+                LOG("input_stream", error,
+                    "block at coordinates ({}, {}) cannot be read because "
+                    "available reading height {} is less than margin size {}",
+                    row_idx_, col_idx_, padded_block_h, block_margin_size_.row);
+                ec = make_error_code(CPLE_ObjectNull);
+                return {};
+            }
 
-        if (padded_block_h < block_margin_size_.row) {
-            LOG("input_stream", error,
-                "block at coordinates ({}, {}) cannot be read because "
-                "available reading height {} is less than margin size {}",
-                row_idx_, col_idx_, padded_block_h, block_margin_size_.row);
-            ec = make_error_code(CPLE_ObjectNull);
-            return {};
+            if (padded_block_h > block_margin_size_.row + block_size_.row) {
+                // bottom margin is partly read. add missing margin
+                padded_block_h += (row_idx_ + block_size_.row +
+                                   2 * block_margin_size_.row - h);
+            } else {
+                padded_block_h += block_margin_size_.row;
+            }
         }
+        if (col_idx_ + padded_block_w > w) {
+            padded_block_w -= (col_idx_ + padded_block_w - w);
 
-        if (padded_block_h > block_margin_size_.row + block_size_.row) {
-            // bottom margin is partly read. add missing margin
-            padded_block_h +=
-                  (row_idx_ + block_size_.row + 2 * block_margin_size_.row - h);
-        } else {
-            padded_block_h += block_margin_size_.row;
-        }
-    }
-    if (col_idx_ + padded_block_w > w) {
-        padded_block_w -= (col_idx_ + padded_block_w - w);
+            if (padded_block_w < block_margin_size_.col) {
+                LOG("ReadBlock", error,
+                    "block at coordinates {}, {}, cannot be read because "
+                    "available "
+                    "reading width {} is less than margin size {}",
+                    row_idx_, col_idx_, padded_block_w, block_margin_size_.col);
+                ec = make_error_code(CPLE_ObjectNull);
+                return {};
+            }
 
-        if (padded_block_w < block_margin_size_.col) {
-            LOG("ReadBlock", error,
-                "block at coordinates {}, {}, cannot be read because available "
-                "reading width {} is less than margin size {}",
-                row_idx_, col_idx_, padded_block_w, block_margin_size_.col);
-            ec = make_error_code(CPLE_ObjectNull);
-            return {};
-        }
-
-        if (padded_block_w > block_size_.col + block_margin_size_.col) {
-            padded_block_w +=
-                  (col_idx_ + block_size_.col + 2 * block_margin_size_.col - w);
-        } else {
-            padded_block_w += block_margin_size_.col;
+            if (padded_block_w > block_size_.col + block_margin_size_.col) {
+                padded_block_w += (col_idx_ + block_size_.col +
+                                   2 * block_margin_size_.col - w);
+            } else {
+                padded_block_w += block_margin_size_.col;
+            }
         }
     }
     Padding block_padding;
@@ -124,9 +125,9 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     }
 
     // bottom padding needed
-    if (row_idx_ >= (h - block_size_.row - 2 * block_margin_size_.row)) {
+    if (row_idx_ >= (h - h_to_read)) {
         block_padding.bottom = block_margin_size_.row;
-        h_to_read -= (row_idx_ + padded_block_h - h);
+        h_to_read -= (row_idx_ + h_to_read - h);
     }
 
     // left padding needed
@@ -136,9 +137,9 @@ StreamBlock InputStream::Read(std::error_code& ec) {
     }
 
     // right padding needed
-    if (col_idx_ >= (w - block_size_.col - 2 * block_margin_size_.col)) {
+    if (col_idx_ >= (w - w_to_read)) {
         block_padding.right = block_margin_size_.col;
-        w_to_read -= (col_idx_ + padded_block_w - w);
+        w_to_read -= (col_idx_ + w_to_read - w);
     }
 
     Image output_buffer({h_to_read, w_to_read});

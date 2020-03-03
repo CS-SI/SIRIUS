@@ -21,57 +21,57 @@
 
 #include "sirius/frequency_resampler_factory.h"
 
-#include "sirius/utils/log.h"
+#include "sirius/image_decomposition/periodic_smooth_policy.h"
+#include "sirius/image_decomposition/regular_policy.h"
 
-#include "sirius/resampler/frequency_resampler.h"
-#include "sirius/resampler/image_decomposition/periodic_smooth_policy.h"
-#include "sirius/resampler/image_decomposition/regular_policy.h"
-#include "sirius/resampler/zoom_strategy/periodization_strategy.h"
-#include "sirius/resampler/zoom_strategy/zero_padding_strategy.h"
+#include "sirius/resampling/frequency_resampler.h"
+#include "sirius/resampling/upsampling/periodization_upsampling.h"
+#include "sirius/resampling/upsampling/zero_padding_upsampling.h"
+
+#include "sirius/utils/log.h"
 
 namespace sirius {
 
 IFrequencyResampler::UPtr FrequencyResamplerFactory::Create(
-      ImageDecompositionPolicies image_decomposition,
-      FrequencyZoomStrategies zoom_strategy) {
-    using FrequencyResamplerRegularZeroPadding = resampler::FrequencyResampler<
-          resampler::ImageDecompositionRegularPolicy,
-          resampler::ZeroPaddingZoomStrategy>;
+      image_decomposition::Policies image_decomposition,
+      FrequencyUpsamplingStrategies zoom_strategy) {
+    using FrequencyResamplerRegularZeroPadding =
+          resampling::FrequencyResampler<image_decomposition::RegularPolicy,
+                                         resampling::ZeroPaddingUpsampling>;
 
     using FrequencyResamplerRegularPeriodization =
-          resampler::FrequencyResampler<
-                resampler::ImageDecompositionRegularPolicy,
-                resampler::PeriodizationZoomStrategy>;
+          resampling::FrequencyResampler<image_decomposition::RegularPolicy,
+                                         resampling::PeriodizationUpsampling>;
 
     using FrequencyResamplerPeriodicSmoothZeroPadding =
-          resampler::FrequencyResampler<
-                resampler::ImageDecompositionPeriodicSmoothPolicy,
-                resampler::ZeroPaddingZoomStrategy>;
+          resampling::FrequencyResampler<
+                image_decomposition::PeriodicSmoothPolicy,
+                resampling::ZeroPaddingUpsampling>;
 
     using FrequencyResamplerPeriodicSmoothPeriodization =
-          resampler::FrequencyResampler<
-                resampler::ImageDecompositionPeriodicSmoothPolicy,
-                resampler::PeriodizationZoomStrategy>;
+          resampling::FrequencyResampler<
+                image_decomposition::PeriodicSmoothPolicy,
+                resampling::PeriodizationUpsampling>;
 
     switch (image_decomposition) {
-        case ImageDecompositionPolicies::kRegular:
+        case image_decomposition::Policies::kRegular:
             switch (zoom_strategy) {
-                case FrequencyZoomStrategies::kZeroPadding:
+                case FrequencyUpsamplingStrategies::kZeroPadding:
                     return std::make_unique<
                           FrequencyResamplerRegularZeroPadding>();
-                case FrequencyZoomStrategies::kPeriodization:
+                case FrequencyUpsamplingStrategies::kPeriodization:
                     return std::make_unique<
                           FrequencyResamplerRegularPeriodization>();
                 default:
                     break;
             }
             break;
-        case ImageDecompositionPolicies::kPeriodicSmooth:
+        case image_decomposition::Policies::kPeriodicSmooth:
             switch (zoom_strategy) {
-                case FrequencyZoomStrategies::kZeroPadding:
+                case FrequencyUpsamplingStrategies::kZeroPadding:
                     return std::make_unique<
                           FrequencyResamplerPeriodicSmoothZeroPadding>();
-                case FrequencyZoomStrategies::kPeriodization:
+                case FrequencyUpsamplingStrategies::kPeriodization:
                     return std::make_unique<
                           FrequencyResamplerPeriodicSmoothPeriodization>();
                 default:
@@ -83,7 +83,8 @@ IFrequencyResampler::UPtr FrequencyResamplerFactory::Create(
     }
 
     LOG("frequency_resampler_factory", warn,
-        "combination of image decomposition and zoom strategy not implemented");
+        "combination of image decomposition and upsampling strategy not "
+        "implemented");
     return nullptr;
 }
 

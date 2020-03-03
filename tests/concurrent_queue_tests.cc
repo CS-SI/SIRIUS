@@ -61,7 +61,7 @@ TEST_CASE("concurrent queue - monothread push pop", "[sirius]") {
 
 TEST_CASE("concurrent queue - multithreaded push pop", "[sirius]") {
     sirius::utils::ConcurrentQueue<int> queue(5);
-    static const std::size_t kValuesSize = 1000;
+    static const int kValuesSize = 1000;
 
     using Values = std::list<int>;
 
@@ -69,7 +69,7 @@ TEST_CASE("concurrent queue - multithreaded push pop", "[sirius]") {
     Values values_t2;
     Values values_t3;
 
-    for (std::size_t i = 0; i < kValuesSize; ++i) {
+    for (int i = 0; i < kValuesSize; ++i) {
         values_t1.push_back(kValuesSize + i);
         values_t2.push_back(2 * kValuesSize + i);
         values_t3.push_back(3 * kValuesSize + i);

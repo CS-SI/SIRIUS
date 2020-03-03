@@ -22,6 +22,8 @@
 #ifndef SIRIUS_UTILS_GSL_H_
 #define SIRIUS_UTILS_GSL_H_
 
+#include "sirius/config.h"
+
 #include <gsl/gsl>
 
 namespace sirius {

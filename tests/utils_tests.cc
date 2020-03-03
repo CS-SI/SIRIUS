@@ -39,8 +39,6 @@ TEST_CASE("utils tests - gcd", "[sirius]") {
 }
 
 TEST_CASE("utils tests - FFTShift2D", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     SECTION("FFTShift2D - even row, even col") {
         std::vector<double> input{11, 12, 13, 14, 21, 22, 23, 24,
                                   31, 32, 33, 34, 41, 42, 43, 44};
@@ -89,8 +87,6 @@ TEST_CASE("utils tests - FFTShift2D", "[sirius]") {
 }
 
 TEST_CASE("utils tests - IFFTShift2D", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     SECTION("IFFTShift2D - even row, even col") {
         std::vector<double> input{11, 12, 13, 14, 21, 22, 23, 24,
                                   31, 32, 33, 34, 41, 42, 43, 44};
@@ -139,8 +135,6 @@ TEST_CASE("utils tests - IFFTShift2D", "[sirius]") {
 }
 
 TEST_CASE("utils tests - IFFTShift2D(FFTShift2D)", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     SECTION("IFFTShift2D(FFTShift2D) - even row, even col") {
         std::vector<double> input{11, 12, 13, 14, 21, 22, 23, 24,
                                   31, 32, 33, 34, 41, 42, 43, 44};
@@ -190,8 +184,6 @@ TEST_CASE("utils tests - IFFTShift2D(FFTShift2D)", "[sirius]") {
 }
 
 TEST_CASE("utils tests - IFFTShift2DUncentered", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     SECTION("IFFTShift2DUncentered - odd row, odd col") {
         std::vector<double> input{0, 1, 2, 3, 4, 5, 6, 7,
                                   8, 9, 10, 11, 12, 13, 14, 15,
@@ -261,8 +253,6 @@ TEST_CASE("utils tests - IFFTShift2DUncentered", "[sirius]") {
 }
 
 TEST_CASE("utils tests - FFTShift2DUncentered", "[sirius]") {
-    LOG_SET_LEVEL(trace);
-
     SECTION("FFTShift2DUncentered - odd row, odd col") {
         std::vector<double> input{18, 19, 15, 16, 17, 23, 24, 20,
                                   21, 22, 3, 4, 0, 1, 2, 8, 9, 5, 6, 7,

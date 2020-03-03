@@ -96,7 +96,7 @@ DatasetUPtr CreateDataset(const std::string& filepath, int w, int h,
     return dataset;
 }
 
-Image LoadImage(const std::string& filepath) {
+Image Load(const std::string& filepath) {
     if (filepath.empty()) {
         LOG("gdal", debug, "no filepath provided");
         return {};
@@ -123,8 +123,8 @@ Image LoadImage(const std::string& filepath) {
     return {tmp_size, std::move(tmp_buffer)};
 }
 
-void SaveImage(const Image& image, const std::string& output_filepath,
-               const GeoReference& geoRef) {
+void Save(const Image& image, const std::string& output_filepath,
+          const GeoReference& geoRef) {
     LOG("gdal", trace, "saving image into '{}'", output_filepath);
 
     // TODO: basic save implementation, test only ATM
@@ -145,7 +145,7 @@ void SaveImage(const Image& image, const std::string& output_filepath,
 
 GeoReference ComputeResampledGeoReference(const std::string& input_path,
                                           const ZoomRatio& zoom_ratio) {
-    auto input_dataset = sirius::gdal::LoadDataset(input_path);
+    auto input_dataset = LoadDataset(input_path);
 
     return {ComputeResampledGeoTransform(input_dataset.get(), zoom_ratio),
             input_dataset->GetProjectionRef()};

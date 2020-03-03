@@ -23,23 +23,16 @@
 #define SIRIUS_FREQUENCY_RESAMPLER_FACTORY_H_
 
 #include "sirius/i_frequency_resampler.h"
+#include "sirius/image_decomposition/policies.h"
 
 namespace sirius {
 
 /**
- * \brief Enum of supported image decomposition policies
- */
-enum class ImageDecompositionPolicies {
-    kRegular = 0,   /**< regular image decomposition */
-    kPeriodicSmooth /**< periodic plus smooth image decomposition */
-};
-
-/**
  * \brief Enum of supported frequency zoom strategies
  */
-enum class FrequencyZoomStrategies {
-    kZeroPadding = 0, /**< zero padding zoom */
-    kPeriodization    /**< periodization zoom */
+enum class FrequencyUpsamplingStrategies {
+    kZeroPadding = 0, /**< zero padding upsampling */
+    kPeriodization    /**< periodization upsampling */
 };
 
 /**
@@ -50,14 +43,14 @@ class FrequencyResamplerFactory {
   public:
     /**
      * \brief IFrequencyResampler factory
-     * \param image_decomposition cf. ImageDecompositionPolicies enum
-     * \param zoom_strategy cf. FrequencyZoomStrategies enum
+     * \param image_decomposition cf. Policies enum
+     * \param zoom_strategy cf. FrequencyUpsamplingStrategies enum
      * \return requested composition of FrequencyResampler | nullptr if not
      * available
      */
     static IFrequencyResampler::UPtr Create(
-          ImageDecompositionPolicies image_decomposition,
-          FrequencyZoomStrategies zoom_strategy);
+          image_decomposition::Policies image_decomposition,
+          FrequencyUpsamplingStrategies zoom_strategy);
 };
 
 }  // namespace sirius

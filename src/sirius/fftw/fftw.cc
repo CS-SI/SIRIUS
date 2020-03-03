@@ -25,6 +25,8 @@
 
 #include <fftw3.h>
 
+#include "sirius/config.h"
+
 #include "sirius/fftw/exception.h"
 #include "sirius/fftw/wrapper.h"
 

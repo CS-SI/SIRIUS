@@ -26,9 +26,9 @@
 #include <string>
 #include <vector>
 
-#include "sirius/filter.h"
 #include "sirius/image.h"
-#include "sirius/types.h"
+
+#include "sirius/resampling/parameters.h"
 
 namespace sirius {
 
@@ -39,6 +39,7 @@ namespace sirius {
 class IFrequencyResampler {
   public:
     using UPtr = std::unique_ptr<IFrequencyResampler>;
+    using Parameters = resampling::Parameters;
 
   public:
     virtual ~IFrequencyResampler() = default;
@@ -48,19 +49,16 @@ class IFrequencyResampler {
      *
      * \remark This method is thread safe
      *
-     * \param zoom_ratio zoom ratio
      * \param input image to zoom in/out
      * \param image_padding expected padding to add to the image to
      *        comply with the filter
-     * \param filter optional filter to apply after the zoom transformation.
-     *        The filter must be compatible with the requested ratio.
-     * \return Zoomed in/out image
+     * \param parameters resampling parameters
+     * \return Resampled image
      *
      * \throw sirius::Exception if a computing issue happens
      */
-    virtual Image Compute(const ZoomRatio& zoom_ratio, const Image& input,
-                          const Padding& image_padding,
-                          const Filter& filter = {}) const = 0;
+    virtual Image Compute(const Image& input, const Padding& image_padding,
+                          const Parameters& resampling_parameters) const = 0;
 };
 
 }  // namespace sirius

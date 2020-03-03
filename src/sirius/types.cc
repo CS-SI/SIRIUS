@@ -30,10 +30,6 @@
 
 namespace sirius {
 
-Size::Size(int row, int col) : row(row), col(col) {}
-
-Size::Size(const std::array<int, 2>& size) : row(size[0]), col(size[1]) {}
-
 ZoomRatio ZoomRatio::Create(const std::string& ratio_string) {
     auto delim_pos = ratio_string.find(':');
 

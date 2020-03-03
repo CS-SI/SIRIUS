@@ -24,7 +24,7 @@
 
 namespace sirius {
 
-static constexpr char kVersion[] = "@SIRIUS_VERSION@";
+static constexpr char kVersion[] = "@SIRIUS_EXTENDED_VERSION@";
 static constexpr char kGitCommit[] = "@SIRIUS_REVISION_COMMIT@";
 
 }  // namespace sirius

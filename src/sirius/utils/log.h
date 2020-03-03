@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include "sirius/config.h"
+
 #ifdef SIRIUS_ENABLE_LOGS
 
 #include <map>
@@ -51,8 +53,6 @@ class LoggerManager {
 
   private:
     std::mutex loggers_mutex_;
-    std::map<std::string, LoggerSPtr> loggers_;
-    spdlog::level::level_enum log_level_{spdlog::level::info};
 };
 
 }  // namespace utils
