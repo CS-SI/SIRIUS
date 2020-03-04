@@ -74,7 +74,7 @@ matrix:
       apt:
         sources:
           - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-5.0
+          - llvm-toolchain-xenial-5.0
           - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
         packages:
           - clang-5.0
@@ -121,7 +121,7 @@ matrix:
       apt:
         sources:
           - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-6.0
+          - llvm-toolchain-bionic-6.0
           - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
         packages:
           - clang-6.0
