@@ -20,6 +20,12 @@ appveyor AddMessage "Installing FFTW3 dependency..."
 vcpkg install fftw3:%VCPKG_TRIPLET% || goto error
 appveyor AddMessage "Installing FFTW3 dependency done"
 
+appveyor AddMessage "Installing SQLITE dependency..."
+vcpkg install sqlite:%VCPKG_TRIPLET% || goto error
+
+appveyor AddMessage "Installing PROJ dependency..."
+vcpkg install proj:%VCPKG_TRIPLET% || goto error
+
 appveyor AddMessage "Installing GDAL dependency..."
 vcpkg install gdal[core,mysql-libmariadb]:%VCPKG_TRIPLET% || goto error
 appveyor AddMessage "Installing GDAL dependency done"
