@@ -28,10 +28,6 @@ matrix:
     script: .travis/osx/build.sh
 
   - <<: *osx-template
-    name: "OS X - Xcode 10.3"
-    osx_image: xcode10.3
-
-  - <<: *osx-template
     name: "OS X - Xcode 11.3"
     osx_image: xcode11.3
 
@@ -148,3 +144,14 @@ matrix:
       script: .travis/docker/deploy.sh
       on:
         branch: master
+
+  # Windows
+  - &windows-template
+    stage: test
+    name: "Windows Visual Studio 2017"
+    os: windows
+    env:
+        - CMAKE_PATH="/c/Program Files/CMake/bin"
+    script:
+        - git clone https://github.com/Microsoft/vcpkg sources
+
