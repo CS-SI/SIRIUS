@@ -16,7 +16,7 @@ configuration: Release
 # environment variables
 environment:
   VCPKG_DIR: C:/Tools/vcpkg
-  VCPKG_TRIPLET: x64-windows-release
+  VCPKG_TRIPLET: x64-windows
   CMAKE_GENERATOR: Visual Studio 15 2017 Win64
 
 # scripts that run after cloning repository
