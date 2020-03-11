@@ -19,20 +19,7 @@
 # along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.2)
-
-# unit_test_init_data copies tests data into the expected directories
-add_custom_target(unit_test_init_data ALL
-                      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/input"
-                      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/filters"
-                      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/output"
-                      COMMAND ${CMAKE_COMMAND} -E copy_directory
-                          "${CMAKE_SOURCE_DIR}/data/input"
-                          "${CMAKE_CURRENT_BINARY_DIR}/input"
-                      COMMAND ${CMAKE_COMMAND} -E copy_directory
-                          "${CMAKE_SOURCE_DIR}/data/filters"
-                          "${CMAKE_CURRENT_BINARY_DIR}/filters")
-set_target_properties(unit_test_init_data PROPERTIES FOLDER test)
+configure_file(test_data.h.in test_data.h)
 
 # unit_test_main contains catch2 main (speed up unit test compilation)
 add_library(unit_test_main STATIC catch_main.cc)
@@ -44,7 +31,8 @@ target_link_libraries(unit_test_main
 add_library(unit_test_lib STATIC
     utils.h
     utils.cc)
-target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  target_include_directories(unit_test_lib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 set_target_properties(unit_test_lib PROPERTIES FOLDER test)
 target_link_libraries(unit_test_lib
     libsirius-static

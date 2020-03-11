@@ -42,9 +42,9 @@
 
 TEST_CASE("image streamer - resampling", "[sirius]") {
     const char kStreamResamplingInputFile[] =
-          "./output/stream_resampling_input.tif";
+          "./stream_resampling_input.tif";
     const char kStreamResamplingOutputFile[] =
-          "./output/stream_resampling_output.tif";
+          "./stream_resampling_output.tif";
     auto dummy_image = sirius::tests::CreateDummyImage({1024, 768});
     sirius::gdal::Save(dummy_image, kStreamResamplingInputFile);
 
