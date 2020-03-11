@@ -17,17 +17,17 @@ copy "%APPVEYOR_BUILD_FOLDER%\.appveyor\vcpkg\triplets\%VCPKG_TRIPLET%-release.c
 :: install fftw3 and gdal packages
 :: force x64 build due to gdal package only available for x64 (libmysql only available for x64)
 appveyor AddMessage "Installing FFTW3 dependency..."
-vcpkg install fftw3:%VCPKG_TRIPLET% || goto error
+vcpkg install fftw3:%VCPKG_TRIPLET%-rel || goto error
 appveyor AddMessage "Installing FFTW3 dependency done"
 
 :: appveyor AddMessage "Installing SQLITE dependency..."
-:: vcpkg install sqlite3:%VCPKG_TRIPLET% || goto error
+:: vcpkg install sqlite3:%VCPKG_TRIPLET%-rel || goto error
 
 appveyor AddMessage "Installing PROJ4 dependency..."
-vcpkg install proj4:%VCPKG_TRIPLET% || goto error
+vcpkg install proj4:%VCPKG_TRIPLET%-rel || goto error
 
 appveyor AddMessage "Installing GDAL dependency..."
-vcpkg install gdal[core,mysql-libmariadb]:%VCPKG_TRIPLET% || goto error
+vcpkg install gdal[core,mysql-libmariadb]:%VCPKG_TRIPLET%-rel || goto error
 appveyor AddMessage "Installing GDAL dependency done"
 
 exit /b 0
