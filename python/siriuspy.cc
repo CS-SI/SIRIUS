@@ -67,7 +67,6 @@ py::array_t<double> resampler(py::buffer input_array, int input_resolution, py::
   if (input_array_info.ndim != 2)
     throw std::runtime_error("Incompatible buffer dimension!");
 
-  auto filter = sirius::Filter::Create(img, zoom_ratio);
 
   auto input_size = sirius::Size(input_array_info.shape[0],  input_array_info.shape[1]);
 
@@ -76,16 +75,21 @@ py::array_t<double> resampler(py::buffer input_array, int input_resolution, py::
 
   auto freq_resampler = sirius::FrequencyResamplerFactory::Create(image_decomposition, zoom_strategy);
 
-  auto output_image = freq_resampler->Compute(
-                              input_image, filter->padding(),
-                              {zoom_ratio, filter.get()});
+  sirius::Image output_image = {};
+  if (kwargs.contains("filter_image")) {
+
+      auto filter = sirius::Filter::Create(img, zoom_ratio);
+      output_image = freq_resampler->Compute(input_image, image_padding, {zoom_ratio, filter.get()});
+  }
+  else {
+      output_image = freq_resampler->Compute(input_image, {}, {zoom_ratio, nullptr});
+  }
 
   return py::array_t<double>(std::vector<ptrdiff_t>{output_image.size.row, output_image.size.col}, &output_image.data[0]);
 
 }
 
 PYBIND11_MODULE(siriuspy, m) {
-  using namespace sirius;
 
  py::enum_<spdlog::level::level_enum>(m, "spdlog")
    .value("trace", spdlog::level::trace)
@@ -107,16 +111,16 @@ PYBIND11_MODULE(siriuspy, m) {
     .value("kPeriodization", sirius::FrequencyUpsamplingStrategies::kPeriodization)
     .export_values();
 
-  py::class_<ZoomRatio>(m, "ZoomRatio")
-    .def_static("Create",     py::overload_cast<int,int>(&ZoomRatio::Create))
-    .def("ratio",                                 &ZoomRatio::ratio)
-    .def("IsRealZoom",                            &ZoomRatio::IsRealZoom)
-    .def("output_resolution",                     &ZoomRatio::output_resolution)
-    .def("input_resolution",                      &ZoomRatio::input_resolution)
+  py::class_<sirius::ZoomRatio>(m, "ZoomRatio")
+      .def_static("Create",     py::overload_cast<int,int>(&sirius::ZoomRatio::Create))
+    .def("ratio",                                 &sirius::ZoomRatio::ratio)
+    .def("IsRealZoom",                            &sirius::ZoomRatio::IsRealZoom)
+    .def("output_resolution",                     &sirius::ZoomRatio::output_resolution)
+    .def("input_resolution",                      &sirius::ZoomRatio::input_resolution)
     ;
-  py::class_<Padding>(m, "Padding")
-    .def(py::init<int,int,int,int,PaddingType>())
-    .def("IsEmpty", &Padding::IsEmpty)
+  py::class_<sirius::Padding>(m, "Padding")
+    .def(py::init<int,int,int,int,sirius::PaddingType>())
+    .def("IsEmpty", &sirius::Padding::IsEmpty)
     ;
   py::enum_<sirius::PaddingType>(m, "PaddingType", py::arithmetic())
     .value("kZeroPadding", sirius::PaddingType::kZeroPadding)

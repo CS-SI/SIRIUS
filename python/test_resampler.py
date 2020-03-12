@@ -3,12 +3,6 @@
 import os
 import siriuspy
 import inspect
-def print_classes():
-    for name, obj in inspect.getmembers(siriuspy):
-        if inspect.isclass(obj):
-            print(obj) #, obj.__name__)
-
-#print_classes()
 import unittest
 import numpy
 from scipy import misc
@@ -32,15 +26,16 @@ for row in range(256):
 
 
 data_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), os.pardir, "data"))
-dirac_image = gdal_load_image(os.path.join(data_dir, "filters", "ZOOM_1_2.tif"))
-sinc_image  = gdal_load_image(os.path.join(data_dir, "filters", "ZOOM_2.tif"))
+dirac_image = gdal_load_image(os.path.join(data_dir, "filters", "dirac_filter.tif"))
+sinc_image  = gdal_load_image(os.path.join(data_dir, "filters", "sinc_zoom2_filter.tif"))
 sinc_padding  = siriuspy.Padding(0, 0, 0, 0, siriuspy.PaddingType.kMirrorPadding)
 dirac_padding = siriuspy.Padding(0, 0, 0, 0, siriuspy.PaddingType.kMirrorPadding)
 
 class TestResampler(unittest.TestCase):
 
     def test_log_level_critical(self):
-        zoomed_image = siriuspy.resampler(npimage, 6, log_level=siriuspy.spdlog.critical)
+
+        zoomed_image = siriuspy.resampler(npimage, 6, log_level=siriuspy.spdlog.debug)
         self.assertEqual(zoomed_image.shape, (1536,1536))
 
     def test_log_level_debug(self):
@@ -62,7 +57,7 @@ class TestResampler(unittest.TestCase):
                                               filter_image=dirac_image,
                                               image_padding=sinc_padding,
                                               image_decomposition=siriuspy.ImageDecompositionPolicies.kRegular,
-                                              zoom_strategy=siriuspy.FrequencyZoomStrategies.kZeroPadding)
+                                              zoom_strategy=siriuspy.FrequencyUpsamplingStrategies.kZeroPadding)
         self.assertEqual(zoomed_image.shape, (512,512))
 
     def test_resampler_with_all_options(self):
@@ -72,7 +67,7 @@ class TestResampler(unittest.TestCase):
                                               filter_image=sinc_image,
                                               image_padding=sinc_padding,
                                               image_decomposition=siriuspy.ImageDecompositionPolicies.kPeriodicSmooth,
-                                              zoom_strategy=siriuspy.FrequencyZoomStrategies.kZeroPadding)
+                                              zoom_strategy=siriuspy.FrequencyUpsamplingStrategies.kZeroPadding)
         self.assertEqual(zoomed_image.shape, (128,128))
 
     def test_resampler_with_different_image_decomposition_and_zoom_strategy(self):
@@ -80,7 +75,7 @@ class TestResampler(unittest.TestCase):
                                               output_resolution=4,
                                               filter_image=dirac_image,
                                               image_decomposition=siriuspy.ImageDecompositionPolicies.kRegular,
-                                              zoom_strategy=siriuspy.FrequencyZoomStrategies.kPeriodization)
+                                              zoom_strategy=siriuspy.FrequencyUpsamplingStrategies.kPeriodization)
         self.assertEqual(zoomed_image.shape, (512,512))
 
     def test_resampler_with_filter_image_and_output_resolution(self):
@@ -94,13 +89,13 @@ class TestResampler(unittest.TestCase):
         zoomed_image = siriuspy.resampler(npimage, 2,
                                               output_resolution=4,
                                               filter_image=sinc_image,
-                                              zoom_strategy=siriuspy.FrequencyZoomStrategies.kZeroPadding)
+                                              zoom_strategy=siriuspy.FrequencyUpsamplingStrategies.kZeroPadding)
         self.assertEqual(zoomed_image.shape, (96,96))
 
     def test_resampler_with_only_required_options(self):
         zoomed_image = siriuspy.resampler(npimage, 2)
         self.assertEqual(zoomed_image.shape, (512,512))
 
+
 if __name__ == '__main__':
-    #unittest.main()
-    help(siriuspy.resampler)
+    unittest.main()
