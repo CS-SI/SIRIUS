@@ -49,6 +49,7 @@ matrix:
           - g++-6
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   - <<: *ubuntu-xenial-template
     name: "Ubuntu Xenial 16.04 GCC 6 - C++ static runtime"
@@ -62,6 +63,7 @@ matrix:
           - g++-6
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   - <<: *ubuntu-xenial-template
     name: "Ubuntu Xenial 16.04 Clang 5.0 - stdlibc++ 6"
@@ -77,6 +79,7 @@ matrix:
           - libstdc++-6-dev
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   # Ubuntu bionic
   - &ubuntu-bionic-template
@@ -96,6 +99,7 @@ matrix:
           - g++-7
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   - <<: *ubuntu-bionic-template
     name: "Ubuntu Bionic 18.04 GCC 7 - C++ static runtime"
@@ -109,6 +113,7 @@ matrix:
           - g++-7
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   - <<: *ubuntu-bionic-template
     name: "Ubuntu Bionic 18.04 Clang 6.0 - stdlibc++ 7"
@@ -124,6 +129,7 @@ matrix:
           - libstdc++-7-dev
           - libfftw3-dev
           - libgdal-dev
+          - python3-dev
 
   # Docker
   - &centos-7-template
