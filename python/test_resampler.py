@@ -5,9 +5,6 @@ import siriuspy
 import inspect
 import unittest
 import numpy
-from scipy import misc
-import matplotlib.pyplot as plt
-from PIL import Image
 from osgeo import gdal
 
 def gdal_load_image(filename, bindex=1):

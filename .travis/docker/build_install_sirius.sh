@@ -32,6 +32,7 @@ cmake3 ${PROJECT_DIR} \
     -DENABLE_GSL_CONTRACTS=OFF \
     -DENABLE_LOGS=ON \
     -DBUILD_TESTING=ON \
+    -DWITH_PYTHON=ON \
     -DENABLE_DOCUMENTATION=ON
 
 # build sirius shared library
