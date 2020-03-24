@@ -159,4 +159,4 @@ matrix:
       - docker
     install: .travis/opensuse/install_deps.sh
     before_script: source .travis/opensuse/before_build.sh
-    script: .travis/docker/build.sh
+    script: .travis/opensuse/build.sh
