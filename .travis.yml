@@ -150,3 +150,13 @@ matrix:
       script: .travis/docker/deploy.sh
       on:
         branch: master
+
+  - &opensuse-template
+    name: "OpenSUSE Leap Docker"
+    stage: test
+    os: linux
+    services:
+      - docker
+    install: .travis/opensuse/install_deps.sh
+    before_script: source .travis/opensuse/before_build.sh
+    script: .travis/docker/build.sh
