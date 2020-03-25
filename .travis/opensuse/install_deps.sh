@@ -7,27 +7,28 @@ if [[ ${TRAVIS_OS_NAME} != 'linux' ]]; then
     echo "unsupported platform"
     exit 22
 fi
+# docker install
+docker pull tfeuvrier/sirius.opensuse.leap
 
-DOCKER_BUILD_DIR=${TRAVIS_BUILD_DIR}/build-sirius-dockerfile
-echo "TRAVIS_BUILD_DIR : ${TRAVIS_BUILD_DIR}"
-echo "DOCKER_BUILD_DIR : ${DOCKER_BUILD_DIR}"
-mkdir -p ${DOCKER_BUILD_DIR}
-cd ${DOCKER_BUILD_DIR}
+#DOCKER_BUILD_DIR=${TRAVIS_BUILD_DIR}/build-sirius-dockerfile
+#echo "TRAVIS_BUILD_DIR : ${TRAVIS_BUILD_DIR}"
+#echo "DOCKER_BUILD_DIR : ${DOCKER_BUILD_DIR}"
+#mkdir -p ${DOCKER_BUILD_DIR}
+#cd ${DOCKER_BUILD_DIR}
 
 # docker install
-cat >Dockerfile <<EOF
-FROM opensuse/leap
+#cat >Dockerfile <<EOF
+#FROM opensuse/leap
 
 # Install dependencies
-RUN zypper -n install \
-    vim \
-    git \
-    python \
-    gcc \
-    gcc-c++ \
-    fftw3-devel \
-    gdal-devel \
-    python \
-    cmake
-
-EOF
+#RUN zypper -n install \
+#    vim \
+#    git \
+#    python \
+#    gcc \
+#    gcc-c++ \
+#    fftw3-devel \
+#    gdal-devel \
+#    python \
+#    cmake
+#EOF
