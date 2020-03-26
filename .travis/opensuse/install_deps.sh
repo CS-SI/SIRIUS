@@ -8,7 +8,7 @@ if [[ ${TRAVIS_OS_NAME} != 'linux' ]]; then
     exit 22
 fi
 # docker install
-docker pull tfeuvrier/sirius.opensuse.leap
+docker pull tfeuvrier/sirius.opensuse.leap:firsttry
 
 #DOCKER_BUILD_DIR=${TRAVIS_BUILD_DIR}/build-sirius-dockerfile
 #echo "TRAVIS_BUILD_DIR : ${TRAVIS_BUILD_DIR}"
