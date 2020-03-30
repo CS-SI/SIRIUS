@@ -25,8 +25,6 @@ cd ${BUILD_DIR}
 cmake ${PROJECT_DIR} \
     -G "Unix Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCXX_COMPILER=/usr/bin/cpp \
-    -DCMAKE_CXX_COMPILER=/usr/bin/cpp \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
     -DSIRIUS_VERSION="${SIRIUS_VERSION}" \
     -DSIRIUS_REVISION_COMMIT="${SIRIUS_REVISION_COMMIT}" \
