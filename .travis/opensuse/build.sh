@@ -10,6 +10,9 @@ fi
 
 # docker script
 docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "echo ${PROJECT_DIR}"
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "echo ${CXX}"
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "echo ${CXX_COMPILER}"
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "echo ${CMAKE_CXX_COMPILER}"
 docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "ls ${PROJECT_DIR}"
 docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "ls ${PROJECT_DIR}/.travis/"
 

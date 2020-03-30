@@ -39,7 +39,7 @@ matrix:
 
   - &opensuse-template
     name: "OpenSUSE Leap Docker"
-    env: CXX_COMPILER=/usr/bin/cpp CMAKE_CXX_COMPILER=/usr/bin/cpp
+    env: CXX=/usr/bin/cpp CXX_COMPILER=/usr/bin/cpp CMAKE_CXX_COMPILER=/usr/bin/cpp
     stage: test
     os: linux
     services:
