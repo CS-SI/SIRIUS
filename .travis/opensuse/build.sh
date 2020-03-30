@@ -9,4 +9,8 @@ if [[ ${TRAVIS_OS_NAME} != 'linux' ]]; then
 fi
 
 # docker script
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "echo ${PROJECT_DIR}"
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "ls ${PROJECT_DIR}"
+docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "ls ${PROJECT_DIR}/.travis/"
+
 docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:firsttry /bin/sh -c "${PROJECT_DIR}/.travis/opensuse/build_install_sirius.sh ${PROJECT_DIR} ${INSTALL_DIR} ${SIRIUS_VERSION} ${TRAVIS_COMMIT}" ${DEPLOY}
