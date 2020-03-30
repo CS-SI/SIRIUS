@@ -14,7 +14,6 @@ if [[ "x${SIRIUS_VERSION}" = "x" ]]; then
 fi
 export SIRIUS_VERSION
 
-# before script
-export PROJECT_DIR=${TRAVIS_BUILD_DIR}
-export INSTALL_DIR=${PROJECT_DIR}/install_directory
-mkdir -p ${INSTALL_DIR}
+# docker before script
+export PROJECT_DIR=/data
+export INSTALL_DIR=/opt/sirius
