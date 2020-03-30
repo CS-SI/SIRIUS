@@ -9,12 +9,4 @@ if [[ ${TRAVIS_OS_NAME} != 'linux' ]]; then
 fi
 
 # docker script
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "echo ${PROJECT_DIR}"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "echo ${CXX}"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "echo ${CXX_COMPILER}"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "echo ${CMAKE_CXX_COMPILER}"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "/usr/bin/cpp --version"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "ls ${PROJECT_DIR}"
-docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "ls ${PROJECT_DIR}/.travis/"
-
 docker run -v $TRAVIS_BUILD_DIR/:/data tfeuvrier/sirius.opensuse.leap:secondtry /bin/sh -c "${PROJECT_DIR}/.travis/opensuse/build_install_sirius.sh ${PROJECT_DIR} ${INSTALL_DIR} ${SIRIUS_VERSION} ${TRAVIS_COMMIT}" ${DEPLOY}

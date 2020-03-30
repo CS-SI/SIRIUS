@@ -10,20 +10,13 @@ fi
 # docker install
 docker pull tfeuvrier/sirius.opensuse.leap:secondtry
 
-#DOCKER_BUILD_DIR=${TRAVIS_BUILD_DIR}/build-sirius-dockerfile
-#echo "TRAVIS_BUILD_DIR : ${TRAVIS_BUILD_DIR}"
-#echo "DOCKER_BUILD_DIR : ${DOCKER_BUILD_DIR}"
-#mkdir -p ${DOCKER_BUILD_DIR}
-#cd ${DOCKER_BUILD_DIR}
+# -------------------------------------------------------------------------
+# Note: tfeuvrier/sirius.opensuse.leap docker image created with
+#       following command lines:
 
-# docker install
 #cat >Dockerfile <<EOF
 #FROM opensuse/leap
-
-# Install dependencies
 #RUN zypper -n install \
-#    vim \
-#    git \
 #    python \
 #    gcc \
 #    gcc-c++ \
@@ -32,3 +25,6 @@ docker pull tfeuvrier/sirius.opensuse.leap:secondtry
 #    python \
 #    cmake
 #EOF
+#docker build -t  sirius.opensuse.leap .
+#docker tag "name" tfeuvrier/sirius.opensuse.leap:secondtry
+#docker push tfeuvrier/sirius.opensuse.leap
