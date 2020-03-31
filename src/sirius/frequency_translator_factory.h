@@ -19,28 +19,30 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_FREQUENCY_TRANSLATOR_FACTORY_H_
+#define SIRIUS_FREQUENCY_TRANSLATOR_FACTORY_H_
 
-#include "sirius/image.h"
-#include "sirius/types.h"
+#include "sirius/i_frequency_translator.h"
+
+#include "sirius/image_decomposition/policies.h"
 
 namespace sirius {
-namespace tests {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+/**
+ * \brief Factory of IFrequencyTranslation
+ */
+class FrequencyTranslatorFactory {
+  public:
+    /**
+     * \brief IFrequencyTranslation factory
+     * \param image_decomposition cf. image_decomposition::Policies enum
+     * \return requested composition of IFrequencyTranslation | nullptr if not
+     * available
+     */
+    static IFrequencyTranslator::UPtr Create(
+          image_decomposition::Policies image_decomposition);
+};
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
-
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-sirius::Image CreateSquaredImage(const sirius::Size& size);
-
-}  // namespace tests
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_FREQUENCY_TRANSLATOR_FACTORY_H_

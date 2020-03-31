@@ -75,6 +75,7 @@ TEST_CASE("filter - sinc2 filter", "[sirius]") {
         REQUIRE_NOTHROW(complex_array = filter->Process(
                               large_size, std::move(complex_array)));
         REQUIRE_NOTHROW(filter->Process(large_size, std::move(complex_array)));
+
     }
     SECTION("sinc2 filter - image size is filter size") {
         auto size = filter->size();

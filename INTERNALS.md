@@ -102,16 +102,25 @@ The policy/strategy pattern is used to adapt the internal behavior of this class
 
 An algorithm implementation must comply with an implicit algorithm interface.
 
-E.g, processing algorithms (upsampling) should comply with:
+E.g, processing algorithms (upsampling, translation) should comply with:
 
 ```cpp
-class ProcessorStrategy  {
+class ProcessorStrategy {
   public:
     Image Process(const Image& image, const transformation::Parameters& transformation_parameters) const;
 };
 ```
 
 Interpolation algorithms should comply with:
+
+```cpp
+class Interpolator {
+  public:
+    Image Interpolate2D(const Image& image, const transformation::Parameters& parameters) const;
+};
+```
+
+Image decomposition algorithms should comply with:
 
 ```cpp
 template <typename Transformation, typename ImageProcessor,
@@ -121,16 +130,6 @@ class ImageDecompositionPolicy : private ImageProcessor, private ImageInterpolat
     Image DecomposeAndProcess(
           const Image& image,
           const typename Transformation::Parameters& parameters) const;
-};
-```
-
-Image decomposition algorithms should comply with:
-
-```cpp
-class ImageDecompositionPolicy {
-  public:
-    Image DecomposeAndZoom(int zoom, const Image& padded_image,
-                           const Filter& filter) const;
 };
 ```
 

@@ -19,28 +19,23 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_TRANSLATION_UTILS_H_
+#define SIRIUS_TRANSLATION_UTILS_H_
 
 #include "sirius/image.h"
-#include "sirius/types.h"
 
 namespace sirius {
-namespace tests {
+namespace translation {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+/**
+  \brief remove borders according to given shifts.
+  \param row_shift shift on y axis
+  \param col_shift shift on x axis
+  \return cropped image
+ */
+Image RemoveBorders(const Image& image, int row_shift, int col_shift);
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
-
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-sirius::Image CreateSquaredImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace translation
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_TRANSLATION_UTILS_H_

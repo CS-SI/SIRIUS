@@ -19,28 +19,25 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_TRANSLATION_INTERPOLATOR_H_
+#define SIRIUS_TRANSLATION_INTERPOLATOR_H_
 
 #include "sirius/image.h"
 #include "sirius/types.h"
 
+#include "sirius/translation/parameters.h"
+
 namespace sirius {
-namespace tests {
+namespace translation {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+class Interpolator {
+  public:
+    Interpolator() = default;
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
+    Image Interpolate2D(const Image& image, const Parameters& parameters) const;
+};
 
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-sirius::Image CreateSquaredImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace translation
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_TRANSLATION_INTERPOLATOR_H_

@@ -36,6 +36,8 @@ using Buffer = std::vector<double>;
  * \brief Data class that represents the size of an image
  */
 struct Size {
+    Size() = default;
+
     constexpr Size(int row, int col) noexcept : row(row), col(col) {}
 
     constexpr Size(const std::array<int, 2>& size) noexcept : row(size[0]),
