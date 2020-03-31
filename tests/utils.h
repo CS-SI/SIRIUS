@@ -30,14 +30,6 @@
 namespace sirius {
 namespace tests {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
-
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
-
 sirius::Image CreateDummyImage(const sirius::Size& size);
 
 sirius::Image CreateSquaredImage(const sirius::Size& size);
