@@ -13,12 +13,24 @@ appveyor AddMessage "Updating vcpkg knowledge base done"
 :: force release version of the dependencies with vcpkg triplet (VCPKG_BUILD_TYPE="release") to
 ::   * reduce compilation time (appveyor timeout is 1h)
 ::   * reduce disk space for dependencies cache
-copy "%APPVEYOR_BUILD_FOLDER%\.appveyor\vcpkg\triplets\%VCPKG_TRIPLET%.cmake" "%VCPKG_DIR%\triplets" || goto error
+copy "%APPVEYOR_BUILD_FOLDER%\.appveyor\vcpkg\triplets\%VCPKG_TRIPLET%-release.cmake" "%VCPKG_DIR%\triplets" || goto error
+
+:: install python3
+appveyor AddMessage "Installing PYTHON3 dependency..."
+vcpkg install python3:%VCPKG_TRIPLET% || goto error
+appveyor AddMessage "Installing PYTHON3 dependency done"
+
 :: install fftw3 and gdal packages
 :: force x64 build due to gdal package only available for x64 (libmysql only available for x64)
 appveyor AddMessage "Installing FFTW3 dependency..."
 vcpkg install fftw3:%VCPKG_TRIPLET% || goto error
 appveyor AddMessage "Installing FFTW3 dependency done"
+
+:: appveyor AddMessage "Installing SQLITE dependency..."
+:: vcpkg install sqlite3:%VCPKG_TRIPLET% || goto error
+
+appveyor AddMessage "Installing PROJ4 dependency..."
+vcpkg install proj4:%VCPKG_TRIPLET% || goto error
 
 appveyor AddMessage "Installing GDAL dependency..."
 vcpkg install gdal[core,mysql-libmariadb]:%VCPKG_TRIPLET% || goto error
