@@ -19,28 +19,24 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
-
-#include "sirius/image.h"
-#include "sirius/types.h"
+#ifndef SIRIUS_TRANSLATION_PARAMETERS_H_
+#define SIRIUS_TRANSLATION_PARAMETERS_H_
 
 namespace sirius {
-namespace tests {
+namespace translation {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+/**
+ * \brief Data class that represents translation parameters
+ */
+struct Parameters {
+    Parameters(float i_row_shift, float i_col_shift)
+        : row_shift(i_row_shift), col_shift(i_col_shift) {}
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
+    float row_shift;
+    float col_shift;
+};
 
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-sirius::Image CreateSquaredImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace resampling
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_TRANSLATION_PARAMETERS_H_

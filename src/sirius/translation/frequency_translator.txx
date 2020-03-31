@@ -19,28 +19,22 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
+#ifndef SIRIUS_FREQUENCY_TRANSLATOR_TXX_
+#define SIRIUS_FREQUENCY_TRANSLATOR_TXX_
 
-#include "sirius/image.h"
-#include "sirius/types.h"
+#include "sirius/translation/frequency_translator.h"
 
 namespace sirius {
-namespace tests {
+namespace translation {
 
-// filter paths
-static constexpr char kDiracFilterPath[] = "./filters/dirac_filter.tif";
-static constexpr char kSincZoom2FilterPath[] =
-      "./filters/sinc_zoom2_filter.tif";
+template <template <class, class, class> class ImageDecompositionPolicy>
+Image FrequencyTranslator<ImageDecompositionPolicy>::Compute(
+      const Image& input, const Padding&,
+      const Parameters& translation_parameters) const {
+    return this->DecomposeAndProcess(input, translation_parameters);
+}
 
-// image paths
-static constexpr char kLenaImagePath[] = "./input/lena.jpg";
-
-sirius::Image CreateDummyImage(const sirius::Size& size);
-
-sirius::Image CreateSquaredImage(const sirius::Size& size);
-
-}  // namespace tests
+}  // namespace translation
 }  // namespace sirius
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+#endif  // SIRIUS_FREQUENCY_TRANSLATOR_TXX_

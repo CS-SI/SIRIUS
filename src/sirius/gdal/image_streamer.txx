@@ -64,8 +64,9 @@ void ImageStreamer<Transformer, InputStream, OutputStream>::RunMonothreadStream(
             break;
         }
 
-        block.buffer = transformer.Compute(block.buffer,
-                                           block.padding, parameters);
+        block.buffer = std::move(
+              transformer.Compute(block.buffer, block.padding, parameters));
+
         std::error_code write_ec;
         output_stream_.Write(std::move(block), write_ec);
         if (write_ec) {
@@ -125,8 +126,8 @@ void ImageStreamer<Transformer, InputStream, OutputStream>::
                     break;
                 }
 
-                block.buffer = transformer.Compute(
-                      block.buffer, block.padding, parameters);
+                block.buffer = std::move(transformer.Compute(
+                      block.buffer, block.padding, parameters));
 
                 std::error_code push_output_ec;
                 output_queue.Push(std::move(block), push_output_ec);

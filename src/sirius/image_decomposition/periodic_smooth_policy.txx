@@ -164,7 +164,7 @@ Image PeriodicSmoothPolicy<Transformation, ImageProcessor, ImageInterpolator>::
     auto interpolated_smooth_image =
           this->Interpolate2D(smooth_part_image, parameters);
 
-    // 10) normalize periodic_part_image
+    // 11) normalize periodic_part_image
     LOG("periodic_smooth_decomposition", trace,
         "normalize periodic image part");
     std::for_each(

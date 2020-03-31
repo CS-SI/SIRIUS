@@ -100,6 +100,10 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/frequency_resampler_factory.h
     sirius/frequency_resampler_factory.cc
 
+    sirius/i_frequency_translator.h
+    sirius/frequency_translator_factory.h
+    sirius/frequency_translator_factory.cc
+
     # image_decomposition
     sirius/image_decomposition/periodic_smooth_policy.h
     sirius/image_decomposition/periodic_smooth_policy.txx
@@ -117,6 +121,17 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/resampling/upsampling/periodization_upsampling.cc
     sirius/resampling/upsampling/zero_padding_upsampling.h
     sirius/resampling/upsampling/zero_padding_upsampling.cc
+
+    # translation
+    sirius/translation/frequency_translator.h
+    sirius/translation/frequency_translator.txx
+    sirius/translation/interpolator.h
+    sirius/translation/interpolator.cc
+    sirius/translation/parameters.h
+    sirius/translation/processor.h
+    sirius/translation/processor.cc
+    sirius/translation/utils.h
+    sirius/translation/utils.cc
 
     # fftw
     sirius/fftw/exception.h
@@ -222,7 +237,6 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
         sirius/gdal/error_code.cc
         sirius/gdal/exception.h
         sirius/gdal/exception.cc
-
         sirius/gdal/image_streamer.h
         sirius/gdal/image_streamer.txx
         sirius/gdal/i_input_stream.h
@@ -231,7 +245,6 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
         sirius/gdal/input_stream.cc
         sirius/gdal/output_stream.h
         sirius/gdal/output_stream.cc
-
         sirius/gdal/stream_block.h
         sirius/gdal/types.h
         sirius/gdal/wrapper.h
@@ -241,7 +254,13 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
         sirius/gdal/resampling/input_stream.h
         sirius/gdal/resampling/input_stream.cc
         sirius/gdal/resampling/output_stream.h
-        sirius/gdal/resampling/output_stream.cc)
+        sirius/gdal/resampling/output_stream.cc
+
+        # gdal/translation
+        sirius/gdal/translation/input_stream.h
+        sirius/gdal/translation/input_stream.cc
+        sirius/gdal/translation/output_stream.h
+        sirius/gdal/translation/output_stream.cc)
     set_target_properties(libsirius-gdal-static PROPERTIES FOLDER lib)
     target_link_libraries(libsirius-gdal-static PUBLIC gdal libsirius-static)
 endif ()

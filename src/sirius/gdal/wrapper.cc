@@ -178,5 +178,30 @@ std::vector<double> ComputeResampledGeoTransform(GDALDataset* dataset,
     return geo_transform;
 }
 
+GeoReference ComputeShiftedGeoReference(const std::string& input_path,
+                                        float row_shift, float col_shift) {
+    auto dataset = sirius::gdal::LoadDataset(input_path);
+
+    return {ComputeShiftedGeoTransform(dataset.get(), row_shift, col_shift),
+            dataset->GetProjectionRef()};
+}
+
+std::vector<double> ComputeShiftedGeoTransform(GDALDataset* dataset,
+                                               float row_shift,
+                                               float col_shift) {
+    std::vector<double> geo_transform(6);
+    CPLErr err = dataset->GetGeoTransform(geo_transform.data());
+    if (err) {
+        LOG("gdal", debug,
+            "GDAL error: {} - could not read input geo transform");
+        return geo_transform;
+    }
+
+    geo_transform[0] += row_shift * geo_transform[1];
+    geo_transform[3] += col_shift * geo_transform[5];
+
+    return geo_transform;
+}
+
 }  // namespace gdal
 }  // namespace sirius
