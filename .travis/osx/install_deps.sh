@@ -13,7 +13,7 @@ fi
 # the following line should resolve the error:
 #   Possible conflicting files are:
 # /usr/local/include/c++ -> /usr/local/Caskroom/oclint/0.13.1,17.4.0/oclint-0.13.1/include/c++
-brew cask uninstall oclint
+#brew cask uninstall oclint
 
 brew update
 
@@ -22,3 +22,6 @@ if brew outdated --quiet | grep -qx gdal; then brew upgrade gdal || true; fi
 
 # install fftw
 brew install fftw
+
+# install python
+brew install python

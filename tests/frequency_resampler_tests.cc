@@ -64,6 +64,8 @@ TEST_CASE("frequency resampler - factory", "[sirius]") {
 TEST_CASE(
       "frequency resampler - regular decomposition - zero padding upsampling",
       "[sirius]") {
+    LOG_SET_LEVEL(trace);
+
     auto zoom_ratio = sirius::ZoomRatio::Create(2, 1);
 
     // test inputs
@@ -156,6 +158,8 @@ TEST_CASE(
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
+
+        sirius::gdal::Save(output, "./output/lena_sinc_filter.tif");
     }
 }
 
@@ -252,6 +256,9 @@ TEST_CASE(
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
+
+        sirius::gdal::Save(output,
+                                "./output/lena_periodization_sinc_filter.tif");
     }
 }
 
@@ -291,6 +298,9 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding upsampling",
 
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
+
+        sirius::gdal::Save(output,
+                                "./output/lena_periodic_smooth_no_filter.tif");
     }
 }
 

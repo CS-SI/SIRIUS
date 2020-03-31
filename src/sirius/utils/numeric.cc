@@ -93,37 +93,37 @@ void IFFTShift2DUncentered(const double* data, const Size& size,
     int begin = p4_shifted.x + p4_shifted.y * size.col;
     int begin_src = p4.x + p4.y * size.col;
     for (int i = 0; i < block_4.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_4.col * sizeof(double));
-        begin += size.col;
+        std::copy(data + begin_src, data + (begin_src + block_4.col),
+                  shifted_data + begin);
         begin_src += size.col;
+        begin += size.col;
     }
 
     begin = p3_shifted.x + p3_shifted.y * size.col;
     begin_src = p3.x + p3.y * size.col;
     for (int i = 0; i < block_3.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_3.col * sizeof(double));
-        begin += size.col;
+        std::copy(data + begin_src, data + (begin_src + block_3.col),
+                  shifted_data + begin);
         begin_src += size.col;
+        begin += size.col;
     }
 
     begin = p2_shifted.x + p2_shifted.y * size.col;
     begin_src = p2.x + p2.y * size.col;
     for (int i = 0; i < block_2.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_2.col * sizeof(double));
-        begin += size.col;
+        std::copy(data + begin_src, data + (begin_src + block_2.col),
+                  shifted_data + begin);
         begin_src += size.col;
+        begin += size.col;
     }
 
     begin = p1_shifted.x + p1_shifted.y * size.col;
     begin_src = p1.x + p1.y * size.col;
     for (int i = 0; i < block_1.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_1.col * sizeof(double));
-        begin += size.col;
+        std::copy(data + begin_src, data + (begin_src + block_1.col),
+                  shifted_data + begin);
         begin_src += size.col;
+        begin += size.col;
     }
 }
 
@@ -147,8 +147,8 @@ void FFTShift2DUncentered(const double* data, const Size& size,
     int begin = p4_shifted.x + p4_shifted.y * size.col;
     int begin_src = p4.x + p4.y * size.col;
     for (int i = 0; i < block_4.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_4.col * sizeof(double));
+        std::copy(data + begin_src, data + (begin_src + block_4.col),
+                  shifted_data + begin);
         begin += size.col;
         begin_src += size.col;
     }
@@ -156,8 +156,8 @@ void FFTShift2DUncentered(const double* data, const Size& size,
     begin = p3_shifted.x + p3_shifted.y * size.col;
     begin_src = p3.x + p3.y * size.col;
     for (int i = 0; i < block_3.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_3.col * sizeof(double));
+        std::copy(data + begin_src, data + (begin_src + block_3.col),
+                  shifted_data + begin);
         begin += size.col;
         begin_src += size.col;
     }
@@ -165,8 +165,8 @@ void FFTShift2DUncentered(const double* data, const Size& size,
     begin = p2_shifted.x + p2_shifted.y * size.col;
     begin_src = p2.x + p2.y * size.col;
     for (int i = 0; i < block_2.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_2.col * sizeof(double));
+        std::copy(data + begin_src, data + (begin_src + block_2.col),
+                  shifted_data + begin);
         begin += size.col;
         begin_src += size.col;
     }
@@ -174,8 +174,8 @@ void FFTShift2DUncentered(const double* data, const Size& size,
     begin = p1_shifted.x + p1_shifted.y * size.col;
     begin_src = p1.x + p1.y * size.col;
     for (int i = 0; i < block_1.row; ++i) {
-        memcpy(&shifted_data[begin], &data[begin_src],
-               block_1.col * sizeof(double));
+        std::copy(data + begin_src, data + (begin_src + block_1.col),
+                  shifted_data + begin);
         begin += size.col;
         begin_src += size.col;
     }

@@ -76,6 +76,19 @@ GeoReference ComputeResampledGeoReference(const std::string& input_path,
 std::vector<double> ComputeResampledGeoTransform(GDALDataset* dataset,
                                                  const ZoomRatio& zoom_ratio);
 
+/**
+ * \brief Compute new origin according to translation paramaters
+ * \param row_shift shift in pixels on x axis
+ * \param col_shift shift in pixels on y axis
+ * \return new geo transform
+ */
+std::vector<double> ComputeShiftedGeoTransform(GDALDataset* dataset,
+                                               float row_shift,
+                                               float col_shift);
+
+GeoReference ComputeShiftedGeoReference(const std::string& input_path,
+                                        float row_shift, float col_shift);
+
 }  // namespace gdal
 }  // namespace sirius
 

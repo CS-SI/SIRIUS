@@ -168,24 +168,22 @@ void Image::CreateEvenImage() {
     }
 
     Image output_image(new_size);
-    int begin_src = 0;
-    int begin_dst = 0;
+    auto src_it = data.begin();
+    auto dst_it = output_image.data.begin();
     for (int i = 0; i < size.row; ++i) {
-        memcpy(&output_image.data[begin_dst], &data[begin_src],
-               size.col * sizeof(double));
-        begin_src += size.col;
-        begin_dst += size.col;
+        std::copy(src_it, src_it + size.col, dst_it);
+        src_it += size.col;
+        dst_it += size.col;
         if (odd_col) {
-            output_image.data[begin_dst] = output_image.data[begin_dst - 1];
-            begin_dst++;
+            *dst_it = *(dst_it - 1);
+            dst_it++;
         }
     }
 
     int x_size = size.col;
     if (odd_col) x_size++;
     if (odd_row) {
-        memcpy(&output_image.data[begin_dst],
-               &output_image.data[begin_dst - x_size], x_size * sizeof(double));
+        std::copy(dst_it - x_size, dst_it, dst_it);
     }
 
     data = output_image.data;
