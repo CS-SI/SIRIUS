@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 CS - Systemes d'Information (CS-SI)
+ * Copyright (C) 2020 CS - Systemes d'Information (CS-SI)
  *
  * This file is part of Sirius
  *
@@ -19,22 +19,18 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIRIUS_TESTS_UTILS_H_
-#define SIRIUS_TESTS_UTILS_H_
-
-#include "sirius/image.h"
-#include "sirius/types.h"
-
-#include "test_data.h"
-
 namespace sirius {
 namespace tests {
 
-sirius::Image CreateDummyImage(const sirius::Size& size);
+// filter paths
+static constexpr char kDiracFilterPath[] = "@CMAKE_SOURCE_DIR@/data/filters/dirac_filter.tif";
+static constexpr char kSincZoom2FilterPath[] = "@CMAKE_SOURCE_DIR@/data/filters/sinc_zoom2_filter.tif";
 
-sirius::Image CreateSquaredImage(const sirius::Size& size);
+// image paths
+static constexpr char kLenaImagePath[] = "@CMAKE_SOURCE_DIR@/data//input/lena.jpg";
 
-}  // namespace tests
-}  // namespace sirius
+// output path
+static constexpr char kOutputDirectoryPath[] = "@CMAKE_BINARY_DIR@/Testing/Temporary/output";
 
-#endif  // SIRIUS_TESTS_UTILS_H_
+}
+}
