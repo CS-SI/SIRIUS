@@ -159,7 +159,7 @@ TEST_CASE(
         LOG("tests", debug, "output size: {}, {}", output.size.row,
             output.size.col);
 
-        sirius::gdal::Save(output, "./output/lena_sinc_filter.tif");
+        sirius::gdal::Save(output, sirius::tests::kOutputDirectoryPath + " lena_sinc_filter.tif");
     }
 }
 
@@ -258,7 +258,7 @@ TEST_CASE(
             output.size.col);
 
         sirius::gdal::Save(output,
-                                "./output/lena_periodization_sinc_filter.tif");
+                                sirius::tests::kOutputDirectoryPath + " lena_periodization_sinc_filter.tif");
     }
 }
 
@@ -300,7 +300,7 @@ TEST_CASE("frequency resampler - periodic smooth - zero padding upsampling",
             output.size.col);
 
         sirius::gdal::Save(output,
-                                "./output/lena_periodic_smooth_no_filter.tif");
+                                sirius::tests::kOutputDirectoryPath + " lena_periodic_smooth_no_filter.tif");
     }
 }
 

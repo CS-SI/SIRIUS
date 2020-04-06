@@ -19,6 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <string>
+
 namespace sirius {
 namespace tests {
 
@@ -34,7 +36,7 @@ static constexpr char kDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/door.tif
 static constexpr char kHalfDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/half-door.tif";
 
 // output path
-static constexpr char kOutputDirectoryPath[] = "@CMAKE_BINARY_DIR@/Testing/Temporary/output";
+static const std::string kOutputDirectoryPath = "@CMAKE_BINARY_DIR@/Testing/Temporary/";
 
 }
 }

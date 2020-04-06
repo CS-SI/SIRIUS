@@ -19,6 +19,8 @@
  * along with Sirius.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <string>
+
 #include <catch/catch.hpp>
 
 #include <thread>
@@ -48,10 +50,10 @@
 TEST_CASE("image streamer - resampling", "[sirius]") {
     LOG_SET_LEVEL(info);
 
-    const char kStreamResamplingInputFile[] =
-          "./stream_resampling_input.tif";
-    const char kStreamResamplingOutputFile[] =
-          "./stream_resampling_output.tif";
+    const std::string kStreamResamplingInputFile =
+          sirius::tests::kOutputDirectoryPath + "stream_resampling_input.tif";
+    const std::string kStreamResamplingOutputFile =
+          sirius::tests::kOutputDirectoryPath + "stream_resampling_output.tif";
     auto dummy_image = sirius::tests::CreateDummyImage({1024, 768});
     sirius::gdal::Save(dummy_image, kStreamResamplingInputFile);
 
@@ -77,10 +79,10 @@ TEST_CASE("image streamer - resampling", "[sirius]") {
 
 TEST_CASE("image streamer - translation", "[sirius]") {
     LOG_SET_LEVEL(info);
-    const char kStreamTranslationInputFile[] =
-          "./output/stream_translation_input.tif";
-    const char kStreamTranslationOutputFile[] =
-          "./output/stream_translation_output.tif";
+    const std::string kStreamTranslationInputFile =
+          sirius::tests::kOutputDirectoryPath + "stream_translation_input.tif";
+    const std::string kStreamTranslationOutputFile =
+          sirius::tests::kOutputDirectoryPath + "stream_translation_output.tif";
     auto dummy_image = sirius::tests::CreateSquaredImage({2048, 1536});
     sirius::gdal::Save(dummy_image, kStreamTranslationInputFile);
 
