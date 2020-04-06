@@ -27,7 +27,11 @@ static constexpr char kDiracFilterPath[] = "@CMAKE_SOURCE_DIR@/data/filters/dira
 static constexpr char kSincZoom2FilterPath[] = "@CMAKE_SOURCE_DIR@/data/filters/sinc_zoom2_filter.tif";
 
 // image paths
-static constexpr char kLenaImagePath[] = "@CMAKE_SOURCE_DIR@/data//input/lena.jpg";
+static constexpr char kLenaImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/lena.jpg";
+static constexpr char kLena255x255ImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/lena-255x255.tif";
+static constexpr char kTriangleImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/triangle.tif";
+static constexpr char kDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/door.tif";
+static constexpr char kHalfDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/half-door.tif";
 
 // output path
 static constexpr char kOutputDirectoryPath[] = "@CMAKE_BINARY_DIR@/Testing/Temporary/output";

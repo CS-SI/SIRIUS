@@ -63,11 +63,11 @@ TEST_CASE("functional tests", "[sirius]") {
     auto zoom_ratio_210_120 = sirius::ZoomRatio::Create(210, 120);
 
     auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
-    auto lena_255_image = sirius::gdal::Load("./input/lena-255x255.tif");
-    auto disp0_image = sirius::gdal::Load("./input/disparity.png");
-    auto triangle_image = sirius::gdal::Load("./input/triangle.tif");
-    auto door_image = sirius::gdal::Load("./input/door.tif");
-    auto half_door_image = sirius::gdal::Load("./input/half-door.tif");
+    auto lena_255_image = sirius::gdal::Load(sirius::tests::kLena255x255ImagePath);
+    //auto disp0_image = sirius::gdal::Load("./input/disparity.png");
+    auto triangle_image = sirius::gdal::Load(sirius::tests::kTriangleImagePath);
+    auto door_image = sirius::gdal::Load(sirius::tests::kDoorImagePath);
+    auto half_door_image = sirius::gdal::Load(sirius::tests::kHalfDoorImagePath);
 
     auto dirac_2_1_filter = sirius::Filter::Create(
           sirius::gdal::Load(sirius::tests::kDiracFilterPath),
