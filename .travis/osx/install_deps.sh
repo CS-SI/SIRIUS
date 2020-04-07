@@ -24,4 +24,4 @@ if brew outdated --quiet | grep -qx gdal; then brew upgrade gdal || true; fi
 brew install fftw
 
 # install python
-brew install python
+if brew outdated --quiet | grep -qx python; then brew upgrade python || true; fi
