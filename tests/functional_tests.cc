@@ -61,7 +61,7 @@ TEST_CASE("functional tests", "[sirius]") {
     auto zoom_ratio_3_1 = sirius::ZoomRatio::Create(3, 1);
     auto zoom_ratio_15_1 = sirius::ZoomRatio::Create(15, 1);
     auto zoom_ratio_7_4 = sirius::ZoomRatio::Create(7, 4);
-    auto zoom_ratio_1_3 = sirius::ZoomRatio::Create(1, 3);
+    //auto zoom_ratio_1_3 = sirius::ZoomRatio::Create(1, 3);
     auto zoom_ratio_210_120 = sirius::ZoomRatio::Create(210, 120);
 
     auto lena_image = sirius::gdal::Load(sirius::tests::kLenaImagePath);
