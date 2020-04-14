@@ -143,6 +143,30 @@ void Save(const Image& image, const std::string& output_filepath,
     }
 }
 
+void WriteToDataset(GDALDataset* dataset, int row_idx, int col_idx, int height,
+                    int width, const double* data) {
+    CPLErr err = dataset->GetRasterBand(1)->RasterIO(
+          GF_Write, col_idx, row_idx, width, height, const_cast<double*>(data),
+          width, height, GDT_Float64, 0, 0, NULL);
+    if (err) {
+        LOG("output_stream", error,
+            "GDAL error: {} - could not write to the given dataset", err);
+        return;
+    }
+}
+
+GeoReference GetGeoReference(GDALDataset* dataset) {
+    std::vector<double> geo_transform(6);
+    CPLErr err = dataset->GetGeoTransform(geo_transform.data());
+    if (err) {
+        LOG("gdal", debug,
+            "GDAL error: {} - could not read input geo transform", err);
+        return {};
+    }
+
+    return {geo_transform, dataset->GetProjectionRef()};
+}
+
 GeoReference ComputeResampledGeoReference(const std::string& input_path,
                                           const ZoomRatio& zoom_ratio) {
     auto input_dataset = LoadDataset(input_path);

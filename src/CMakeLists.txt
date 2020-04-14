@@ -104,6 +104,10 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/frequency_translator_factory.h
     sirius/frequency_translator_factory.cc
 
+    sirius/i_frequency_rotator.h
+    sirius/frequency_rotator_factory.h
+    sirius/frequency_rotator_factory.cc
+
     # image_decomposition
     sirius/image_decomposition/periodic_smooth_policy.h
     sirius/image_decomposition/periodic_smooth_policy.txx
@@ -132,6 +136,16 @@ add_library(libsirius-objects OBJECT EXCLUDE_FROM_ALL
     sirius/translation/processor.cc
     sirius/translation/utils.h
     sirius/translation/utils.cc
+
+    # rotation
+    sirius/rotation/frequency_rotator.h
+    sirius/rotation/interpolator.h
+    sirius/rotation/interpolator.cc
+    sirius/rotation/parameters.h
+    sirius/rotation/processor.cc
+    sirius/rotation/processor.h
+    sirius/rotation/utils.cc
+    sirius/rotation/utils.h
 
     # fftw
     sirius/fftw/exception.h
@@ -260,7 +274,14 @@ if (ENABLE_SIRIUS_EXECUTABLE OR BUILD_TESTING)
         sirius/gdal/translation/input_stream.h
         sirius/gdal/translation/input_stream.cc
         sirius/gdal/translation/output_stream.h
-        sirius/gdal/translation/output_stream.cc)
+        sirius/gdal/translation/output_stream.cc
+
+        # gdal/rotation
+        sirius/gdal/rotation/input_stream.h
+        sirius/gdal/rotation/input_stream.cc
+        sirius/gdal/rotation/output_stream.h
+        sirius/gdal/rotation/output_stream.cc)
+
     set_target_properties(libsirius-gdal-static PROPERTIES FOLDER lib)
     target_link_libraries(libsirius-gdal-static PUBLIC gdal libsirius-static)
 endif ()
