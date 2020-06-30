@@ -1,14 +1,13 @@
 #! /bin/bash
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 PROJECT_DIR  TEMPORARY_WORKING_DIR"
+# Build the sirius image docker and save it (.tar)
+if [ "$#" -ne 1 ]; then
+    echo " Build the sirius image docker and save it (.tar)"
+    echo " Usage: $0 PROJECT_DIR"
     exit 1
 fi
 
 LOCAL_PROJECT_DIR=$1
 LOCAL_PROJECT_DIR="$(readlink -f ${LOCAL_PROJECT_DIR})"
-
-TEMPORARY_WORKING_DIR=$2
-TEMPORARY_WORKING_DIR="$(readlink -f ${TEMPORARY_WORKING_DIR})"
 
 DOCKER_IMAGENAME="sirius"
 # TODO: SIRIUS_VERSION ?
@@ -22,7 +21,6 @@ DOCKER_VAR_SIRIUS_VERSION="0.2.0"
 
 echo " "
 echo " * PROJECT_DIR=${LOCAL_PROJECT_DIR}"
-echo " * TEMPORARY_WORKING_DIR=${TEMPORARY_WORKING_DIR}"
 echo " "
 
 DOCKER_VAR_INSTALL_DIR="/opt/sirius"
@@ -35,10 +33,9 @@ echo " * DOCKER_VAR_SIRIUS_REVISION_COMMIT=${DOCKER_VAR_SIRIUS_REVISION_COMMIT}"
 echo " * DOCKER_VAR_INSTALL_DIR=${DOCKER_VAR_INSTALL_DIR}"
 echo " * DOCKER_VAR_BUILD_DIR=${DOCKER_VAR_BUILD_DIR}"
 
-[ ! -d ${TEMPORARY_WORKING_DIR} ] && mkdir -p ${TEMPORARY_WORKING_DIR};
-cd ${TEMPORARY_WORKING_DIR}
-
-cat >${TEMPORARY_WORKING_DIR}/Dockerfile <<EOF
+# Build docker
+# ----------------------
+sudo docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy --build-arg no_proxy=$no_proxy  -t ${DOCKER_IMAGENAME}:latest  -t ${DOCKER_IMAGENAME}:${DOCKER_VAR_SIRIUS_VERSION} -f- . <<EOF
 FROM ubuntu:18.04
 LABEL maintainer="CS SI"
 
@@ -80,18 +77,20 @@ WORKDIR ${DOCKER_VAR_BUILD_DIR}
 COPY . ${DOCKER_VAR_BUILD_DIR}
 
 # Usage: ./build_install_sirius.sh PROJECT_DIR INSTALL_DIR SIRIUS_VERSION SIRIUS_REVISION_COMMIT
-RUN ${DOCKER_VAR_BUILD_DIR}/build/build_install_sirius.sh  \\
+RUN ./build/build_install_sirius.sh  \\
             ${DOCKER_VAR_BUILD_DIR} \\
             ${DOCKER_VAR_INSTALL_DIR} \\
             "${DOCKER_VAR_SIRIUS_VERSION}" \\
             "${DOCKER_VAR_SIRIUS_REVISION_COMMIT}"
 #        && rm -rf ${DOCKER_VAR_BUILD_DIR}
 
+
 ENV LD_LIBRARY_PATH=${DOCKER_VAR_INSTALL_DIR}/lib:\$LD_LIBRARY_PATH
 ENV PATH=${DOCKER_VAR_INSTALL_DIR}/bin:\$PATH
 
 EOF
 
-# Build docker
-sudo docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy --build-arg no_proxy=$no_proxy  -t ${DOCKER_IMAGENAME}:latest  -t ${DOCKER_IMAGENAME}:${DOCKER_VAR_SIRIUS_VERSION} -f ${TEMPORARY_WORKING_DIR}/Dockerfile ${LOCAL_PROJECT_DIR}
-sudo docker save ${DOCKER_IMAGENAME}:${DOCKER_VAR_SIRIUS_VERSION} -o ${TEMPORARY_WORKING_DIR}/${DOCKER_IMAGENAME}_${DOCKER_VAR_SIRIUS_VERSION}.tar
+# Save docker image
+# ----------------------
+echo "Save the image docker ${DOCKER_IMAGENAME}_${DOCKER_VAR_SIRIUS_VERSION}.tar..." \
+  && sudo docker save ${DOCKER_IMAGENAME}:${DOCKER_VAR_SIRIUS_VERSION} -o ${DOCKER_IMAGENAME}_${DOCKER_VAR_SIRIUS_VERSION}.tar
