@@ -9,6 +9,7 @@ fi
 LOCAL_PROJECT_DIR=$1
 LOCAL_PROJECT_DIR="$(readlink -f ${LOCAL_PROJECT_DIR})"
 
+CURRENT_DIR=$(pwd)
 DOCKER_IMAGENAME="sirius"
 # TODO: SIRIUS_VERSION ?
 cd ${LOCAL_PROJECT_DIR}
@@ -92,5 +93,6 @@ EOF
 
 # Save docker image
 # ----------------------
+cd ${CURRENT_DIR}
 echo "Save the image docker ${DOCKER_IMAGENAME}_${DOCKER_VAR_SIRIUS_VERSION}.tar..." \
   && sudo docker save ${DOCKER_IMAGENAME}:${DOCKER_VAR_SIRIUS_VERSION} -o ${DOCKER_IMAGENAME}_${DOCKER_VAR_SIRIUS_VERSION}.tar
