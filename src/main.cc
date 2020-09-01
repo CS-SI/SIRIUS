@@ -234,6 +234,14 @@ void StreamTransformation(const CliOptions& options,
           std::max(std::min(options.stream.parallel_workers,
                             std::thread::hardware_concurrency()),
                    1u);
+    LOG("sirius", debug,
+                   "parallel-workers value {}.", options.stream.parallel_workers);
+    if (options.stream.parallel_workers > std::thread::hardware_concurrency()) {
+        LOG("sirius", warn,
+                   "The parallel-workers value {} is greater than the max authorized value {}. Value set to {}.",
+                    options.stream.parallel_workers, std::thread::hardware_concurrency(),
+                    max_parallel_workers);
+    }
 
     sirius::gdal::ImageStreamer<Transformer, InputStream, OutputStream>
           streamer(options.input_image_path, options.output_image_path,
@@ -324,7 +332,7 @@ CliOptions GetCliOptions(int argc, char* argv[]) {
         ("parallel-workers", stream_parallel_workers_desc.str(),
          cxxopts::value(cli_options.stream.parallel_workers)
             ->default_value("1")
-            ->implicit_value("1"));
+            ->implicit_value(max_threads_string));
 
     options.add_options("positional arguments")
         ("i,input", "Input image", cxxopts::value(cli_options.input_image_path))
