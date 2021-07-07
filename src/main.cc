@@ -32,6 +32,7 @@
 
 #include "sirius/exception.h"
 #include "sirius/frequency_resampler_factory.h"
+#include "sirius/frequency_rotator_factory.h"
 #include "sirius/frequency_translator_factory.h"
 #include "sirius/sirius.h"
 
@@ -39,6 +40,9 @@
 
 #include "sirius/gdal/resampling/input_stream.h"
 #include "sirius/gdal/resampling/output_stream.h"
+
+#include "sirius/gdal/rotation/input_stream.h"
+#include "sirius/gdal/rotation/output_stream.h"
 
 #include "sirius/gdal/translation/input_stream.h"
 #include "sirius/gdal/translation/output_stream.h"
@@ -62,6 +66,11 @@ struct CliOptions {
         float row = 0.0;
         float col = 0.0;
     };
+
+    struct Rotation {
+        int angle = 0;
+    };
+
     struct Stream {
         sirius::Size block_size = {256, 256};
         bool no_block_resizing = false;
@@ -79,6 +88,7 @@ struct CliOptions {
     Resampling resampling;
     Filter filter;
     Translation translation;
+    Rotation rotation;
     Stream stream;
 
     // status
@@ -94,6 +104,7 @@ void StreamTransformation(const CliOptions& cli_options,
 CliOptions GetCliOptions(int argc, char* argv[]);
 int Resample(const CliOptions& options);
 int Translate(const CliOptions& options);
+int Rotate(const CliOptions& options);
 
 int main(int argc, char* argv[]) {
     CliOptions options = GetCliOptions(argc, argv);
@@ -118,6 +129,10 @@ int main(int argc, char* argv[]) {
             return Translate(options);
         }
 
+        if (options.rotation.angle != 0) {
+            return Rotate(options);
+        }
+
         return Resample(options);
 
     } catch (const std::exception& e) {
@@ -125,6 +140,68 @@ int main(int argc, char* argv[]) {
                   << e.what() << std::endl;
         return 1;
     }
+}
+
+int Rotate(const CliOptions& options) {
+    LOG("sirius", info, "rotation mode");
+    if (options.rotation.angle < -180 || options.rotation.angle > 180) {
+        LOG("sirius", error, "Rotation angle must be between [-180, 180]");
+        throw sirius::Exception("Rotation angle out of the [-180, 180] range");
+    }
+
+    if (options.rotation.angle == 0) {
+        LOG("sirius", warn,
+            "Rotation angle is 0. Output file will not be created");
+        return 0;
+    }
+
+    if (options.stream.block_size.col != 256 ||
+        options.stream.block_size.row != 256) {
+        LOG("sirius", warn, "Block options are not available in rotation mode");
+        const_cast<CliOptions&>(options).stream.block_size.col = 256;
+        const_cast<CliOptions&>(options).stream.block_size.row = 256;
+    }
+
+    sirius::image_decomposition::Policies image_decomposition_policy =
+          sirius::image_decomposition::Policies::kPeriodicSmooth;
+
+    if (options.no_image_decomposition) {
+        LOG("sirius", info, "image decomposition: none");
+        image_decomposition_policy =
+              sirius::image_decomposition::Policies::kRegular;
+    } else {
+        LOG("sirius", info, "image decomposition: periodic plus smooth");
+    }
+
+    auto frequency_rotator =
+          sirius::FrequencyRotatorFactory::Create(image_decomposition_policy);
+
+    int angle = options.rotation.angle;
+    if (options.rotation.angle > 90 || options.rotation.angle < -90) {
+        int angle1 =
+              (options.rotation.angle / std::abs(options.rotation.angle)) * 90;
+        int angle2 =
+              (options.rotation.angle / std::abs(options.rotation.angle)) *
+              (std::abs(options.rotation.angle) - 90);
+
+        std::string real_output_image_path = options.output_image_path;
+        const_cast<CliOptions&>(options).output_image_path = "/tmp/rot_tmp.tif";
+        StreamTransformation<sirius::IFrequencyRotator,
+                             sirius::gdal::rotation::InputStream,
+                             sirius::gdal::rotation::OutputStream>(
+              options, *frequency_rotator, {angle1});
+        const_cast<CliOptions&>(options).input_image_path = "/tmp/rot_tmp.tif";
+        const_cast<CliOptions&>(options).output_image_path =
+              real_output_image_path;
+        angle = angle2;
+    }
+
+    StreamTransformation<sirius::IFrequencyRotator,
+                         sirius::gdal::rotation::InputStream,
+                         sirius::gdal::rotation::OutputStream>(
+          options, *frequency_rotator, {angle});
+
+    return 0;
 }
 
 int Translate(const CliOptions& options) {
@@ -256,7 +333,7 @@ CliOptions GetCliOptions(int argc, char* argv[]) {
     description
           << "Sirius " << sirius::kVersion << " (" << sirius::kGitCommit << ")"
           << std::endl
-          << "Standalone tool to resample, translate and filter images in the "
+          << "Standalone tool to resample, translate, rotate and filter images in the "
              "frequency domain"
           << std::endl;
     cxxopts::Options options(argv[0], description.str());
@@ -321,6 +398,10 @@ CliOptions GetCliOptions(int argc, char* argv[]) {
         ("trans-col", "Translation on x axis",
          cxxopts::value(cli_options.translation.col)->default_value("0.0"));
 
+    options.add_options("rotation")
+        ("rot-angle", "Rotation angle applied on both axis",
+         cxxopts::value(cli_options.rotation.angle)->default_value("0"));
+
     options.add_options("streaming")
         ("block-width", "Initial width of a stream block",
          cxxopts::value(cli_options.stream.block_size.col)->default_value("256"))
@@ -342,7 +423,7 @@ CliOptions GetCliOptions(int argc, char* argv[]) {
     options.parse_positional({"input", "output"});
 
     cli_options.help_message = options.help(
-          {"", "resampling", "translation", "filter", "streaming"});
+          {"", "resampling", "translation", "rotation", "filter", "streaming"});
 
     try {
         auto result = options.parse(argc, argv);

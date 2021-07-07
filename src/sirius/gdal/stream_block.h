@@ -41,14 +41,20 @@ struct StreamBlock {
      * \param i_row_idx row index of the top left corner of the image
      * \param i_col_idx col index of the top left corner if the image
      * \param i_padding required filter padding
+     * \param original_size optional size of the block before its rotation
+     * \param original_size_with_margins optional size of the block with read
+     * margins before its rotation
      */
     StreamBlock(Image&& i_block_image, int i_row_idx, int i_col_idx,
-                const Padding& i_padding)
+                const Padding& i_padding, Size i_original_size = {0, 0},
+                Size i_original_size_with_margins = {0, 0})
         : buffer(std::move(i_block_image)),
           row_idx(i_row_idx),
           col_idx(i_col_idx),
           padding(i_padding),
-          is_initialized(true) {}
+          is_initialized(true),
+          original_size(i_original_size),
+          original_size_with_margins(i_original_size_with_margins) {}
 
     ~StreamBlock() = default;
     StreamBlock(const StreamBlock&) = default;
@@ -61,6 +67,8 @@ struct StreamBlock {
     int col_idx = 0;
     Padding padding = kEmptyPadding;
     bool is_initialized = false;
+    Size original_size;
+    Size original_size_with_margins;
 };
 
 }  // namespace gdal

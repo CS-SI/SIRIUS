@@ -34,6 +34,8 @@ static constexpr char kLena255x255ImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/l
 static constexpr char kTriangleImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/triangle.tif";
 static constexpr char kDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/door.tif";
 static constexpr char kHalfDoorImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/half-door.tif";
+static constexpr char kPointImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/point.jpg";
+static constexpr char kPointBlackImagePath[] = "@CMAKE_SOURCE_DIR@/data/input/point_black.jpg";
 
 // output path
 static const std::string kOutputDirectoryPath = "@CMAKE_BINARY_DIR@/Testing/Temporary/";

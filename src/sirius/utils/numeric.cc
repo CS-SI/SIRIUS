@@ -73,6 +73,15 @@ void IFFTShift2D(const double* data, const Size& size, double* shifted_data) {
     }
 }
 
+void IFFTShift(const int* data, const int size, int* shifted_data) {
+    auto initial_ptr = shifted_data;
+    int half = size / 2;
+    std::copy(data + half, data + size, shifted_data);
+    shifted_data += size - half;
+    std::copy(data, data + half, shifted_data);
+    shifted_data = initial_ptr;
+}
+
 void IFFTShift2DUncentered(const double* data, const Size& size,
                            const Point& hot_point, double* shifted_data) {
     Size block_4(size.row - hot_point.y, size.col - hot_point.x);

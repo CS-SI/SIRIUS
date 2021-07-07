@@ -88,6 +88,8 @@ constexpr Size kEmptySize = Size(0, 0);
  * \brief Data class that represents the 2D coordinates of a point
  */
 struct Point {
+    Point() = default;
+
     constexpr Point(int x, int y) noexcept : x(x), y(y) {}
 
     ~Point() = default;
